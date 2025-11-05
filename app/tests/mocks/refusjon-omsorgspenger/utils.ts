@@ -1,6 +1,5 @@
 import { Page } from "@playwright/test";
-
-const SERVER_URL = "/server/api";
+import { InntektsopplysningerDto } from "~/features/refusjon-omsorgspenger/api/queries";
 
 export const mockInnloggetBruker = ({
   page,
@@ -118,6 +117,24 @@ export const mockInntektsopplysninger = ({
     "**/*/refusjon-omsorgsdager/inntektsopplysninger",
     async (route) => {
       await route.fulfill({ json });
+    },
+  );
+};
+
+export const mockInntektsopplysningerIngenPenger = ({
+  page,
+}: {
+  page: Page;
+}) => {
+  return page.route(
+    "**/*/refusjon-omsorgsdager/inntektsopplysninger",
+    async (route) => {
+      await route.fulfill({
+        json: {
+          gjennomsnittLønn: 0,
+          månedsinntekter: [],
+        } satisfies InntektsopplysningerDto,
+      });
     },
   );
 };

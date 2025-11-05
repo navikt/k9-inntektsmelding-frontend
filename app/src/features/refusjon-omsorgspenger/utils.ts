@@ -240,7 +240,7 @@ export function utledDefaultMonthDatepicker(årForRefusjon: number) {
   if (årForRefusjon === iDag.getFullYear()) {
     return iDag;
   }
-  return new Date(`${årForRefusjon}-12-31`);
+  return new Date(Number(årForRefusjon), 11, 31);
 }
 
 export function datoErInnenforGyldigDatoIntervall(dato: string, år: number) {

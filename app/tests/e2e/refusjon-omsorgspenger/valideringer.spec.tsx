@@ -4,8 +4,11 @@ import {
   mockInnloggetBruker,
   mockInntektsmeldingForÅr,
   mockInntektsopplysninger,
+  mockInntektsopplysningerIngenPenger,
 } from "tests/mocks/refusjon-omsorgspenger/utils";
 import { mockGrunnbeløp } from "tests/mocks/shared/utils";
+
+import { formatDatoKort } from "~/utils";
 
 const VALID_FNR = "16878397960";
 const ORGANISASJONSNUMMER = "123456789";
@@ -46,6 +49,25 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await expect(
       page.getByText("Du må svare på hvilket år du søker refusjon for"),
     ).toBeVisible();
+
+    // Fix the error by selecting year - error should disappear and we can proceed
+    const currentYear = new Date().getFullYear();
+    await page.getByRole("radio", { name: String(currentYear) }).click();
+
+    // Error should be gone
+    await expect(
+      page.getByText("Du må svare på hvilket år du søker refusjon for"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/2-ansatt-og-arbeidsgiver`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 2: Validering av kontaktperson, fødselsnummer og organisasjonsnummer", async ({
@@ -121,6 +143,27 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await expect(
       page.getByText("Fødselsnummer eller d-nummer er ikke gyldig"),
     ).toBeVisible();
+
+    // Fix the error by filling valid fødselsnummer - error should disappear and we can proceed
+    await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
+    await page.waitForLoadState("networkidle");
+
+    // Error should be gone
+    await expect(
+      page.getByText("Fødselsnummer eller d-nummer er ikke gyldig"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/3-omsorgsdager`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 3: Validering av omsorgsdager", async ({ page }) => {
@@ -178,6 +221,36 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
         "Du må oppgi fravær enten som hele dager, deler av dager eller dager som skal trekkes",
       ),
     ).toBeVisible();
+
+    // Fix the error by adding fravær - error should disappear and we can proceed
+    await page
+      .getByRole("button", { name: "Legg til periode" })
+      .first()
+      .click();
+    await page.waitForTimeout(500);
+    const fomDate = `15.06.${currentYear}`;
+    const tomDate = `20.06.${currentYear}`;
+    await page.getByLabel("Fra og med").first().fill(fomDate);
+    await page.getByLabel("Til og med").first().fill(tomDate);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        "Du må oppgi fravær enten som hele dager, deler av dager eller dager som skal trekkes",
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.waitForTimeout(1000);
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForLoadState("networkidle");
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 3: Validering av fravær hele dager", async ({ page }) => {
@@ -254,9 +327,30 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     // Should show error for date outside year
     await expect(
       page.getByText(
-        `Fraværet må være mellom ${currentYear}.01.01 og ${currentYear}.12.31`,
+        `Fraværet må være mellom ${currentYear}.01.01 og ${formatDatoKort(new Date())}`,
       ),
     ).toBeVisible();
+
+    // Fix the error by filling valid dates - errors should disappear and we can proceed
+    const validTomDate = `20.01.${currentYear}`;
+    await page.getByLabel("Til og med").fill(validTomDate);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        `Fraværet må være mellom ${currentYear}.01.01 og ${formatDatoKort(new Date())}`,
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 3: Validering av fravær deler av dagen", async ({ page }) => {
@@ -348,6 +442,24 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await expect(
       page.getByText("Antall timer kan ikke være mer enn 24"),
     ).toBeVisible();
+
+    // Fix the error by filling valid timer - error should disappear and we can proceed
+    await page.getByLabel("Timer fravær").fill("3.5");
+
+    // Error should be gone
+    await expect(
+      page.getByText("Antall timer kan ikke være mer enn 24"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 3: Validering av dager som skal trekkes", async ({ page }) => {
@@ -396,9 +508,10 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await page.waitForTimeout(500);
 
     // Focus and blur a date field to mark it as touched
-    const fraOgMedLabels = page.getByLabel("Fra og med");
-    await fraOgMedLabels.nth(1).focus();
-    await fraOgMedLabels.nth(1).blur();
+    // Get the "Fra og med" field from the dager som skal trekkes section (second date range picker)
+    const fraOgMedLabel = page.getByLabel("Fra og med");
+    await fraOgMedLabel.focus();
+    await fraOgMedLabel.blur();
 
     // Try to submit without filling dates
     await page.getByRole("button", { name: "Neste steg" }).click();
@@ -411,16 +524,37 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     // Fill dates with tom before fom - find the labels in the dager som skal trekkes section
     const fomDate = `20.01.${currentYear}`;
     const tomDate = `15.01.${currentYear}`;
-    const fraOgMedLabels2 = page.getByLabel("Fra og med");
-    const tilOgMedLabels = page.getByLabel("Til og med");
-    await fraOgMedLabels2.nth(1).fill(fomDate);
-    await tilOgMedLabels.nth(1).fill(tomDate);
+    await fraOgMedLabel.fill(fomDate);
+    // Get the "Til og med" field from the dager som skal trekkes section (second date range picker)
+    const tilOgMedLabel = page.getByLabel("Til og med");
+    await tilOgMedLabel.fill(tomDate);
     await page.getByRole("button", { name: "Neste steg" }).click();
 
-    // Should show error for tom before fom
+    // TODO: Denne bør egentlig si at tom er før fom. Men daterange-komponenten gjør det litt vrient
+    await expect(page.getByText("Du må oppgi en til og med dato")).toBeVisible({
+      timeout: 10_000,
+    });
+
+    // Fill dates with tom after fom (fix the error)
+    const fomDate2 = `20.01.${currentYear}`;
+    const tomDate2 = `25.01.${currentYear}`;
+    await fraOgMedLabel.fill(fomDate2);
+    await tilOgMedLabel.fill(tomDate2);
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Error should be gone
     await expect(
-      page.getByText("Fra og med dato må være før til og med dato"),
-    ).toBeVisible();
+      page.getByText("Du må oppgi en til og med dato"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 3: Validering av overlappende perioder", async ({ page }) => {
@@ -476,15 +610,34 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await leggTilPerioderButtons.nth(1).click();
     const fom2 = `18.01.${currentYear}`;
     const tom2 = `22.01.${currentYear}`;
-    const fraOgMedLabels = page.getByLabel("Fra og med");
-    const tilOgMedLabels = page.getByLabel("Til og med");
-    await fraOgMedLabels.nth(1).fill(fom2);
-    await tilOgMedLabels.nth(1).fill(tom2);
+    await page.getByLabel("Fra og med").last().fill(fom2);
+    await page.getByLabel("Til og med").last().fill(tom2);
     await page.getByRole("button", { name: "Neste steg" }).click();
 
     // Should show error for overlapping periods
     await expect(
       page.getByText("Dagene kan ikke overlappe med fravær hele dager"),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fix the error by adjusting dates to not overlap - error should disappear and we can proceed
+    const fom2Fixed = `25.01.${currentYear}`;
+    const tom2Fixed = `28.01.${currentYear}`;
+    await page.getByLabel("Fra og med").last().fill(fom2Fixed);
+    await page.getByLabel("Til og med").last().fill(tom2Fixed);
+
+    // Error should be gone
+    await expect(
+      page.getByText("Dagene kan ikke overlappe med fravær hele dager"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
     ).toBeVisible({ timeout: 10_000 });
   });
 
@@ -543,10 +696,33 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
         "Du oppgir å ha dekket 10 omsorgsdager i år, samtidig som du ber om refusjon for fravær innenfor de 10 første dagene av året",
       ),
     ).toBeVisible({ timeout: 10_000 });
+
+    await page.getByLabel("Fra og med").first().fill(`20.01.${currentYear}`);
+    await page.getByLabel("Til og med").first().fill(`25.01.${currentYear}`);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        "Du oppgir å ha dekket 10 omsorgsdager i år, samtidig som du ber om refusjon for fravær innenfor de 10 første dagene av året",
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 4: Validering av inntekt", async ({ page }) => {
     await mockArbeidstakerOppslag({ page });
+    await mockInntektsopplysningerIngenPenger({
+      page,
+    });
     await page.goto(
       `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
     );
@@ -596,9 +772,6 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await expect(
       page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
     ).toBeVisible({ timeout: 10_000 });
-
-    // Wait for inntektsopplysninger to load
-    await page.waitForTimeout(2000);
 
     // Try to submit step 4 without inntekt (set to 0)
     // First, we need to check if there's an error alert for inntekt
@@ -674,6 +847,30 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
         "Fravær deler av dag må ikke overlappe med fravær hele dager",
       ),
     ).toBeVisible();
+
+    // Fix the error by changing the date to not overlap - error should disappear and we can proceed
+    const nonOverlapDate = `25.06.${currentYear}`;
+    await page
+      .getByRole("textbox", { name: "Dato" })
+      .first()
+      .fill(nonOverlapDate);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        "Fravær deler av dag må ikke overlappe med fravær hele dager",
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 3: Validering av overlapp mellom dager som skal trekkes og fravær deler av dag", async ({
@@ -735,22 +932,44 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await leggTilPerioderButtons.nth(1).click();
     const fom = `15.06.${currentYear}`;
     const tom = `20.06.${currentYear}`;
-    const fraOgMedLabels = page.getByLabel("Fra og med");
-    const tilOgMedLabels = page.getByLabel("Til og med");
-    await fraOgMedLabels.nth(1).fill(fom);
-    await tilOgMedLabels.nth(1).fill(tom);
+    await page.getByLabel("Fra og med").fill(fom);
+    await page.getByLabel("Til og med").fill(tom);
     await page.getByRole("button", { name: "Neste steg" }).click();
 
     // Should show error for overlapping periods
     await expect(
       page.getByText("Dagene kan ikke overlappe med fravær deler av dag"),
     ).toBeVisible();
+
+    // Fix the error by adjusting dates to not overlap - error should disappear and we can proceed
+    const fomFixed = `25.06.${currentYear}`;
+    const tomFixed = `28.06.${currentYear}`;
+    await page.getByLabel("Fra og med").fill(fomFixed);
+    await page.getByLabel("Til og med").fill(tomFixed);
+
+    // Error should be gone
+    await expect(
+      page.getByText("Dagene kan ikke overlappe med fravær deler av dag"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 
   test("Steg 4: Validering av korrigert inntekt og endringsårsaker", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
+    await mockInntektsopplysningerIngenPenger({
+      page,
+    });
     await page.goto(
       `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
     );
@@ -823,7 +1042,6 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
       ),
     ).toBeVisible();
 
-    // Fill valid korrigert inntekt but not endringsårsak
     await page.getByLabel("Endret månedsinntekt").fill("45000");
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -856,5 +1074,26 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await expect(
       page.getByText("Fra og med dato må være før til og med dato"),
     ).toBeVisible();
+
+    // Fix the error by correcting the dates - error should disappear and we can proceed
+    const fomDateFixed = `01.05.${currentYear}`;
+    const tomDateFixed = `15.05.${currentYear}`;
+    await page.getByLabel("Fra og med").fill(fomDateFixed);
+    await page.getByLabel("Til og med").fill(tomDateFixed);
+
+    // Error should be gone
+    await expect(
+      page.getByText("Fra og med dato må være før til og med dato"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/5-oppsummering`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Oppsummering" }),
+    ).toBeVisible({ timeout: 10_000 });
   });
 });

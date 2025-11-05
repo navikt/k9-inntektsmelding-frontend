@@ -43,10 +43,7 @@ import { DateRangePickerWrapped } from "../../shared/react-hook-form-wrappers/Da
 import { RefusjonOmsorgspengerResponseDto } from "../api/mutations.ts";
 import { useHentInntektsmeldingForÅr } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
-import {
-  beregnGyldigDatoIntervall,
-  utledDefaultMonthDatepicker,
-} from "../utils.ts";
+import { utledDefaultMonthDatepicker } from "../utils.ts";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
@@ -189,7 +186,6 @@ const FraværHeleDagen = () => {
   });
 
   const årForRefusjon = Number(watch("årForRefusjon"));
-  const { minDato, maxDato } = beregnGyldigDatoIntervall(årForRefusjon);
 
   return (
     <VStack gap="4">
@@ -206,8 +202,6 @@ const FraværHeleDagen = () => {
             datepickerProps={{
               defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
             }}
-            maxDato={maxDato}
-            minDato={minDato}
             name={`fraværHeleDager.${index}`}
           />
           <div>
@@ -254,7 +248,6 @@ const FraværDelerAvDagen = () => {
   });
   const årForRefusjon = Number(watch("årForRefusjon"));
 
-  const { minDato, maxDato } = beregnGyldigDatoIntervall(årForRefusjon);
   return (
     <VStack gap="2">
       <Heading level="3" size="small">
@@ -271,8 +264,6 @@ const FraværDelerAvDagen = () => {
           >
             <DatePickerWrapped
               datepickerProps={{
-                toDate: maxDato,
-                fromDate: minDato,
                 defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
               }}
               key={periode.id}
@@ -381,7 +372,6 @@ const DagerSomSkalTrekkes = () => {
   });
 
   const årForRefusjon = Number(watch("årForRefusjon"));
-  const { minDato, maxDato } = beregnGyldigDatoIntervall(årForRefusjon);
   return (
     <VStack gap="4">
       <Heading level="3" size="small">
@@ -398,8 +388,6 @@ const DagerSomSkalTrekkes = () => {
             datepickerProps={{
               defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
             }}
-            maxDato={maxDato}
-            minDato={minDato}
             name={`dagerSomSkalTrekkes.${index}`}
           />
           <div>
