@@ -1,5 +1,7 @@
 import "./index.css";
 import "./settOppGrafanaFaro.ts";
+// Polyfill for toSorted. Ble introdusert i ES2023, så den mangler i eldre browsere og fører til feil.
+import "core-js/actual/array/to-sorted";
 
 import {
   BodyShort,
@@ -16,9 +18,6 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 
 import { routeTree } from "./routeTree.gen";
-
-// Polyfill for toSorted. Ble introdusert i ES2023, så den mangler i eldre browsere og fører til feil.
-import "core-js/actual/array/to-sorted";
 
 export const queryClient = new QueryClient();
 
