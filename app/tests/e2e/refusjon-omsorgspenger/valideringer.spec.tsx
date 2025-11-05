@@ -319,26 +319,26 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
       page.getByText("Du må oppgi en til og med dato"),
     ).toBeVisible();
 
-    // Fill invalid date (outside year)
-    const invalidDate = `15.01.${currentYear + 1}`;
-    await page.getByLabel("Til og med").fill(invalidDate);
+    // Fill invalid date (outside year) for tom
+    const invalidTomDate = `15.01.${currentYear + 1}`;
+    await page.getByLabel("Til og med").fill(invalidTomDate);
     await page.getByRole("button", { name: "Neste steg" }).click();
 
     // Should show error for date outside year
     await expect(
       page.getByText(
-        `Fraværet må være mellom ${currentYear}.01.01 og ${formatDatoKort(new Date())}`,
+        `Fraværet må være mellom 01.01.${currentYear} og ${formatDatoKort(new Date())}`,
       ),
     ).toBeVisible();
 
-    // Fix the error by filling valid dates - errors should disappear and we can proceed
+    // Fix the error by filling valid dates - errors should disappear
     const validTomDate = `20.01.${currentYear}`;
     await page.getByLabel("Til og med").fill(validTomDate);
 
     // Error should be gone
     await expect(
       page.getByText(
-        `Fraværet må være mellom ${currentYear}.01.01 og ${formatDatoKort(new Date())}`,
+        `Fraværet må være mellom 01.01.${currentYear} og ${formatDatoKort(new Date())}`,
       ),
     ).not.toBeVisible({ timeout: 5000 });
 
@@ -415,6 +415,30 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await expect(page.getByText("Du må oppgi antall timer")).toBeVisible({
       timeout: 10_000,
     });
+
+    // Fill dato outside year
+    const invalidDato = `15.01.${currentYear + 1}`;
+    await page.getByRole("textbox", { name: "Dato" }).first().fill(invalidDato);
+    await page.getByLabel("Timer fravær").fill("3.5");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Should show error for date outside year
+    await expect(
+      page.getByText(
+        `Fraværet må være mellom 01.01.${currentYear} og ${formatDatoKort(new Date())}`,
+      ),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fix the error by filling valid date - error should disappear and we can proceed
+    const validDato = `15.01.${currentYear}`;
+    await page.getByRole("textbox", { name: "Dato" }).first().fill(validDato);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        `Fraværet må være mellom 01.01.${currentYear} og ${formatDatoKort(new Date())}`,
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
 
     // Fill invalid timer (more than 2 decimals)
     await page.getByLabel("Timer fravær").fill("3.123");
@@ -548,6 +572,95 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).not.toBeVisible({ timeout: 5000 });
 
     // Verify we can proceed to the next step
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
+  });
+
+  test("Steg 3: Validering av dager som skal trekkes - datoer i inneværende år", async ({
+    page,
+  }) => {
+    await mockArbeidstakerOppslag({ page });
+    await page.goto(
+      `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
+    );
+
+    // Wait for page to load
+    await expect(
+      page.getByRole("heading", { name: "Om refusjon", exact: true }),
+    ).toBeVisible();
+
+    // Fill step 1
+    await page.getByRole("radio", { name: "Ja" }).click();
+    const currentYear = new Date().getFullYear();
+    await page.getByRole("radio", { name: String(currentYear) }).click();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 2 to load
+    await expect(
+      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+    ).toBeVisible();
+
+    // Fill step 2
+    await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
+    // Wait for network to be idle after API call
+    await page.waitForLoadState("networkidle");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 3 to load (with longer timeout)
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fill step 3 - select harDekket10FørsteOmsorgsdager and add dager som skal trekkes
+    await page.getByRole("radio", { name: "Ja" }).click();
+    // Find the "Legg til periode" button for "dager som skal trekkes" section
+    const leggTilPerioderButtons = page.getByRole("button", {
+      name: "Legg til periode",
+    });
+    await leggTilPerioderButtons.nth(1).click();
+    // Wait for the new form fields to be ready
+    await page.waitForTimeout(500);
+
+    // Focus and blur a date field to mark it as touched
+    const fraOgMedLabel = page.getByLabel("Fra og med");
+    await fraOgMedLabel.focus();
+    await fraOgMedLabel.blur();
+
+    // Fill fom with valid date but tom with date outside year
+    const fomDate = `15.01.${currentYear}`;
+    const invalidTomDate = `20.01.${currentYear + 1}`;
+    await fraOgMedLabel.fill(fomDate);
+    const tilOgMedLabel = page.getByLabel("Til og med");
+    await tilOgMedLabel.fill(invalidTomDate);
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Should show error for date outside year
+    await expect(
+      page.getByText(
+        `Fraværet må være mellom 01.01.${currentYear} og ${formatDatoKort(new Date())}`,
+      ),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fix the error by filling valid dates - error should disappear and we can proceed
+    const validTomDate = `15.01.${currentYear}`;
+    await tilOgMedLabel.fill(validTomDate);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        `Fraværet må være mellom 01.01.${currentYear} og ${formatDatoKort(new Date())}`,
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
     await page.waitForURL(
       `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
       { timeout: 10_000 },

@@ -205,8 +205,8 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             code: z.ZodIssueCode.custom,
             message:
               Number(data.årForRefusjon) === new Date().getFullYear()
-                ? `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${formatDatoKort(new Date())}`
-                : `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${data.årForRefusjon}.12.31`,
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
             path: ["fraværHeleDager", index, "fom"],
           });
         }
@@ -221,8 +221,8 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             code: z.ZodIssueCode.custom,
             message:
               Number(data.årForRefusjon) === new Date().getFullYear()
-                ? `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${formatDatoKort(new Date())}`
-                : `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${data.årForRefusjon}.12.31`,
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
             path: ["fraværHeleDager", index, "tom"],
           });
         }
@@ -316,8 +316,8 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             code: z.ZodIssueCode.custom,
             message:
               Number(data.årForRefusjon) === new Date().getFullYear()
-                ? `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${formatDatoKort(new Date())}`
-                : `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${data.årForRefusjon}.12.31`,
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
             path: ["fraværDelerAvDagen", index, "dato"],
           });
         }
@@ -373,6 +373,22 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             code: z.ZodIssueCode.custom,
             message: "Dagene kan ikke overlappe med fravær deler av dag",
             path: ["dagerSomSkalTrekkes", index, "fom"],
+          });
+        }
+        // må være innenfor gyldig dato intervall
+        if (
+          !datoErInnenforGyldigDatoIntervall(
+            dag.tom,
+            Number(data.årForRefusjon),
+          )
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+              Number(data.årForRefusjon) === new Date().getFullYear()
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
+            path: ["dagerSomSkalTrekkes", index, "tom"],
           });
         }
       }
