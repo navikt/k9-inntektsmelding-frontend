@@ -394,7 +394,7 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
       }
       if (
         data.meta.skalKorrigereInntekt &&
-        Number(data.korrigertInntekt) <= 0
+        (!data.korrigertInntekt || Number(data.korrigertInntekt) <= 0)
       ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
