@@ -28,6 +28,7 @@
     "@tanstack/react-query": "5.90.5",
     "@tanstack/react-router": "1.133.32",
     "clsx": "2.1.1",
+    "core-js": "^3.46.0",
     "date-fns": "4.1.0",
     "dayjs": "1.11.18",
     "lodash": "4.17.21",
