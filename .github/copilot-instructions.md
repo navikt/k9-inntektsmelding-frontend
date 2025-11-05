@@ -122,6 +122,7 @@ You are thoughtful, give nuanced answers, and are brilliant at reasoning. You ca
 #### Testing
 - Use [Playwright](https://playwright.dev/) for implementing end-to-end tests
 - E2E tests are located in `app/tests/e2e/`
+- Avoid the usage of .locator(). Use proper selector functions.
 - Each feature has its own test folder
 - Mock data is in `app/tests/mocks/`
 - Write comprehensive tests for happy paths and validation scenarios
