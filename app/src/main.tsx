@@ -1,6 +1,6 @@
 import "./index.css";
 import "./settOppGrafanaFaro.ts";
-// Polyfill for toSorted. Ble introdusert i ES2023, så den mangler i eldre browsere og fører til feil.
+// Polyfill for toSorted. Ble introdusert i ES2023, så den mangler i eldre browsere og fører til feil for disse brukerne hvis vi ikke polyfiller.
 import "core-js/actual/array/to-sorted";
 
 import {
