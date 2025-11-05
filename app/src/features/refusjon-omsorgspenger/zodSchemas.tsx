@@ -254,14 +254,10 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         }
         if (dag.dato) {
           // Fravær deler av dag må ikke overlappe med fravær hele dager
-          const overlap = data.fraværHeleDager.some((d) => {
-            if (d.fom && d.tom) {
-              return perioderOverlapper(
-                [{ fom: dag.dato, tom: dag.dato }],
-                [{ fom: d.fom, tom: d.tom }],
-              );
-            }
-          });
+          const overlap = perioderOverlapper(
+            [{ fom: dag.dato, tom: dag.dato }],
+            data.fraværHeleDager,
+          );
           if (overlap) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
