@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+
 import { InntektsopplysningerDto } from "~/features/refusjon-omsorgspenger/api/queries";
 
 export const mockInnloggetBruker = ({
@@ -87,12 +88,12 @@ export const mockInntektsmeldingForÅr = ({
 export const mockInntektsopplysninger = ({
   page,
   json = {
-    gjennomsnittLønn: 50000,
+    gjennomsnittLønn: 50_000,
     månedsinntekter: [
       {
         fom: "2024-01-01",
         tom: "2024-01-31",
-        beløp: 50000,
+        beløp: 50_000,
         status: "BRUKT_I_GJENNOMSNITT" as const,
       },
     ],
