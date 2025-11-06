@@ -450,7 +450,7 @@ function Endringsårsaker({
 }: EndringsårsakerProps) {
   const { control, register, formState } =
     useFormContext<InntektOgRefusjonForm>();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: "endringAvInntektÅrsaker",
   });
@@ -481,6 +481,13 @@ function Endringsårsaker({
                 required: "Må oppgis",
               })}
               className="md:max-w-[60%]"
+              onChange={(v) => {
+                // vi nullstiller alle andre felter enn årsak, så vi ikke får noe som henger igjen når vi endrer årsak
+                update(index, {
+                  ...ENDRINGSÅRSAK_TEMPLATE,
+                  årsak: v.target.value as EndringAvInntektÅrsaker,
+                });
+              }}
             >
               <option value="">Velg endringsårsak</option>
               {muligeÅrsakerValg.map((årsak) => (
