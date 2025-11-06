@@ -22,7 +22,7 @@ import {
 import { ListItem } from "@navikt/ds-react/List";
 import clsx from "clsx";
 import { isAfter } from "date-fns";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import type { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
@@ -531,9 +531,17 @@ type ÅrsaksperioderProps = {
 };
 
 function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
-  const { watch, register } = useFormContext<InntektOgRefusjonForm>();
+  const { watch, register, setValue } = useFormContext<InntektOgRefusjonForm>();
   const årsak = watch(`endringAvInntektÅrsaker.${index}.årsak`);
   const ignorerTom = watch(`endringAvInntektÅrsaker.${index}.ignorerTom`);
+
+  // hvis årsak endres, slett alle felter så ingenting blir hengende igjen fra tidligere årsak
+  useEffect(() => {
+    setValue(`endringAvInntektÅrsaker.${index}`, {
+      ...ENDRINGSÅRSAK_TEMPLATE,
+      årsak,
+    });
+  }, [årsak]);
 
   const endringsÅrsakTekst = endringsårsak.find(
     ({ value }) => value === årsak,
