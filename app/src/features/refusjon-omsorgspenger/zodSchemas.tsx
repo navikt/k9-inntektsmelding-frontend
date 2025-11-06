@@ -8,11 +8,7 @@ import { beløpSchema, formatDatoKort } from "~/utils";
 import { perioderOverlapper } from "~/utils/date-utils";
 import { validateInntekt, validateTimer } from "~/validators";
 
-import {
-  datoErInnenforGyldigDatoIntervall,
-  hasFullDayAbsenceInRange,
-  hasPartialDayAbsenceInRange,
-} from "./utils";
+import { datoErInnenforGyldigDatoIntervall } from "./utils";
 
 // Create a single unified form schema
 const baseSchema = z.object({
@@ -228,10 +224,14 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         }
         if (
           data.harDekket10FørsteOmsorgsdager === "ja" &&
-          hasFullDayAbsenceInRange(
+          perioderOverlapper(
             [periode],
-            new Date(`${data.årForRefusjon}-01-01`),
-            new Date(`${data.årForRefusjon}-01-10`),
+            [
+              {
+                fom: `${data.årForRefusjon}-01-01`,
+                tom: `${data.årForRefusjon}-01-10`,
+              },
+            ],
           )
         ) {
           ctx.addIssue({
@@ -268,10 +268,14 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           }
           if (
             data.harDekket10FørsteOmsorgsdager === "ja" &&
-            hasPartialDayAbsenceInRange(
-              [dag],
-              new Date(`${data.årForRefusjon}-01-01`),
-              new Date(`${data.årForRefusjon}-01-10`),
+            perioderOverlapper(
+              [{ fom: dag.dato, tom: dag.dato }],
+              [
+                {
+                  fom: `${data.årForRefusjon}-01-01`,
+                  tom: `${data.årForRefusjon}-01-10`,
+                },
+              ],
             )
           ) {
             ctx.addIssue({
