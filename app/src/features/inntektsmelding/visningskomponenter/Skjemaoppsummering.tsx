@@ -16,6 +16,7 @@ import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodS
 import { endringsårsak } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import { REFUSJON_RADIO_VALG } from "~/features/shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
 import type { OpplysningerDto } from "~/types/api-models.ts";
+import { EndringAvInntektÅrsakerSchema } from "~/types/api-models.ts";
 import {
   capitalize,
   formatDatoKort,
@@ -136,6 +137,12 @@ function InntektOppsummering({
   const harEndretInntekt = skjemaState.endringAvInntektÅrsaker.length > 0;
   const estimertInntekt = opplysninger.inntektsopplysninger.gjennomsnittLønn;
   const gjeldendeInntekt = skjemaState.korrigertInntekt ?? skjemaState.inntekt;
+  const årsakerUtenTariffendring = skjemaState.endringAvInntektÅrsaker.filter(
+    (årsak) => årsak.årsak !== EndringAvInntektÅrsakerSchema.enum.TARIFFENDRING,
+  );
+  const årsakerMedTariffendring = skjemaState.endringAvInntektÅrsaker.filter(
+    (årsak) => årsak.årsak === EndringAvInntektÅrsakerSchema.enum.TARIFFENDRING,
+  );
 
   return (
     <FormSummary>
@@ -169,7 +176,7 @@ function InntektOppsummering({
               <FormSummary.Label>Årsaker</FormSummary.Label>
               <FormSummary.Value>
                 <FormSummary.Answers>
-                  {skjemaState.endringAvInntektÅrsaker.map(
+                  {årsakerUtenTariffendring.map(
                     ({ årsak, fom, tom, bleKjentFom, ignorerTom }) => {
                       const periodeStreng = formaterPeriodeStreng({
                         fom,
@@ -190,6 +197,22 @@ function InntektOppsummering({
                       );
                     },
                   )}
+                  {årsakerMedTariffendring.map((årsak) => (
+                    <FormSummary.Answer key={årsak.fom}>
+                      <FormSummary.Label>Tariffendring</FormSummary.Label>
+                      <FormSummary.Value>
+                        {formaterPeriodeStreng({
+                          fom: årsak.fom,
+                        })}
+                        {årsak.bleKjentFom && (
+                          <>
+                            {", ble kjent fra "}
+                            {formatDatoKort(new Date(årsak.bleKjentFom))}
+                          </>
+                        )}
+                      </FormSummary.Value>
+                    </FormSummary.Answer>
+                  ))}
                 </FormSummary.Answers>
               </FormSummary.Value>
             </FormSummary.Answer>

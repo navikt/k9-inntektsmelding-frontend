@@ -1,5 +1,6 @@
 import { expect, Page, test } from "@playwright/test";
 
+import { mangeEksisterendeInntektsmeldingerResponse } from "../../mocks/inntektsmelding/eksisterende-inntektsmeldinger";
 import {
   expectError,
   mockGrunnbeløp,
@@ -214,6 +215,67 @@ test("oppsummering vises riktig når tomdato er gjort valgfri", async ({
   );
 
   await page.getByRole("button", { name: "Send inn" }).click();
+});
+
+test("tariffendring vises riktig i oppsummering", async ({ page }) => {
+  await mockOpplysninger({
+    page,
+    uuid: "f29dcea7-febe-4a76-911c-ad8f6d3e8858",
+  });
+  await mockGrunnbeløp({ page });
+  await mockInntektsmeldinger({
+    page,
+    json: mangeEksisterendeInntektsmeldingerResponse,
+    uuid: "f29dcea7-febe-4a76-911c-ad8f6d3e8858",
+  });
+
+  await page.goto("/k9-im-dialog/f29dcea7-febe-4a76-911c-ad8f6d3e8858");
+  await page.getByRole("link", { name: "Endre inntekt" }).click();
+
+  // When editing an existing inntektsmelding, there might already be endringsårsaker
+  // Click "Legg til ny endringsårsak" to add a new one
+  await page.getByRole("button", { name: "Legg til ny endringsårsak" }).click();
+
+  // Find the last endringsårsak select (the one we just added) and select Tariffendring
+  const endringsårsakSelects = page.getByLabel("Hva er årsaken til endringen?");
+  const count = await endringsårsakSelects.count();
+  await endringsårsakSelects.nth(count - 1).selectOption("Tariffendring");
+
+  // Fill in "Fra og med" date - find the last one (for the tariffendring we just added)
+  const fraOgMedInputs = page.getByLabel("Fra og med");
+  await fraOgMedInputs.nth(2).fill("01.03.2024");
+
+  // Fill in "Ble kjent fra" date - this should be unique to tariffendring
+  await page.getByLabel("Ble kjent fra").last().fill("15.03.2024");
+
+  await page
+    .getByRole("group", {
+      name: "Betaler dere lønn under fraværet og krever refusjon?",
+    })
+    .getByRole("radio", { name: "Nei" })
+    .click();
+  await page
+    .getByRole("group", {
+      name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
+    })
+    .getByRole("radio", { name: "Nei" })
+    .click();
+  await page.getByRole("button", { name: "Neste steg" }).click();
+
+  // Verify we're on the summary page
+  await expect(
+    page.getByRole("heading", { name: "Oppsummering" }),
+  ).toBeVisible();
+
+  // Verify tariffendring is displayed correctly
+  await expect(
+    page.getByText("Årsaker").locator("..").getByText("Tariffendring"),
+  ).toBeVisible();
+
+  // Verify the value shows "fra og med [date], ble kjent fra [date]"
+  await expect(
+    page.getByText("fra og med 01.03.2024, ble kjent fra 15.03.2024"),
+  ).toBeVisible();
 });
 
 const forventFomDatoForEndringsÅrsak = async ({
