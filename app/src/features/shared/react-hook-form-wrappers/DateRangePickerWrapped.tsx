@@ -10,8 +10,6 @@ import { formatIsoDatostempel } from "~/utils";
 
 type DateRangePickerWrappedProps = {
   name: string;
-  minDato: Date;
-  maxDato?: Date;
   rules?: {
     fom: RegisterOptions;
     tom: RegisterOptions;
@@ -22,7 +20,7 @@ type DateRangePickerWrappedProps = {
 export const DateRangePickerWrapped = forwardRef<
   HTMLDivElement,
   DateRangePickerWrappedProps
->(({ name, minDato, maxDato, rules, datepickerProps }, ref) => {
+>(({ name, rules, datepickerProps }, ref) => {
   const { field: fromField, fieldState: fromFieldState } = useController({
     name: `${name}.fom`,
     rules: rules?.fom,
@@ -37,8 +35,6 @@ export const DateRangePickerWrapped = forwardRef<
     fromInputProps,
   } = useRangeDatepicker({
     ...datepickerProps,
-    fromDate: minDato,
-    toDate: maxDato,
     onRangeChange: (dateRange) => {
       fromField.onChange(
         dateRange?.from ? formatIsoDatostempel(dateRange.from) : "",

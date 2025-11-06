@@ -4,15 +4,11 @@ import { z } from "zod";
 
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt";
 import { EndringAvInntektÅrsakerSchema } from "~/types/api-models";
-import { beløpSchema } from "~/utils";
-import { perioderOverlapper, periodeTilDager } from "~/utils/date-utils";
+import { beløpSchema, formatDatoKort } from "~/utils";
+import { perioderOverlapper } from "~/utils/date-utils";
 import { validateInntekt, validateTimer } from "~/validators";
 
-import {
-  datoErInnenforGyldigDatoIntervall,
-  hasFullDayAbsenceInRange,
-  hasPartialDayAbsenceInRange,
-} from "./utils";
+import { datoErInnenforGyldigDatoIntervall } from "./utils";
 
 // Create a single unified form schema
 const baseSchema = z.object({
@@ -203,7 +199,10 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${data.årForRefusjon}.12.31`,
+            message:
+              Number(data.årForRefusjon) === new Date().getFullYear()
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
             path: ["fraværHeleDager", index, "fom"],
           });
         }
@@ -216,16 +215,23 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${data.årForRefusjon}.12.31`,
+            message:
+              Number(data.årForRefusjon) === new Date().getFullYear()
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
             path: ["fraværHeleDager", index, "tom"],
           });
         }
         if (
           data.harDekket10FørsteOmsorgsdager === "ja" &&
-          hasFullDayAbsenceInRange(
+          perioderOverlapper(
             [periode],
-            new Date(`${data.årForRefusjon}-01-01`),
-            new Date(`${data.årForRefusjon}-01-10`),
+            [
+              {
+                fom: `${data.årForRefusjon}-01-01`,
+                tom: `${data.årForRefusjon}-01-10`,
+              },
+            ],
           )
         ) {
           ctx.addIssue({
@@ -248,10 +254,9 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         }
         if (dag.dato) {
           // Fravær deler av dag må ikke overlappe med fravær hele dager
-          const overlap = hasFullDayAbsenceInRange(
+          const overlap = perioderOverlapper(
+            [{ fom: dag.dato, tom: dag.dato }],
             data.fraværHeleDager,
-            new Date(dag.dato),
-            new Date(dag.dato),
           );
           if (overlap) {
             ctx.addIssue({
@@ -263,10 +268,14 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           }
           if (
             data.harDekket10FørsteOmsorgsdager === "ja" &&
-            hasPartialDayAbsenceInRange(
-              [dag],
-              new Date(`${data.årForRefusjon}-01-01`),
-              new Date(`${data.årForRefusjon}-01-10`),
+            perioderOverlapper(
+              [{ fom: dag.dato, tom: dag.dato }],
+              [
+                {
+                  fom: `${data.årForRefusjon}-01-01`,
+                  tom: `${data.årForRefusjon}-01-10`,
+                },
+              ],
             )
           ) {
             ctx.addIssue({
@@ -309,7 +318,10 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         ) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `Fraværet må være mellom ${data.årForRefusjon}.01.01 og ${data.årForRefusjon}.12.31`,
+            message:
+              Number(data.årForRefusjon) === new Date().getFullYear()
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
             path: ["fraværDelerAvDagen", index, "dato"],
           });
         }
@@ -354,12 +366,10 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           });
         }
         // kan ikke overlappe med fravær deler av dag
-        const dager = periodeTilDager({ fom: dag.fom, tom: dag.tom });
-        const overlapDelerAvDag = dager.some((dag) => {
-          return hasPartialDayAbsenceInRange(
-            data.fraværDelerAvDagen,
-            new Date(dag),
-            new Date(dag),
+        const overlapDelerAvDag = data.fraværDelerAvDagen.some((v) => {
+          return perioderOverlapper(
+            [{ fom: v.dato, tom: v.dato }],
+            [{ fom: dag.fom, tom: dag.tom }],
           );
         });
         if (overlapDelerAvDag) {
@@ -367,6 +377,22 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             code: z.ZodIssueCode.custom,
             message: "Dagene kan ikke overlappe med fravær deler av dag",
             path: ["dagerSomSkalTrekkes", index, "fom"],
+          });
+        }
+        // må være innenfor gyldig dato intervall
+        if (
+          !datoErInnenforGyldigDatoIntervall(
+            dag.tom,
+            Number(data.årForRefusjon),
+          )
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message:
+              Number(data.årForRefusjon) === new Date().getFullYear()
+                ? `Fraværet må være mellom 01.01.${data.årForRefusjon} og ${formatDatoKort(new Date())}`
+                : `Fraværet må være mellom 01.01.${data.årForRefusjon} og 31.12.${data.årForRefusjon}`,
+            path: ["dagerSomSkalTrekkes", index, "tom"],
           });
         }
       }
@@ -378,16 +404,19 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:
-            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større en kr 0.",
+            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større enn kr 0.",
           path: ["inntekt"],
         });
       }
-      if (data.meta.skalKorrigereInntekt && !data.korrigertInntekt) {
+      if (
+        data.meta.skalKorrigereInntekt &&
+        (!data.korrigertInntekt || Number(data.korrigertInntekt) <= 0)
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:
-            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større en kr 0.",
-          path: ["korrigertInntekt"],
+            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større enn kr 0.",
+          path: ["inntekt"],
         });
       }
       if (data.korrigertInntekt) {

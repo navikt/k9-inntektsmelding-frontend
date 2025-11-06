@@ -161,7 +161,7 @@ const STØNADSNAVN = {
 
 export const beløpSchema = z.union([z.string(), z.number()]);
 
-export const isDev = import.meta.env.DEV;
+export const isDev = import.meta.env?.DEV ?? false;
 
 export function logDev(
   level: "info" | "warn" | "error",
