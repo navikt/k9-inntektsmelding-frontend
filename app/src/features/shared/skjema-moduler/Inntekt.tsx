@@ -22,7 +22,7 @@ import {
 import { ListItem } from "@navikt/ds-react/List";
 import clsx from "clsx";
 import { isAfter } from "date-fns";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import type { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
@@ -450,7 +450,7 @@ function Endringsårsaker({
 }: EndringsårsakerProps) {
   const { control, register, formState } =
     useFormContext<InntektOgRefusjonForm>();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: "endringAvInntektÅrsaker",
   });
@@ -481,6 +481,13 @@ function Endringsårsaker({
                 required: "Må oppgis",
               })}
               className="md:max-w-[60%]"
+              onChange={(v) => {
+                // vi nullstiller alle andre felter enn årsak, så vi ikke får noe som henger igjen når vi endrer årsak
+                update(index, {
+                  ...ENDRINGSÅRSAK_TEMPLATE,
+                  årsak: v.target.value as EndringAvInntektÅrsaker,
+                });
+              }}
             >
               <option value="">Velg endringsårsak</option>
               {muligeÅrsakerValg.map((årsak) => (
@@ -531,17 +538,9 @@ type ÅrsaksperioderProps = {
 };
 
 function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
-  const { watch, register, setValue } = useFormContext<InntektOgRefusjonForm>();
+  const { watch, register } = useFormContext<InntektOgRefusjonForm>();
   const årsak = watch(`endringAvInntektÅrsaker.${index}.årsak`);
   const ignorerTom = watch(`endringAvInntektÅrsaker.${index}.ignorerTom`);
-
-  // hvis årsak endres, slett alle felter så ingenting blir hengende igjen fra tidligere årsak
-  useEffect(() => {
-    setValue(`endringAvInntektÅrsaker.${index}`, {
-      ...ENDRINGSÅRSAK_TEMPLATE,
-      årsak,
-    });
-  }, [årsak]);
 
   const endringsÅrsakTekst = endringsårsak.find(
     ({ value }) => value === årsak,
