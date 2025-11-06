@@ -894,7 +894,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     // Should show error for inntekt being 0
     await expect(
       page.getByText(
-        "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større en kr 0.",
+        "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større enn kr 0.",
       ),
     ).toBeVisible();
   });
@@ -1150,7 +1150,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     // Should show error for korrigert inntekt being 0
     await expect(
       page.getByText(
-        "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større en kr 0.",
+        "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større enn kr 0.",
       ),
     ).toBeVisible();
 

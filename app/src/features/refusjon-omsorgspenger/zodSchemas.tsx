@@ -404,7 +404,7 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:
-            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større en kr 0.",
+            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større enn kr 0.",
           path: ["inntekt"],
         });
       }
@@ -415,7 +415,7 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:
-            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større en kr 0.",
+            "Månedsinntekten er satt til kr 0. Dersom dere har utbetalt lønn og krever refusjon må månedsinntekten være større enn kr 0.",
           path: ["inntekt"],
         });
       }
