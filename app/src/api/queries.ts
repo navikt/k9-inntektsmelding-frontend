@@ -119,7 +119,7 @@ export async function hentOpplysningerData(
 ): Promise<OpplysningerDto> {
   if (uuid === ARBEIDSGIVER_INITERT_ID) {
     // Da har vi en fakeId. Hent fra sessionstorage
-    const opplysninger = parseStorageItem(
+    const opplysninger = parseStorageItem<OpplysningerDto>(
       sessionStorage,
       ARBEIDSGIVER_INITERT_ID,
       opplysningerSchema,

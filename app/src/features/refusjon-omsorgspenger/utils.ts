@@ -78,6 +78,7 @@ export const mapSkjemaTilSendInntektsmeldingRequest = (
   const inntekt =
     validatedSkjemaState.korrigertInntekt || validatedSkjemaState.inntekt;
   return {
+    foresporselUuid: undefined,
     kontaktperson: {
       navn: validatedSkjemaState.kontaktperson.navn,
       telefonnummer: validatedSkjemaState.kontaktperson.telefonnummer,
