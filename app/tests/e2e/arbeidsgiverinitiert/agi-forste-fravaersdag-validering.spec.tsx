@@ -171,7 +171,7 @@ test.describe("AGI Første fraværsdag validering", () => {
       "**/*/arbeidsgiverinitiert/arbeidsforhold",
       async (route) => {
         await route.fulfill({
-          status: 400,
+          status: 403,
           json: { type: "INGEN_SAK_FUNNET" },
         });
       },
