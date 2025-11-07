@@ -33,6 +33,17 @@ export function PersonOppslagError({
     );
   }
 
+  if (error.message === "SENDT_FOR_TIDLIG") {
+    return (
+      <Alert variant="warning">
+        <BodyShort>
+          Du kan ikke sende inn inntektsmelding mer enn fire uker før personen
+          starter med {formatYtelsesnavn(ytelse)}.
+        </BodyShort>
+      </Alert>
+    );
+  }
+
   if (error.message === "INGEN_SAK_FUNNET") {
     if (context === "dato_validering") {
       return (

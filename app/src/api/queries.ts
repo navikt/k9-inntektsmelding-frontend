@@ -173,12 +173,22 @@ export async function hentPersonFraFnr(
     throw new Error("FANT_IKKE_PERSON");
   }
 
+  if (!response.ok) {
+    const json = await response.json();
+    const parsedFeil = feilmeldingSchema.safeParse(json);
+    if (!parsedFeil.success) {
+      logDev("error", parsedFeil.error);
+      throw new Error("Kunne ikke hente opplysninger");
+    }
+    throw new Error(parsedFeil.data?.type);
+  }
+
   const json = await response.json();
   const parsedJson = SlåOppArbeidstakerResponseDtoSchema.safeParse(json);
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
 
-    throw new Error(json.type);
+    throw new Error("Responsen fra serveren matchet ikke forventet format");
   }
 
   return parsedJson.data;
@@ -204,10 +214,7 @@ export async function hentOpplysninger(
       logDev("error", parsedFeil.error);
       throw new Error("Kunne ikke hente opplysninger");
     }
-    if (parsedFeil.data?.type === "INGEN_SAK_FUNNET") {
-      throw new Error(parsedFeil.data?.type);
-    }
-    throw new Error("Kunne ikke hente opplysninger");
+    throw new Error(parsedFeil.data.type);
   }
 
   const json = await response.json();
