@@ -20,6 +20,9 @@ export default defineConfig({
       "~": fileURLToPath(new URL("src", import.meta.url)),
     },
   },
+  build: {
+    sourcemap: true,
+  },
   server: {
     cors: {
       origin: [new RegExp("dev.nav.no$"), "http://localhost:9300"],
