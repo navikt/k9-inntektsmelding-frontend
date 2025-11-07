@@ -180,7 +180,7 @@ export async function hentPersonFraFnr(
       logDev("error", parsedFeil.error);
       throw new Error("Kunne ikke hente opplysninger");
     }
-    throw new Error(parsedFeil.data?.type);
+    throw new Error(parsedFeil.data.type);
   }
 
   const json = await response.json();
