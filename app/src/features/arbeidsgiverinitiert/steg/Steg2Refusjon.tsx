@@ -78,7 +78,7 @@ export function Steg2Refusjon() {
   // typeguard for sisteInntektsmelding
   const sisteInntektsmelding = inntektsmeldinger[0];
   const sisteInntektsmeldingFørsteFraværsdag = () => {
-    return "førsteFraværsdag" in sisteInntektsmelding
+    return sisteInntektsmelding && "førsteFraværsdag" in sisteInntektsmelding
       ? sisteInntektsmelding.førsteFraværsdag
       : undefined;
   };

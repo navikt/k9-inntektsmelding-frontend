@@ -353,7 +353,7 @@ test.describe("AGI Første fraværsdag validering", () => {
     // Verifiser at feilmeldingen fortsatt er synlig
     await expect(
       page.getByText("Du kan ikke endre denne datoen fremover i tid."),
-    ).toBeVisible();
+    ).toHaveCount(2);
 
     // Nå skal vi teste at brukeren kan utbedre feilen ved å endre datoen tilbake
     // Endre tilbake til original dato (01.04.2024) eller en tidligere dato
