@@ -216,15 +216,33 @@ function LikRefusjon() {
 }
 
 function VarierendeRefusjon() {
+  const opplysninger = useOpplysninger();
+  const visInfoOmEndringAvFørsteFraværsdagMedRefusjon = [
+    "ARBEIDSGIVERINITIERT_NYANSATT",
+    "ARBEIDSGIVERINITIERT_UREGISTRERT",
+  ].includes(opplysninger.forespørselType);
   return (
     <>
       <VStack data-testid="varierende-refusjon">
-        <Heading level="2" size="small">
+        <Heading className="mb-4" level="2" size="small">
           Refusjonsbeløp dere krever per periode
         </Heading>
         <Alert className="mb-4" variant="info">
-          Hvis dere skal slutte å forskuttere lønn i perioden, skriver du 0,- i
-          refusjonsbeløp fra den datoen dere ikke lengre forskutterer lønn.
+          <Stack gap="2">
+            {visInfoOmEndringAvFørsteFraværsdagMedRefusjon && (
+              <BodyLong>
+                Skal du endre første fraværsdag med refusjon fremover i tid,
+                skriver du 0,- i refusjonsbeløp i perioder uten refusjon. Trykk
+                på «Legg til ny periode» for å legge til ny dato dere ønsker
+                refusjon fra, og skriv inn refusjonsbeløpet.
+              </BodyLong>
+            )}
+            <BodyLong>
+              Hvis dere skal slutte å forskuttere lønn i perioden, skriver du
+              0,- i refusjonsbeløp fra den datoen dere ikke lengre forskutterer
+              lønn.
+            </BodyLong>
+          </Stack>
         </Alert>
         <Refusjonsperioder />
         <Over6GAlert />

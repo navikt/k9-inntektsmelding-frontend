@@ -90,9 +90,8 @@ export const SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert = z.object(
   },
 );
 
-export type SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert = z.infer<
-  typeof SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert
->;
+export type SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType =
+  z.infer<typeof SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert>;
 
 export const SendInntektsmeldingRequestDtoSchema =
   SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert.extend({

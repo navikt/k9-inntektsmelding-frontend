@@ -2,7 +2,7 @@ import { mapInntektsmeldingResponseTilValidState } from "~/api/queries.ts";
 import {
   InntektsmeldingResponseDtoSchema,
   SendInntektsmeldingRequestDto,
-  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert,
+  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
 } from "~/types/api-models.ts";
 import { logDev } from "~/utils.ts";
 
@@ -36,7 +36,7 @@ export async function sendInntektsmelding(
 }
 
 export async function sendInntektsmeldingArbeidsgiverInitiert(
-  sendInntektsmeldingRequest: SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert,
+  sendInntektsmeldingRequest: SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
 ) {
   const response = await fetch(
     `${SERVER_URL}/imdialog/send-inntektsmelding/arbeidsgiverinitiert-nyansatt`,

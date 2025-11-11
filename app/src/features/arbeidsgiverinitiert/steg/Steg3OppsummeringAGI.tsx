@@ -9,7 +9,7 @@ import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsin
 import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
 import type {
   OpplysningerDto,
-  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert,
+  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
 } from "~/types/api-models.ts";
 import { formatStrengTilTall, formatYtelsesnavn } from "~/utils";
 
@@ -162,5 +162,5 @@ function lagSendInntektsmeldingRequest(
       opplysninger.forespørselUuid === ARBEIDSGIVER_INITERT_ID
         ? undefined
         : opplysninger.forespørselUuid,
-  } satisfies SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert;
+  } satisfies SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType;
 }
