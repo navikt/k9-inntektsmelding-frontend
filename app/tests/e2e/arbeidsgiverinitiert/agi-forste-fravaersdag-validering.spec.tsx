@@ -25,7 +25,9 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Gå til opprett-siden og opprett inntektsmelding
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
+    await page
+      .getByRole("radio", { name: "Ny ansatt som mottar ytelse fra Nav" })
+      .click();
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
@@ -45,7 +47,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Velg "JA" på refusjon
     await page
-      .locator('input[name="skalRefunderes"][value="JA_LIK_REFUSJON"]')
+      .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
       .click();
 
     // Mock successful validation for the date
@@ -92,7 +94,9 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Gå til opprett-siden og opprett inntektsmelding
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
+    await page
+      .getByRole("radio", { name: "Ny ansatt som mottar ytelse fra Nav" })
+      .click();
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
@@ -107,7 +111,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Vi er nå på refusjon-steget
     await page
-      .locator('input[name="skalRefunderes"][value="JA_LIK_REFUSJON"]')
+      .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
       .click();
 
     // Mock failed validation - person not found
@@ -150,7 +154,9 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Gå til opprett-siden og opprett inntektsmelding
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
+    await page
+      .getByRole("radio", { name: "Ny ansatt som mottar ytelse fra Nav" })
+      .click();
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
@@ -165,7 +171,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Vi er nå på refusjon-steget
     await page
-      .locator('input[name="skalRefunderes"][value="JA_LIK_REFUSJON"]')
+      .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
       .click();
 
     // Mock failed validation - invalid date
@@ -204,7 +210,9 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Gå til opprett-siden og opprett inntektsmelding
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
+    await page
+      .getByRole("radio", { name: "Ny ansatt som mottar ytelse fra Nav" })
+      .click();
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
@@ -223,7 +231,7 @@ test.describe("AGI Første fraværsdag validering", () => {
     ).toBeVisible();
 
     // Velg "NEI" på refusjon
-    await page.locator('input[name="skalRefunderes"][value="NEI"]').click();
+    await page.getByRole("radio", { name: "Nei" }).click();
 
     // Knappen skal være disabled når NEI er valgt
     const nesteStegButton = page.getByRole("button", { name: "Neste steg" });
@@ -290,7 +298,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Velg "JA" på refusjon
     await page
-      .locator('input[name="skalRefunderes"][value="JA_LIK_REFUSJON"]')
+      .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
       .click();
 
     // Prøv å endre første fraværsdag til en senere dato (02.04.2024)
