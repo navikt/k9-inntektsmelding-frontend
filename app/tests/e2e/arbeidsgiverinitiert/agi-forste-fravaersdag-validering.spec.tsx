@@ -3,6 +3,8 @@ import {
   mockAGIOpplysninger,
   mockGrunnbeløp,
   mockHentPersonOgArbeidsforhold,
+  mockInntektsmeldinger,
+  mockOpplysninger,
 } from "tests/mocks/shared/utils";
 
 import { agiOpplysningerResponseNyAnsatt } from "../../mocks/arbeidsgiverinitiert/agi-opplysninger";
@@ -228,5 +230,168 @@ test.describe("AGI Første fraværsdag validering", () => {
     await expect(nesteStegButton).toBeDisabled();
 
     // Ingen validering skal skje siden knappen er disabled
+  });
+
+  test("Skal vise feilmelding når første fraværsdag endres fremover i tid", async ({
+    page,
+  }) => {
+    const uuid = "f29dcea7-febe-4a76-911c-ad8f6d3e8858";
+
+    // Mock opplysninger for eksisterende inntektsmelding
+    const opplysningerMedUuid = {
+      ...agiOpplysningerResponseNyAnsatt,
+      forespørselUuid: uuid,
+    };
+    await mockOpplysninger({
+      page,
+      json: opplysningerMedUuid,
+      uuid,
+    });
+
+    // Mock eksisterende inntektsmelding med første fraværsdag 01.04.2024
+    const eksisterendeInntektsmelding = [
+      {
+        id: 1_001_706,
+        foresporselUuid: uuid,
+        aktorId: "1234567890123",
+        ytelse: "PLEIEPENGER_SYKT_BARN" as const,
+        arbeidsgiverIdent: "974652293",
+        kontaktperson: {
+          navn: "Berømt Flyttelass",
+          telefonnummer: "12312312",
+        },
+        startdato: "2024-04-01",
+        inntekt: 45_000,
+        opprettetTidspunkt: "2024-04-01T10:00:00.000",
+        refusjon: [
+          {
+            fom: "2024-04-01",
+            beløp: 45_000,
+          },
+        ],
+        bortfaltNaturalytelsePerioder: [],
+        endringAvInntektÅrsaker: [],
+      },
+    ];
+
+    await mockInntektsmeldinger({
+      page,
+      json: eksisterendeInntektsmelding,
+      uuid,
+    });
+
+    // Gå til refusjon-steget for eksisterende inntektsmelding
+    await page.goto(`/k9-im-dialog/agi/${uuid}/refusjon`);
+
+    // Vi er nå på refusjon-steget
+    await expect(
+      page.getByRole("heading", { name: "Refusjon", exact: true }),
+    ).toBeVisible();
+
+    // Velg "JA" på refusjon
+    await page
+      .locator('input[name="skalRefunderes"][value="JA_LIK_REFUSJON"]')
+      .click();
+
+    // Prøv å endre første fraværsdag til en senere dato (02.04.2024)
+    const førsteFraværsdagField = page.getByLabel(
+      "Første fraværsdag med refusjon",
+    );
+    await førsteFraværsdagField.clear();
+    await førsteFraværsdagField.fill("02.04.2024");
+    // Trigger blur to ensure validation runs
+    await førsteFraværsdagField.blur();
+
+    // Skal vise feilmelding om at datoen ikke kan endres fremover i tid
+    await expect(
+      page.getByText("Du kan ikke endre denne datoen fremover i tid."),
+    ).toBeVisible();
+
+    await expect(
+      page.getByText(
+        "Skal du endre datoen dere ønsker refusjon fra fremover i tid, må du legge inn endringen under punktet «Ja, men kun deler av perioden eller varierende beløp».",
+      ),
+    ).toBeVisible();
+
+    // Mock successful validation for the date (selv om vi ikke skal kunne gå videre)
+    await page.route(
+      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      async (route) => {
+        await route.fulfill({
+          json: {
+            fornavn: "MOMENTAN",
+            etternavn: "TRAKT",
+            arbeidsforhold: [
+              {
+                organisasjonsnavn: "NAV",
+                organisasjonsnummer: "974652293",
+              },
+            ],
+            kjønn: "MANN",
+          },
+        });
+      },
+    );
+
+    // Prøv å klikke "Neste steg" - dette skal ikke fungere pga validering
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Skal fortsatt være på refusjon-steget (validering forhindrer navigering)
+    await expect(
+      page.getByRole("heading", { name: "Refusjon", exact: true }),
+    ).toBeVisible();
+
+    // Skal også vise feilmelding i feltet (validering forhindrer form submission)
+    // Verifiser at feilmeldingen fortsatt er synlig
+    await expect(
+      page.getByText("Du kan ikke endre denne datoen fremover i tid."),
+    ).toBeVisible();
+
+    // Nå skal vi teste at brukeren kan utbedre feilen ved å endre datoen tilbake
+    // Endre tilbake til original dato (01.04.2024) eller en tidligere dato
+    await førsteFraværsdagField.clear();
+    await førsteFraværsdagField.fill("01.04.2024");
+    await førsteFraværsdagField.blur();
+
+    // Feilmeldingen skal nå være borte
+    await expect(
+      page.getByText("Du kan ikke endre denne datoen fremover i tid."),
+    ).not.toBeVisible();
+
+    // Mock successful validation for the date
+    await page.route(
+      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      async (route) => {
+        const request = route.request();
+        const postData = JSON.parse(request.postData() || "{}");
+
+        // Sjekk at riktig data sendes
+        expect(postData.fødselsnummer).toBe(FAKE_FNR);
+        expect(postData.ytelseType).toBe("PLEIEPENGER_SYKT_BARN");
+        expect(postData.førsteFraværsdag).toBe("2024-04-01");
+
+        await route.fulfill({
+          json: {
+            fornavn: "MOMENTAN",
+            etternavn: "TRAKT",
+            arbeidsforhold: [
+              {
+                organisasjonsnavn: "NAV",
+                organisasjonsnummer: "974652293",
+              },
+            ],
+            kjønn: "MANN",
+          },
+        });
+      },
+    );
+
+    // Nå skal det være mulig å gå videre
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Vi skal nå være på oppsummering-steget (validering var vellykket)
+    await expect(
+      page.getByRole("heading", { name: "Oppsummering" }),
+    ).toBeVisible();
   });
 });
