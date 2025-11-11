@@ -1,9 +1,11 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { isAfter } from "date-fns";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { useEksisterendeInntektsmeldinger } from "~/features/shared/hooks/useEksisterendeInntektsmeldinger.tsx";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
@@ -26,9 +28,16 @@ export type RefusjonForm = {
   førsteFraværsdag: string;
 } & Pick<InntektsmeldingSkjemaStateAGI, "refusjon">;
 
+const førsteFraværsdagFremoverItidFeilmeldingHeading =
+  "Du kan ikke endre denne datoen fremover i tid.";
+const førsteFraværsdagFremoverItidFeilmelding =
+  "Skal du endre datoen dere ønsker refusjon fra fremover i tid, må du legge inn endringen under punktet «Ja, men kun deler av perioden eller varierende beløp».";
+
 export function Steg2Refusjon() {
   useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
+  const inntektsmeldinger = useEksisterendeInntektsmeldinger();
+
   useDocumentTitle(
     `Refusjon - inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
@@ -66,10 +75,28 @@ export function Steg2Refusjon() {
 
   const { handleSubmit, watch, setValue } = formMethods;
 
+  // typeguard for sisteInntektsmelding
+  const sisteInntektsmelding = inntektsmeldinger[0];
+  const sisteInntektsmeldingFørsteFraværsdag = () => {
+    return "førsteFraværsdag" in sisteInntektsmelding
+      ? sisteInntektsmelding.førsteFraværsdag
+      : undefined;
+  };
+
+  const prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding =
+    () => {
+      const førsteFraværsdag = watch("førsteFraværsdag");
+      const førsteFraværsdagTidligereInnsending =
+        sisteInntektsmeldingFørsteFraværsdag();
+      return førsteFraværsdagTidligereInnsending &&
+        isAfter(førsteFraværsdag, førsteFraværsdagTidligereInnsending)
+        ? førsteFraværsdagFremoverItidFeilmeldingHeading
+        : undefined;
+    };
+
   // Legg til person oppslag mutation for dato validering for første fraværsdag
   const validerFørsteFraværsdagMutation = usePersonOppslag();
 
-  watch("førsteFraværsdag");
   const førsteFraværsdag = watch("førsteFraværsdag");
 
   useEffect(() => {
@@ -141,7 +168,11 @@ export function Steg2Refusjon() {
           <DatePickerWrapped
             label="Første fraværsdag med refusjon"
             name="førsteFraværsdag"
-            rules={{ required: "Må oppgis" }} // TODO: Forklare hvorfor det må oppgis
+            rules={{
+              required: "Må oppgis",
+              validate:
+                prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding,
+            }}
           />
           {validerFørsteFraværsdagMutation.error && (
             <PersonOppslagError
@@ -149,6 +180,14 @@ export function Steg2Refusjon() {
               error={validerFørsteFraværsdagMutation.error}
               ytelse={opplysninger.ytelse}
             />
+          )}
+          {prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding() && (
+            <Alert variant="warning">
+              <Heading level="3" size="small" spacing>
+                {førsteFraværsdagFremoverItidFeilmeldingHeading}
+              </Heading>
+              <BodyLong>{førsteFraværsdagFremoverItidFeilmelding}</BodyLong>
+            </Alert>
           )}
           <UtbetalingOgRefusjon />
 
