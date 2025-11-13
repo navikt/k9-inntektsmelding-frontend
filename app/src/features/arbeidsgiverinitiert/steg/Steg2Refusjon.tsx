@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
-import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Stack } from "@navikt/ds-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { isAfter } from "date-fns";
 import { useEffect } from "react";
@@ -9,7 +9,7 @@ import { useEksisterendeInntektsmeldinger } from "~/features/shared/hooks/useEks
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
-import { formatYtelsesnavn } from "~/utils";
+import { formatDatoKort, formatYtelsesnavn } from "~/utils";
 
 import { PersonOppslagError } from "../../shared/components/PersonOppslagFeil.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
@@ -30,8 +30,6 @@ export type RefusjonForm = {
 
 const førsteFraværsdagFremoverItidFeilmeldingHeading =
   "Du kan ikke endre denne datoen fremover i tid.";
-const førsteFraværsdagFremoverItidFeilmelding =
-  "Skal du endre datoen dere ønsker refusjon fra fremover i tid, må du legge inn endringen under punktet «Ja, men kun deler av perioden eller varierende beløp».";
 
 export function Steg2Refusjon() {
   useScrollToTopOnMount();
@@ -77,17 +75,16 @@ export function Steg2Refusjon() {
 
   // typeguard for sisteInntektsmelding
   const sisteInntektsmelding = inntektsmeldinger[0];
-  const sisteInntektsmeldingFørsteFraværsdag = () => {
-    return sisteInntektsmelding && "førsteFraværsdag" in sisteInntektsmelding
+  const sisteInntektsmeldingFørsteFraværsdag =
+    sisteInntektsmelding && "førsteFraværsdag" in sisteInntektsmelding
       ? sisteInntektsmelding.førsteFraværsdag
       : undefined;
-  };
 
   const prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding =
     () => {
       const førsteFraværsdag = watch("førsteFraværsdag");
       const førsteFraværsdagTidligereInnsending =
-        sisteInntektsmeldingFørsteFraværsdag();
+        sisteInntektsmeldingFørsteFraværsdag;
       return førsteFraværsdagTidligereInnsending &&
         isAfter(førsteFraværsdag, førsteFraværsdagTidligereInnsending)
         ? førsteFraværsdagFremoverItidFeilmeldingHeading
@@ -181,14 +178,28 @@ export function Steg2Refusjon() {
               ytelse={opplysninger.ytelse}
             />
           )}
-          {prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding() && (
-            <Alert variant="warning">
-              <Heading level="3" size="small" spacing>
-                {førsteFraværsdagFremoverItidFeilmeldingHeading}
-              </Heading>
-              <BodyLong>{førsteFraværsdagFremoverItidFeilmelding}</BodyLong>
-            </Alert>
-          )}
+          {prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding() &&
+            sisteInntektsmeldingFørsteFraværsdag && (
+              <Alert variant="warning">
+                <Stack gap="2">
+                  <Heading level="3" size="small" spacing>
+                    {førsteFraværsdagFremoverItidFeilmeldingHeading}
+                  </Heading>
+                  <BodyLong>
+                    Første fraværsdag i forrige innsending var{" "}
+                    {formatDatoKort(
+                      new Date(sisteInntektsmeldingFørsteFraværsdag),
+                    )}
+                    .
+                  </BodyLong>
+                  <BodyLong>
+                    Skal du endre datoen dere ønsker refusjon fra fremover i
+                    tid, må du legge inn endringen under punktet «Ja, men kun
+                    deler av perioden eller varierende beløp».
+                  </BodyLong>
+                </Stack>
+              </Alert>
+            )}
           <UtbetalingOgRefusjon />
 
           <div className="flex gap-4 justify-center">

@@ -321,6 +321,11 @@ test.describe("AGI Første fraværsdag validering", () => {
       ),
     ).toBeVisible();
 
+    // Skal også vise første fraværsdag fra forrige innsending
+    await expect(
+      page.getByText("Første fraværsdag i forrige innsending var 01.04.2024."),
+    ).toBeVisible();
+
     // Mock successful validation for the date (selv om vi ikke skal kunne gå videre)
     await page.route(
       "**/*/arbeidsgiverinitiert/arbeidsforhold",
