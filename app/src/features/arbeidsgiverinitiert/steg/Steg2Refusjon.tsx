@@ -187,9 +187,11 @@ export function Steg2Refusjon() {
                   </Heading>
                   <BodyLong>
                     Første fraværsdag i forrige innsending var{" "}
-                    {formatDatoKort(
-                      new Date(sisteInntektsmeldingFørsteFraværsdag),
-                    )}
+                    <span className="font-bold">
+                      {formatDatoKort(
+                        new Date(sisteInntektsmeldingFørsteFraværsdag),
+                      )}
+                    </span>
                     .
                   </BodyLong>
                   <BodyLong>
