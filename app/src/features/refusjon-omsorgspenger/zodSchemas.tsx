@@ -222,6 +222,20 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             path: ["fraværHeleDager", index, "tom"],
           });
         }
+        // Check for overlapping periods within fraværHeleDager
+        if (periode.fom && periode.tom) {
+          const otherPerioder = data.fraværHeleDager.filter(
+            (_, otherIndex) => otherIndex !== index,
+          );
+          const overlap = perioderOverlapper([periode], otherPerioder);
+          if (overlap) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Perioden overlapper med en annen periode i hele dager",
+              path: ["fraværHeleDager", index, "fom"],
+            });
+          }
+        }
         if (
           data.harDekket10FørsteOmsorgsdager === "ja" &&
           perioderOverlapper(
@@ -253,6 +267,18 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           });
         }
         if (dag.dato) {
+          // Check for duplicate dates within fraværDelerAvDagen
+          const duplicateDates = data.fraværDelerAvDagen.filter(
+            (otherDag, otherIndex) =>
+              otherIndex !== index && otherDag.dato === dag.dato,
+          );
+          if (duplicateDates.length > 0) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: "Datoen er allerede oppgitt i delvise dager",
+              path: ["fraværDelerAvDagen", index, "dato"],
+            });
+          }
           // Fravær deler av dag må ikke overlappe med fravær hele dager
           const overlap = perioderOverlapper(
             [{ fom: dag.dato, tom: dag.dato }],
@@ -352,6 +378,21 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
             message: "Fra og med dato må være før til og med dato",
             path: ["dagerSomSkalTrekkes", index, "fom"],
           });
+        }
+        // Check for overlapping periods within dagerSomSkalTrekkes
+        if (dag.fom && dag.tom) {
+          const otherPerioder = data.dagerSomSkalTrekkes.filter(
+            (_, otherIndex) => otherIndex !== index,
+          );
+          const overlap = perioderOverlapper([dag], otherPerioder);
+          if (overlap) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message:
+                "Perioden overlapper med en annen periode i dager som skal trekkes",
+              path: ["dagerSomSkalTrekkes", index, "fom"],
+            });
+          }
         }
         // kan ikke overlappe med fravær hele dager
         const overlap = perioderOverlapper(data.fraværHeleDager, [
