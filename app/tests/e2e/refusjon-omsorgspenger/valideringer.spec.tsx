@@ -1076,6 +1076,265 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
+  test("Steg 3: Validering av overlappende perioder innenfor hele dager", async ({
+    page,
+  }) => {
+    await mockArbeidstakerOppslag({ page });
+    await page.goto(
+      `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
+    );
+
+    // Wait for page to load
+    await expect(
+      page.getByRole("heading", { name: "Om refusjon", exact: true }),
+    ).toBeVisible();
+
+    // Fill step 1
+    await page.getByRole("radio", { name: "Ja" }).click();
+    const currentYear = new Date().getFullYear();
+    await page.getByRole("radio", { name: String(currentYear) }).click();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 2 to load
+    await expect(
+      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+    ).toBeVisible();
+
+    // Fill step 2
+    await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
+    // Wait for network to be idle after API call
+    await page.waitForLoadState("networkidle");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 3 to load (with longer timeout)
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fill step 3 - add first periode for hele dager
+    await page.getByRole("radio", { name: "Ja" }).click();
+    await page
+      .getByRole("button", { name: "Legg til periode" })
+      .first()
+      .click();
+    await page.waitForTimeout(500);
+    const fom1 = `15.06.${currentYear}`;
+    const tom1 = `20.06.${currentYear}`;
+    await page.getByLabel("Fra og med").first().fill(fom1);
+    await page.getByLabel("Til og med").first().fill(tom1);
+
+    // Add second periode that overlaps with first periode
+    await page
+      .getByRole("button", { name: "Legg til periode" })
+      .first()
+      .click();
+    await page.waitForTimeout(500);
+    const fom2 = `18.06.${currentYear}`;
+    const tom2 = `25.06.${currentYear}`;
+    const fraOgMedFields = page.getByLabel("Fra og med");
+    await fraOgMedFields.nth(1).fill(fom2);
+    const tilOgMedFields = page.getByLabel("Til og med");
+    await tilOgMedFields.nth(1).fill(tom2);
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Should show error for overlapping periods within hele dager
+    await expect(
+      page.getByText("Perioden overlapper med en annen periode i hele dager"),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fix the error by adjusting dates to not overlap - error should disappear and we can proceed
+    const fom2Fixed = `25.06.${currentYear}`;
+    const tom2Fixed = `28.06.${currentYear}`;
+    await fraOgMedFields.nth(1).fill(fom2Fixed);
+    await tilOgMedFields.nth(1).fill(tom2Fixed);
+
+    // Error should be gone
+    await expect(
+      page.getByText("Perioden overlapper med en annen periode i hele dager"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
+  });
+
+  test("Steg 3: Validering av duplikate datoer innenfor delvise dager", async ({
+    page,
+  }) => {
+    await mockArbeidstakerOppslag({ page });
+    await page.goto(
+      `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
+    );
+
+    // Wait for page to load
+    await expect(
+      page.getByRole("heading", { name: "Om refusjon", exact: true }),
+    ).toBeVisible();
+
+    // Fill step 1
+    await page.getByRole("radio", { name: "Ja" }).click();
+    const currentYear = new Date().getFullYear();
+    await page.getByRole("radio", { name: String(currentYear) }).click();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 2 to load
+    await expect(
+      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+    ).toBeVisible();
+
+    // Fill step 2
+    await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
+    // Wait for network to be idle after API call
+    await page.waitForLoadState("networkidle");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 3 to load (with longer timeout)
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fill step 3 - add first delvis dag
+    await page.getByRole("radio", { name: "Ja" }).click();
+    await page.getByRole("button", { name: "Legg til dag" }).click();
+    await page.waitForTimeout(500);
+    const dato1 = `15.06.${currentYear}`;
+    const datoFields = page.getByRole("textbox", { name: "Dato" });
+    await datoFields.first().fill(dato1);
+    await page.getByLabel("Timer fravær").first().fill("3.5");
+
+    // Add second delvis dag with the same date
+    await page.getByRole("button", { name: "Legg til dag" }).click();
+    await page.waitForTimeout(500);
+    await datoFields.nth(1).fill(dato1);
+    await page.getByLabel("Timer fravær").nth(1).fill("4.0");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Should show error for duplicate date within delvise dager
+    await expect(
+      page.getByText("Datoen er allerede oppgitt i delvise dager"),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fix the error by changing the date to a different one - error should disappear and we can proceed
+    const dato2Fixed = `20.06.${currentYear}`;
+    await datoFields.nth(1).fill(dato2Fixed);
+
+    // Error should be gone
+    await expect(
+      page.getByText("Datoen er allerede oppgitt i delvise dager"),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
+  });
+
+  test("Steg 3: Validering av overlappende perioder innenfor dager som skal trekkes", async ({
+    page,
+  }) => {
+    await mockArbeidstakerOppslag({ page });
+    await page.goto(
+      `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
+    );
+
+    // Wait for page to load
+    await expect(
+      page.getByRole("heading", { name: "Om refusjon", exact: true }),
+    ).toBeVisible();
+
+    // Fill step 1
+    await page.getByRole("radio", { name: "Ja" }).click();
+    const currentYear = new Date().getFullYear();
+    await page.getByRole("radio", { name: String(currentYear) }).click();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 2 to load
+    await expect(
+      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+    ).toBeVisible();
+
+    // Fill step 2
+    await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
+    // Wait for network to be idle after API call
+    await page.waitForLoadState("networkidle");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Wait for step 3 to load (with longer timeout)
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fill step 3 - add first periode for dager som skal trekkes
+    await page.getByRole("radio", { name: "Ja" }).click();
+    const leggTilPerioderButtons = page.getByRole("button", {
+      name: "Legg til periode",
+    });
+    await leggTilPerioderButtons.nth(1).click();
+    await page.waitForTimeout(500);
+    const fom1 = `15.06.${currentYear}`;
+    const tom1 = `20.06.${currentYear}`;
+    await page.getByLabel("Fra og med").first().fill(fom1);
+    await page.getByLabel("Til og med").first().fill(tom1);
+
+    // Add second periode that overlaps with first periode
+    await leggTilPerioderButtons.nth(1).click();
+    await page.waitForTimeout(500);
+    const fom2 = `18.06.${currentYear}`;
+    const tom2 = `25.06.${currentYear}`;
+    const fraOgMedFields = page.getByLabel("Fra og med");
+    await fraOgMedFields.nth(1).fill(fom2);
+    const tilOgMedFields = page.getByLabel("Til og med");
+    await tilOgMedFields.nth(1).fill(tom2);
+    await page.getByRole("button", { name: "Neste steg" }).click();
+
+    // Should show error for overlapping periods within dager som skal trekkes
+    await expect(
+      page.getByText(
+        "Perioden overlapper med en annen periode i dager som skal trekkes",
+      ),
+    ).toBeVisible({ timeout: 10_000 });
+
+    // Fix the error by adjusting dates to not overlap - error should disappear and we can proceed
+    const fom2Fixed = `25.06.${currentYear}`;
+    const tom2Fixed = `28.06.${currentYear}`;
+    await fraOgMedFields.nth(1).fill(fom2Fixed);
+    await tilOgMedFields.nth(1).fill(tom2Fixed);
+
+    // Error should be gone
+    await expect(
+      page.getByText(
+        "Perioden overlapper med en annen periode i dager som skal trekkes",
+      ),
+    ).not.toBeVisible({ timeout: 5000 });
+
+    // Verify we can proceed to the next step
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page.waitForURL(
+      `**/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/4-refusjon`,
+      { timeout: 10_000 },
+    );
+    await expect(
+      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+    ).toBeVisible({ timeout: 10_000 });
+  });
+
   test("Steg 4: Validering av korrigert inntekt og endringsårsaker", async ({
     page,
   }) => {
