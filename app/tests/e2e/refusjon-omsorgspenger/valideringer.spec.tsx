@@ -1141,7 +1141,9 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Should show error for overlapping periods within hele dager
     await expect(
-      page.getByText("Perioden overlapper med en annen periode i hele dager"),
+      page
+        .getByText("Perioden overlapper med en annen periode i hele dager")
+        .first(),
     ).toBeVisible({ timeout: 10_000 });
 
     // Fix the error by adjusting dates to not overlap - error should disappear and we can proceed
@@ -1152,7 +1154,9 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Error should be gone
     await expect(
-      page.getByText("Perioden overlapper med en annen periode i hele dager"),
+      page
+        .getByText("Perioden overlapper med en annen periode i hele dager")
+        .first(),
     ).not.toBeVisible({ timeout: 5000 });
 
     // Verify we can proceed to the next step
@@ -1221,7 +1225,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Should show error for duplicate date within delvise dager
     await expect(
-      page.getByText("Datoen er allerede oppgitt i delvise dager"),
+      page.getByText("Datoen er allerede oppgitt i delvise dager").first(),
     ).toBeVisible({ timeout: 10_000 });
 
     // Fix the error by changing the date to a different one - error should disappear and we can proceed
@@ -1230,7 +1234,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Error should be gone
     await expect(
-      page.getByText("Datoen er allerede oppgitt i delvise dager"),
+      page.getByText("Datoen er allerede oppgitt i delvise dager").first(),
     ).not.toBeVisible({ timeout: 5000 });
 
     // Verify we can proceed to the next step
@@ -1306,9 +1310,11 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Should show error for overlapping periods within dager som skal trekkes
     await expect(
-      page.getByText(
-        "Perioden overlapper med en annen periode i dager som skal trekkes",
-      ),
+      page
+        .getByText(
+          "Perioden overlapper med en annen periode i dager som skal trekkes",
+        )
+        .first(),
     ).toBeVisible({ timeout: 10_000 });
 
     // Fix the error by adjusting dates to not overlap - error should disappear and we can proceed
@@ -1319,9 +1325,11 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Error should be gone
     await expect(
-      page.getByText(
-        "Perioden overlapper med en annen periode i dager som skal trekkes",
-      ),
+      page
+        .getByText(
+          "Perioden overlapper med en annen periode i dager som skal trekkes",
+        )
+        .first(),
     ).not.toBeVisible({ timeout: 5000 });
 
     // Verify we can proceed to the next step
