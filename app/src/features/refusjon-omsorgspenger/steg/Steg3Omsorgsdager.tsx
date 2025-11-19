@@ -62,7 +62,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
     aktørId: watch("ansattesAktørId") as string,
     arbeidsgiverIdent: watch("organisasjonsnummer") as string,
-    år: årForRefusjon as string,
+    år: årForRefusjon,
   });
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
 };
 
 const FraværHeleDagen = () => {
-  const { control, watch, clearErrors, setValue } = useSkjemaState();
+  const { control, watch, clearErrors, setValue, trigger } = useSkjemaState();
 
   useEffect(() => {
     setValue("meta.step", 3);
@@ -186,6 +186,14 @@ const FraværHeleDagen = () => {
   });
 
   const årForRefusjon = Number(watch("årForRefusjon"));
+  const fraværHeleDager = watch("fraværHeleDager");
+
+  // Trigger validation for all periods when any period changes
+  useEffect(() => {
+    if (fraværHeleDager?.length > 0) {
+      trigger("fraværHeleDager");
+    }
+  }, [fraværHeleDager, trigger]);
 
   return (
     <VStack gap="4">
@@ -281,7 +289,7 @@ const FraværDelerAvDagen = () => {
                   const valueWithoutCommas = value.replaceAll(",", ".");
                   setValue(
                     `fraværDelerAvDagen.${index}.timer`,
-                    valueWithoutCommas as unknown as string,
+                    valueWithoutCommas,
                   );
                 },
               })}

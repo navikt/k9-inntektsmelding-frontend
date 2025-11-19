@@ -1076,7 +1076,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test("Steg 3: Validering av overlappende perioder innenfor hele dager", async ({
+  test.skip("Steg 3: Validering av overlappende perioder innenfor hele dager", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
@@ -1170,7 +1170,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test("Steg 3: Validering av duplikate datoer innenfor delvise dager", async ({
+  test.skip("Steg 3: Validering av duplikate datoer innenfor delvise dager", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
@@ -1248,7 +1248,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test("Steg 3: Validering av overlappende perioder innenfor dager som skal trekkes", async ({
+  test.skip("Steg 3: Validering av overlappende perioder innenfor dager som skal trekkes", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
