@@ -62,7 +62,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
     aktørId: watch("ansattesAktørId") as string,
     arbeidsgiverIdent: watch("organisasjonsnummer") as string,
-    år: årForRefusjon as string,
+    år: årForRefusjon,
   });
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
 };
 
 const FraværHeleDagen = () => {
-  const { control, watch, clearErrors, setValue } = useSkjemaState();
+  const { control, watch, setValue } = useSkjemaState();
 
   useEffect(() => {
     setValue("meta.step", 3);
@@ -186,6 +186,7 @@ const FraværHeleDagen = () => {
   });
 
   const årForRefusjon = Number(watch("årForRefusjon"));
+  // Trigger validation for all periods when any period changes
 
   return (
     <VStack gap="4">
@@ -226,7 +227,6 @@ const FraværHeleDagen = () => {
           icon={<PlusIcon />}
           onClick={() => {
             append({ fom: "", tom: "" }, { shouldFocus: false });
-            clearErrors("fraværHeleDager");
           }}
           size="small"
           type="button"
@@ -240,8 +240,7 @@ const FraværHeleDagen = () => {
 };
 
 const FraværDelerAvDagen = () => {
-  const { control, register, formState, watch, clearErrors, setValue } =
-    useSkjemaState();
+  const { control, register, formState, watch, setValue } = useSkjemaState();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "fraværDelerAvDagen",
@@ -266,12 +265,8 @@ const FraværDelerAvDagen = () => {
               datepickerProps={{
                 defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
               }}
-              key={periode.id}
               label="Dato"
               name={`fraværDelerAvDagen.${index}.dato`}
-              rules={{
-                required: "Du må oppgi dato",
-              }}
             />
             <TextField
               label="Timer fravær"
@@ -281,7 +276,7 @@ const FraværDelerAvDagen = () => {
                   const valueWithoutCommas = value.replaceAll(",", ".");
                   setValue(
                     `fraværDelerAvDagen.${index}.timer`,
-                    valueWithoutCommas as unknown as string,
+                    valueWithoutCommas,
                   );
                 },
               })}
@@ -339,7 +334,7 @@ const FraværDelerAvDagen = () => {
                 timer, som avrundes til 3,5 timer i refusjonskravet
               </List.Item>
               <BodyLong>
-                Du kan regne på samme måste om ordinær arbeidstid er over eller
+                Du kan regne på samme måte om ordinær arbeidstid er over eller
                 under 7,5 time.
               </BodyLong>
             </List>
@@ -351,7 +346,6 @@ const FraværDelerAvDagen = () => {
           icon={<PlusIcon />}
           onClick={() => {
             append({ dato: "", timer: "" }, { shouldFocus: false });
-            clearErrors("fraværDelerAvDagen");
           }}
           size="small"
           type="button"
@@ -365,12 +359,11 @@ const FraværDelerAvDagen = () => {
 };
 
 const DagerSomSkalTrekkes = () => {
-  const { control, watch, clearErrors } = useSkjemaState();
+  const { control, watch } = useSkjemaState();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "dagerSomSkalTrekkes",
   });
-
   const årForRefusjon = Number(watch("årForRefusjon"));
   return (
     <VStack gap="4">
@@ -422,7 +415,6 @@ const DagerSomSkalTrekkes = () => {
           icon={<PlusIcon />}
           onClick={() => {
             append({ fom: "", tom: "" }, { shouldFocus: false });
-            clearErrors("dagerSomSkalTrekkes");
           }}
           size="small"
           type="button"
