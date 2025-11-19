@@ -164,15 +164,17 @@ test("oppsummering vises riktig når tomdato er gjort valgfri", async ({
   await page
     .getByLabel("Hva er årsaken til endringen?")
     .selectOption("Sykefravær");
-  await page.getByLabel("Fra og med").fill("01.6.2028");
+  await page.getByLabel("Fra og med").fill("01.06.2028");
   await page.getByRole("button", { name: "Neste steg" }).click();
   await expectError({
     page,
     label: "Fra og med",
     error: "Lønnsendring må være før første dag med fravær",
   });
-  await page.getByLabel("Fra og med").fill("01.4.2024");
-  await page.getByLabel("Til og med").fill("01.7.2024");
+  await page.getByLabel("Fra og med").clear();
+  await page.getByLabel("Fra og med").fill("01.04.2024");
+  await page.getByLabel("Til og med").clear();
+  await page.getByLabel("Til og med").fill("01.07.2024");
 
   await page.getByText("Ansatt har fremdeles sykefravær").click();
 

@@ -33,7 +33,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
     "Refusjon – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
 
-  const { handleSubmit, getValues, setValue, trigger } = useSkjemaState();
+  const { handleSubmit, getValues, setValue } = useSkjemaState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,21 +46,18 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
     }
   }, []);
 
-  const onSubmit = handleSubmit(
-    (skjemadata) => {
-      const { korrigertInntekt, endringAvInntektÅrsaker } = skjemadata;
+  const onSubmit = handleSubmit((skjemadata) => {
+    const { korrigertInntekt, endringAvInntektÅrsaker } = skjemadata;
 
-      setValue(
-        "endringAvInntektÅrsaker",
-        korrigertInntekt ? endringAvInntektÅrsaker : [],
-      );
-      navigate({
-        from: "/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon",
-        to: "../5-oppsummering",
-      });
-    },
-    () => trigger(),
-  );
+    setValue(
+      "endringAvInntektÅrsaker",
+      korrigertInntekt ? endringAvInntektÅrsaker : [],
+    );
+    navigate({
+      from: "/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon",
+      to: "../5-oppsummering",
+    });
+  });
 
   const fraværHeleDager = getValues("fraværHeleDager");
   const fraværDelerAvDagen = getValues("fraværDelerAvDagen");

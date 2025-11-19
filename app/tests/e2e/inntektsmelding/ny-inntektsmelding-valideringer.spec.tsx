@@ -117,8 +117,8 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     error: "Må oppgis",
   });
 
-  await page.getByLabel("Fra og med").fill("01.8.2024");
-  await page.getByLabel("Til og med").fill("01.8.2024"); // TODO: mangler validering på at den ikke kan være tidligere
+  await page.getByLabel("Fra og med").fill("01.08.2024");
+  await page.getByLabel("Til og med").fill("01.08.2024"); // TODO: mangler validering på at den ikke kan være tidligere
   await page.getByRole("button", { name: "Neste steg" }).click();
   await expectError({
     page,
@@ -131,7 +131,9 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     label: "Til og med",
     error: "Lønnsendring må være før første dag med fravær",
   });
-  await page.getByLabel("Fra og med").fill("01.4.2024");
+  await page.getByLabel("Fra og med").clear();
+  await page.getByLabel("Fra og med").fill("01.04.2024");
+  await page.getByLabel("Til og med").clear();
   await page.getByLabel("Til og med").fill("01.5.2024");
 
   await page.getByRole("button", { name: "Legg til ny endringsårsak" }).click();
