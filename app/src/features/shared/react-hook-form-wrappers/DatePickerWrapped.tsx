@@ -39,10 +39,11 @@ export function DatePickerWrapped({
   return (
     <DatePicker {...datePickerProperties.datepickerProps}>
       <DatePicker.Input
-        error={fieldState.error?.message}
         {...dateInputProps}
-        ref={field.ref}
         {...datePickerProperties.inputProps}
+        error={fieldState.error?.message}
+        onBlur={field.onBlur}
+        ref={field.ref}
       />
     </DatePicker>
   );

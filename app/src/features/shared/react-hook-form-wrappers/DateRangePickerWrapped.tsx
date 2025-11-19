@@ -60,7 +60,7 @@ export const DateRangePickerWrapped = forwardRef<
         <DatePicker.Input
           {...fromInputProps}
           className="w-full max-w-[50%]"
-          error={fromFieldState.isTouched && fromFieldState.error?.message}
+          error={fromFieldState.error?.message}
           label="Fra og med"
           onBlur={fromField.onBlur}
           ref={fromField.ref}
@@ -68,7 +68,7 @@ export const DateRangePickerWrapped = forwardRef<
         <DatePicker.Input
           {...toInputProps}
           className="w-full max-w-[50%]"
-          error={toFieldState.isTouched && toFieldState.error?.message}
+          error={toFieldState.error?.message}
           label="Til og med"
           onBlur={toField.onBlur}
           ref={toField.ref}

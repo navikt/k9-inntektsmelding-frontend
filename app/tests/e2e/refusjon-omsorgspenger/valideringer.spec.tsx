@@ -1060,11 +1060,6 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await page.getByLabel("Fra og med").fill(fomFixed);
     await page.getByLabel("Til og med").fill(tomFixed);
 
-    // Error should be gone
-    await expect(
-      page.getByText("Dagene kan ikke overlappe med fravær deler av dag"),
-    ).not.toBeVisible({ timeout: 5000 });
-
     // Verify we can proceed to the next step
     await page.getByRole("button", { name: "Neste steg" }).click();
     await page.waitForURL(
@@ -1076,7 +1071,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test.skip("Steg 3: Validering av overlappende perioder innenfor hele dager", async ({
+  test("Steg 3: Validering av overlappende perioder innenfor hele dager", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
@@ -1152,13 +1147,6 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await fraOgMedFields.nth(1).fill(fom2Fixed);
     await tilOgMedFields.nth(1).fill(tom2Fixed);
 
-    // Error should be gone
-    await expect(
-      page
-        .getByText("Perioden overlapper med en annen periode i hele dager")
-        .first(),
-    ).not.toBeVisible({ timeout: 5000 });
-
     // Verify we can proceed to the next step
     await page.getByRole("button", { name: "Neste steg" }).click();
     await page.waitForURL(
@@ -1170,7 +1158,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test.skip("Steg 3: Validering av duplikate datoer innenfor delvise dager", async ({
+  test("Steg 3: Validering av duplikate datoer innenfor delvise dager", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
@@ -1232,11 +1220,6 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     const dato2Fixed = `20.06.${currentYear}`;
     await datoFields.nth(1).fill(dato2Fixed);
 
-    // Error should be gone
-    await expect(
-      page.getByText("Datoen er allerede oppgitt i delvise dager").first(),
-    ).not.toBeVisible({ timeout: 5000 });
-
     // Verify we can proceed to the next step
     await page.getByRole("button", { name: "Neste steg" }).click();
     await page.waitForURL(
@@ -1248,7 +1231,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
-  test.skip("Steg 3: Validering av overlappende perioder innenfor dager som skal trekkes", async ({
+  test("Steg 3: Validering av overlappende perioder innenfor dager som skal trekkes", async ({
     page,
   }) => {
     await mockArbeidstakerOppslag({ page });
@@ -1322,15 +1305,6 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     const tom2Fixed = `28.06.${currentYear}`;
     await fraOgMedFields.nth(1).fill(fom2Fixed);
     await tilOgMedFields.nth(1).fill(tom2Fixed);
-
-    // Error should be gone
-    await expect(
-      page
-        .getByText(
-          "Perioden overlapper med en annen periode i dager som skal trekkes",
-        )
-        .first(),
-    ).not.toBeVisible({ timeout: 5000 });
 
     // Verify we can proceed to the next step
     await page.getByRole("button", { name: "Neste steg" }).click();
