@@ -36,20 +36,20 @@ const baseSchema = z.object({
   harDekket10FørsteOmsorgsdager: z.preprocess((val) => val || "", z.string()),
   fraværHeleDager: z.array(
     z.object({
-      fom: z.string().optional(),
-      tom: z.string().optional(),
+      fom: z.string(),
+      tom: z.string(),
     }),
   ),
   fraværDelerAvDagen: z.array(
     z.object({
-      dato: z.string().optional(),
+      dato: z.preprocess((val) => val || "", z.string()),
       timer: z.preprocess((val) => String(val) || "", z.string()),
     }),
   ),
   dagerSomSkalTrekkes: z.array(
     z.object({
-      fom: z.string().optional(),
-      tom: z.string().optional(),
+      fom: z.string(),
+      tom: z.string(),
     }),
   ),
 
