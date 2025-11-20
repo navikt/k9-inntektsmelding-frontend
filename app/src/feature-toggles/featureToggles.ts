@@ -1,5 +1,5 @@
 import { devGcpFeatureToggles } from "./dev-gcp";
-import { FeatureTogglesType } from "./FeatureTogglesType";
+import { FeatureTogglesType } from "./geatureTogglesType";
 import { prodGcpFeatureToggles } from "./prod-gcp";
 
 const PROD = "prod-gcp";
