@@ -27,5 +27,4 @@ const environment = finnEnvironmentForHostname(
   globalThis?.location?.hostname ?? "",
 );
 
-export const featureToggles =
-  togglesPerEnvironment[environment] ?? prodGcpFeatureToggles;
+export const featureToggles = togglesPerEnvironment[environment];

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { finnEnvironmentForHostname } from "~/feature-toggles";
+import { finnEnvironmentForHostname } from "~/feature-toggles/featureToggles";
 
 describe("finnEnvironmentForHostname", () => {
   it("gir dev-gcp for intern.dev.nav.no-domener", () => {
