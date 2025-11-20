@@ -118,13 +118,8 @@ export function UnntattAaregRegistrering({
             label="Ansattes fødselsnummer"
           />
         </HStack>
-        <Button
-          className="w-fit"
-          loading={opprettOpplysningerMutation.isPending}
-          type="submit"
-          variant="secondary"
-        >
-          Opprett inntektsmelding
+        <Button type="submit" variant="secondary">
+          Hent opplysninger
         </Button>
         <HentOpplysningerError error={opprettOpplysningerMutation.error} />
         {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
