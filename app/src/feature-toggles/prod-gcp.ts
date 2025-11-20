@@ -1,4 +1,4 @@
-import { FeatureTogglesType } from "./geatureTogglesType";
+import { FeatureTogglesType } from "./featureTogglesType";
 
 export const prodGcpFeatureToggles = {
   AGI_UREGISTRERT: false,
