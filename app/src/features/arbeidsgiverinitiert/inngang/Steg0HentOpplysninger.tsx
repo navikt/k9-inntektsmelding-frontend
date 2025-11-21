@@ -8,7 +8,7 @@ import { formatYtelsesnavn } from "~/utils.ts";
 import { AnnenÅrsak } from "./AnnenÅrsak";
 import { NyAnsattForm } from "./NyAnsattForm";
 import { FormType } from "./types";
-import { UnntattAaregRegistrering } from "./UnntattAaregRegistrering";
+import { UnntattAaregRegistreringForm } from "./UnntattAaregRegistreringForm";
 
 export const HentOpplysninger = () => {
   const route = getRouteApi("/opprett");
@@ -59,7 +59,7 @@ export const HentOpplysninger = () => {
             <NyAnsattForm ytelseType={ytelseType} />
           )}
           {formMethods.watch("årsak") === "unntatt_aaregister" && (
-            <UnntattAaregRegistrering ytelseType={ytelseType} />
+            <UnntattAaregRegistreringForm ytelseType={ytelseType} />
           )}
           {formMethods.watch("årsak") === "annen_årsak" && <AnnenÅrsak />}
         </div>

@@ -4,6 +4,7 @@ import { setBreadcrumbs } from "@navikt/nav-dekoratoren-moduler";
 import { getRouteApi, Outlet, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 
+import { InntektsmeldingSkjemaStateProviderAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/SkjemaStateContext";
 import { InntektsmeldingSkjemaStateProvider } from "~/features/inntektsmelding/SkjemaStateContext";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
 import { formatYtelsesnavn } from "~/utils.ts";
@@ -107,12 +108,12 @@ export const InntektsmeldingRootUnntattAaregister = () => {
   const opplysninger = useOpplysninger();
 
   return (
-    <InntektsmeldingSkjemaStateProvider skjemaId={id}>
+    <InntektsmeldingSkjemaStateProviderAGIUnntattAaregister skjemaId={id}>
       <InntektsmeldingRootLayoutComponent
         skjemaId={id}
         ytelse={opplysninger.ytelse}
         {...opplysninger.arbeidsgiver}
       />
-    </InntektsmeldingSkjemaStateProvider>
+    </InntektsmeldingSkjemaStateProviderAGIUnntattAaregister>
   );
 };

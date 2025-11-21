@@ -25,7 +25,7 @@ import {
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";
 
-export function UnntattAaregRegistrering({
+export function UnntattAaregRegistreringForm({
   ytelseType,
 }: {
   ytelseType: Ytelsetype;
@@ -66,8 +66,8 @@ export function UnntattAaregRegistrering({
         },
         forespørselStatus: "UNDER_BEHANDLING",
         forespørselType: "BESTILT_AV_FAGSYSTEM",
-        skjæringstidspunkt: "",
-        førsteUttaksdato: "",
+        skjæringstidspunkt: new Date().toDateString(),
+        førsteUttaksdato: new Date().toISOString(),
       }) satisfies Promise<OpplysningerDto>;
     },
     onSuccess: (opplysninger) => {

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Steg2InntektOgRefusjon } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
+import { Steg2InntektOgRefusjon } from "~/features/arbeidsgiverinitiert/unntattAAregister/steg/Steg2InntektOgRefusjon";
 import { HjelpetekstToggle } from "~/features/shared/Hjelpetekst";
 
 export const Route = createFileRoute(
