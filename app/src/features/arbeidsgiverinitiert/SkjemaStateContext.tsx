@@ -7,7 +7,7 @@ import {
 } from "react";
 import { ZodError } from "zod";
 
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import { logDev } from "~/utils";
 
 import { useOpplysninger } from "../shared/hooks/useOpplysninger.tsx";
@@ -51,7 +51,7 @@ export const InntektsmeldingSkjemaStateProviderAGI = ({
 }: InntektsmeldingSkjemaStateProviderProps) => {
   const [state, setState] =
     useSessionStorageState<InntektsmeldingSkjemaStateAGI>(
-      "skjemadata-" + ARBEIDSGIVER_INITERT_ID,
+      "skjemadata-" + ARBEIDSGIVERINITERT_NYANSATT_ID,
       defaultSkjemaState(),
       InntektsmeldingSkjemaStateSchema,
     );

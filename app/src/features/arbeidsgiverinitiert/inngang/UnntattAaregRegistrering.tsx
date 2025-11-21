@@ -15,8 +15,8 @@ import { useFormContext } from "react-hook-form";
 
 import { hentOpplysninger } from "~/api/queries.ts";
 import { featureToggles } from "~/feature-toggles/featureToggles";
-import { usePersonOppslag } from "~/features/shared/hooks/usePersonOppslag";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
+import { ARBEIDSGIVERINITIERT_UREGISTRERT_ID } from "~/routes/opprett";
 import { OpplysningerRequest, Ytelsetype } from "~/types/api-models.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
@@ -31,7 +31,7 @@ export function UnntattAaregRegistrering({
   const navigate = useNavigate();
 
   //TODO: Erstatt med egen usePersonOppslag hook for unntatt_aaregister
-  const hentPersonMutation = usePersonOppslag();
+  const hentPersonMutation = usePersonOppslagUnntattAareg();
 
   //TODO: Gjenbruk, denne kan være lik som i NyAnsattForm
   const opprettOpplysningerMutation = useMutation({
@@ -42,19 +42,21 @@ export function UnntattAaregRegistrering({
       if (opplysninger.forespørselUuid === undefined) {
         const opplysningerMedId = {
           ...opplysninger,
-          forespørselUuid: ARBEIDSGIVER_INITERT_ID,
+          forespørselUuid: ARBEIDSGIVERINITIERT_UREGISTRERT_ID,
         };
 
         sessionStorage.setItem(
-          ARBEIDSGIVER_INITERT_ID,
+          ARBEIDSGIVERINITIERT_UREGISTRERT_ID,
           JSON.stringify(opplysningerMedId),
         );
-        sessionStorage.removeItem(`skjemadata-${ARBEIDSGIVER_INITERT_ID}`);
+        sessionStorage.removeItem(
+          `skjemadata-${ARBEIDSGIVERINITIERT_UREGISTRERT_ID}`,
+        );
 
         return navigate({
-          to: "/agi/$id/dine-opplysninger",
+          to: "/agi-uregistrert/$id/dine-opplysninger",
           params: {
-            id: ARBEIDSGIVER_INITERT_ID,
+            id: ARBEIDSGIVERINITIERT_UREGISTRERT_ID,
           },
         });
       }

@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger.tsx";
 import { DineOpplysninger } from "../../shared/skjema-moduler/DineOpplysninger.tsx";
@@ -21,7 +21,7 @@ export const Steg1DineOpplysningerAGI = () => {
     }));
     navigate({
       from: "/agi/$id/dine-opplysninger",
-      params: { id: opplysninger.forespørselUuid || ARBEIDSGIVER_INITERT_ID },
+      params: { id: opplysninger.forespørselUuid || ARBEIDSGIVERINITERT_NYANSATT_ID },
       to: "../refusjon",
     });
   };

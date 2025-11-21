@@ -8,7 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useEksisterendeInntektsmeldinger } from "~/features/shared/hooks/useEksisterendeInntektsmeldinger.tsx";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import { formatDatoKort, formatYtelsesnavn } from "~/utils";
 
 import { PersonOppslagError } from "../../shared/components/PersonOppslagFeil.tsx";
@@ -142,7 +142,7 @@ export function Steg2Refusjon() {
           navigate({
             from: "/agi/$id/refusjon",
             params: {
-              id: opplysninger.forespørselUuid || ARBEIDSGIVER_INITERT_ID,
+              id: opplysninger.forespørselUuid || ARBEIDSGIVERINITERT_NYANSATT_ID,
             },
             to: "../oppsummering",
           });

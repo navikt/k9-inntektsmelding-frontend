@@ -6,7 +6,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { sendInntektsmeldingArbeidsgiverInitiert } from "~/api/mutations.ts";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import type {
   OpplysningerDto,
   SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
@@ -101,7 +101,7 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
       navigate({
         to: "/agi/$id/kvittering",
         params: {
-          id: opplysninger.forespørselUuid || ARBEIDSGIVER_INITERT_ID,
+          id: opplysninger.forespørselUuid || ARBEIDSGIVERINITERT_NYANSATT_ID,
         },
       });
     },
@@ -159,7 +159,7 @@ function lagSendInntektsmeldingRequest(
       beløp: formatStrengTilTall(r.beløp),
     })),
     foresporselUuid:
-      opplysninger.forespørselUuid === ARBEIDSGIVER_INITERT_ID
+      opplysninger.forespørselUuid === ARBEIDSGIVERINITERT_NYANSATT_ID
         ? undefined
         : opplysninger.forespørselUuid,
   } satisfies SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType;

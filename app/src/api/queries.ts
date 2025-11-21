@@ -4,7 +4,7 @@ import { z } from "zod";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import {
   feilmeldingSchema,
   grunnbeløpSchema,
@@ -13,6 +13,7 @@ import {
   OpplysningerRequest,
   opplysningerSchema,
   SendInntektsmeldingResponseDto,
+  SlåOppArbeidstakerResponseDto,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-models";
@@ -117,11 +118,11 @@ export function mapInntektsmeldingResponseTilValidState(
 export async function hentOpplysningerData(
   uuid: string,
 ): Promise<OpplysningerDto> {
-  if (uuid === ARBEIDSGIVER_INITERT_ID) {
+  if (uuid === ARBEIDSGIVERINITERT_NYANSATT_ID) {
     // Da har vi en fakeId. Hent fra sessionstorage
     const opplysninger = parseStorageItem(
       sessionStorage,
-      ARBEIDSGIVER_INITERT_ID,
+      ARBEIDSGIVERINITERT_NYANSATT_ID,
       opplysningerSchema,
     );
     if (!opplysninger) {
@@ -192,6 +193,30 @@ export async function hentPersonFraFnr(
   }
 
   return parsedJson.data;
+}
+
+export async function hentPersonFraFnrUnntattAareg(
+  fnr: string,
+  ytelsetype: Ytelsetype,
+  førsteFraværsdag: string,
+): Promise<SlåOppArbeidstakerResponseDto> {
+  // foreløpig stub
+
+  return new Promise<SlåOppArbeidstakerResponseDto>((resolve) => {
+    setTimeout(() => {
+      return resolve({
+        fornavn: "Ola",
+        etternavn: "Nordmann",
+        arbeidsforhold: [
+          {
+            organisasjonsnavn: "NAV",
+            organisasjonsnummer: "974652293",
+          },
+        ],
+        kjønn: "MANN",
+      });
+    }, 1000);
+  });
 }
 
 export async function hentOpplysninger(

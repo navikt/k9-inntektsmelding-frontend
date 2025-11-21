@@ -16,7 +16,7 @@ import { hentOpplysninger } from "~/api/queries.ts";
 import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFeil";
 import { usePersonOppslag } from "~/features/shared/hooks/usePersonOppslag";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import { OpplysningerRequest, Ytelsetype } from "~/types/api-models.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
@@ -36,19 +36,21 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
       if (opplysninger.forespørselUuid === undefined) {
         const opplysningerMedId = {
           ...opplysninger,
-          forespørselUuid: ARBEIDSGIVER_INITERT_ID,
+          forespørselUuid: ARBEIDSGIVERINITERT_NYANSATT_ID,
         };
 
         sessionStorage.setItem(
-          ARBEIDSGIVER_INITERT_ID,
+          ARBEIDSGIVERINITERT_NYANSATT_ID,
           JSON.stringify(opplysningerMedId),
         );
-        sessionStorage.removeItem(`skjemadata-${ARBEIDSGIVER_INITERT_ID}`);
+        sessionStorage.removeItem(
+          `skjemadata-${ARBEIDSGIVERINITERT_NYANSATT_ID}`,
+        );
 
         return navigate({
           to: "/agi/$id/dine-opplysninger",
           params: {
-            id: ARBEIDSGIVER_INITERT_ID,
+            id: ARBEIDSGIVERINITERT_NYANSATT_ID,
           },
         });
       }

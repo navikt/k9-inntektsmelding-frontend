@@ -14,7 +14,7 @@ import {
 import { OpplysningerDto } from "~/types/api-models";
 import { logDev } from "~/utils";
 
-import { ARBEIDSGIVER_INITERT_ID } from "./opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "./opprett";
 
 const mapInntektsmeldingResponseTilValidState = (
   im: SendInntektsmeldingResponseDto,
@@ -38,7 +38,7 @@ const mapInntektsmeldingResponseTilValidState = (
 };
 
 export async function hentEksisterendeInntektsmeldinger(uuid: string) {
-  if (uuid === ARBEIDSGIVER_INITERT_ID) {
+  if (uuid === ARBEIDSGIVERINITERT_NYANSATT_ID) {
     return [];
   }
   const response = await fetch(
