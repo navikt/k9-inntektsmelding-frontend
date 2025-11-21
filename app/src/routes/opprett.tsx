@@ -5,7 +5,8 @@ import { InntektsmeldingRootLayoutComponent } from "~/features/shared/rot-layout
 import { YtelsetypeSchema } from "~/types/api-models";
 
 export const ARBEIDSGIVERINITERT_NYANSATT_ID = "agi";
-export const ARBEIDSGIVERINITIERT_UREGISTRERT_ID = "agi-uregistrert";
+export const ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID =
+  "agi-unntatt-aaregister";
 
 const agiSearchParams = z.object({
   ytelseType: YtelsetypeSchema,

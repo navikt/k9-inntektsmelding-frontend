@@ -14,8 +14,8 @@ import { useEffect } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
 
-import { useInntektsmeldingSkjemaAGINyansatt } from "../nyansatt/SkjemaStateContext";
-import { SkjemaoppsummeringAGI } from "../nyansatt/SkjemaoppsummeringAGI";
+import { SkjemaoppsummeringAGI } from "./SkjemaoppsummeringAGI";
+import { useInntektsmeldingSkjemaAGINyansatt } from "./SkjemaStateContext";
 
 const route = getRouteApi("/agi/$id");
 

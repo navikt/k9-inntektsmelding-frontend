@@ -2,13 +2,17 @@ import { getRouteApi, useLocation } from "@tanstack/react-router";
 
 export const useOpplysninger = () => {
   const location = useLocation();
-  const route = location.pathname.startsWith("/agi")
-    ? getRouteApi("/agi/$id")
-    : getRouteApi("/$id");
-  const routeData = route.useLoaderData();
 
-  if (!routeData?.opplysninger) {
-    throw new Error("useOpplysninger kan kun brukes på /:id eller /agi routes");
+  const erAGIUnntattAaregister = location.pathname.startsWith(
+    "/agi-unntatt-aaregister",
+  );
+  const erAGI = location.pathname.startsWith("/agi");
+  if (erAGIUnntattAaregister) {
+    return getRouteApi("/agi-unntatt-aaregister/$id").useLoaderData()
+      .opplysninger;
   }
-  return routeData.opplysninger;
+  if (erAGI) {
+    return getRouteApi("/agi/$id").useLoaderData().opplysninger;
+  }
+  return getRouteApi("/$id").useLoaderData().opplysninger;
 };

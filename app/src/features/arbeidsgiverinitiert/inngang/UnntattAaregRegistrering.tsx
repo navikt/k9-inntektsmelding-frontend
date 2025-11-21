@@ -13,11 +13,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
-import { hentOpplysninger } from "~/api/queries.ts";
 import { featureToggles } from "~/feature-toggles/featureToggles";
 import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
-import { ARBEIDSGIVERINITIERT_UREGISTRERT_ID } from "~/routes/opprett";
-import { OpplysningerRequest, Ytelsetype } from "~/types/api-models.ts";
+import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
+import {
+  OpplysningerDto,
+  OpplysningerRequest,
+  Ytelsetype,
+} from "~/types/api-models.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";
@@ -35,28 +38,57 @@ export function UnntattAaregRegistrering({
 
   //TODO: Gjenbruk, denne kan være lik som i NyAnsattForm
   const opprettOpplysningerMutation = useMutation({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
-      return hentOpplysninger(opplysningerRequest);
+      // stub
+      return Promise.resolve({
+        forespørselUuid: undefined,
+        person: {
+          fornavn: "Ola",
+          etternavn: "Nordmann",
+          fødselsnummer: "26448515302",
+          aktørId: "1234567890123",
+        },
+        arbeidsgiver: {
+          organisasjonNavn: "NAV",
+          organisasjonNummer: "315853370",
+        },
+        ytelse: "PLEIEPENGER_SYKT_BARN",
+        innsender: {
+          fornavn: "Emil",
+          etternavn: "Johansen",
+          mellomnavn: undefined,
+          telefon: undefined,
+        },
+        inntektsopplysninger: {
+          gjennomsnittLønn: 0,
+          månedsinntekter: [],
+        },
+        forespørselStatus: "UNDER_BEHANDLING",
+        forespørselType: "BESTILT_AV_FAGSYSTEM",
+        skjæringstidspunkt: "",
+        førsteUttaksdato: "",
+      }) satisfies Promise<OpplysningerDto>;
     },
     onSuccess: (opplysninger) => {
       if (opplysninger.forespørselUuid === undefined) {
         const opplysningerMedId = {
           ...opplysninger,
-          forespørselUuid: ARBEIDSGIVERINITIERT_UREGISTRERT_ID,
+          forespørselUuid: ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
         };
 
         sessionStorage.setItem(
-          ARBEIDSGIVERINITIERT_UREGISTRERT_ID,
+          ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
           JSON.stringify(opplysningerMedId),
         );
         sessionStorage.removeItem(
-          `skjemadata-${ARBEIDSGIVERINITIERT_UREGISTRERT_ID}`,
+          `skjemadata-${ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID}`,
         );
 
         return navigate({
-          to: "/agi-uregistrert/$id/dine-opplysninger",
+          to: "/agi-unntatt-aaregister/$id/dine-opplysninger",
           params: {
-            id: ARBEIDSGIVERINITIERT_UREGISTRERT_ID,
+            id: ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
           },
         });
       }
@@ -69,25 +101,18 @@ export function UnntattAaregRegistrering({
   });
 
   const handleSubmit = (values: FormType) => {
-    hentPersonMutation.mutate(
-      {
-        fødselsnummer: values.fødselsnummer,
-        ytelse: ytelseType,
-        førsteFraværsdag: values.førsteFraværsdag,
+    hentPersonMutation.mutate(undefined, {
+      onSuccess: (data) => {
+        if (data.arbeidsforhold.length === 1) {
+          return opprettOpplysningerMutation.mutate({
+            fødselsnummer: values.fødselsnummer,
+            førsteFraværsdag: values.førsteFraværsdag,
+            ytelseType,
+            organisasjonsnummer: data.arbeidsforhold[0].organisasjonsnummer,
+          });
+        }
       },
-      {
-        onSuccess: (data) => {
-          if (data.arbeidsforhold.length === 1) {
-            return opprettOpplysningerMutation.mutate({
-              fødselsnummer: values.fødselsnummer,
-              førsteFraværsdag: values.førsteFraværsdag,
-              ytelseType,
-              organisasjonsnummer: data.arbeidsforhold[0].organisasjonsnummer,
-            });
-          }
-        },
-      },
-    );
+    });
   };
 
   if (!featureToggles.AGI_NYANSATT) {
@@ -120,9 +145,11 @@ export function UnntattAaregRegistrering({
             label="Ansattes fødselsnummer"
           />
         </HStack>
-        <Button type="submit" variant="secondary">
-          Hent opplysninger
-        </Button>
+        <div>
+          <Button type="submit" variant="secondary">
+            Hent opplysninger
+          </Button>
+        </div>
         <HentOpplysningerError error={opprettOpplysningerMutation.error} />
         {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
           <Button

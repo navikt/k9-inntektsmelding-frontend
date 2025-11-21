@@ -10,21 +10,21 @@ import { ZodError } from "zod";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import { logDev } from "~/utils";
 
-import { useOpplysninger } from "../shared/hooks/useOpplysninger.tsx";
-import { useSessionStorageState } from "../shared/hooks/usePersistedState.tsx";
+import { useOpplysninger } from "../../shared/hooks/useOpplysninger.tsx";
+import { useSessionStorageState } from "../../shared/hooks/usePersistedState.tsx";
 import {
-  AGIValidatedInntektsmelding,
-  InntektsmeldingSkjemaStateAGI,
-  InntektsmeldingSkjemaStateValidAGI,
+  AGIValidatedInntektsmeldingNyansatt,
+  InntektsmeldingSkjemaStateAGINyansatt,
+  InntektsmeldingSkjemaStateValidAGINyansatt,
 } from "./zodSchemas.tsx";
-import { InntektsmeldingSkjemaStateSchema } from "./zodSchemas.tsx";
+import { InntektsmeldingSkjemaStateSchemaNyansatt } from "./zodSchemas.tsx";
 
 type InntektsmeldingSkjemaStateContextTypeAGI = {
-  gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValidAGI;
+  gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValidAGINyansatt;
   inntektsmeldingSkjemaStateError?: ZodError;
-  inntektsmeldingSkjemaState: InntektsmeldingSkjemaStateAGI;
+  inntektsmeldingSkjemaState: InntektsmeldingSkjemaStateAGINyansatt;
   setInntektsmeldingSkjemaState: Dispatch<
-    SetStateAction<InntektsmeldingSkjemaStateAGI>
+    SetStateAction<InntektsmeldingSkjemaStateAGINyansatt>
   >;
 };
 const InntektsmeldingSkjemaStateContextAGI =
@@ -43,21 +43,21 @@ const defaultSkjemaState = () => {
       telefonnummer: "",
     },
     refusjon: [],
-  } satisfies InntektsmeldingSkjemaStateAGI;
+  } satisfies InntektsmeldingSkjemaStateAGINyansatt;
 };
 
-export const InntektsmeldingSkjemaStateProviderAGI = ({
+export const InntektsmeldingSkjemaStateProviderAGINyansatt = ({
   children,
 }: InntektsmeldingSkjemaStateProviderProps) => {
   const [state, setState] =
-    useSessionStorageState<InntektsmeldingSkjemaStateAGI>(
+    useSessionStorageState<InntektsmeldingSkjemaStateAGINyansatt>(
       "skjemadata-" + ARBEIDSGIVERINITERT_NYANSATT_ID,
       defaultSkjemaState(),
-      InntektsmeldingSkjemaStateSchema,
+      InntektsmeldingSkjemaStateSchemaNyansatt,
     );
 
   const gyldigInntektsmeldingSkjemaState =
-    AGIValidatedInntektsmelding.safeParse(state);
+    AGIValidatedInntektsmeldingNyansatt.safeParse(state);
 
   if (!gyldigInntektsmeldingSkjemaState.success) {
     logDev("error", gyldigInntektsmeldingSkjemaState.error);
@@ -78,7 +78,7 @@ export const InntektsmeldingSkjemaStateProviderAGI = ({
 };
 
 /** Henter ut global skjematilstand, og lar deg manipulere den */
-export const useInntektsmeldingSkjemaAGI = () => {
+export const useInntektsmeldingSkjemaAGINyansatt = () => {
   const context = useContext(InntektsmeldingSkjemaStateContextAGI);
   if (!context) {
     throw new Error(

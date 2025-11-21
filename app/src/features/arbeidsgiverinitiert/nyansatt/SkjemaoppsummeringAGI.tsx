@@ -5,14 +5,14 @@ import {
   RefusjonOppsummering,
   UtbetalingOgRefusjonOppsummering,
 } from "../../inntektsmelding/visningskomponenter/Skjemaoppsummering.tsx";
-import { InntektsmeldingSkjemaStateValidAGI } from "../zodSchemas.tsx";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "./zodSchemas.tsx";
 
 export const SkjemaoppsummeringAGI = ({
   opplysninger,
   gyldigInntektsmeldingSkjemaState,
 }: {
   opplysninger: OpplysningerDto;
-  gyldigInntektsmeldingSkjemaState: InntektsmeldingSkjemaStateValidAGI;
+  gyldigInntektsmeldingSkjemaState: InntektsmeldingSkjemaStateValidAGINyansatt;
 }) => {
   return (
     <>

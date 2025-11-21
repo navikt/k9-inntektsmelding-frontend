@@ -13,10 +13,10 @@ import type {
 } from "~/types/api-models.ts";
 import { formatStrengTilTall, formatYtelsesnavn } from "~/utils";
 
-import { useOpplysninger } from "../../shared/hooks/useOpplysninger.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
+import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
 import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
-import { SkjemaoppsummeringAGI } from "../visningskomponenter/SkjemaoppsummeringAGI";
+import { SkjemaoppsummeringAGI } from "../SkjemaoppsummeringAGI.tsx";
 import { InntektsmeldingSkjemaStateValidAGI } from "../zodSchemas.tsx";
 
 export const Steg3Oppsummering = () => {

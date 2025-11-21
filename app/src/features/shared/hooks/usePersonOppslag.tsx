@@ -26,16 +26,8 @@ export function usePersonOppslag() {
 
 export function usePersonOppslagUnntattAareg() {
   return useMutation({
-    mutationFn: async ({
-      fødselsnummer,
-      ytelse,
-      førsteFraværsdag,
-    }: PersonOppslagParams) => {
-      return await hentPersonFraFnrUnntattAareg(
-        fødselsnummer,
-        ytelse,
-        førsteFraværsdag,
-      );
+    mutationFn: async () => {
+      return await hentPersonFraFnrUnntattAareg();
     },
   });
 }

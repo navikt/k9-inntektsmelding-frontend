@@ -4,7 +4,10 @@ import { z } from "zod";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
-import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
+import {
+  ARBEIDSGIVERINITERT_NYANSATT_ID,
+  ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
+} from "~/routes/opprett";
 import {
   feilmeldingSchema,
   grunnbeløpSchema,
@@ -131,6 +134,21 @@ export async function hentOpplysningerData(
     return opplysninger;
   }
 
+  if (uuid === ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID) {
+    // Da har vi en fakeId. Hent fra sessionstorage
+    const opplysninger = parseStorageItem(
+      sessionStorage,
+      ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
+      opplysningerSchema,
+    );
+    if (!opplysninger) {
+      throw new Error(
+        "Finner ikke arbeidsgiverinitierte unntatt aaregistrering opplysninger",
+      );
+    }
+    return opplysninger;
+  }
+
   const response = await fetch(
     `${SERVER_URL}/imdialog/opplysninger?foresporselUuid=${uuid}`,
   );
@@ -195,11 +213,7 @@ export async function hentPersonFraFnr(
   return parsedJson.data;
 }
 
-export async function hentPersonFraFnrUnntattAareg(
-  fnr: string,
-  ytelsetype: Ytelsetype,
-  førsteFraværsdag: string,
-): Promise<SlåOppArbeidstakerResponseDto> {
+export async function hentPersonFraFnrUnntattAareg(): Promise<SlåOppArbeidstakerResponseDto> {
   // foreløpig stub
 
   return new Promise<SlåOppArbeidstakerResponseDto>((resolve) => {
@@ -210,7 +224,7 @@ export async function hentPersonFraFnrUnntattAareg(
         arbeidsforhold: [
           {
             organisasjonsnavn: "NAV",
-            organisasjonsnummer: "974652293",
+            organisasjonsnummer: "315853370",
           },
         ],
         kjønn: "MANN",

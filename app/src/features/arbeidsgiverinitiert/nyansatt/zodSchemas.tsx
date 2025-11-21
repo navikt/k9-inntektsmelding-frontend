@@ -14,7 +14,7 @@ const skalRefunderesSchema = z.union([
 ]);
 
 // Før vi er i oppsummeringssteget
-export const InntektsmeldingSkjemaStateSchema = z.object({
+export const InntektsmeldingSkjemaStateSchemaNyansatt = z.object({
   kontaktperson: kontaktpersonSchema,
   refusjon: z.array(
     z
@@ -31,7 +31,7 @@ export const InntektsmeldingSkjemaStateSchema = z.object({
 });
 
 // Klar for innsending til backend. Når vi er i oppsummeringssteget, eller tidligere innsendt skjema.
-export const AGIValidatedInntektsmelding = z.object({
+export const AGIValidatedInntektsmeldingNyansatt = z.object({
   kontaktperson: kontaktpersonSchema,
   refusjon: z.array(
     z.object({
@@ -45,10 +45,10 @@ export const AGIValidatedInntektsmelding = z.object({
   opprettetTidspunkt: z.string().optional(),
 });
 
-export type InntektsmeldingSkjemaStateAGI = z.infer<
-  typeof InntektsmeldingSkjemaStateSchema
+export type InntektsmeldingSkjemaStateAGINyansatt = z.infer<
+  typeof InntektsmeldingSkjemaStateSchemaNyansatt
 >;
 
-export type InntektsmeldingSkjemaStateValidAGI = z.infer<
-  typeof AGIValidatedInntektsmelding
+export type InntektsmeldingSkjemaStateValidAGINyansatt = z.infer<
+  typeof AGIValidatedInntektsmeldingNyansatt
 >;

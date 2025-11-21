@@ -11,12 +11,12 @@ import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsin
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import { formatDatoKort, formatYtelsesnavn } from "~/utils";
 
-import { PersonOppslagError } from "../../shared/components/PersonOppslagFeil.tsx";
-import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { usePersonOppslag } from "../../shared/hooks/usePersonOppslag.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
-import { DatePickerWrapped } from "../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
-import { UtbetalingOgRefusjon } from "../../shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
+import { PersonOppslagError } from "../../../shared/components/PersonOppslagFeil.tsx";
+import { useDocumentTitle } from "../../../shared/hooks/useDocumentTitle.tsx";
+import { usePersonOppslag } from "../../../shared/hooks/usePersonOppslag.tsx";
+import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
+import { DatePickerWrapped } from "../../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
+import { UtbetalingOgRefusjon } from "../../../shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
 import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
 import { InntektsmeldingSkjemaStateAGI } from "../zodSchemas.tsx";
 

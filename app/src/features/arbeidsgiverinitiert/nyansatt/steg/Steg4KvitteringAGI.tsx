@@ -1,10 +1,11 @@
-import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
-import { Kvittering } from "../../shared/skjema-moduler/Kvittering";
-import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
+import { useOpplysninger } from "../../../shared/hooks/useOpplysninger";
+import { Kvittering } from "../../../shared/skjema-moduler/Kvittering";
+import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext";
 
 export const Steg4KvitteringAGI = () => {
   const opplysninger = useOpplysninger();
-  const { gyldigInntektsmeldingSkjemaState } = useInntektsmeldingSkjemaAGI();
+  const { gyldigInntektsmeldingSkjemaState } =
+    useInntektsmeldingSkjemaAGINyansatt();
 
   return (
     <Kvittering

@@ -8,7 +8,7 @@ import { InntektsmeldingSkjemaStateProvider } from "~/features/inntektsmelding/S
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
 import { formatYtelsesnavn } from "~/utils.ts";
 
-import { InntektsmeldingSkjemaStateProviderAGI } from "../../arbeidsgiverinitiert/SkjemaStateContext";
+import { InntektsmeldingSkjemaStateProviderAGINyansatt } from "../../arbeidsgiverinitiert/nyansatt/SkjemaStateContext";
 import { useOpplysninger } from "../hooks/useOpplysninger";
 
 type InntektsmeldingRootLayoutProps = {
@@ -91,12 +91,28 @@ export const InntektsmeldingRootAGI = () => {
   const { id } = route.useParams();
   const data = route.useLoaderData();
   return (
-    <InntektsmeldingSkjemaStateProviderAGI skjemaId={id}>
+    <InntektsmeldingSkjemaStateProviderAGINyansatt skjemaId={id}>
       <InntektsmeldingRootLayoutComponent
         skjemaId={id}
         ytelse={data.opplysninger.ytelse}
         {...data.opplysninger.arbeidsgiver}
       />
-    </InntektsmeldingSkjemaStateProviderAGI>
+    </InntektsmeldingSkjemaStateProviderAGINyansatt>
+  );
+};
+
+export const InntektsmeldingRootUnntattAaregister = () => {
+  const route = getRouteApi("/agi-unntatt-aaregister/$id");
+  const { id } = route.useParams();
+  const opplysninger = useOpplysninger();
+
+  return (
+    <InntektsmeldingSkjemaStateProvider skjemaId={id}>
+      <InntektsmeldingRootLayoutComponent
+        skjemaId={id}
+        ytelse={opplysninger.ytelse}
+        {...opplysninger.arbeidsgiver}
+      />
+    </InntektsmeldingSkjemaStateProvider>
   );
 };
