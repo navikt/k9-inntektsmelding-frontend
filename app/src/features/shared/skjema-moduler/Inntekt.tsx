@@ -23,7 +23,7 @@ import { ListItem } from "@navikt/ds-react/List";
 import clsx from "clsx";
 import { isAfter } from "date-fns";
 import { Fragment } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 
 import type { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
 import {
@@ -40,6 +40,7 @@ import {
   formatDatoKort,
   formatKroner,
   formatOppramsing,
+  formatStrengTilTall,
   leggTilGenitiv,
 } from "~/utils.ts";
 import { navnPåMåned } from "~/utils/date-utils";
@@ -62,7 +63,8 @@ export function Inntekt({
   children,
 }: InntektProps) {
   const { skjæringstidspunkt, person, inntektsopplysninger } = opplysninger;
-  const { watch, setValue } = useFormContext<InntektOgRefusjonForm>();
+  const { watch, setValue, control, formState, trigger } =
+    useFormContext<InntektOgRefusjonForm>();
   const { isOpen, onOpen, onClose } = useDisclosure(
     !!watch("korrigertInntekt"),
   );
@@ -70,7 +72,6 @@ export function Inntekt({
     (inntekt) => inntekt.status === "NEDETID_AINNTEKT",
   );
   const førsteDag = formatDatoKort(new Date(skjæringstidspunkt));
-
   const gjennomsnittAvMånederTekst = `Gjennomsnittet av lønn fra 
   ${formatOppramsing(
     inntektsopplysninger.månedsinntekter
@@ -118,6 +119,32 @@ export function Inntekt({
             {formatKroner(inntektsopplysninger.gjennomsnittLønn)}
           </strong>
           <BodyShort>{gjennomsnittAvMånederTekst}</BodyShort>
+          <div className="mt-2">
+            <Controller
+              control={control}
+              name="inntekt"
+              render={() =>
+                formState.errors.inntekt ? (
+                  <Alert variant="error">
+                    <BodyShort>{formState.errors.inntekt?.message}</BodyShort>
+                  </Alert>
+                ) : (
+                  <></>
+                )
+              }
+              rules={{
+                validate: (v) => {
+                  if (watch("meta.skalKorrigereInntekt")) {
+                    return true;
+                  }
+                  if (formatStrengTilTall(v) > 0) {
+                    return true;
+                  }
+                  return 'Beløpet må være større enn kr 0. Klikk på "Endre månedslønn" for å endre inntekten.';
+                },
+              }}
+            />
+          </div>
         </VStack>
       )}
       {/* Hvis A-inntekt må feltet fylles ut, og det er ingen tilbakestillingsknapp. */}
@@ -127,7 +154,7 @@ export function Inntekt({
           htmlSize={20}
           inputMode="numeric"
           label="Beregnet måndslønn"
-          min={0}
+          min={1}
           name="inntekt"
           required
         />
@@ -138,6 +165,7 @@ export function Inntekt({
           onClose={() => {
             onClose();
             setValue("meta.skalKorrigereInntekt", false);
+            trigger("inntekt");
           }}
           skjæringstidspunkt={skjæringstidspunkt}
         />
@@ -148,6 +176,7 @@ export function Inntekt({
           onClick={() => {
             onOpen();
             setValue("meta.skalKorrigereInntekt", true);
+            trigger("inntekt");
           }}
           size="medium"
           type="button"
@@ -409,7 +438,7 @@ const EndreMånedslønn = ({
         <FormattertTallTextField
           inputMode="numeric"
           label="Endret månedsinntekt"
-          min={0}
+          min={1}
           name="korrigertInntekt"
           required
         />
