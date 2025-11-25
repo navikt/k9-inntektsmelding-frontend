@@ -13,6 +13,8 @@ updates:
       - k9-inntektsmelding-frontend
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 20
     groups:
       minor:
