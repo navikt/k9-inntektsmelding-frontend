@@ -63,7 +63,7 @@ export function Inntekt({
   children,
 }: InntektProps) {
   const { skjæringstidspunkt, person, inntektsopplysninger } = opplysninger;
-  const { watch, setValue, control, formState, trigger } =
+  const { watch, setValue, control, trigger } =
     useFormContext<InntektOgRefusjonForm>();
   const { isOpen, onOpen, onClose } = useDisclosure(
     !!watch("korrigertInntekt"),
@@ -123,10 +123,10 @@ export function Inntekt({
             <Controller
               control={control}
               name="inntekt"
-              render={() =>
-                formState.errors.inntekt ? (
+              render={({ fieldState }) =>
+                fieldState.error ? (
                   <Alert variant="error">
-                    <BodyShort>{formState.errors.inntekt?.message}</BodyShort>
+                    <BodyShort>{fieldState.error.message}</BodyShort>
                   </Alert>
                 ) : (
                   <></>
