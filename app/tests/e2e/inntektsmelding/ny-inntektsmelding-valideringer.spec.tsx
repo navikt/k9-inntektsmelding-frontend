@@ -92,7 +92,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await expectError({
     page,
     label: "Endret månedsinntekt",
-    error: "Beløpet må være 0 eller høyere",
+    error: "Beløpet må være 1 eller høyere",
   });
   await page.getByText("Endret månedsinntekt").fill("5".repeat(21));
   await expectError({
