@@ -29,7 +29,7 @@ import {
   leggTilGenitiv,
 } from "~/utils";
 
-import { useInntektsmeldingSkjemaAGIUnntattAaregister } from "../SkjemaStateContext.tsx";
+import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext.tsx";
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../zodSchemas.tsx";
 
 type JaNei = "ja" | "nei";
@@ -70,7 +70,7 @@ export function Steg2InntektOgRefusjon() {
   );
 
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
-    useInntektsmeldingSkjemaAGIUnntattAaregister();
+    useInntektsmeldingSkjemaAGIUnntattAaRegister();
 
   const eksisterendeInntektsmeldinger = useEksisterendeInntektsmeldinger();
   const harEksisterendeInntektsmeldinger =

@@ -4,13 +4,13 @@ import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
 import { DineOpplysninger } from "../../../shared/skjema-moduler/DineOpplysninger.tsx";
-import { useInntektsmeldingSkjemaAGIUnntattAaregister } from "../SkjemaStateContext.tsx";
+import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext.tsx";
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../zodSchemas.tsx";
 
 export const Steg1DineOpplysningerAGIUnntattAaregister = () => {
   const opplysninger = useOpplysninger();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
-    useInntektsmeldingSkjemaAGIUnntattAaregister();
+    useInntektsmeldingSkjemaAGIUnntattAaRegister();
   const navigate = useNavigate();
   const onSubmit = (
     kontaktperson: InntektsmeldingSkjemaStateAGIUnntattAaregister["kontaktperson"],

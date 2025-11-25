@@ -45,7 +45,7 @@ const defaultSkjemaState = () => {
   } satisfies InntektsmeldingSkjemaStateAGIUnntattAaregister;
 };
 
-export const InntektsmeldingSkjemaStateProviderAGIUnntattAaregister = ({
+export const InntektsmeldingSkjemaStateProviderAGIUnntattAaRegister = ({
   children,
 }: InntektsmeldingSkjemaStateProviderProps) => {
   const [state, setState] =
@@ -77,7 +77,7 @@ export const InntektsmeldingSkjemaStateProviderAGIUnntattAaregister = ({
 };
 
 /** Henter ut global skjematilstand, og lar deg manipulere den */
-export const useInntektsmeldingSkjemaAGIUnntattAaregister = () => {
+export const useInntektsmeldingSkjemaAGIUnntattAaRegister = () => {
   const context = useContext(
     InntektsmeldingSkjemaStateContextAGIUnntattAaregister,
   );

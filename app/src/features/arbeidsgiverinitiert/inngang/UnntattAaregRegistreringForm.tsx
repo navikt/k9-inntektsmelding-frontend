@@ -61,8 +61,18 @@ export function UnntattAaregRegistreringForm({
           telefon: undefined,
         },
         inntektsopplysninger: {
-          gjennomsnittLønn: 0,
-          månedsinntekter: [],
+          gjennomsnittLønn: 50_000,
+          // tre siste måneder med rapportert lønn
+          månedsinntekter: Array.from({ length: 3 }, (_, index) => ({
+            fom: new Date(
+              new Date().setMonth(new Date().getMonth() - index),
+            ).toISOString(),
+            tom: new Date(
+              new Date().setMonth(new Date().getMonth() - index),
+            ).toISOString(),
+            beløp: 50_000,
+            status: "BRUKT_I_GJENNOMSNITT",
+          })),
         },
         forespørselStatus: "UNDER_BEHANDLING",
         forespørselType: "BESTILT_AV_FAGSYSTEM",
