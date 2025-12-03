@@ -145,6 +145,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
               </Button>
             </>
           ) : null}
+          <InntektAlert />
           <div className="flex gap-4">
             <Button
               as={Link}
@@ -188,6 +189,20 @@ function Over6GAlert() {
       <Alert variant="info">
         Nav utbetaler opptil 6G av årslønnen. Du skal likevel føre opp den
         lønnen dere utbetaler til den ansatte i sin helhet.
+      </Alert>
+    );
+  }
+  return null;
+}
+
+function InntektAlert() {
+  const { formState } = useFormContext<RefusjonOmsorgspengerFormData>();
+  const error = formState.errors.inntekt;
+
+  if (error) {
+    return (
+      <Alert variant="error">
+        <BodyLong>{error.message}</BodyLong>
       </Alert>
     );
   }
