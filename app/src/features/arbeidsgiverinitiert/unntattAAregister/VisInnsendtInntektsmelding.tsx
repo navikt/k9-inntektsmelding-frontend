@@ -14,15 +14,16 @@ import { useEffect } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
 
-import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
-import { SkjemaoppsummeringAGI } from "./SkjemaoppsummeringAGI";
+import { Skjemaoppsummering } from "../../inntektsmelding/visningskomponenter/Skjemaoppsummering.tsx";
+import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "./SkjemaStateContext";
 
-const route = getRouteApi("/agi/$id");
+const route = getRouteApi("/agi-unntatt-aaregister/$id");
 
-export const VisInntektsmelding = () => {
+export const VisInnsendtInntektsmelding = () => {
   const { opplysninger, eksisterendeInntektsmeldinger } = route.useLoaderData();
   const { id } = route.useParams();
-  const { setInntektsmeldingSkjemaState } = useInntektsmeldingSkjemaAGI();
+  const { setInntektsmeldingSkjemaState } =
+    useInntektsmeldingSkjemaAGIUnntattAaRegister();
 
   const sisteInntektsmelding = finnSenesteInntektsmelding(
     eksisterendeInntektsmeldinger,
@@ -78,9 +79,9 @@ export const VisInntektsmelding = () => {
             </BodyShort>
           </Alert>
         )}
-        <SkjemaoppsummeringAGI
-          gyldigInntektsmeldingSkjemaState={sisteInntektsmelding}
+        <Skjemaoppsummering
           opplysninger={opplysninger}
+          skjemaState={sisteInntektsmelding}
         />
         <HStack gap="4" justify="space-between">
           <HStack gap="4">

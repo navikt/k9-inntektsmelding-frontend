@@ -24,7 +24,7 @@ import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import type { OpplysningerDto } from "~/types/api-models";
 import { formatYtelsesnavn, lagFulltNavn, slugify } from "~/utils";
 
-import { useScrollToTopOnMount } from "../hooks/useScrollToTopOnMount";
+import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
 
 type Steg4KvitteringBaseProps = {
   breadcrumbUrl: string;

@@ -3,42 +3,20 @@ import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 
 import { SERVER_URL } from "~/api/mutations";
-import { hentOpplysningerData } from "~/api/queries";
-import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/zodSchemas";
-import { InntektsmeldingRootAGI } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
-import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
 import {
-  InntektsmeldingResponseDtoSchema,
-  SendInntektsmeldingResponseDto,
-} from "~/types/api-models";
+  hentOpplysningerData,
+  mapInntektsmeldingResponseTilValidState,
+} from "~/api/queries";
+import { InntektsmeldingRootUnntattAaregister } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
+import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
+import { InntektsmeldingResponseDtoSchema } from "~/types/api-models";
 import { OpplysningerDto } from "~/types/api-models";
 import { logDev } from "~/utils";
 
-import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "./opprett";
-
-const mapInntektsmeldingResponseTilValidState = (
-  im: SendInntektsmeldingResponseDto,
-): Omit<InntektsmeldingSkjemaStateValidAGINyansatt, "opprettetTidspunkt"> & {
-  opprettetTidspunkt: string;
-  id: number;
-} => {
-  return {
-    kontaktperson: im.kontaktperson,
-    refusjon: im.refusjon as { fom: string; beløp: string | number }[],
-    skalRefunderes:
-      im.refusjon?.length > 1
-        ? "JA_VARIERENDE_REFUSJON"
-        : im.refusjon?.length === 1
-          ? "JA_LIK_REFUSJON"
-          : "NEI",
-    førsteFraværsdag: im.startdato,
-    opprettetTidspunkt: im.opprettetTidspunkt,
-    id: im.id,
-  };
-};
+import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "./opprett";
 
 export async function hentEksisterendeInntektsmeldinger(uuid: string) {
-  if (uuid === ARBEIDSGIVERINITERT_NYANSATT_ID) {
+  if (uuid === ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID) {
     return [];
   }
   const response = await fetch(
@@ -67,8 +45,8 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
     mapInntektsmeldingResponseTilValidState(im),
   );
 }
-export const Route = createFileRoute("/agi/$id")({
-  component: InntektsmeldingRootAGI,
+export const Route = createFileRoute("/agi-unntatt-aaregister/$id")({
+  component: InntektsmeldingRootUnntattAaregister,
   errorComponent: ({ error }) => {
     throw error;
   },

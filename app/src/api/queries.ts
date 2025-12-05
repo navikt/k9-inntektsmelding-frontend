@@ -4,7 +4,10 @@ import { z } from "zod";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import {
+  ARBEIDSGIVERINITERT_NYANSATT_ID,
+  ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
+} from "~/routes/opprett";
 import {
   feilmeldingSchema,
   grunnbeløpSchema,
@@ -13,6 +16,7 @@ import {
   OpplysningerRequest,
   opplysningerSchema,
   SendInntektsmeldingResponseDto,
+  SlåOppArbeidstakerResponseDto,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-models";
@@ -80,7 +84,10 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
 
 export function mapInntektsmeldingResponseTilValidState(
   inntektsmelding: SendInntektsmeldingResponseDto,
-) {
+): InntektsmeldingSkjemaStateValid & {
+  opprettetTidspunkt: string;
+  id: number;
+} {
   return {
     kontaktperson: inntektsmelding.kontaktperson,
     refusjon: inntektsmelding.refusjon ?? [],
@@ -111,21 +118,36 @@ export function mapInntektsmeldingResponseTilValidState(
       (inntektsmelding.bortfaltNaturalytelsePerioder?.length ?? 0) > 0,
     opprettetTidspunkt: inntektsmelding.opprettetTidspunkt,
     id: inntektsmelding.id,
-  } satisfies InntektsmeldingSkjemaStateValid;
+  };
 }
 
 export async function hentOpplysningerData(
   uuid: string,
 ): Promise<OpplysningerDto> {
-  if (uuid === ARBEIDSGIVER_INITERT_ID) {
+  if (uuid === ARBEIDSGIVERINITERT_NYANSATT_ID) {
     // Da har vi en fakeId. Hent fra sessionstorage
     const opplysninger = parseStorageItem(
       sessionStorage,
-      ARBEIDSGIVER_INITERT_ID,
+      ARBEIDSGIVERINITERT_NYANSATT_ID,
       opplysningerSchema,
     );
     if (!opplysninger) {
       throw new Error("Finner ikke arbeidsgiverinitierte opplysninger");
+    }
+    return opplysninger;
+  }
+
+  if (uuid === ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID) {
+    // Da har vi en fakeId. Hent fra sessionstorage
+    const opplysninger = parseStorageItem(
+      sessionStorage,
+      ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
+      opplysningerSchema,
+    );
+    if (!opplysninger) {
+      throw new Error(
+        "Finner ikke arbeidsgiverinitierte unntatt aaregistrering opplysninger",
+      );
     }
     return opplysninger;
   }
@@ -192,6 +214,26 @@ export async function hentPersonFraFnr(
   }
 
   return parsedJson.data;
+}
+
+export async function hentPersonFraFnrUnntattAareg(): Promise<SlåOppArbeidstakerResponseDto> {
+  // foreløpig stub
+
+  return new Promise<SlåOppArbeidstakerResponseDto>((resolve) => {
+    setTimeout(() => {
+      return resolve({
+        fornavn: "Ola",
+        etternavn: "Nordmann",
+        arbeidsforhold: [
+          {
+            organisasjonsnavn: "NAV",
+            organisasjonsnummer: "315853370",
+          },
+        ],
+        kjønn: "MANN",
+      });
+    }, 1000);
+  });
 }
 
 export async function hentOpplysninger(

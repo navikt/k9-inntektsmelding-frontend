@@ -4,14 +4,16 @@ export const useEksisterendeInntektsmeldinger = () => {
   const location = useLocation();
 
   const erAGI = location.pathname.startsWith("/agi");
-
-  const route = erAGI ? getRouteApi("/agi/$id") : getRouteApi("/$id");
-  const routeData = route.useLoaderData();
-
-  if (!routeData?.eksisterendeInntektsmeldinger) {
-    throw new Error(
-      "useEksisterendeInntektsmeldinger kan kun brukes på /:id eller /agi routes",
-    );
+  const erAGIUnntattAaregister = location.pathname.startsWith(
+    "/agi-unntatt-aaregister",
+  );
+  if (erAGIUnntattAaregister) {
+    return getRouteApi("/agi-unntatt-aaregister/$id").useLoaderData()
+      .eksisterendeInntektsmeldinger;
   }
-  return routeData.eksisterendeInntektsmeldinger;
+  if (erAGI) {
+    return getRouteApi("/agi/$id").useLoaderData()
+      .eksisterendeInntektsmeldinger;
+  }
+  return getRouteApi("/$id").useLoaderData().eksisterendeInntektsmeldinger;
 };

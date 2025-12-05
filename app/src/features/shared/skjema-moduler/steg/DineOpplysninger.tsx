@@ -11,8 +11,10 @@ import {
 } from "@navikt/ds-react";
 import { useForm } from "react-hook-form";
 
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/zodSchemas";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { useHjelpetekst } from "~/features/shared/Hjelpetekst";
-import { useEksisterendeInntektsmeldinger } from "~/features/shared/hooks/useEksisterendeInntektsmeldinger";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import type { OpplysningerDto } from "~/types/api-models.ts";
 import {
@@ -22,10 +24,10 @@ import {
   lagFulltNavn,
 } from "~/utils";
 
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../hooks/useScrollToTopOnMount";
-import { Informasjonsseksjon } from "../Informasjonsseksjon";
-import { Fremgangsindikator } from "./Fremgangsindikator";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
+import { Informasjonsseksjon } from "../../Informasjonsseksjon";
+import { Fremgangsindikator } from "../Fremgangsindikator";
 
 type PersonOgSelskapsInformasjonForm = {
   navn: string;
@@ -42,14 +44,18 @@ type MinimalSkjemaState = {
 
 export const DineOpplysninger = <T extends MinimalSkjemaState>({
   inntektsmeldingSkjemaState,
+  eksisterendeInntektsmeldinger,
   onSubmit,
 }: {
   inntektsmeldingSkjemaState: T;
+  eksisterendeInntektsmeldinger:
+    | InntektsmeldingSkjemaStateValid[]
+    | InntektsmeldingSkjemaStateValidAGINyansatt[]
+    | InntektsmeldingSkjemaStateValidAGIUnntattAaregister[];
   onSubmit: (kontaktperson: T["kontaktperson"]) => void;
 }) => {
   useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
-  const eksisterendeInntektsmeldinger = useEksisterendeInntektsmeldinger();
   useDocumentTitle(
     `Dine opplysninger – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );

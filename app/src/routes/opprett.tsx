@@ -4,7 +4,9 @@ import { z } from "zod";
 import { InntektsmeldingRootLayoutComponent } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { YtelsetypeSchema } from "~/types/api-models";
 
-export const ARBEIDSGIVER_INITERT_ID = "agi";
+export const ARBEIDSGIVERINITERT_NYANSATT_ID = "agi";
+export const ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID =
+  "agi-unntatt-aaregister";
 
 const agiSearchParams = z.object({
   ytelseType: YtelsetypeSchema,
@@ -15,7 +17,7 @@ export const Route = createFileRoute("/opprett")({
     const { ytelseType } = useSearch({ from: "/opprett" });
     return (
       <InntektsmeldingRootLayoutComponent
-        skjemaId={ARBEIDSGIVER_INITERT_ID}
+        skjemaId={ARBEIDSGIVERINITERT_NYANSATT_ID}
         ytelse={ytelseType}
       />
     );

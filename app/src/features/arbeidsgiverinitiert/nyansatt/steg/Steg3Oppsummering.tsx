@@ -6,18 +6,18 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { sendInntektsmeldingArbeidsgiverInitiert } from "~/api/mutations.ts";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
-import { ARBEIDSGIVER_INITERT_ID } from "~/routes/opprett";
+import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 import type {
   OpplysningerDto,
   SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
 } from "~/types/api-models.ts";
 import { formatStrengTilTall, formatYtelsesnavn } from "~/utils";
 
-import { useOpplysninger } from "../../shared/hooks/useOpplysninger.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
-import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
-import { SkjemaoppsummeringAGI } from "../visningskomponenter/SkjemaoppsummeringAGI";
-import { InntektsmeldingSkjemaStateValidAGI } from "../zodSchemas.tsx";
+import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
+import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
+import { Skjemaoppsummering } from "../Skjemaoppsummering.tsx";
+import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext.tsx";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "../zodSchemas.tsx";
 
 export const Steg3Oppsummering = () => {
   useScrollToTopOnMount();
@@ -27,7 +27,7 @@ export const Steg3Oppsummering = () => {
   );
 
   const { gyldigInntektsmeldingSkjemaState, inntektsmeldingSkjemaStateError } =
-    useInntektsmeldingSkjemaAGI();
+    useInntektsmeldingSkjemaAGINyansatt();
 
   if (!gyldigInntektsmeldingSkjemaState) {
     // På dette punktet "skal" skjemaet være gyldig med mindre noe har gått galt. Logg error til Grafana for innsikt.
@@ -63,7 +63,7 @@ export const Steg3Oppsummering = () => {
           Oppsummering
         </Heading>
         <Fremgangsindikator aktivtSteg={3} />
-        <SkjemaoppsummeringAGI
+        <Skjemaoppsummering
           gyldigInntektsmeldingSkjemaState={gyldigInntektsmeldingSkjemaState}
           opplysninger={opplysninger}
         />{" "}
@@ -80,10 +80,12 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
   const navigate = useNavigate();
 
   const { gyldigInntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
-    useInntektsmeldingSkjemaAGI();
+    useInntektsmeldingSkjemaAGINyansatt();
 
   const { mutate, error, isPending } = useMutation({
-    mutationFn: async (skjemaState: InntektsmeldingSkjemaStateValidAGI) => {
+    mutationFn: async (
+      skjemaState: InntektsmeldingSkjemaStateValidAGINyansatt,
+    ) => {
       const inntektsmeldingRequest = lagSendInntektsmeldingRequest(
         skjemaState,
         opplysninger,
@@ -101,7 +103,7 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
       navigate({
         to: "/agi/$id/kvittering",
         params: {
-          id: opplysninger.forespørselUuid || ARBEIDSGIVER_INITERT_ID,
+          id: opplysninger.forespørselUuid || ARBEIDSGIVERINITERT_NYANSATT_ID,
         },
       });
     },
@@ -138,7 +140,7 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
 }
 
 function lagSendInntektsmeldingRequest(
-  skjemaState: InntektsmeldingSkjemaStateValidAGI,
+  skjemaState: InntektsmeldingSkjemaStateValidAGINyansatt,
   opplysninger: OpplysningerDto,
 ) {
   const refusjon =
@@ -159,7 +161,7 @@ function lagSendInntektsmeldingRequest(
       beløp: formatStrengTilTall(r.beløp),
     })),
     foresporselUuid:
-      opplysninger.forespørselUuid === ARBEIDSGIVER_INITERT_ID
+      opplysninger.forespørselUuid === ARBEIDSGIVERINITERT_NYANSATT_ID
         ? undefined
         : opplysninger.forespørselUuid,
   } satisfies SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType;

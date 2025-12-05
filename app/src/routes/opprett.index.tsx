@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { HentOpplysninger } from "~/features/arbeidsgiverinitiert/steg/Steg0HentOpplysninger";
+import { HentOpplysninger } from "~/features/arbeidsgiverinitiert/inngang/Steg0HentOpplysninger";
 
 export const Route = createFileRoute("/opprett/")({
   component: RouteComponent,

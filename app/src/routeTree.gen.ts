@@ -15,11 +15,13 @@ import { Route as OpprettIndexRouteImport } from './routes/opprett.index'
 import { Route as IdIndexRouteImport } from './routes/$id.index'
 import { Route as RefusjonOmsorgspengerOrganisasjonsnummerRouteImport } from './routes/refusjon-omsorgspenger.$organisasjonsnummer'
 import { Route as AgiIdRouteImport } from './routes/agi.$id'
+import { Route as AgiUnntattAaregisterIdRouteImport } from './routes/agi-unntatt-aaregister.$id'
 import { Route as IdVisRouteImport } from './routes/$id.vis'
 import { Route as IdOppsummeringRouteImport } from './routes/$id.oppsummering'
 import { Route as IdKvitteringRouteImport } from './routes/$id.kvittering'
 import { Route as IdInntektOgRefusjonRouteImport } from './routes/$id.inntekt-og-refusjon'
 import { Route as IdDineOpplysningerRouteImport } from './routes/$id.dine-opplysninger'
+import { Route as AgiUnntattAaregisterIdIndexRouteImport } from './routes/agi-unntatt-aaregister.$id.index'
 import { Route as RefusjonOmsorgspengerOrganisasjonsnummer6KvitteringRouteImport } from './routes/refusjon-omsorgspenger.$organisasjonsnummer.6-kvittering'
 import { Route as RefusjonOmsorgspengerOrganisasjonsnummer5OppsummeringRouteImport } from './routes/refusjon-omsorgspenger.$organisasjonsnummer.5-oppsummering'
 import { Route as RefusjonOmsorgspengerOrganisasjonsnummer4RefusjonRouteImport } from './routes/refusjon-omsorgspenger.$organisasjonsnummer.4-refusjon'
@@ -32,6 +34,11 @@ import { Route as AgiIdRefusjonRouteImport } from './routes/agi.$id.refusjon'
 import { Route as AgiIdOppsummeringRouteImport } from './routes/agi.$id.oppsummering'
 import { Route as AgiIdKvitteringRouteImport } from './routes/agi.$id.kvittering'
 import { Route as AgiIdDineOpplysningerRouteImport } from './routes/agi.$id.dine-opplysninger'
+import { Route as AgiUnntattAaregisterIdVisRouteImport } from './routes/agi-unntatt-aaregister.$id.vis'
+import { Route as AgiUnntattAaregisterIdOppsummeringRouteImport } from './routes/agi-unntatt-aaregister.$id.oppsummering'
+import { Route as AgiUnntattAaregisterIdKvitteringRouteImport } from './routes/agi-unntatt-aaregister.$id.kvittering'
+import { Route as AgiUnntattAaregisterIdInntektOgRefusjonRouteImport } from './routes/agi-unntatt-aaregister.$id.inntekt-og-refusjon'
+import { Route as AgiUnntattAaregisterIdDineOpplysningerRouteImport } from './routes/agi-unntatt-aaregister.$id.dine-opplysninger'
 
 const OpprettRoute = OpprettRouteImport.update({
   id: '/opprett',
@@ -64,6 +71,11 @@ const AgiIdRoute = AgiIdRouteImport.update({
   path: '/agi/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgiUnntattAaregisterIdRoute = AgiUnntattAaregisterIdRouteImport.update({
+  id: '/agi-unntatt-aaregister/$id',
+  path: '/agi-unntatt-aaregister/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IdVisRoute = IdVisRouteImport.update({
   id: '/vis',
   path: '/vis',
@@ -89,6 +101,12 @@ const IdDineOpplysningerRoute = IdDineOpplysningerRouteImport.update({
   path: '/dine-opplysninger',
   getParentRoute: () => IdRoute,
 } as any)
+const AgiUnntattAaregisterIdIndexRoute =
+  AgiUnntattAaregisterIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AgiUnntattAaregisterIdRoute,
+  } as any)
 const RefusjonOmsorgspengerOrganisasjonsnummer6KvitteringRoute =
   RefusjonOmsorgspengerOrganisasjonsnummer6KvitteringRouteImport.update({
     id: '/6-kvittering',
@@ -158,6 +176,36 @@ const AgiIdDineOpplysningerRoute = AgiIdDineOpplysningerRouteImport.update({
   path: '/dine-opplysninger',
   getParentRoute: () => AgiIdRoute,
 } as any)
+const AgiUnntattAaregisterIdVisRoute =
+  AgiUnntattAaregisterIdVisRouteImport.update({
+    id: '/vis',
+    path: '/vis',
+    getParentRoute: () => AgiUnntattAaregisterIdRoute,
+  } as any)
+const AgiUnntattAaregisterIdOppsummeringRoute =
+  AgiUnntattAaregisterIdOppsummeringRouteImport.update({
+    id: '/oppsummering',
+    path: '/oppsummering',
+    getParentRoute: () => AgiUnntattAaregisterIdRoute,
+  } as any)
+const AgiUnntattAaregisterIdKvitteringRoute =
+  AgiUnntattAaregisterIdKvitteringRouteImport.update({
+    id: '/kvittering',
+    path: '/kvittering',
+    getParentRoute: () => AgiUnntattAaregisterIdRoute,
+  } as any)
+const AgiUnntattAaregisterIdInntektOgRefusjonRoute =
+  AgiUnntattAaregisterIdInntektOgRefusjonRouteImport.update({
+    id: '/inntekt-og-refusjon',
+    path: '/inntekt-og-refusjon',
+    getParentRoute: () => AgiUnntattAaregisterIdRoute,
+  } as any)
+const AgiUnntattAaregisterIdDineOpplysningerRoute =
+  AgiUnntattAaregisterIdDineOpplysningerRouteImport.update({
+    id: '/dine-opplysninger',
+    path: '/dine-opplysninger',
+    getParentRoute: () => AgiUnntattAaregisterIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/$id': typeof IdRouteWithChildren
@@ -167,10 +215,16 @@ export interface FileRoutesByFullPath {
   '/$id/kvittering': typeof IdKvitteringRoute
   '/$id/oppsummering': typeof IdOppsummeringRoute
   '/$id/vis': typeof IdVisRoute
+  '/agi-unntatt-aaregister/$id': typeof AgiUnntattAaregisterIdRouteWithChildren
   '/agi/$id': typeof AgiIdRouteWithChildren
   '/refusjon-omsorgspenger/$organisasjonsnummer': typeof RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren
   '/$id/': typeof IdIndexRoute
   '/opprett/': typeof OpprettIndexRoute
+  '/agi-unntatt-aaregister/$id/dine-opplysninger': typeof AgiUnntattAaregisterIdDineOpplysningerRoute
+  '/agi-unntatt-aaregister/$id/inntekt-og-refusjon': typeof AgiUnntattAaregisterIdInntektOgRefusjonRoute
+  '/agi-unntatt-aaregister/$id/kvittering': typeof AgiUnntattAaregisterIdKvitteringRoute
+  '/agi-unntatt-aaregister/$id/oppsummering': typeof AgiUnntattAaregisterIdOppsummeringRoute
+  '/agi-unntatt-aaregister/$id/vis': typeof AgiUnntattAaregisterIdVisRoute
   '/agi/$id/dine-opplysninger': typeof AgiIdDineOpplysningerRoute
   '/agi/$id/kvittering': typeof AgiIdKvitteringRoute
   '/agi/$id/oppsummering': typeof AgiIdOppsummeringRoute
@@ -183,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon': typeof RefusjonOmsorgspengerOrganisasjonsnummer4RefusjonRoute
   '/refusjon-omsorgspenger/$organisasjonsnummer/5-oppsummering': typeof RefusjonOmsorgspengerOrganisasjonsnummer5OppsummeringRoute
   '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering': typeof RefusjonOmsorgspengerOrganisasjonsnummer6KvitteringRoute
+  '/agi-unntatt-aaregister/$id/': typeof AgiUnntattAaregisterIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/$id/dine-opplysninger': typeof IdDineOpplysningerRoute
@@ -194,6 +249,11 @@ export interface FileRoutesByTo {
   '/refusjon-omsorgspenger/$organisasjonsnummer': typeof RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren
   '/$id': typeof IdIndexRoute
   '/opprett': typeof OpprettIndexRoute
+  '/agi-unntatt-aaregister/$id/dine-opplysninger': typeof AgiUnntattAaregisterIdDineOpplysningerRoute
+  '/agi-unntatt-aaregister/$id/inntekt-og-refusjon': typeof AgiUnntattAaregisterIdInntektOgRefusjonRoute
+  '/agi-unntatt-aaregister/$id/kvittering': typeof AgiUnntattAaregisterIdKvitteringRoute
+  '/agi-unntatt-aaregister/$id/oppsummering': typeof AgiUnntattAaregisterIdOppsummeringRoute
+  '/agi-unntatt-aaregister/$id/vis': typeof AgiUnntattAaregisterIdVisRoute
   '/agi/$id/dine-opplysninger': typeof AgiIdDineOpplysningerRoute
   '/agi/$id/kvittering': typeof AgiIdKvitteringRoute
   '/agi/$id/oppsummering': typeof AgiIdOppsummeringRoute
@@ -206,6 +266,7 @@ export interface FileRoutesByTo {
   '/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon': typeof RefusjonOmsorgspengerOrganisasjonsnummer4RefusjonRoute
   '/refusjon-omsorgspenger/$organisasjonsnummer/5-oppsummering': typeof RefusjonOmsorgspengerOrganisasjonsnummer5OppsummeringRoute
   '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering': typeof RefusjonOmsorgspengerOrganisasjonsnummer6KvitteringRoute
+  '/agi-unntatt-aaregister/$id': typeof AgiUnntattAaregisterIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -216,10 +277,16 @@ export interface FileRoutesById {
   '/$id/kvittering': typeof IdKvitteringRoute
   '/$id/oppsummering': typeof IdOppsummeringRoute
   '/$id/vis': typeof IdVisRoute
+  '/agi-unntatt-aaregister/$id': typeof AgiUnntattAaregisterIdRouteWithChildren
   '/agi/$id': typeof AgiIdRouteWithChildren
   '/refusjon-omsorgspenger/$organisasjonsnummer': typeof RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren
   '/$id/': typeof IdIndexRoute
   '/opprett/': typeof OpprettIndexRoute
+  '/agi-unntatt-aaregister/$id/dine-opplysninger': typeof AgiUnntattAaregisterIdDineOpplysningerRoute
+  '/agi-unntatt-aaregister/$id/inntekt-og-refusjon': typeof AgiUnntattAaregisterIdInntektOgRefusjonRoute
+  '/agi-unntatt-aaregister/$id/kvittering': typeof AgiUnntattAaregisterIdKvitteringRoute
+  '/agi-unntatt-aaregister/$id/oppsummering': typeof AgiUnntattAaregisterIdOppsummeringRoute
+  '/agi-unntatt-aaregister/$id/vis': typeof AgiUnntattAaregisterIdVisRoute
   '/agi/$id/dine-opplysninger': typeof AgiIdDineOpplysningerRoute
   '/agi/$id/kvittering': typeof AgiIdKvitteringRoute
   '/agi/$id/oppsummering': typeof AgiIdOppsummeringRoute
@@ -232,6 +299,7 @@ export interface FileRoutesById {
   '/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon': typeof RefusjonOmsorgspengerOrganisasjonsnummer4RefusjonRoute
   '/refusjon-omsorgspenger/$organisasjonsnummer/5-oppsummering': typeof RefusjonOmsorgspengerOrganisasjonsnummer5OppsummeringRoute
   '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering': typeof RefusjonOmsorgspengerOrganisasjonsnummer6KvitteringRoute
+  '/agi-unntatt-aaregister/$id/': typeof AgiUnntattAaregisterIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -243,10 +311,16 @@ export interface FileRouteTypes {
     | '/$id/kvittering'
     | '/$id/oppsummering'
     | '/$id/vis'
+    | '/agi-unntatt-aaregister/$id'
     | '/agi/$id'
     | '/refusjon-omsorgspenger/$organisasjonsnummer'
     | '/$id/'
     | '/opprett/'
+    | '/agi-unntatt-aaregister/$id/dine-opplysninger'
+    | '/agi-unntatt-aaregister/$id/inntekt-og-refusjon'
+    | '/agi-unntatt-aaregister/$id/kvittering'
+    | '/agi-unntatt-aaregister/$id/oppsummering'
+    | '/agi-unntatt-aaregister/$id/vis'
     | '/agi/$id/dine-opplysninger'
     | '/agi/$id/kvittering'
     | '/agi/$id/oppsummering'
@@ -259,6 +333,7 @@ export interface FileRouteTypes {
     | '/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon'
     | '/refusjon-omsorgspenger/$organisasjonsnummer/5-oppsummering'
     | '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering'
+    | '/agi-unntatt-aaregister/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$id/dine-opplysninger'
@@ -270,6 +345,11 @@ export interface FileRouteTypes {
     | '/refusjon-omsorgspenger/$organisasjonsnummer'
     | '/$id'
     | '/opprett'
+    | '/agi-unntatt-aaregister/$id/dine-opplysninger'
+    | '/agi-unntatt-aaregister/$id/inntekt-og-refusjon'
+    | '/agi-unntatt-aaregister/$id/kvittering'
+    | '/agi-unntatt-aaregister/$id/oppsummering'
+    | '/agi-unntatt-aaregister/$id/vis'
     | '/agi/$id/dine-opplysninger'
     | '/agi/$id/kvittering'
     | '/agi/$id/oppsummering'
@@ -282,6 +362,7 @@ export interface FileRouteTypes {
     | '/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon'
     | '/refusjon-omsorgspenger/$organisasjonsnummer/5-oppsummering'
     | '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering'
+    | '/agi-unntatt-aaregister/$id'
   id:
     | '__root__'
     | '/$id'
@@ -291,10 +372,16 @@ export interface FileRouteTypes {
     | '/$id/kvittering'
     | '/$id/oppsummering'
     | '/$id/vis'
+    | '/agi-unntatt-aaregister/$id'
     | '/agi/$id'
     | '/refusjon-omsorgspenger/$organisasjonsnummer'
     | '/$id/'
     | '/opprett/'
+    | '/agi-unntatt-aaregister/$id/dine-opplysninger'
+    | '/agi-unntatt-aaregister/$id/inntekt-og-refusjon'
+    | '/agi-unntatt-aaregister/$id/kvittering'
+    | '/agi-unntatt-aaregister/$id/oppsummering'
+    | '/agi-unntatt-aaregister/$id/vis'
     | '/agi/$id/dine-opplysninger'
     | '/agi/$id/kvittering'
     | '/agi/$id/oppsummering'
@@ -307,11 +394,13 @@ export interface FileRouteTypes {
     | '/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon'
     | '/refusjon-omsorgspenger/$organisasjonsnummer/5-oppsummering'
     | '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering'
+    | '/agi-unntatt-aaregister/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IdRoute: typeof IdRouteWithChildren
   OpprettRoute: typeof OpprettRouteWithChildren
+  AgiUnntattAaregisterIdRoute: typeof AgiUnntattAaregisterIdRouteWithChildren
   AgiIdRoute: typeof AgiIdRouteWithChildren
   RefusjonOmsorgspengerOrganisasjonsnummerRoute: typeof RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren
 }
@@ -360,6 +449,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgiIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agi-unntatt-aaregister/$id': {
+      id: '/agi-unntatt-aaregister/$id'
+      path: '/agi-unntatt-aaregister/$id'
+      fullPath: '/agi-unntatt-aaregister/$id'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$id/vis': {
       id: '/$id/vis'
       path: '/vis'
@@ -394,6 +490,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$id/dine-opplysninger'
       preLoaderRoute: typeof IdDineOpplysningerRouteImport
       parentRoute: typeof IdRoute
+    }
+    '/agi-unntatt-aaregister/$id/': {
+      id: '/agi-unntatt-aaregister/$id/'
+      path: '/'
+      fullPath: '/agi-unntatt-aaregister/$id/'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdIndexRouteImport
+      parentRoute: typeof AgiUnntattAaregisterIdRoute
     }
     '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering': {
       id: '/refusjon-omsorgspenger/$organisasjonsnummer/6-kvittering'
@@ -479,6 +582,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AgiIdDineOpplysningerRouteImport
       parentRoute: typeof AgiIdRoute
     }
+    '/agi-unntatt-aaregister/$id/vis': {
+      id: '/agi-unntatt-aaregister/$id/vis'
+      path: '/vis'
+      fullPath: '/agi-unntatt-aaregister/$id/vis'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdVisRouteImport
+      parentRoute: typeof AgiUnntattAaregisterIdRoute
+    }
+    '/agi-unntatt-aaregister/$id/oppsummering': {
+      id: '/agi-unntatt-aaregister/$id/oppsummering'
+      path: '/oppsummering'
+      fullPath: '/agi-unntatt-aaregister/$id/oppsummering'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdOppsummeringRouteImport
+      parentRoute: typeof AgiUnntattAaregisterIdRoute
+    }
+    '/agi-unntatt-aaregister/$id/kvittering': {
+      id: '/agi-unntatt-aaregister/$id/kvittering'
+      path: '/kvittering'
+      fullPath: '/agi-unntatt-aaregister/$id/kvittering'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdKvitteringRouteImport
+      parentRoute: typeof AgiUnntattAaregisterIdRoute
+    }
+    '/agi-unntatt-aaregister/$id/inntekt-og-refusjon': {
+      id: '/agi-unntatt-aaregister/$id/inntekt-og-refusjon'
+      path: '/inntekt-og-refusjon'
+      fullPath: '/agi-unntatt-aaregister/$id/inntekt-og-refusjon'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdInntektOgRefusjonRouteImport
+      parentRoute: typeof AgiUnntattAaregisterIdRoute
+    }
+    '/agi-unntatt-aaregister/$id/dine-opplysninger': {
+      id: '/agi-unntatt-aaregister/$id/dine-opplysninger'
+      path: '/dine-opplysninger'
+      fullPath: '/agi-unntatt-aaregister/$id/dine-opplysninger'
+      preLoaderRoute: typeof AgiUnntattAaregisterIdDineOpplysningerRouteImport
+      parentRoute: typeof AgiUnntattAaregisterIdRoute
+    }
   }
 }
 
@@ -512,6 +650,34 @@ const OpprettRouteChildren: OpprettRouteChildren = {
 
 const OpprettRouteWithChildren =
   OpprettRoute._addFileChildren(OpprettRouteChildren)
+
+interface AgiUnntattAaregisterIdRouteChildren {
+  AgiUnntattAaregisterIdDineOpplysningerRoute: typeof AgiUnntattAaregisterIdDineOpplysningerRoute
+  AgiUnntattAaregisterIdInntektOgRefusjonRoute: typeof AgiUnntattAaregisterIdInntektOgRefusjonRoute
+  AgiUnntattAaregisterIdKvitteringRoute: typeof AgiUnntattAaregisterIdKvitteringRoute
+  AgiUnntattAaregisterIdOppsummeringRoute: typeof AgiUnntattAaregisterIdOppsummeringRoute
+  AgiUnntattAaregisterIdVisRoute: typeof AgiUnntattAaregisterIdVisRoute
+  AgiUnntattAaregisterIdIndexRoute: typeof AgiUnntattAaregisterIdIndexRoute
+}
+
+const AgiUnntattAaregisterIdRouteChildren: AgiUnntattAaregisterIdRouteChildren =
+  {
+    AgiUnntattAaregisterIdDineOpplysningerRoute:
+      AgiUnntattAaregisterIdDineOpplysningerRoute,
+    AgiUnntattAaregisterIdInntektOgRefusjonRoute:
+      AgiUnntattAaregisterIdInntektOgRefusjonRoute,
+    AgiUnntattAaregisterIdKvitteringRoute:
+      AgiUnntattAaregisterIdKvitteringRoute,
+    AgiUnntattAaregisterIdOppsummeringRoute:
+      AgiUnntattAaregisterIdOppsummeringRoute,
+    AgiUnntattAaregisterIdVisRoute: AgiUnntattAaregisterIdVisRoute,
+    AgiUnntattAaregisterIdIndexRoute: AgiUnntattAaregisterIdIndexRoute,
+  }
+
+const AgiUnntattAaregisterIdRouteWithChildren =
+  AgiUnntattAaregisterIdRoute._addFileChildren(
+    AgiUnntattAaregisterIdRouteChildren,
+  )
 
 interface AgiIdRouteChildren {
   AgiIdDineOpplysningerRoute: typeof AgiIdDineOpplysningerRoute
@@ -567,6 +733,7 @@ const RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IdRoute: IdRouteWithChildren,
   OpprettRoute: OpprettRouteWithChildren,
+  AgiUnntattAaregisterIdRoute: AgiUnntattAaregisterIdRouteWithChildren,
   AgiIdRoute: AgiIdRouteWithChildren,
   RefusjonOmsorgspengerOrganisasjonsnummerRoute:
     RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren,

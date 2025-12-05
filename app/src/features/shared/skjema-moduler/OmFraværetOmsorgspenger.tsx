@@ -18,11 +18,11 @@ import {
 import { createLink } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
-import { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
+import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import { formatDatoKort, lagFulltNavn } from "~/utils";
 
-import { useHjelpetekst } from "../Hjelpetekst";
-import { useOpplysninger } from "../hooks/useOpplysninger";
+import { useHjelpetekst } from "../../shared/Hjelpetekst";
+import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
 
 const OmFraværetOmsorgspenger = () => {
   const { register, formState, watch } =
