@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
@@ -38,7 +39,6 @@ export function UnntattAaregRegistreringForm({
 
   //TODO: Gjenbruk, denne kan være lik som i NyAnsattForm
   const opprettOpplysningerMutation = useMutation({
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
       // stub
       return Promise.resolve({
