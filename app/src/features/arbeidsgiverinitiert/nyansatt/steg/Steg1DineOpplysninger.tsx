@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 
@@ -12,6 +12,8 @@ export const Steg1DineOpplysningerAGINyansatt = () => {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGINyansatt();
   const navigate = useNavigate();
+  const { eksisterendeInntektsmeldinger } =
+    getRouteApi("/agi/$id").useLoaderData();
   const onSubmit = (
     kontaktperson: InntektsmeldingSkjemaStateAGINyansatt["kontaktperson"],
   ) => {
@@ -31,6 +33,7 @@ export const Steg1DineOpplysningerAGINyansatt = () => {
   };
   return (
     <DineOpplysninger
+      eksisterendeInntektsmeldinger={eksisterendeInntektsmeldinger}
       inntektsmeldingSkjemaState={inntektsmeldingSkjemaState}
       onSubmit={onSubmit}
     />

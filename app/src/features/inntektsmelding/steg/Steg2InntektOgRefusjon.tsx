@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { formatYtelsesnavn } from "~/utils";
@@ -17,7 +17,7 @@ export const Steg2InntektOgRefusjon = () => {
   useDocumentTitle(
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
-
+  const { eksisterendeInntektsmeldinger } = getRouteApi("/$id").useLoaderData();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjema();
 
@@ -55,6 +55,7 @@ export const Steg2InntektOgRefusjon = () => {
 
   return (
     <InntektOgRefusjon
+      eksisterendeInntektsmeldinger={eksisterendeInntektsmeldinger}
       inntektsmeldingSkjemaState={inntektsmeldingSkjemaState}
       onSubmit={onSubmit}
     />

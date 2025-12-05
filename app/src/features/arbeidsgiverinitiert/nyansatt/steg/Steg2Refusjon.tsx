@@ -1,11 +1,10 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Alert, BodyLong, Button, Heading, Stack } from "@navikt/ds-react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { isAfter } from "date-fns";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { useEksisterendeInntektsmeldinger } from "~/features/shared/hooks/useEksisterendeInntektsmeldinger.tsx";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
@@ -17,8 +16,8 @@ import { usePersonOppslag } from "../../../shared/hooks/usePersonOppslag.tsx";
 import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
 import { DatePickerWrapped } from "../../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
 import { UtbetalingOgRefusjon } from "../../../shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
-import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
-import { InntektsmeldingSkjemaStateAGI } from "../zodSchemas.tsx";
+import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext";
+import { InntektsmeldingSkjemaStateAGINyansatt } from "../zodSchemas.tsx";
 
 export type RefusjonForm = {
   meta: {
@@ -26,7 +25,7 @@ export type RefusjonForm = {
   };
   skalRefunderes: "JA_LIK_REFUSJON" | "JA_VARIERENDE_REFUSJON" | "NEI";
   førsteFraværsdag: string;
-} & Pick<InntektsmeldingSkjemaStateAGI, "refusjon">;
+} & Pick<InntektsmeldingSkjemaStateAGINyansatt, "refusjon">;
 
 const førsteFraværsdagFremoverItidFeilmeldingHeading =
   "Du kan ikke endre denne datoen fremover i tid.";
@@ -34,14 +33,15 @@ const førsteFraværsdagFremoverItidFeilmeldingHeading =
 export function Steg2Refusjon() {
   useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
-  const inntektsmeldinger = useEksisterendeInntektsmeldinger();
+  const { eksisterendeInntektsmeldinger } =
+    getRouteApi("/agi/$id").useLoaderData();
 
   useDocumentTitle(
     `Refusjon - inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
 
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
-    useInntektsmeldingSkjemaAGI();
+    useInntektsmeldingSkjemaAGINyansatt();
 
   const defaultInntekt = opplysninger.inntektsopplysninger.gjennomsnittLønn;
 
@@ -74,7 +74,7 @@ export function Steg2Refusjon() {
   const { handleSubmit, watch, setValue } = formMethods;
 
   // typeguard for sisteInntektsmelding
-  const sisteInntektsmelding = inntektsmeldinger[0];
+  const sisteInntektsmelding = eksisterendeInntektsmeldinger[0];
   const sisteInntektsmeldingFørsteFraværsdag =
     sisteInntektsmelding && "førsteFraværsdag" in sisteInntektsmelding
       ? sisteInntektsmelding.førsteFraværsdag
@@ -132,7 +132,7 @@ export function Steg2Refusjon() {
         onSuccess: () => {
           // Hvis validering er vellykket, lagre og naviger
           setInntektsmeldingSkjemaState(
-            (prev: InntektsmeldingSkjemaStateAGI) => ({
+            (prev: InntektsmeldingSkjemaStateAGINyansatt) => ({
               ...prev,
               førsteFraværsdag,
               refusjon,
@@ -142,7 +142,8 @@ export function Steg2Refusjon() {
           navigate({
             from: "/agi/$id/refusjon",
             params: {
-              id: opplysninger.forespørselUuid || ARBEIDSGIVERINITERT_NYANSATT_ID,
+              id:
+                opplysninger.forespørselUuid || ARBEIDSGIVERINITERT_NYANSATT_ID,
             },
             to: "../oppsummering",
           });

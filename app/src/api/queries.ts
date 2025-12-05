@@ -84,7 +84,10 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
 
 export function mapInntektsmeldingResponseTilValidState(
   inntektsmelding: SendInntektsmeldingResponseDto,
-) {
+): InntektsmeldingSkjemaStateValid & {
+  opprettetTidspunkt: string;
+  id: number;
+} {
   return {
     kontaktperson: inntektsmelding.kontaktperson,
     refusjon: inntektsmelding.refusjon ?? [],
@@ -115,7 +118,7 @@ export function mapInntektsmeldingResponseTilValidState(
       (inntektsmelding.bortfaltNaturalytelsePerioder?.length ?? 0) > 0,
     opprettetTidspunkt: inntektsmelding.opprettetTidspunkt,
     id: inntektsmelding.id,
-  } satisfies InntektsmeldingSkjemaStateValid;
+  };
 }
 
 export async function hentOpplysningerData(

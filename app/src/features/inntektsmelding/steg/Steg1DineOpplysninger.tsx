@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
 import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/zodSchemas";
 
@@ -9,6 +9,7 @@ export const Steg1DineOpplysninger = () => {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjema();
   const navigate = useNavigate();
+  const { eksisterendeInntektsmeldinger } = getRouteApi("/$id").useLoaderData();
   const handleSubmit = (
     kontaktperson: InntektsmeldingSkjemaState["kontaktperson"],
   ) => {
@@ -24,6 +25,7 @@ export const Steg1DineOpplysninger = () => {
 
   return (
     <DineOpplysninger
+      eksisterendeInntektsmeldinger={eksisterendeInntektsmeldinger}
       inntektsmeldingSkjemaState={inntektsmeldingSkjemaState}
       onSubmit={handleSubmit}
     />

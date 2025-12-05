@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
 
@@ -12,6 +12,9 @@ export const Steg1DineOpplysningerAGIUnntattAaregister = () => {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGIUnntattAaRegister();
   const navigate = useNavigate();
+  const { eksisterendeInntektsmeldinger } = getRouteApi(
+    "/agi-unntatt-aaregister/$id",
+  ).useLoaderData();
   const onSubmit = (
     kontaktperson: InntektsmeldingSkjemaStateAGIUnntattAaregister["kontaktperson"],
   ) => {
@@ -33,6 +36,7 @@ export const Steg1DineOpplysningerAGIUnntattAaregister = () => {
   };
   return (
     <DineOpplysninger
+      eksisterendeInntektsmeldinger={eksisterendeInntektsmeldinger}
       inntektsmeldingSkjemaState={inntektsmeldingSkjemaState}
       onSubmit={onSubmit}
     />

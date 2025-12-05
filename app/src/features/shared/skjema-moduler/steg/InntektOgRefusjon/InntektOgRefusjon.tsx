@@ -4,14 +4,16 @@ import { Link } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas.tsx";
-import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/zodSchemas.tsx";
+import {
+  InntektsmeldingSkjemaState,
+  InntektsmeldingSkjemaStateValid,
+} from "~/features/inntektsmelding/zodSchemas.tsx";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { EndringAvInntektÅrsaker, Naturalytelsetype } from "~/types/api-models";
 import { formatYtelsesnavn } from "~/utils";
 
 import { useDocumentTitle } from "../../../hooks/useDocumentTitle.tsx";
-import { useEksisterendeInntektsmeldinger } from "../../../hooks/useEksisterendeInntektsmeldinger.tsx";
 import { useScrollToTopOnMount } from "../../../hooks/useScrollToTopOnMount.tsx";
 import { Inntekt } from "../../Inntekt.tsx";
 import { Naturalytelser } from "../../Naturalytelser.tsx";
@@ -52,11 +54,13 @@ type NaturalytelserSomMistesForm = {
 
 export function InntektOgRefusjon({
   inntektsmeldingSkjemaState,
+  eksisterendeInntektsmeldinger,
   onSubmit,
 }: {
   inntektsmeldingSkjemaState:
     | InntektsmeldingSkjemaState
     | InntektsmeldingSkjemaStateAGIUnntattAaregister;
+  eksisterendeInntektsmeldinger: InntektsmeldingSkjemaStateValid[];
   onSubmit: (skjemadata: InntektOgRefusjonForm) => void;
 }) {
   useScrollToTopOnMount();
@@ -65,7 +69,6 @@ export function InntektOgRefusjon({
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
 
-  const eksisterendeInntektsmeldinger = useEksisterendeInntektsmeldinger();
   const harEksisterendeInntektsmeldinger =
     eksisterendeInntektsmeldinger.length > 0;
 
