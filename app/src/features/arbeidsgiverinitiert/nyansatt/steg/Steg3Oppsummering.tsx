@@ -15,9 +15,9 @@ import { formatStrengTilTall, formatYtelsesnavn } from "~/utils";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
 import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
-import { useInntektsmeldingSkjemaAGI } from "../SkjemaStateContext";
-import { SkjemaoppsummeringAGI } from "../SkjemaoppsummeringAGI.tsx";
-import { InntektsmeldingSkjemaStateValidAGI } from "../zodSchemas.tsx";
+import { Skjemaoppsummering } from "../Skjemaoppsummering.tsx";
+import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext.tsx";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "../zodSchemas.tsx";
 
 export const Steg3Oppsummering = () => {
   useScrollToTopOnMount();
@@ -27,7 +27,7 @@ export const Steg3Oppsummering = () => {
   );
 
   const { gyldigInntektsmeldingSkjemaState, inntektsmeldingSkjemaStateError } =
-    useInntektsmeldingSkjemaAGI();
+    useInntektsmeldingSkjemaAGINyansatt();
 
   if (!gyldigInntektsmeldingSkjemaState) {
     // På dette punktet "skal" skjemaet være gyldig med mindre noe har gått galt. Logg error til Grafana for innsikt.
@@ -63,7 +63,7 @@ export const Steg3Oppsummering = () => {
           Oppsummering
         </Heading>
         <Fremgangsindikator aktivtSteg={3} />
-        <SkjemaoppsummeringAGI
+        <Skjemaoppsummering
           gyldigInntektsmeldingSkjemaState={gyldigInntektsmeldingSkjemaState}
           opplysninger={opplysninger}
         />{" "}
@@ -80,10 +80,12 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
   const navigate = useNavigate();
 
   const { gyldigInntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
-    useInntektsmeldingSkjemaAGI();
+    useInntektsmeldingSkjemaAGINyansatt();
 
   const { mutate, error, isPending } = useMutation({
-    mutationFn: async (skjemaState: InntektsmeldingSkjemaStateValidAGI) => {
+    mutationFn: async (
+      skjemaState: InntektsmeldingSkjemaStateValidAGINyansatt,
+    ) => {
       const inntektsmeldingRequest = lagSendInntektsmeldingRequest(
         skjemaState,
         opplysninger,
@@ -138,7 +140,7 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
 }
 
 function lagSendInntektsmeldingRequest(
-  skjemaState: InntektsmeldingSkjemaStateValidAGI,
+  skjemaState: InntektsmeldingSkjemaStateValidAGINyansatt,
   opplysninger: OpplysningerDto,
 ) {
   const refusjon =

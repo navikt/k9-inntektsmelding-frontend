@@ -7,7 +7,7 @@ import {
 } from "../../inntektsmelding/visningskomponenter/Skjemaoppsummering.tsx";
 import { InntektsmeldingSkjemaStateValidAGINyansatt } from "./zodSchemas.tsx";
 
-export const SkjemaoppsummeringAGI = ({
+export const Skjemaoppsummering = ({
   opplysninger,
   gyldigInntektsmeldingSkjemaState,
 }: {

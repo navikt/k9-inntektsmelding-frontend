@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
 
-import { SkjemaoppsummeringAGI } from "./SkjemaoppsummeringAGI";
+import { Skjemaoppsummering } from "./Skjemaoppsummering";
 import { useInntektsmeldingSkjemaAGINyansatt } from "./SkjemaStateContext";
 
 const route = getRouteApi("/agi/$id");
@@ -79,7 +79,7 @@ export const VisInntektsmelding = () => {
             </BodyShort>
           </Alert>
         )}
-        <SkjemaoppsummeringAGI
+        <Skjemaoppsummering
           gyldigInntektsmeldingSkjemaState={sisteInntektsmelding}
           opplysninger={opplysninger}
         />
