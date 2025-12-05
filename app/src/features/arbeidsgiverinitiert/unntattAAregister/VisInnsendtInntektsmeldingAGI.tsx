@@ -15,7 +15,7 @@ import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
 
 import { SkjemaoppsummeringAGI } from "./SkjemaoppsummeringAGI";
-import { useInntektsmeldingSkjemaAGINyansatt } from "./SkjemaStateContext";
+import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "./SkjemaStateContext";
 
 const route = getRouteApi("/agi/$id");
 
@@ -23,7 +23,7 @@ export const VisInntektsmelding = () => {
   const { opplysninger, eksisterendeInntektsmeldinger } = route.useLoaderData();
   const { id } = route.useParams();
   const { setInntektsmeldingSkjemaState } =
-    useInntektsmeldingSkjemaAGINyansatt();
+    useInntektsmeldingSkjemaAGIUnntattAaRegister();
 
   const sisteInntektsmelding = finnSenesteInntektsmelding(
     eksisterendeInntektsmeldinger,

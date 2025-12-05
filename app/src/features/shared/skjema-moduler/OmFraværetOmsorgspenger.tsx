@@ -21,8 +21,8 @@ import { useFormContext } from "react-hook-form";
 import { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
 import { formatDatoKort, lagFulltNavn } from "~/utils";
 
-import { useHjelpetekst } from "../Hjelpetekst";
-import { useOpplysninger } from "../hooks/useOpplysninger";
+import { useHjelpetekst } from "../../shared/Hjelpetekst";
+import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
 
 const OmFraværetOmsorgspenger = () => {
   const { register, formState, watch } =

@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
-import { DineOpplysninger } from "../../../shared/skjema-moduler/DineOpplysninger.tsx";
+import { DineOpplysninger } from "../../../shared/skjema-moduler/steg/DineOpplysninger.tsx";
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext.tsx";
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../zodSchemas.tsx";
 

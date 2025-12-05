@@ -2,7 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/zodSchemas";
 
-import { DineOpplysninger } from "../../shared/skjema-moduler/DineOpplysninger";
+import { DineOpplysninger } from "../../shared/skjema-moduler/steg/DineOpplysninger";
 import { useInntektsmeldingSkjema } from "../SkjemaStateContext";
 
 export const Steg1DineOpplysninger = () => {

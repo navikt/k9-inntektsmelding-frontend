@@ -22,10 +22,10 @@ import {
   lagFulltNavn,
 } from "~/utils";
 
-import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../hooks/useScrollToTopOnMount";
-import { Informasjonsseksjon } from "../Informasjonsseksjon";
-import { Fremgangsindikator } from "./Fremgangsindikator";
+import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
+import { Informasjonsseksjon } from "../../Informasjonsseksjon";
+import { Fremgangsindikator } from "../Fremgangsindikator";
 
 type PersonOgSelskapsInformasjonForm = {
   navn: string;

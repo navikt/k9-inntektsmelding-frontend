@@ -1,5 +1,5 @@
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger";
-import { Kvittering } from "../../../shared/skjema-moduler/Kvittering";
+import { Kvittering } from "../../../shared/skjema-moduler/steg/Kvittering";
 import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext";
 
 export const Steg4KvitteringAGI = () => {
