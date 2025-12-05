@@ -39,6 +39,7 @@ export function UnntattAaregRegistreringForm({
 
   //TODO: Gjenbruk, denne kan være lik som i NyAnsattForm
   const opprettOpplysningerMutation = useMutation({
+    // @ts-expect-error(TODO: Erstatt med ekte endepunkt når det er implementert)
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
       // stub
       return Promise.resolve({
