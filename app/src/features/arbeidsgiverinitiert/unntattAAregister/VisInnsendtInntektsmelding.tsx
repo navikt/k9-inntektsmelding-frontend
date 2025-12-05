@@ -19,7 +19,7 @@ import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "./SkjemaStateConte
 
 const route = getRouteApi("/agi-unntatt-aaregister/$id");
 
-export const VisInntektsmelding = () => {
+export const VisInnsendtInntektsmelding = () => {
   const { opplysninger, eksisterendeInntektsmeldinger } = route.useLoaderData();
   const { id } = route.useParams();
   const { setInntektsmeldingSkjemaState } =

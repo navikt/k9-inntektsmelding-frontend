@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { VisInntektsmelding } from "~/features/inntektsmelding/visningskomponenter/VisInntektsmelding";
+import { VisInnsendtInntektsmelding } from "~/features/arbeidsgiverinitiert/unntattAAregister/VisInnsendtInntektsmelding";
 
 const InntektsmeldingContainer = () => {
-  return <VisInntektsmelding />;
+  return <VisInnsendtInntektsmelding />;
 };
 export const Route = createFileRoute("/agi-unntatt-aaregister/$id/vis")({
   component: InntektsmeldingContainer,
