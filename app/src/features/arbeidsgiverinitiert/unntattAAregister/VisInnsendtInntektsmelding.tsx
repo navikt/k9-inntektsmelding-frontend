@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
 
-import { SkjemaoppsummeringAGI } from "./SkjemaoppsummeringAGI";
+import { Skjemaoppsummering } from "../../inntektsmelding/visningskomponenter/Skjemaoppsummering.tsx";
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "./SkjemaStateContext";
 
 const route = getRouteApi("/agi-unntatt-aaregister/$id");
@@ -79,9 +79,9 @@ export const VisInnsendtInntektsmelding = () => {
             </BodyShort>
           </Alert>
         )}
-        <SkjemaoppsummeringAGI
-          gyldigInntektsmeldingSkjemaState={sisteInntektsmelding}
+        <Skjemaoppsummering
           opplysninger={opplysninger}
+          skjemaState={sisteInntektsmelding}
         />
         <HStack gap="4" justify="space-between">
           <HStack gap="4">

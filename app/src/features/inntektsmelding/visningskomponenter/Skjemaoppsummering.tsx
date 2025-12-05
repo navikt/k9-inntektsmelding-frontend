@@ -12,6 +12,8 @@ import {
 import { ListItem } from "@navikt/ds-react/List";
 import { Link } from "@tanstack/react-router";
 
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/zodSchemas.tsx";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas.tsx";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas.tsx";
 import { endringsårsak } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import { REFUSJON_RADIO_VALG } from "~/features/shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
@@ -29,11 +31,11 @@ import {
   lagFulltNavn,
 } from "~/utils";
 
-import { InntektsmeldingSkjemaStateValidAGI } from "../../arbeidsgiverinitiert/zodSchemas.tsx";
-
 type SkjemaoppsummeringProps = {
   opplysninger: OpplysningerDto;
-  skjemaState: InntektsmeldingSkjemaStateValid;
+  skjemaState:
+    | InntektsmeldingSkjemaStateValid
+    | InntektsmeldingSkjemaStateValidAGIUnntattAaregister;
 };
 
 export const Skjemaoppsummering = ({
@@ -242,7 +244,8 @@ export const ArbeidsgiverOgAnsattOppsummering = ({
   opplysninger: OpplysningerDto;
   skjemaState:
     | InntektsmeldingSkjemaStateValid
-    | InntektsmeldingSkjemaStateValidAGI;
+    | InntektsmeldingSkjemaStateValidAGIUnntattAaregister
+    | InntektsmeldingSkjemaStateValidAGINyansatt;
   editPath?: string;
 }) => (
   <FormSummary>
@@ -331,7 +334,8 @@ export const UtbetalingOgRefusjonOppsummering = ({
   kanEndres: boolean;
   skjemaState:
     | InntektsmeldingSkjemaStateValid
-    | InntektsmeldingSkjemaStateValidAGI;
+    | InntektsmeldingSkjemaStateValidAGIUnntattAaregister
+    | InntektsmeldingSkjemaStateValidAGINyansatt;
   editPath?: string;
 }) => (
   <FormSummary>
@@ -397,7 +401,9 @@ const NaturalytelserOppsummering = ({
   skjemaState,
 }: {
   kanEndres: boolean;
-  skjemaState: InntektsmeldingSkjemaStateValid;
+  skjemaState:
+    | InntektsmeldingSkjemaStateValid
+    | InntektsmeldingSkjemaStateValidAGIUnntattAaregister;
 }) => (
   <FormSummary>
     <FormSummary.Header>
@@ -467,7 +473,9 @@ function formaterPeriodeStreng({
 }
 
 const formatterKontaktperson = (
-  kontaktperson: InntektsmeldingSkjemaStateValid["kontaktperson"],
+  kontaktperson:
+    | InntektsmeldingSkjemaStateValid["kontaktperson"]
+    | InntektsmeldingSkjemaStateValidAGIUnntattAaregister["kontaktperson"],
 ) => {
   if (!kontaktperson) {
     return "";

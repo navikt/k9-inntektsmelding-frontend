@@ -23,10 +23,10 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { hentGrunnbeløpOptions } from "~/api/queries.ts";
-import type { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
 import { HjelpetekstReadMore } from "~/features/shared/Hjelpetekst";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
+import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import { formatKroner, formatStønadsnavn } from "~/utils.ts";
 
 import { FormattertTallTextField } from "../react-hook-form-wrappers/FormattertTallTextField";

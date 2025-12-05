@@ -25,12 +25,12 @@ import { isAfter } from "date-fns";
 import { Fragment } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import type { InntektOgRefusjonForm } from "~/features/inntektsmelding/steg/Steg2InntektOgRefusjon";
 import {
   HjelpetekstAlert,
   HjelpetekstReadMore,
 } from "~/features/shared/Hjelpetekst";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
+import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import {
   EndringAvInntektÅrsaker,
   OpplysningerDto,

@@ -16,11 +16,7 @@ import { useFormContext } from "react-hook-form";
 import { featureToggles } from "~/feature-toggles/featureToggles";
 import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
-import {
-  OpplysningerDto,
-  OpplysningerRequest,
-  Ytelsetype,
-} from "~/types/api-models.ts";
+import { OpplysningerDto, Ytelsetype } from "~/types/api-models.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";
@@ -39,7 +35,7 @@ export function UnntattAaregRegistreringForm({
   //TODO: Gjenbruk, denne kan være lik som i NyAnsattForm
   const opprettOpplysningerMutation = useMutation({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
+    mutationFn: async () => {
       // stub
       return Promise.resolve({
         forespørselUuid: undefined,

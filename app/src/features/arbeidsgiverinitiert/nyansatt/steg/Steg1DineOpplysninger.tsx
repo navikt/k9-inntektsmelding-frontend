@@ -7,7 +7,7 @@ import { DineOpplysninger } from "../../../shared/skjema-moduler/steg/DineOpplys
 import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext.tsx";
 import { InntektsmeldingSkjemaStateAGINyansatt } from "../zodSchemas.tsx";
 
-export const Steg1DineOpplysningerAGINyansatt = () => {
+export const Steg1DineOpplysninger = () => {
   const opplysninger = useOpplysninger();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGINyansatt();

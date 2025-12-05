@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Steg1DineOpplysningerAGI } from "~/features/arbeidsgiverinitiert/steg/Steg1DineOpplysninger";
+import { Steg1DineOpplysninger } from "~/features/arbeidsgiverinitiert/nyansatt/steg/Steg1DineOpplysninger";
 import { HjelpetekstToggle } from "~/features/shared/Hjelpetekst";
 
 export const Route = createFileRoute("/agi/$id/dine-opplysninger")({
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/agi/$id/dine-opplysninger")({
     return (
       <>
         <HjelpetekstToggle />
-        <Steg1DineOpplysningerAGI />
+        <Steg1DineOpplysninger />
       </>
     );
   },
