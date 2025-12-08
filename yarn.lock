@@ -717,7 +717,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:3.3.1, @eslint/eslintrc@npm:^3.3.1":
+"@eslint/eslintrc@npm:3.3.3":
+  version: 3.3.3
+  resolution: "@eslint/eslintrc@npm:3.3.3"
+  dependencies:
+    ajv: "npm:^6.12.4"
+    debug: "npm:^4.3.2"
+    espree: "npm:^10.0.1"
+    globals: "npm:^14.0.0"
+    ignore: "npm:^5.2.0"
+    import-fresh: "npm:^3.2.1"
+    js-yaml: "npm:^4.1.1"
+    minimatch: "npm:^3.1.2"
+    strip-json-comments: "npm:^3.1.1"
+  checksum: 10c0/532c7acc7ddd042724c28b1f020bd7bf148fcd4653bb44c8314168b5f772508c842ce4ee070299cac51c5c5757d2124bdcfcef5551c8c58ff9986e3e17f2260d
+  languageName: node
+  linkType: hard
+
+"@eslint/eslintrc@npm:^3.3.1":
   version: 3.3.1
   resolution: "@eslint/eslintrc@npm:3.3.1"
   dependencies:
@@ -970,35 +987,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:7.34.0":
-  version: 7.34.0
-  resolution: "@navikt/aksel-icons@npm:7.34.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.34.0%2Fe0ec5f786c00d1ec4c24973b10c52b15f62ed988"
-  checksum: 10c0/52c201d359c09bfe12032be27c8c6da2d767551a0f3ae37e51321d40fb0184bd37776b1854d3b63ab23b8645069fd3530df8ba30bc8781d78f7dd4db2c75353c
-  languageName: node
-  linkType: hard
-
-"@navikt/aksel-icons@npm:^7.34.0":
+"@navikt/aksel-icons@npm:7.35.0":
   version: 7.35.0
   resolution: "@navikt/aksel-icons@npm:7.35.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.35.0%2F7068430eff75ea06c6b047441e881cbfe05418c5"
   checksum: 10c0/b1755b5b683a6cc7a3b2eb37ffa16ecb79685f1149e72cf210673f0ab149b797ff54ce7b2c0a0680f4f57f74db921337902f118975fe7ca34f5e2a27760c8de9
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:7.34.0":
-  version: 7.34.0
-  resolution: "@navikt/ds-css@npm:7.34.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.34.0%2F21d6538e7d802bc383c15471616d5b37c79777e3"
-  checksum: 10c0/faf253e49474bb9e8fddbfc19fc2ca2c4921b926b7c79395acceffeea467711363f9652f29a4a82063445fca2b42fe3f60497fab857b5677ede8946f1d11209c
+"@navikt/aksel-icons@npm:^7.35.0":
+  version: 7.35.1
+  resolution: "@navikt/aksel-icons@npm:7.35.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F7.35.1%2F83a5150571dd3c01d44e5f20320e56734ace3dc2"
+  checksum: 10c0/fb12620fb557c87dcf3bdd0b33f8b758256bfeb87e2570c9dcfdb9af9efbe14cb03cf4478f18f25b59508a3ce8142002b3f7343e04cea00cf3f25e8a6ab5558c
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:7.34.0":
-  version: 7.34.0
-  resolution: "@navikt/ds-react@npm:7.34.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.34.0%2F745ea1bbe609f94869a2756540b58d3f37839505"
+"@navikt/ds-css@npm:7.35.0":
+  version: 7.35.0
+  resolution: "@navikt/ds-css@npm:7.35.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F7.35.0%2Faf568312ae1be10ff361691532f9861bf5e499d2"
+  checksum: 10c0/d708ece314f6026c737bce5b27cd588449014cc068842daaf22d9450b752a98b97be8019b8812cdf5cdbcfc80b2e9be73a6cd3a9e04f749d6bb7cb36cc3271dd
+  languageName: node
+  linkType: hard
+
+"@navikt/ds-react@npm:7.35.0":
+  version: 7.35.0
+  resolution: "@navikt/ds-react@npm:7.35.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-react%2F7.35.0%2F075cfc70b74bb8c46d67fcf47e0acdc5e47b2b9a"
   dependencies:
     "@floating-ui/react": "npm:0.27.8"
     "@floating-ui/react-dom": "npm:^2.1.6"
-    "@navikt/aksel-icons": "npm:^7.34.0"
-    "@navikt/ds-tokens": "npm:^7.34.0"
+    "@navikt/aksel-icons": "npm:^7.35.0"
+    "@navikt/ds-tokens": "npm:^7.35.0"
     clsx: "npm:^2.1.0"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:9.7.0"
@@ -1006,41 +1023,41 @@ __metadata:
     "@types/react": ^17.0.30 || ^18 || ^19
     react: ^17 || ^18 || ^19
     react-dom: ^17 || ^18 || ^19
-  checksum: 10c0/59ff6cf9c9fbe0c121b147b941aab2174ceb1db402bdab9db10e4742a7ea21c336eaf9bad3ca781a69e60497f78895d92c29f5bd7eaa6f8dd3908582814de399
+  checksum: 10c0/a5774b3313debb42c35cd2bbbb79090a9e739a34b1d332be3c1d1797eabd11d0826fa6fc962afe0f881ae8c35ace0dc1eeea1ea82ac781020184020dbf1d274d
   languageName: node
   linkType: hard
 
-"@navikt/ds-tailwind@npm:7.34.0":
-  version: 7.34.0
-  resolution: "@navikt/ds-tailwind@npm:7.34.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tailwind%2F7.34.0%2F8ab755dd6f3809b1a5a34998057f78be21285dd4"
-  checksum: 10c0/2ebd69ff70d9511a03d6e4629136676d1e30bcba236507ba180f723a1b2d97bc146532ac0187c09ae64384be089e444826b8d98efaff06cac11151f4e451c665
+"@navikt/ds-tailwind@npm:7.35.0":
+  version: 7.35.0
+  resolution: "@navikt/ds-tailwind@npm:7.35.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tailwind%2F7.35.0%2F454a8af26588a582d7c4f380c4dd5c1ade621079"
+  checksum: 10c0/e61bf9a9192038ed0eef537d1dcfbdb2cb94f1c8ccba1c4e06cab8d2fa26cb7967cebecf3fcd5bf0f48752444f553c305c061d6aaebec466a0011d1b89b1924d
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:7.34.0":
-  version: 7.34.0
-  resolution: "@navikt/ds-tokens@npm:7.34.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.34.0%2Faea8f6932bdf5aec384d1fbbeb5930c2c69dc6d1"
-  checksum: 10c0/9bfeda07ff877ab9a7fb1847c3dd7b6d72fa076201924522050380617b55a850d4ec8abe36ba04b7c9e00851d832039b69f74057b158fbde1133f9270cbfacc3
-  languageName: node
-  linkType: hard
-
-"@navikt/ds-tokens@npm:^7.34.0":
+"@navikt/ds-tokens@npm:7.35.0":
   version: 7.35.0
   resolution: "@navikt/ds-tokens@npm:7.35.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.35.0%2Fc2662001774ee2d027838f9ee2249fc77f9316bc"
   checksum: 10c0/40ea7dc751528857254abd789f1e599dc2ea323574fbc6ffa1a1f730af68f083e783c35b6075ee791483ef0b97125983b0309a05da2271a9f9f936483fd4b92e
   languageName: node
   linkType: hard
 
-"@navikt/fnrvalidator@npm:2.1.5":
-  version: 2.1.5
-  resolution: "@navikt/fnrvalidator@npm:2.1.5::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffnrvalidator%2F2.1.5%2Fe33cbc5693b14419bbcf4d5daee2ac9eeec532e5"
-  checksum: 10c0/eef0c2dcfc8007a4411726daa737f9f6e2a07c3ae3974f026ed19526c44f724877d1368e6b293031203de6cd99103d02726244386cd42d2b19fe3c04cd2355f6
+"@navikt/ds-tokens@npm:^7.35.0":
+  version: 7.35.1
+  resolution: "@navikt/ds-tokens@npm:7.35.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-tokens%2F7.35.1%2Fc6e84a9e9939fdf8e9c638b6bf9d3de136d95afe"
+  checksum: 10c0/bd7c66d14366e4467a356930ef82cef9e40408d30931cc6a5987f11148f8599a0f12d39b2740f4af5e5f49c8f82a1a7bf8c86f65aad4a5f9ccc4272066f740b1
   languageName: node
   linkType: hard
 
-"@navikt/nav-dekoratoren-moduler@npm:3.6.0":
-  version: 3.6.0
-  resolution: "@navikt/nav-dekoratoren-moduler@npm:3.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F3.6.0%2F69947afcefe2052f16f4a3cbdb96aac44b475d50"
+"@navikt/fnrvalidator@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@navikt/fnrvalidator@npm:2.2.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Ffnrvalidator%2F2.2.0%2F4886b1ab78dabbca087adf379b81ba0ef27ebbd9"
+  checksum: 10c0/5626fb39ec28c79935b9758c0194cfcfe5eaeb3b97b83b6ae1a8be356aed1e1974734ca48f7f0c30d0ba9b6ef429070bce0d56acd0dd1edd3880cc4cfc3e9fb6
+  languageName: node
+  linkType: hard
+
+"@navikt/nav-dekoratoren-moduler@npm:3.6.1":
+  version: 3.6.1
+  resolution: "@navikt/nav-dekoratoren-moduler@npm:3.6.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F3.6.1%2Fb0dfb47266ce90ffacd1905cd4feb53d8194dbcb"
   dependencies:
     js-cookie: "npm:^3.0.5"
   peerDependencies:
@@ -1048,7 +1065,7 @@ __metadata:
     html-react-parser: ">=5.x"
     jsdom: ">=16.x"
     react: ">=17.x"
-  checksum: 10c0/4ce47bec5c93a0da27fb6ad19d7f6ea01fbc312e0ae2639e88649c8cba70a0b5bb8cec7e7c3d03f82138d13f2316b3887f6a31720eab7d05ffeb935e43a8b86a
+  checksum: 10c0/8072e6609743e0b77d2a07fa0dae2f0738d7e058f00f57a3eb393943022630ea8ddb58934d1498f15897103ace9ba99c5d438785918cac6a7619ab40e69261cf
   languageName: node
   linkType: hard
 
@@ -1859,38 +1876,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router-devtools@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/react-router-devtools@npm:1.139.7"
+"@tanstack/react-router-devtools@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/react-router-devtools@npm:1.139.12"
   dependencies:
-    "@tanstack/router-devtools-core": "npm:1.139.7"
+    "@tanstack/router-devtools-core": "npm:1.139.12"
     vite: "npm:^7.1.7"
   peerDependencies:
-    "@tanstack/react-router": ^1.139.7
-    "@tanstack/router-core": ^1.139.7
+    "@tanstack/react-router": ^1.139.12
+    "@tanstack/router-core": ^1.139.12
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
   peerDependenciesMeta:
     "@tanstack/router-core":
       optional: true
-  checksum: 10c0/a2dd0bebc95ad34762d9feb17a76e84c3165821b44caa54feaf621c3838f7845df3bd6224f84d9de380a2c9b346b30b987c244fe69b69229918af40c1a4bc74a
+  checksum: 10c0/f801adbc358c845377c16ff9e8a069464c46494a22a43c4db5fed834af1ac1a47d879dd7fc7cb774af12f25dac05d741c181d8b920e613836edd2b9907d466d0
   languageName: node
   linkType: hard
 
-"@tanstack/react-router@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/react-router@npm:1.139.7"
+"@tanstack/react-router@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/react-router@npm:1.139.12"
   dependencies:
     "@tanstack/history": "npm:1.139.0"
     "@tanstack/react-store": "npm:^0.8.0"
-    "@tanstack/router-core": "npm:1.139.7"
+    "@tanstack/router-core": "npm:1.139.12"
     isbot: "npm:^5.1.22"
     tiny-invariant: "npm:^1.3.3"
     tiny-warning: "npm:^1.0.3"
   peerDependencies:
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
-  checksum: 10c0/31a3ecf75d057a6c0bbd3699aa14a69969594fdc954709f65b462994bf9c10646e24f40b5e14c72659e2a241648d50a26deaa276c9b653f796129580cb75959e
+  checksum: 10c0/71d846684d902909b78ba8bf3156f4582bdbe7cfae2d1e9153516fa09f069a89ab60034a30eb2da7d145381e8867f12927743aceba92626c5eede991eba7a9c8
   languageName: node
   linkType: hard
 
@@ -1907,9 +1924,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/router-core@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/router-core@npm:1.139.7"
+"@tanstack/router-core@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/router-core@npm:1.139.12"
   dependencies:
     "@tanstack/history": "npm:1.139.0"
     "@tanstack/store": "npm:^0.8.0"
@@ -1918,54 +1935,54 @@ __metadata:
     seroval-plugins: "npm:^1.4.0"
     tiny-invariant: "npm:^1.3.3"
     tiny-warning: "npm:^1.0.3"
-  checksum: 10c0/5d33feee5dbc7f5136e2c460036ad6cd42622eb85638921ccf59abfdc9ea9340f5db56aa1ab1af9323f01fb273004fa39d04143d4a6e7d00b032b3d73df0eb8e
+  checksum: 10c0/4823343c5bc8bdd17f7b5a2ff60bdceefa76cc78800721d0d46cee96b8de220ff48f3dfc3b7cc49a760b4e6a0243d561e84700e878906442ed139a7676bf6584
   languageName: node
   linkType: hard
 
-"@tanstack/router-devtools-core@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/router-devtools-core@npm:1.139.7"
+"@tanstack/router-devtools-core@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/router-devtools-core@npm:1.139.12"
   dependencies:
     clsx: "npm:^2.1.1"
     goober: "npm:^2.1.16"
     tiny-invariant: "npm:^1.3.3"
     vite: "npm:^7.1.7"
   peerDependencies:
-    "@tanstack/router-core": ^1.139.7
+    "@tanstack/router-core": ^1.139.12
     csstype: ^3.0.10
     solid-js: ">=1.9.5"
   peerDependenciesMeta:
     csstype:
       optional: true
-  checksum: 10c0/8ec493706a90ae5cb3a3ca488857d72d4970d802ef1023e48a96999ee51d0047d49d4be884a01c38194cecff9cb9fd1282edf2c1871eac8568f00e0d8c5bfda7
+  checksum: 10c0/3d62c2082307b3d95dc97f4bb3eaabc742d74c2c77f49f1a4d4a779a0e76729809ff12507b4d450851805a3587f92a75d853867b7a665118c0205798e103b7d6
   languageName: node
   linkType: hard
 
-"@tanstack/router-devtools@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/router-devtools@npm:1.139.7"
+"@tanstack/router-devtools@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/router-devtools@npm:1.139.12"
   dependencies:
-    "@tanstack/react-router-devtools": "npm:1.139.7"
+    "@tanstack/react-router-devtools": "npm:1.139.12"
     clsx: "npm:^2.1.1"
     goober: "npm:^2.1.16"
     vite: "npm:^7.1.7"
   peerDependencies:
-    "@tanstack/react-router": ^1.139.7
+    "@tanstack/react-router": ^1.139.12
     csstype: ^3.0.10
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
   peerDependenciesMeta:
     csstype:
       optional: true
-  checksum: 10c0/6258b2b475e049d4e220c8415fb2cb7a82ed927eeb3844e118e4bfb3e6c0a0c61a5bf7c6a9cf8d7d529134fb0122bb44c6ca753e7d97e3ef60ab984da0e6104f
+  checksum: 10c0/b822d2bb76a80a2ce545f8f995190783dbeeb793fe0da7f169fa24828cbfba3f6809b10e5e43269e4a1c5aea996625ce02d0f16c70dee00c01a94a186553e5db
   languageName: node
   linkType: hard
 
-"@tanstack/router-generator@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/router-generator@npm:1.139.7"
+"@tanstack/router-generator@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/router-generator@npm:1.139.12"
   dependencies:
-    "@tanstack/router-core": "npm:1.139.7"
+    "@tanstack/router-core": "npm:1.139.12"
     "@tanstack/router-utils": "npm:1.139.0"
     "@tanstack/virtual-file-routes": "npm:1.139.0"
     prettier: "npm:^3.5.0"
@@ -1973,13 +1990,13 @@ __metadata:
     source-map: "npm:^0.7.4"
     tsx: "npm:^4.19.2"
     zod: "npm:^3.24.2"
-  checksum: 10c0/9b74e37c31213bc047d688c4fe8267a9b3bf4b4800cd3c101788f4ca1061689f8291bd44ee2a6c3c4c4a4f47eb6f76507da3cbeae7d5ab0715231d6c88a3ee9a
+  checksum: 10c0/6b9a8d8e8757afc1049b2ad3efe92fad8e043b950f499595926450378216969ab1f734c79cb35892315c94ae275d408a874962a5ac6995c6221851e4062d60c7
   languageName: node
   linkType: hard
 
-"@tanstack/router-plugin@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/router-plugin@npm:1.139.7"
+"@tanstack/router-plugin@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/router-plugin@npm:1.139.12"
   dependencies:
     "@babel/core": "npm:^7.27.7"
     "@babel/plugin-syntax-jsx": "npm:^7.27.1"
@@ -1987,8 +2004,8 @@ __metadata:
     "@babel/template": "npm:^7.27.2"
     "@babel/traverse": "npm:^7.27.7"
     "@babel/types": "npm:^7.27.7"
-    "@tanstack/router-core": "npm:1.139.7"
-    "@tanstack/router-generator": "npm:1.139.7"
+    "@tanstack/router-core": "npm:1.139.12"
+    "@tanstack/router-generator": "npm:1.139.12"
     "@tanstack/router-utils": "npm:1.139.0"
     "@tanstack/virtual-file-routes": "npm:1.139.0"
     babel-dead-code-elimination: "npm:^1.0.10"
@@ -1997,7 +2014,7 @@ __metadata:
     zod: "npm:^3.24.2"
   peerDependencies:
     "@rsbuild/core": ">=1.0.2"
-    "@tanstack/react-router": ^1.139.7
+    "@tanstack/react-router": ^1.139.12
     vite: ">=5.0.0 || >=6.0.0 || >=7.0.0"
     vite-plugin-solid: ^2.11.10
     webpack: ">=5.92.0"
@@ -2012,7 +2029,7 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/3b2d3410545f8ceeb7777381a591f14eaec3f6c30b20d53cbfa5b4549b3874e3b98de163159bdcb28768613ab1d2ff74b29243f75dd0dd5ffeed00078a1cb48f
+  checksum: 10c0/fde4cbb032d93dc27fcf319e5ced00977880f794e880416a54bbf309bb4e16d1930747df1dc8634aafca2dafd280faa8c7f0c17f531d24d7053567eb3871b1cf
   languageName: node
   linkType: hard
 
@@ -2032,12 +2049,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/router-vite-plugin@npm:1.139.7":
-  version: 1.139.7
-  resolution: "@tanstack/router-vite-plugin@npm:1.139.7"
+"@tanstack/router-vite-plugin@npm:1.139.12":
+  version: 1.139.12
+  resolution: "@tanstack/router-vite-plugin@npm:1.139.12"
   dependencies:
-    "@tanstack/router-plugin": "npm:1.139.7"
-  checksum: 10c0/28efcda973ae43ba38605d10ee841d55d59327a43110ecdbc557416d082a157f9fc20d696afdfe22d5a88be592c893487da6427faa28fe8f9d76016d6eb19a68
+    "@tanstack/router-plugin": "npm:1.139.12"
+  checksum: 10c0/207d4f187ecbcad2445a0b822389e332c23c7fdbcd0ff414469d95f8c52b823b8997ea7f2ee96884a8e45219a471eeaa33f0dfe58e2383f77c83289cc2450944
   languageName: node
   linkType: hard
 
@@ -2745,26 +2762,26 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "app@workspace:app"
   dependencies:
-    "@eslint/eslintrc": "npm:3.3.1"
+    "@eslint/eslintrc": "npm:3.3.3"
     "@eslint/js": "npm:9.39.1"
     "@grafana/faro-web-sdk": "npm:1.19.0"
     "@grafana/faro-web-tracing": "npm:1.19.0"
     "@hookform/resolvers": "npm:4.1.3"
-    "@navikt/aksel-icons": "npm:7.34.0"
-    "@navikt/ds-css": "npm:7.34.0"
-    "@navikt/ds-react": "npm:7.34.0"
-    "@navikt/ds-tailwind": "npm:7.34.0"
-    "@navikt/ds-tokens": "npm:7.34.0"
-    "@navikt/fnrvalidator": "npm:2.1.5"
-    "@navikt/nav-dekoratoren-moduler": "npm:3.6.0"
+    "@navikt/aksel-icons": "npm:7.35.0"
+    "@navikt/ds-css": "npm:7.35.0"
+    "@navikt/ds-react": "npm:7.35.0"
+    "@navikt/ds-tailwind": "npm:7.35.0"
+    "@navikt/ds-tokens": "npm:7.35.0"
+    "@navikt/fnrvalidator": "npm:2.2.0"
+    "@navikt/nav-dekoratoren-moduler": "npm:3.6.1"
     "@playwright/test": "npm:1.57.0"
     "@tailwindcss/vite": "npm:^4.1.17"
     "@tanstack/eslint-plugin-query": "npm:5.91.2"
     "@tanstack/react-query": "npm:5.90.11"
     "@tanstack/react-query-devtools": "npm:5.91.1"
-    "@tanstack/react-router": "npm:1.139.7"
-    "@tanstack/router-devtools": "npm:1.139.7"
-    "@tanstack/router-vite-plugin": "npm:1.139.7"
+    "@tanstack/react-router": "npm:1.139.12"
+    "@tanstack/router-devtools": "npm:1.139.12"
+    "@tanstack/router-vite-plugin": "npm:1.139.12"
     "@types/lodash": "npm:4.17.20"
     "@types/node": "npm:22.18.12"
     "@types/react": "npm:^19.2.2"
@@ -2784,14 +2801,14 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:12.1.1"
     eslint-plugin-unicorn: "npm:62.0.0"
     lodash: "npm:4.17.21"
-    prettier: "npm:3.7.1"
+    prettier: "npm:3.7.3"
     react: "npm:19.2.0"
     react-dom: "npm:19.2.0"
-    react-hook-form: "npm:7.66.1"
+    react-hook-form: "npm:7.67.0"
     tailwindcss: "npm:4.1.17"
     typescript: "npm:5.9.3"
     typescript-eslint: "npm:8.48.0"
-    vite: "npm:7.2.4"
+    vite: "npm:7.2.6"
     vite-size: "npm:0.0.6"
     vitest: "npm:4.0.14"
     zod: "npm:3.25.76"
@@ -3377,10 +3394,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csp-header@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "csp-header@npm:6.2.0"
-  checksum: 10c0/589568394a94946c6c600d74bfa1f1a8ea20daeeaa8994a99fa458dae0144e1329c9ff126e7ead89e23ea96f5600e6eda14c9a362e99facf79157df775cb2708
+"csp-header@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "csp-header@npm:6.2.1"
+  checksum: 10c0/098c3144b31013ee0bcc6b3dc3e8237296aafd764dc35fe7e91c153800258f1ef9b1614b2273dbe5fdfd3b88d741dfb39df423c8c91dd5658fc0e2946c7713d3
   languageName: node
   linkType: hard
 
@@ -5338,7 +5355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0":
+"js-yaml@npm:^4.1.0, js-yaml@npm:^4.1.1":
   version: 4.1.1
   resolution: "js-yaml@npm:4.1.1"
   dependencies:
@@ -6260,12 +6277,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.7.1":
-  version: 3.7.1
-  resolution: "prettier@npm:3.7.1"
+"prettier@npm:3.7.3":
+  version: 3.7.3
+  resolution: "prettier@npm:3.7.3"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/a6610043ee0a64a3251a948bf82fad3e59d984a8e8dea206400cfa190585417e3343b32c1f6ae7d8f40798a9b4bd91affc08fa7795dd99a9dec5c9bccdf31500
+  checksum: 10c0/ee86bb06121c74dadc54f30b6f99aff6288966d9b842ce501d6991e20d20c6ce2d45028651b3b0955ca6e5fa89c1bee1e72b6f810243a93cef8bc69737972ef7
   languageName: node
   linkType: hard
 
@@ -6412,12 +6429,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.66.1":
-  version: 7.66.1
-  resolution: "react-hook-form@npm:7.66.1"
+"react-hook-form@npm:7.67.0":
+  version: 7.67.0
+  resolution: "react-hook-form@npm:7.67.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/f82238249d44111b377116bdfb6063045e3e81fef4c73d7f487160554fa4b43ff0970dec1f4d031e57bc2dfbdd974bdfba5608bc8c5785998a7b8a39a566428f
+  checksum: 10c0/d20fec07e2f86a3c7ad60c453ae004e5ca59def04c1ca9a34e7d899e93d1587f8070e4b8b88b0ff1d01ff1651c4bb06f580e32aa3a97120d60fbc483e3f9e312
   languageName: node
   linkType: hard
 
@@ -6858,16 +6875,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "server@workspace:server"
   dependencies:
-    "@eslint/eslintrc": "npm:3.3.1"
+    "@eslint/eslintrc": "npm:3.3.3"
     "@eslint/js": "npm:9.39.1"
-    "@navikt/nav-dekoratoren-moduler": "npm:3.6.0"
+    "@navikt/nav-dekoratoren-moduler": "npm:3.6.1"
     "@navikt/oasis": "npm:4.1.1"
     "@navikt/vite-mode": "npm:0.12.0"
     "@types/express": "npm:4.17.21"
     "@types/jsdom": "npm:^27"
     "@types/react": "npm:^19"
     "@typescript-eslint/eslint-plugin": "npm:8.48.0"
-    csp-header: "npm:^6.2.0"
+    csp-header: "npm:^6.2.1"
     eslint: "npm:9.39.1"
     eslint-plugin-prettier: "npm:5.5.4"
     eslint-plugin-simple-import-sort: "npm:12.1.1"
@@ -6876,7 +6893,7 @@ __metadata:
     html-react-parser: "npm:^5.2.10"
     http-proxy-middleware: "npm:3.0.5"
     jsdom: "npm:^27.2.0"
-    prettier: "npm:3.7.1"
+    prettier: "npm:3.7.3"
     react: "npm:19.2.0"
     typescript: "npm:5.9.3"
     typescript-eslint: "npm:8.48.0"
@@ -7729,9 +7746,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:7.2.4":
-  version: 7.2.4
-  resolution: "vite@npm:7.2.4"
+"vite@npm:7.2.6":
+  version: 7.2.6
+  resolution: "vite@npm:7.2.6"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.5.0"
@@ -7780,7 +7797,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/26aa0cad01d6e00f17c837b2a0587ab52f6bd0d0e64606b4220cfc58fa5fa76a4095ef3ea27c886bea542a346363912c4fad9f9462ef1e6757262fedfd5196b2
+  checksum: 10c0/d444a159ab8f0f854d596d1938f201b449d59ed4d336e587be9dc89005467214d85848c212c2495f76a8421372ffe4d061d023d659600f1aaa3ba5ac13e804f7
   languageName: node
   linkType: hard
 
