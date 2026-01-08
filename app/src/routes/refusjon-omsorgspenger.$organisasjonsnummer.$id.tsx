@@ -38,6 +38,7 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
       "Responsen fra serveren matchet ikke forventet format",
       parsedJson.error,
     );
+    throw new Error("Responsen fra serveren matchet ikke forventet format");
   }
 
   return parsedJson.data;
