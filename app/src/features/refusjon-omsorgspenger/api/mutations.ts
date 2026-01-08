@@ -33,6 +33,7 @@ export const RefusjonOmsorgspengerResponseDtoSchema =
     id: z.number(),
     opprettetTidspunkt: z.string(),
     innsendtTidspunkt: z.string().optional(),
+    foresporselUuid: z.string(),
   });
 
 export type RefusjonOmsorgspengerDto = z.infer<
