@@ -125,8 +125,7 @@ export function UnntattAaregRegistreringForm({
       },
     });
   };
-
-  if (!featureToggles.AGI_NYANSATT) {
+  if (!featureToggles.AGI_UREGISTRERT) {
     return (
       <Alert variant="info">
         <Heading level="3" size="small">

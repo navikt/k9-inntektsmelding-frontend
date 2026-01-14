@@ -1,10 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { enkeltOpplysningerResponse } from "tests/mocks/inntektsmelding/opplysninger";
 import {
   expectError,
   mockHentPersonOgArbeidsforhold,
 } from "tests/mocks/shared/utils";
-
-import { enkeltOpplysningerResponse } from "../../mocks/inntektsmelding/opplysninger.ts";
 
 const FAKE_FNR = "09810198874";
 

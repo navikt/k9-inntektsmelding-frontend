@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import {
   expectError,
   mockAGIOpplysninger,
   mockGrunnbeløp,
   mockHentPersonOgArbeidsforhold,
 } from "tests/mocks/shared/utils";
-
-import { agiOpplysningerResponseNyAnsatt } from "../../mocks/arbeidsgiverinitiert/agi-opplysninger";
 
 const FAKE_FNR = "09810198874";
 
