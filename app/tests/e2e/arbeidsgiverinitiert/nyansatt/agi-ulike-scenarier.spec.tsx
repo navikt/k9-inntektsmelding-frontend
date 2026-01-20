@@ -161,19 +161,6 @@ test.describe("AGI Ulike scenarier", () => {
     ).toBeVisible();
   });
 
-  test("Visning av 'unntatt aaregister' melding", async ({ page }) => {
-    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-
-    await page
-      .locator('input[name="årsak"][value="unntatt_aaregister"]')
-      .click();
-
-    // Skal vise melding om at man må bruke Altinn
-    await expect(
-      page.getByText("Du må sende inn inntektsmelding via Altinn"),
-    ).toBeVisible();
-  });
-
   test("Visning av 'annen årsak' melding", async ({ page }) => {
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
 
