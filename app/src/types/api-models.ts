@@ -177,6 +177,7 @@ export const opplysningerSchema = z.object({
     "ARBEIDSGIVERINITIERT_NYANSATT",
     "ARBEIDSGIVERINITIERT_UREGISTRERT",
     "OMSORGSPENGER_REFUSJON",
+    "BESTILT_AV_SAKSBEHANDLER",
   ]),
   skjæringstidspunkt: z.string(),
   førsteUttaksdato: z.string(),
