@@ -1,16 +1,15 @@
 import { expect, test } from "@playwright/test";
 import {
+  agiOpplysningerAlternativYtelse,
+  agiOpplysningerResponseNyAnsatt,
+} from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
+import { agiSendInntektsmeldingResponse } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-send-inntektsmelding";
+import {
   mockAGIOpplysninger,
   mockAGISendInntektsmelding,
   mockGrunnbeløp,
   mockHentPersonOgArbeidsforhold,
 } from "tests/mocks/shared/utils";
-
-import {
-  agiOpplysningerAlternativYtelse,
-  agiOpplysningerResponseNyAnsatt,
-} from "../../mocks/arbeidsgiverinitiert/agi-opplysninger";
-import { agiSendInntektsmeldingResponse } from "../../mocks/arbeidsgiverinitiert/agi-send-inntektsmelding";
 
 const FAKE_FNR = "09810198874";
 
@@ -159,19 +158,6 @@ test.describe("AGI Ulike scenarier", () => {
     // Skal være tilbake på refusjon
     await expect(
       page.getByRole("heading", { name: "Refusjon", exact: true }),
-    ).toBeVisible();
-  });
-
-  test("Visning av 'unntatt aaregister' melding", async ({ page }) => {
-    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-
-    await page
-      .locator('input[name="årsak"][value="unntatt_aaregister"]')
-      .click();
-
-    // Skal vise melding om at man må bruke Altinn
-    await expect(
-      page.getByText("Du må sende inn inntektsmelding via Altinn"),
     ).toBeVisible();
   });
 

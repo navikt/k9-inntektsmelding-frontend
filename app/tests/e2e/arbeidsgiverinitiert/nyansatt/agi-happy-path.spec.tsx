@@ -1,13 +1,12 @@
 import { expect, test } from "@playwright/test";
+import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
+import { agiSendInntektsmeldingResponse } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-send-inntektsmelding";
 import {
   mockAGIOpplysninger,
   mockAGISendInntektsmelding,
   mockGrunnbeløp,
   mockHentPersonOgArbeidsforhold,
 } from "tests/mocks/shared/utils";
-
-import { agiOpplysningerResponseNyAnsatt } from "../../mocks/arbeidsgiverinitiert/agi-opplysninger";
-import { agiSendInntektsmeldingResponse } from "../../mocks/arbeidsgiverinitiert/agi-send-inntektsmelding";
 
 const FAKE_FNR = "09810198874";
 

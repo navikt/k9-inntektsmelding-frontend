@@ -218,7 +218,6 @@ export async function hentPersonFraFnr(
 
 export async function hentPersonFraFnrUnntattAareg(): Promise<SlåOppArbeidstakerResponseDto> {
   // foreløpig stub
-
   return new Promise<SlåOppArbeidstakerResponseDto>((resolve) => {
     setTimeout(() => {
       return resolve({
