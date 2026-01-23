@@ -17,7 +17,6 @@ const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
     opplysninger.inntektsopplysninger.gjennomsnittLønn === undefined ||
     opplysninger.inntektsopplysninger.gjennomsnittLønn === null
   ) {
-    console.log('logger')
     const loggObjekt = {
       statuser: opplysninger.inntektsopplysninger.månedsinntekter.map(
         (inntekt) => ({
@@ -28,7 +27,7 @@ const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
     faro.api.pushLog(
       [
         "gjennomsnittLønn er undefined eller null, dette bør ikke skje",
-        loggObjekt,
+        JSON.stringify(loggObjekt),
       ],
       {
         level: LogLevel.ERROR,
