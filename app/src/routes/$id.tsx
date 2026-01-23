@@ -13,6 +13,7 @@ import { OpplysningerDto } from "~/types/api-models";
 
 const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
   if (
+    true ||
     opplysninger.inntektsopplysninger.gjennomsnittLønn === undefined ||
     opplysninger.inntektsopplysninger.gjennomsnittLønn === null
   ) {
