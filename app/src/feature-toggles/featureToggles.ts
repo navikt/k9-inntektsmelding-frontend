@@ -20,8 +20,7 @@ export const finnEnvironmentForHostname = (hostname: string) => {
   }
   if (
     hostname.includes(".intern.dev.nav.no") ||
-    hostname.includes(".dev.nav.no") ||
-    hostname.includes("localhost")
+    hostname.includes(".dev.nav.no")
   ) {
     return DEV;
   }
