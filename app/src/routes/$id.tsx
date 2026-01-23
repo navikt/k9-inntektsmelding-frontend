@@ -14,11 +14,11 @@ import { isDev } from "~/utils";
 
 const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
   if (
+    true ||
     opplysninger.inntektsopplysninger.gjennomsnittLønn === undefined ||
     opplysninger.inntektsopplysninger.gjennomsnittLønn === null ||
     isDev
   ) {
-    console.log("gjennomsnittLønn er undefined eller null, dette bør ikke skje");
     const loggObjekt = {
       statuser: opplysninger.inntektsopplysninger.månedsinntekter.map(
         (inntekt) => ({
