@@ -10,15 +10,14 @@ import { OppgaveErUtgåttFeilside } from "~/features/shared/error-boundary/Oppga
 import { InntektsmeldingRoot } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
 import { OpplysningerDto } from "~/types/api-models";
-import { isDev } from "~/utils";
 
 const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
   if (
     true ||
     opplysninger.inntektsopplysninger.gjennomsnittLønn === undefined ||
-    opplysninger.inntektsopplysninger.gjennomsnittLønn === null ||
-    isDev
+    opplysninger.inntektsopplysninger.gjennomsnittLønn === null
   ) {
+    console.log('logger')
     const loggObjekt = {
       statuser: opplysninger.inntektsopplysninger.månedsinntekter.map(
         (inntekt) => ({
