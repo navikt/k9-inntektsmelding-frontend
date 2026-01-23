@@ -1,3 +1,4 @@
+import { faro, LogLevel } from "@grafana/faro-web-sdk";
 import { BodyShort, Loader } from "@navikt/ds-react";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -8,6 +9,33 @@ import {
 import { OppgaveErUtgåttFeilside } from "~/features/shared/error-boundary/OppgaveErUtgåttFeilside";
 import { InntektsmeldingRoot } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
+import { OpplysningerDto } from "~/types/api-models";
+import { isDev } from "~/utils";
+
+const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
+  if (
+    opplysninger.inntektsopplysninger.gjennomsnittLønn === undefined ||
+    opplysninger.inntektsopplysninger.gjennomsnittLønn === null ||
+    isDev
+  ) {
+    const loggObjekt = {
+      statuser: opplysninger.inntektsopplysninger.månedsinntekter.map(
+        (inntekt) => ({
+          status: inntekt.status,
+        }),
+      ),
+    };
+    faro.api.pushLog(
+      [
+        "gjennomsnittLønn er undefined eller null, dette bør ikke skje",
+        loggObjekt,
+      ],
+      {
+        level: LogLevel.ERROR,
+      },
+    );
+  }
+};
 
 enum FEILKODER {
   OPPGAVE_ER_UTGÅTT = "OPPGAVE_ER_UTGÅTT",
@@ -35,6 +63,8 @@ export const Route = createFileRoute("/$id")({
       hentOpplysningerData(params.id),
       hentEksisterendeInntektsmeldinger(params.id),
     ]);
+
+    debugInntektsopplysningerLogging(opplysninger);
 
     if (
       opplysninger.forespørselStatus === "UTGÅTT" &&
