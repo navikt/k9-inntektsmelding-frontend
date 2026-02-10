@@ -100,12 +100,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
                 ansatte har rett til å bruke.
               </BodyLong>
               <BodyLong>
-                Hvis dere ikke har utbetalt lønn under fraværet, kan den ansatte
-                selv søke om refusjon av omsorgspenger. Vi jobber med en ny
-                løsning for innsending av inntektsmelding når dere ikke skal ha
-                refusjon. Inntil videre må dere bruker arbeidsgivers eget lønns-
-                og personalsystem eller Altinn for å sende inntektsmelding i
-                saker uten refusjon.
+                Hvis dere ikke har utbetalt lønn under fraværet, og den ansatte
+                søker om utbetaling direkte fra Nav, vil dere få et varsel om å
+                sende inntektsmelding på Min side - arbeidsgiver.
               </BodyLong>
             </Alert>
           )}
