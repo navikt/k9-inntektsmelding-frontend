@@ -10,6 +10,7 @@ import { OppgaveErUtgåttFeilside } from "~/features/shared/error-boundary/Oppga
 import { InntektsmeldingRoot } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
 import { OpplysningerDto } from "~/types/api-models";
+import { isDev } from "~/utils";
 
 const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
   if (
@@ -23,15 +24,17 @@ const debugInntektsopplysningerLogging = (opplysninger: OpplysningerDto) => {
         }),
       ),
     };
-    faro.api.pushLog(
-      [
-        "gjennomsnittLønn er undefined eller null, dette bør ikke skje",
-        JSON.stringify(loggObjekt),
-      ],
-      {
-        level: LogLevel.ERROR,
-      },
-    );
+    if (!isDev) {
+      faro.api.pushLog(
+        [
+          "gjennomsnittLønn er undefined eller null, dette bør ikke skje",
+          JSON.stringify(loggObjekt),
+        ],
+        {
+          level: LogLevel.ERROR,
+        },
+      );
+    }
   }
 };
 
