@@ -1333,14 +1333,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/vite-mode@npm:0.12.0":
-  version: 0.12.0
-  resolution: "@navikt/vite-mode@npm:0.12.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fvite-mode%2F0.12.0%2F88a5cc893b734d9acc0c264f003567e24171646d"
+"@navikt/vite-mode@npm:0.13.7":
+  version: 0.13.7
+  resolution: "@navikt/vite-mode@npm:0.13.7::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fvite-mode%2F0.13.7%2F2c0088852983e61e5eb2b6a2259fa70d9c98d9b1"
   dependencies:
     cookie-parser: "npm:1.4.7"
   peerDependencies:
-    express: 4.x
-  checksum: 10c0/c47e0a06a7d1a92450e3daeb81b275c8d10aafee03716f7ae041d4b623c11e8cf2684576389830d8b31b75ffaa307f0b824daa6fb2b9ab3f012b4b9ee855cbf4
+    express: 5.x
+  checksum: 10c0/95a16dcfe249e54ace28cde53c2493ada12856425d7dd2e2aff3f457e509d0ed2ab2f479e316f2970908bded1af066c6840f5af7a5a50eca776ef403bc60507a
   languageName: node
   linkType: hard
 
@@ -6229,7 +6229,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@navikt/nav-dekoratoren-moduler": "npm:3.6.1"
     "@navikt/oasis": "npm:4.1.2"
-    "@navikt/vite-mode": "npm:0.12.0"
+    "@navikt/vite-mode": "npm:0.13.7"
     "@types/express": "npm:^5.0.6"
     "@types/jsdom": "npm:^27.0.0"
     "@types/react": "npm:^19.2.14"
