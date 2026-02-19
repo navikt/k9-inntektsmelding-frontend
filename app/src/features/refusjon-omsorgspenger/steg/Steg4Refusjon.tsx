@@ -110,7 +110,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
         </BodyLong>
       </GuidePanel>
       <form onSubmit={onSubmit}>
-        <VStack gap="4">
+        <VStack gap="space-16">
           {inntektsopplysninger ? (
             <Inntekt
               harEksisterendeInntektsmeldinger={false}

@@ -45,13 +45,13 @@ export function Naturalytelser({ opplysninger }: NaturalytelserProps) {
 
   const misterNaturalytelser = watch("misterNaturalytelser");
   return (
-    <VStack data-testid="naturalytelser-blokk" gap="4">
+    <VStack data-testid="naturalytelser-blokk" gap="space-16">
       <hr />
       <Heading id="naturalytelser" level="4" size="medium">
         Naturalytelser
       </Heading>
       <HjelpetekstReadMore header="Hva er naturalytelser?">
-        <Stack gap="2">
+        <Stack gap="space-8">
           <BodyLong>
             Naturalytelser er goder som den ansatte får i tillegg til vanlig
             lønn. Dette kan være firmabil, elektronisk kommunikasjon

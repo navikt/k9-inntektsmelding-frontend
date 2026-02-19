@@ -94,7 +94,7 @@ export const VisInnsendtRefusjonskrav = () => {
             Opprett nytt refusjonskrav
           </Button>
         </Alert>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <OppsummeringRefusjon redigerbar={false} />
           <OppsummeringArbeidsgiverOgAnsatt redigerbar={false} />
           <OppsummeringOmsorgsdager

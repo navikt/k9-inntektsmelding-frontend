@@ -43,7 +43,7 @@ export const Steg3Oppsummering = () => {
     );
     return (
       <Alert className="mt-4 mx-4 ax-md:mx-0" variant="error">
-        <Stack gap="4">
+        <Stack gap="space-16">
           <BodyLong>
             Noe gikk galt med utfyllingen av inntektsmeldingen din. Du må
             dessverre begynne på nytt.

@@ -182,7 +182,7 @@ export function Steg2Refusjon() {
           {prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding() &&
             sisteInntektsmeldingFørsteFraværsdag && (
               <Alert variant="warning">
-                <Stack gap="2">
+                <Stack gap="space-8">
                   <Heading level="3" size="small" spacing>
                     {førsteFraværsdagFremoverItidFeilmeldingHeading}
                   </Heading>

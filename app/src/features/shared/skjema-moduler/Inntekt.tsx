@@ -90,7 +90,7 @@ export function Inntekt({
         kilde="Fra A-Ordningen"
         tittel={`${capitalizeSetning(leggTilGenitiv(person.fornavn))} lønn før ${førsteDag}`}
       >
-        <HGrid columns={{ md: "max-content 1fr" }} gap="4">
+        <HGrid columns={{ md: "max-content 1fr" }} gap="space-16">
           {inntektsopplysninger.månedsinntekter
             ?.toSorted((a, b) => a.fom.localeCompare(b.fom))
             .map((inntekt) => (
@@ -107,7 +107,7 @@ export function Inntekt({
         </HGrid>
       </Informasjonsseksjon>
       {!erAInntektNede && (
-        <VStack data-testid="gjennomsnittinntekt-block" gap="1">
+        <VStack data-testid="gjennomsnittinntekt-block" gap="space-4">
           <BodyShort>Beregnet månedslønn</BodyShort>
           <strong
             className={clsx(
@@ -176,7 +176,7 @@ export function Inntekt({
       </HjelpetekstAlert>
       <div className="flex flex-col gap-2">
         <HjelpetekstReadMore header="Har den ansatte hatt ferie eller fravær de siste tre månedene?">
-          <Stack gap="2">
+          <Stack gap="space-8">
             <BodyLong>
               Hvis den ansatte har hatt ferietrekk i en lønnsutbetaling skal
               dette inngå som en del av gjennomsnittet for tre måneder. Du må da
@@ -467,7 +467,7 @@ function Endringsårsaker({
       );
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       {fields.map((field, index) => {
         return (
           <div

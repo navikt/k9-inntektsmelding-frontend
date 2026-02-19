@@ -57,7 +57,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={1} />
       <GuidePanel className="mb-4">
-        <VStack gap="4">
+        <VStack gap="space-16">
           <Heading level="2" size="medium">
             Hei {capitalizeSetning(innloggetBruker.fornavn)}!
           </Heading>
@@ -76,7 +76,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
         </VStack>
       </GuidePanel>
       <form onSubmit={onSubmit}>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <RadioGroup
             error={formState.errors.harUtbetaltLønn?.message}
             legend="Har dere utbetalt lønn under fraværet, og krever refusjon?"

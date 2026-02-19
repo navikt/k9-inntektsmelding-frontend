@@ -55,8 +55,8 @@ export const VisInntektsmelding = () => {
 
   return (
     <section className="mt-4">
-      <VStack className="bg-ax-bg-default px-5 py-6 rounded-md" gap="6">
-        <HStack gap="2" justify="space-between">
+      <VStack className="bg-ax-bg-default px-5 py-6 rounded-md" gap="space-24">
+        <HStack gap="space-8" justify="space-between">
           <VStack>
             <Heading level="1" size="medium">
               Innsendt inntektsmelding
@@ -83,8 +83,8 @@ export const VisInntektsmelding = () => {
           gyldigInntektsmeldingSkjemaState={sisteInntektsmelding}
           opplysninger={opplysninger}
         />
-        <HStack gap="4" justify="space-between">
-          <HStack gap="4">
+        <HStack gap="space-16" justify="space-between">
+          <HStack gap="space-16">
             {endreKnapp}
             <Button as="a" href="/min-side-arbeidsgiver" variant="tertiary">
               Lukk

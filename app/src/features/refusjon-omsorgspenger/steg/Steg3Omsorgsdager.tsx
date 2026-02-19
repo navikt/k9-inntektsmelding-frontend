@@ -139,7 +139,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
         </BodyLong>
       </GuidePanel>
       <form onSubmit={onSubmit}>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <RadioGroup
             error={formState.errors.harDekket10FørsteOmsorgsdager?.message}
             legend={`Har dere dekket de 10 første omsorgsdagene i ${årForRefusjon}?`}
@@ -163,7 +163,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
               </BodyLong>
             </Alert>
           )}
-          <VStack gap="8">
+          <VStack gap="space-32">
             <TidligereInnsendinger
               inntektsmeldinger={inntektsmeldingerForÅr}
               årForRefusjon={årForRefusjon}
@@ -213,14 +213,14 @@ const FraværHeleDagen = () => {
   // Trigger validation for all periods when any period changes
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <Heading level="3" size="small">
         Hele dager dere søker refusjon for
       </Heading>
       {fields.map((periode, index) => (
         <HStack
           className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
-          gap="4"
+          gap="space-16"
           key={periode.id}
         >
           <DateRangePickerWrapped
@@ -270,7 +270,7 @@ const FraværDelerAvDagen = () => {
   const årForRefusjon = Number(watch("årForRefusjon"));
 
   return (
-    <VStack gap="2">
+    <VStack gap="space-8">
       <Heading level="3" size="small">
         Delvise dager dere søker refusjon for
       </Heading>
@@ -279,7 +279,7 @@ const FraværDelerAvDagen = () => {
           <HStack
             align="start"
             className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2"
-            gap="4"
+            gap="space-16"
             key={periode.id}
           >
             <DatePickerWrapped
@@ -389,15 +389,14 @@ const DagerSomSkalTrekkes = () => {
   });
   const årForRefusjon = Number(watch("årForRefusjon"));
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <Heading level="3" size="small">
         Dager dere ønsker å trekke
       </Heading>
-
       {fields.map((periode, index) => (
         <HStack
           className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
-          gap="4"
+          gap="space-16"
           key={periode.id}
         >
           <DateRangePickerWrapped
@@ -465,7 +464,7 @@ const TiFørsteOmsorgsdagerInfo = () => {
   if (harDekket10FørsteOmsorgsdager === "nei") {
     return (
       <HjelpetekstAlert>
-        <VStack gap="4">
+        <VStack gap="space-16">
           <BodyLong>
             Dere må dekke de første 10 omsorgsdagene hvert kalenderår for
             ansatte som har barn under 12 år, eller som fyller 12 år det

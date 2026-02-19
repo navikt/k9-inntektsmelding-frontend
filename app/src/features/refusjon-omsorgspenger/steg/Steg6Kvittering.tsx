@@ -59,7 +59,7 @@ export const Steg6Kvittering = () => {
         <Heading className="mb-4" level="2" size="small">
           Ofte stilte spørsmål
         </Heading>
-        <VStack className="mb-12" gap="2">
+        <VStack className="mb-12" gap="space-8">
           <FaqItem
             icon={<ClockIcon />}
             question="Hvor lang er saksbehandlingstiden?"
@@ -113,7 +113,7 @@ export const Steg6Kvittering = () => {
           </FaqItem>
         </VStack>
 
-        <HStack gap="2" justify="center" wrap={true}>
+        <HStack gap="space-8" justify="center" wrap={true}>
           <Button as="a" href="/min-side-arbeidsgiver" variant="primary">
             Gå til min side – arbeidsgiver
           </Button>
@@ -147,7 +147,7 @@ const FaqItem = ({ question, children, icon }: FaqItemProps) => {
     <ExpansionCard aria-labelledby={`faq-${id}`} size="small">
       <ExpansionCardHeader>
         <ExpansionCardTitle id={`faq-${id}`}>
-          <HStack align="center" gap="4">
+          <HStack align="center" gap="space-16">
             {icon}
             {question}
           </HStack>

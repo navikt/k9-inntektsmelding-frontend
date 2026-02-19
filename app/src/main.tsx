@@ -50,8 +50,8 @@ function NotFoundComponent() {
   return (
     <Page>
       <Page.Block as="main" gutters width="xl">
-        <Box data-aksel-template="404-v2" paddingBlock="20 16">
-          <VStack align="start" gap="12">
+        <Box data-aksel-template="404-v2" paddingBlock="space-80 space-64">
+          <VStack align="start" gap="space-48">
             <div>
               <Heading level="1" size="large" spacing>
                 Beklager, vi fant ikke siden

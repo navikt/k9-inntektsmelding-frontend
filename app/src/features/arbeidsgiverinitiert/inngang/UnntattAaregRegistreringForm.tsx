@@ -142,8 +142,8 @@ export function UnntattAaregRegistreringForm({
 
   return (
     <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
-      <VStack gap="8">
-        <HStack gap="10">
+      <VStack gap="space-32">
+        <HStack gap="space-40">
           <TextField
             {...formMethods.register("fødselsnummer", {
               required: "Må oppgis",

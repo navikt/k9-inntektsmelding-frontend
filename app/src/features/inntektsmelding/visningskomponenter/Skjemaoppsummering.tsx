@@ -48,7 +48,7 @@ export const Skjemaoppsummering = ({
     const fravær = opplysninger.etterspurtePerioder;
     const harUtbetaltLønn = skjemaState.skalRefunderes === "JA_LIK_REFUSJON";
     return (
-      <VStack gap="4">
+      <VStack gap="space-16">
         <ArbeidsgiverOgAnsattOppsummering
           kanEndres={kanEndres}
           opplysninger={opplysninger}
@@ -105,7 +105,7 @@ export const Skjemaoppsummering = ({
     );
   }
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <ArbeidsgiverOgAnsattOppsummering
         kanEndres={kanEndres}
         opplysninger={opplysninger}

@@ -65,13 +65,13 @@ export function UtbetalingOgRefusjon() {
   const skalRefunderes = watch("skalRefunderes");
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <hr />
       <Heading id="refusjon" level="4" size="medium">
         Utbetaling og refusjon
       </Heading>
       <HjelpetekstReadMore header="Hva vil det si å ha refusjon?">
-        <Stack gap="2">
+        <Stack gap="space-8">
           <BodyLong>
             Refusjon er når arbeidsgiver utbetaler lønn som vanlig til den
             ansatte, og får tilbakebetalt{" "}
@@ -161,8 +161,8 @@ function LikRefusjon() {
     <>
       <div>
         {skalEndreBeløp ? (
-          <Stack gap="4">
-            <HStack gap="4">
+          <Stack gap="space-16">
+            <HStack gap="space-16">
               <FormattertTallTextField
                 autoFocus
                 label="Refusjonsbeløp per måned"
@@ -228,7 +228,7 @@ function VarierendeRefusjon() {
           Refusjonsbeløp dere krever per periode
         </Heading>
         <Alert className="mb-4" variant="info">
-          <Stack gap="2">
+          <Stack gap="space-8">
             {visInfoOmEndringAvFørsteFraværsdagMedRefusjon && (
               <BodyLong>
                 Skal du endre første fraværsdag med refusjon fremover i tid,
@@ -247,10 +247,10 @@ function VarierendeRefusjon() {
         <Refusjonsperioder />
         <Over6GAlert />
       </VStack>
-      <VStack gap="2">
+      <VStack gap="space-8">
         <DelvisFraværHjelpetekst />
         <HjelpetekstReadMore header="Hvilke endringer må du informere Nav om?">
-          <Stack gap="2">
+          <Stack gap="space-8">
             <BodyLong>
               Her skal du registrere endringer som påvirker refusjonen fra Nav.
               Dette kan være på grunn av endret stillingsprosent som gjør at
@@ -289,12 +289,12 @@ function Refusjonsperioder() {
   const tidligsteDato = watch(`refusjon.0.fom`) ?? "";
 
   return (
-    <VStack className="py-4" gap={{ xs: "5", md: "3" }}>
+    <VStack className="py-4" gap={{ xs: "space-20", md: "space-12" }}>
       {fields.map((field, index) => (
         <HGrid
           className="px-4 border-l-4 border-ax-bg-neutral-soft"
           columns={{ xs: "1fr", md: "min-content 1fr 1fr" }}
-          gap="6"
+          gap="space-24"
           key={field.id}
         >
           <DatePickerWrapped

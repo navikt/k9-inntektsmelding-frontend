@@ -22,7 +22,7 @@ export function Ytelsesperiode() {
   }
 
   return (
-    <VStack gap="4">
+    <VStack gap="space-16">
       <hr />
       <Heading level="4" size="medium">
         Periode med {formatYtelsesnavn(ytelse)}

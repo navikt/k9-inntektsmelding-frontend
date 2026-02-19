@@ -13,10 +13,10 @@ export const OppgaveErUtgåttFeilside = () => {
   return (
     <Page>
       <PageBlock as="main" gutters width="xl">
-        <Box paddingBlock="20 8">
+        <Box paddingBlock="space-80 space-32">
           <HGrid columns="minmax(auto,600px)" data-aksel-template="500-v2">
-            <VStack gap="16">
-              <VStack align="start" gap="12">
+            <VStack gap="space-64">
+              <VStack align="start" gap="space-48">
                 <div>
                   <Heading level="1" size="large" spacing>
                     Oppgaven er utgått

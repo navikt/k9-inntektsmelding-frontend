@@ -79,8 +79,7 @@ export const Kvittering = ({
           fra deg.
         </BodyLong>
       </Alert>
-
-      <VStack className="mb-12" gap="4">
+      <VStack className="mb-12" gap="space-16">
         <Heading size="medium">Ofte stilte spørsmål</Heading>
         {ofteStilteSpørsmål().map((spørsmål) => (
           <ExpansionCard
@@ -90,7 +89,7 @@ export const Kvittering = ({
           >
             <ExpansionCard.Header>
               <ExpansionCard.Title id={slugify(spørsmål.spørsmål)} size="small">
-                <HStack align="center" gap="4">
+                <HStack align="center" gap="space-16">
                   <div
                     aria-hidden
                     className="p-2 bg-ax-bg-info-soft rounded-full w-fit"
@@ -105,7 +104,7 @@ export const Kvittering = ({
           </ExpansionCard>
         ))}
       </VStack>
-      <HStack gap="2" justify="center" wrap={true}>
+      <HStack gap="space-8" justify="center" wrap={true}>
         <Button as="a" href="/min-side-arbeidsgiver" variant="primary">
           Gå til min side – arbeidsgiver
         </Button>
@@ -177,7 +176,7 @@ const ofteStilteSpørsmålRefusjon = [
     spørsmål: "Hvilken informasjon kan arbeidsgiver få?",
     ikon: <InformationIcon />,
     svar: (
-      <VStack gap="4">
+      <VStack gap="space-16">
         <BodyLong>
           Nav sender vedtaket til den ansatte, og du må ha dialog med den
           ansatte om status på søknaden. Nav deler ikke sensitiv informasjon fra
@@ -227,7 +226,7 @@ const ofteStilteSpørsmålIkkeRefusjon = [
     spørsmål: "Hvilken informasjon kan arbeidsgiver få?",
     ikon: <InformationIcon />,
     svar: (
-      <VStack gap="4">
+      <VStack gap="space-16">
         <BodyLong>
           Nav sender vedtaket til den ansatte, og du må ha dialog med den
           ansatte om status på søknaden. Nav deler ikke sensitiv informasjon fra
