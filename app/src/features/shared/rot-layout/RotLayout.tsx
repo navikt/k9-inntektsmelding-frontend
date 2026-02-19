@@ -37,13 +37,12 @@ export const RotLayout = ({
   undertittel,
   children,
   medHjelpetekstToggle = false,
-  background = "bg-subtle",
   medHvitBoks = false,
   medAvbrytKnapp = false,
 }: RotLayoutProps) => {
   return (
     <main id="maincontent">
-      <Page background={background}>
+      <Page>
         <Page.Block className="bg-ax-bg-default border-ax-border-focus border-b-4 py-5">
           <Page.Block width="md">
             <HStack align="center">
