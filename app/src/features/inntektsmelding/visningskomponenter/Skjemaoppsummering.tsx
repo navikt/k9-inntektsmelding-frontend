@@ -1,4 +1,4 @@
-import { FormSummary, List, VStack } from "@navikt/ds-react";
+import { FormSummary, List, VStack, Box } from "@navikt/ds-react";
 import {
   FormSummaryAnswer,
   FormSummaryAnswers,
@@ -63,16 +63,16 @@ export const Skjemaoppsummering = ({
               <FormSummaryLabel>Dager med oppgitt fravær</FormSummaryLabel>
               <FormSummaryValue>
                 {fravær ? (
-                  <List>
-                    {fravær?.map((periode, index) =>
-                      periode.fom && periode.tom ? (
-                        <ListItem key={index}>
-                          {formatDatoKort(new Date(periode.fom))}–
-                          {formatDatoKort(new Date(periode.tom))}
-                        </ListItem>
-                      ) : null,
-                    )}
-                  </List>
+                  <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                      {fravær?.map((periode, index) =>
+                        periode.fom && periode.tom ? (
+                          <ListItem key={index}>
+                            {formatDatoKort(new Date(periode.fom))}–
+                            {formatDatoKort(new Date(periode.tom))}
+                          </ListItem>
+                        ) : null,
+                      )}
+                    </List></Box>
                 ) : (
                   "Ingen dager med oppgitt fravær"
                 )}
@@ -156,17 +156,17 @@ function InntektOppsummering({
           <FormSummary.Label>Beregnet månedslønn</FormSummary.Label>
           <FormSummary.Value>
             {harEndretInntekt ? (
-              <List>
-                <List.Item>
-                  Estimert:{" "}
-                  <span className="line-through">
-                    {formatKroner(estimertInntekt)}
-                  </span>
-                </List.Item>
-                <List.Item>
-                  Endret til: {formatKroner(gjeldendeInntekt)}
-                </List.Item>
-              </List>
+              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                  <List.Item>
+                    Estimert:{" "}
+                    <span className="line-through">
+                      {formatKroner(estimertInntekt)}
+                    </span>
+                  </List.Item>
+                  <List.Item>
+                    Endret til: {formatKroner(gjeldendeInntekt)}
+                  </List.Item>
+                </List></Box>
             ) : (
               formatKroner(gjeldendeInntekt)
             )}

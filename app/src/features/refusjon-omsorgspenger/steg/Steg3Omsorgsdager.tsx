@@ -274,7 +274,6 @@ const FraværDelerAvDagen = () => {
       <Heading level="3" size="small">
         Delvise dager dere søker refusjon for
       </Heading>
-
       {fields.map((periode, index) => {
         return (
           <HStack
@@ -338,28 +337,28 @@ const FraværDelerAvDagen = () => {
               Arbeidstaker jobber vanligvis 7,5 timer per dag og har vært borte
               en halv dag.
             </BodyLong>
-            <List>
-              <List.Item className="my-8">
-                Fraværet utgjør 3,75 timer, som skal avrundes til nærmeste halve
-                time. Dette betyr at du oppgir 4 timer i refusjonskravet. Ved
-                flere halve dager kan det oppgis som 3,5 og 4 timer annenhver
-                dag.
-              </List.Item>
-              <Label>Eksempel 2:</Label>
-              <BodyLong>
-                Arbeidstaker jobber vanligvis 9 timer per dag og er borte i 4 av
-                disse. Du deler da antall timer fravær på antall timer
-                arbeidstakeren skulle jobbet. Tallet du får ganger du med 7,5.
-              </BodyLong>
-              <List.Item className="my-8">
-                4 timer fravær / 9 timer arbeidstid = 0,440,44 × 7,5 = 3,33
-                timer, som avrundes til 3,5 timer i refusjonskravet
-              </List.Item>
-              <BodyLong>
-                Du kan regne på samme måte om ordinær arbeidstid er over eller
-                under 7,5 time.
-              </BodyLong>
-            </List>
+            <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                <List.Item className="my-8">
+                  Fraværet utgjør 3,75 timer, som skal avrundes til nærmeste halve
+                  time. Dette betyr at du oppgir 4 timer i refusjonskravet. Ved
+                  flere halve dager kan det oppgis som 3,5 og 4 timer annenhver
+                  dag.
+                </List.Item>
+                <Label>Eksempel 2:</Label>
+                <BodyLong>
+                  Arbeidstaker jobber vanligvis 9 timer per dag og er borte i 4 av
+                  disse. Du deler da antall timer fravær på antall timer
+                  arbeidstakeren skulle jobbet. Tallet du får ganger du med 7,5.
+                </BodyLong>
+                <List.Item className="my-8">
+                  4 timer fravær / 9 timer arbeidstid = 0,440,44 × 7,5 = 3,33
+                  timer, som avrundes til 3,5 timer i refusjonskravet
+                </List.Item>
+                <BodyLong>
+                  Du kan regne på samme måte om ordinær arbeidstid er over eller
+                  under 7,5 time.
+                </BodyLong>
+              </List></Box>
           </HjelpetekstReadMore>
         </>
       )}
@@ -579,14 +578,14 @@ const TidligereInnsendinger = ({
                               </Theme>
                             )}
                           </div>
-                          <List className="flex flex-col gap-2 mt-1">
-                            {innsending.heleDager?.map((dag) => (
-                              <List.Item key={dag.fom}>
-                                {formatDatoKort(new Date(dag.fom))} -{" "}
-                                {formatDatoKort(new Date(dag.tom))}
-                              </List.Item>
-                            ))}
-                          </List>
+                          <div className="flex flex-col gap-2 mt-1"><Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                                {innsending.heleDager?.map((dag) => (
+                                  <List.Item key={dag.fom}>
+                                    {formatDatoKort(new Date(dag.fom))} -{" "}
+                                    {formatDatoKort(new Date(dag.tom))}
+                                  </List.Item>
+                                ))}
+                              </List></Box></div>
                         </div>
                       )}
                     {innsending.delviseDager &&
@@ -595,14 +594,14 @@ const TidligereInnsendinger = ({
                           <Dropdown.Menu.Divider />
                           <div className="mt-4">
                             <Label>Delvise dager dere søkte refusjon for</Label>
-                            <List className="flex flex-col gap-2 mt-1">
-                              {innsending.delviseDager?.map((dag) => (
-                                <List.Item key={dag.dato}>
-                                  {formatDatoKort(new Date(dag.dato))} -{" "}
-                                  {dag.timer} timer
-                                </List.Item>
-                              ))}
-                            </List>
+                            <div className="flex flex-col gap-2 mt-1"><Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                                  {innsending.delviseDager?.map((dag) => (
+                                    <List.Item key={dag.dato}>
+                                      {formatDatoKort(new Date(dag.dato))} -{" "}
+                                      {dag.timer} timer
+                                    </List.Item>
+                                  ))}
+                                </List></Box></div>
                           </div>
                         </div>
                       )}
@@ -612,13 +611,13 @@ const TidligereInnsendinger = ({
                           <Dropdown.Menu.Divider />
                           <div className="mt-4">
                             <Label>Dager dere ønsker å trekke</Label>
-                            <List className="flex flex-col gap-2 mt-1">
-                              {innsending.dagerSomSkalTrekkes?.map((dag) => (
-                                <List.Item key={dag.dato}>
-                                  {formatDatoKort(new Date(dag.dato))}
-                                </List.Item>
-                              ))}
-                            </List>
+                            <div className="flex flex-col gap-2 mt-1"><Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                                  {innsending.dagerSomSkalTrekkes?.map((dag) => (
+                                    <List.Item key={dag.dato}>
+                                      {formatDatoKort(new Date(dag.dato))}
+                                    </List.Item>
+                                  ))}
+                                </List></Box></div>
                           </div>
                         </div>
                       )}

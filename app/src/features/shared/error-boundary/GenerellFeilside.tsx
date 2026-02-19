@@ -28,21 +28,21 @@ export const GenerellFeilside = () => {
                     utilgjengelig. Dette skyldes ikke noe du gjorde.
                   </BodyShort>
                   <BodyShort>Du kan prøve å</BodyShort>
-                  <List>
-                    <List.Item>
-                      vente noen minutter og{" "}
-                      <Link href="#" onClick={() => location.reload()}>
-                        laste siden på nytt
-                      </Link>
-                    </List.Item>
-                    <List.Item>
-                      {globalThis.history.length > 1 && (
-                        <Link href="#" onClick={() => history.back()}>
-                          gå tilbake til forrige side
+                  <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                      <List.Item>
+                        vente noen minutter og{" "}
+                        <Link href="#" onClick={() => location.reload()}>
+                          laste siden på nytt
                         </Link>
-                      )}
-                    </List.Item>
-                  </List>
+                      </List.Item>
+                      <List.Item>
+                        {globalThis.history.length > 1 && (
+                          <Link href="#" onClick={() => history.back()}>
+                            gå tilbake til forrige side
+                          </Link>
+                        )}
+                      </List.Item>
+                    </List></Box>
                   <BodyShort>
                     Hvis problemet vedvarer, kan du{" "}
                     <Link href="https://nav.no/kontaktoss" target="_blank">

@@ -97,24 +97,24 @@ const OmFraværetOmsorgspenger = () => {
             <ReadMore header="Slik sender du dokumentasjon">
               <BodyShort>
                 Dokumentasjon kan sendes til oss på to måter:
-                <List>
-                  <List.Item>
-                    Gi dokumentasjonen til den ansatte, som selv ettersender den
-                    digitalt ved å logge inn på nav.no.
-                  </List.Item>
-                  <List.Item>
-                    Gå til{" "}
-                    <Link
-                      href="https://www.nav.no/start/ettersend-soknad-utbetaling-omsorgspenger-arbeidsgiver-ikke-utbetaler"
-                      target="_blank"
-                    >
-                      siden for ettersendelse
-                    </Link>
-                    , og velg ettersend i posten. Husk å notere den ansatte sitt
-                    fødsels- og personnummer når du henter ut førsteside for
-                    innsendelse.
-                  </List.Item>
-                </List>
+                <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                    <List.Item>
+                      Gi dokumentasjonen til den ansatte, som selv ettersender den
+                      digitalt ved å logge inn på nav.no.
+                    </List.Item>
+                    <List.Item>
+                      Gå til{" "}
+                      <Link
+                        href="https://www.nav.no/start/ettersend-soknad-utbetaling-omsorgspenger-arbeidsgiver-ikke-utbetaler"
+                        target="_blank"
+                      >
+                        siden for ettersendelse
+                      </Link>
+                      , og velg ettersend i posten. Husk å notere den ansatte sitt
+                      fødsels- og personnummer når du henter ut førsteside for
+                      innsendelse.
+                    </List.Item>
+                  </List></Box>
               </BodyShort>
             </ReadMore>
           </div>
@@ -138,14 +138,14 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
           {opplysninger.etterspurtePerioder &&
           opplysninger.etterspurtePerioder?.length > 0 ? (
             <div>
-              <List className="flex flex-col gap-2 mt-1">
-                {opplysninger.etterspurtePerioder?.map((periode) => (
-                  <List.Item key={periode.fom}>
-                    {formatDatoKort(new Date(periode.fom))} -{" "}
-                    {formatDatoKort(new Date(periode.tom))}
-                  </List.Item>
-                ))}
-              </List>
+              <div className="flex flex-col gap-2 mt-1"><Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                    {opplysninger.etterspurtePerioder?.map((periode) => (
+                      <List.Item key={periode.fom}>
+                        {formatDatoKort(new Date(periode.fom))} -{" "}
+                        {formatDatoKort(new Date(periode.tom))}
+                      </List.Item>
+                    ))}
+                  </List></Box></div>
             </div>
           ) : (
             <BodyLong>Ingen dager med oppgitt fravær</BodyLong>

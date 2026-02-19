@@ -18,6 +18,7 @@ import {
   Select,
   Stack,
   VStack,
+  Box,
 } from "@navikt/ds-react";
 import { ListItem } from "@navikt/ds-react/List";
 import clsx from "clsx";
@@ -105,7 +106,6 @@ export function Inntekt({
           />
         </HGrid>
       </Informasjonsseksjon>
-
       {!erAInntektNede && (
         <VStack data-testid="gjennomsnittinntekt-block" gap="1">
           <BodyShort>Beregnet månedslønn</BodyShort>
@@ -190,47 +190,47 @@ export function Inntekt({
               regnes arbeidsforholdet som avbrutt. Hvilken inntekt du oppgir
               avhenger av om den ansatte var tilbake fra jobb etter fraværet:
             </BodyLong>
-            <List>
-              <ListItem>
-                Hvis den ansatte ikke har vært tilbake på jobb, skal du oppgi
-                0,- i inntekt. Nav vurderer da søknaden ut fra opplysninger i
-                A-meldingen.
-              </ListItem>
-              <ListItem>
-                Hvis den ansatte har vært tilbake i mindre enn 3 måneder, må du
-                fastsette månedsinntekten ut fra perioden den ansatte var
-                tilbake:
-                <List>
-                  <ListItem>
-                    Hvis den ansatte har fast månedslønn, er det denne du skal
-                    bruke
-                  </ListItem>
-                  <ListItem>
-                    Hvis den ansatte har hatt lovlig fravær, skal du bruke
-                    inntekten som den ansatte ville hatt hvis han eller hun var
-                    på jobb. Lovlig fravær kan for eksempel være på grunn av
-                    ferie, sykefravær, foreldrepermisjon eller perioder med
-                    pleiepenger.
-                  </ListItem>
-                  <ListItem>
-                    Hvis den ansatte har varierende lønn, og ikke rakk å jobbe
-                    tre hele måneder, må du fastsette inntekten for delvise
-                    måneder slik: Utbetalt lønn / utførte arbeidsdager x avtalte
-                    arbeidsdager for måneden.
-                    <br />
-                    <em>
-                      Eks: Den ansatte skal ha stønad fra 17. november. Det var
-                      avtalt 22 arbeidsdager for hele november, og den ansatte
-                      jobbet 12 dager frem til første fraværsdag. På disse 12
-                      dagene tjente den ansatte 22 000,-. Beregnet inntekt: 22
-                      000 / 12 x 22 = 40 333,- månedslønn i november. Denne
-                      inntekten tas med i snittet av tre måneder, sammen med
-                      september og oktober.
-                    </em>
-                  </ListItem>
-                </List>
-              </ListItem>
-            </List>
+            <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                <ListItem>
+                  Hvis den ansatte ikke har vært tilbake på jobb, skal du oppgi
+                  0,- i inntekt. Nav vurderer da søknaden ut fra opplysninger i
+                  A-meldingen.
+                </ListItem>
+                <ListItem>
+                  Hvis den ansatte har vært tilbake i mindre enn 3 måneder, må du
+                  fastsette månedsinntekten ut fra perioden den ansatte var
+                  tilbake:
+                  <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                      <ListItem>
+                        Hvis den ansatte har fast månedslønn, er det denne du skal
+                        bruke
+                      </ListItem>
+                      <ListItem>
+                        Hvis den ansatte har hatt lovlig fravær, skal du bruke
+                        inntekten som den ansatte ville hatt hvis han eller hun var
+                        på jobb. Lovlig fravær kan for eksempel være på grunn av
+                        ferie, sykefravær, foreldrepermisjon eller perioder med
+                        pleiepenger.
+                      </ListItem>
+                      <ListItem>
+                        Hvis den ansatte har varierende lønn, og ikke rakk å jobbe
+                        tre hele måneder, må du fastsette inntekten for delvise
+                        måneder slik: Utbetalt lønn / utførte arbeidsdager x avtalte
+                        arbeidsdager for måneden.
+                        <br />
+                        <em>
+                          Eks: Den ansatte skal ha stønad fra 17. november. Det var
+                          avtalt 22 arbeidsdager for hele november, og den ansatte
+                          jobbet 12 dager frem til første fraværsdag. På disse 12
+                          dagene tjente den ansatte 22 000,-. Beregnet inntekt: 22
+                          000 / 12 x 22 = 40 333,- månedslønn i november. Denne
+                          inntekten tas med i snittet av tre måneder, sammen med
+                          september og oktober.
+                        </em>
+                      </ListItem>
+                    </List></Box>
+                </ListItem>
+              </List></Box>
           </Stack>
         </HjelpetekstReadMore>
         <HjelpetekstReadMore header="Jobber den ansatte skift eller har timelønn?">

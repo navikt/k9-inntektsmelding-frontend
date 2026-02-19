@@ -1,4 +1,4 @@
-import { List } from "@navikt/ds-react";
+import { List, Box } from "@navikt/ds-react";
 import {
   FormSummary,
   FormSummaryAnswer,
@@ -69,16 +69,16 @@ export const OppsummeringOmsorgsdager = ({
           <FormSummaryLabel>Dager med fravær hele dagen</FormSummaryLabel>
           <FormSummaryValue>
             {harFraværHeleDager ? (
-              <List>
-                {fraværHeleDager?.map((periode, index) =>
-                  periode.fom && periode.tom ? (
-                    <ListItem key={index}>
-                      {formatDatoKort(new Date(periode.fom))}–
-                      {formatDatoKort(new Date(periode.tom))}
-                    </ListItem>
-                  ) : null,
-                )}
-              </List>
+              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                  {fraværHeleDager?.map((periode, index) =>
+                    periode.fom && periode.tom ? (
+                      <ListItem key={index}>
+                        {formatDatoKort(new Date(periode.fom))}–
+                        {formatDatoKort(new Date(periode.tom))}
+                      </ListItem>
+                    ) : null,
+                  )}
+                </List></Box>
             ) : (
               "Ingen dager med fravær hele dagen"
             )}
@@ -93,19 +93,19 @@ export const OppsummeringOmsorgsdager = ({
           </FormSummaryLabel>
           <FormSummaryValue>
             {harFraværDelerAvDagen ? (
-              <List>
-                {fraværDelerAvDagen
-                  ?.filter((fravær) => Number(fravær.timer) > 0)
-                  .map((fravær, index) => (
-                    <ListItem key={index}>
-                      {formatDatoKort(new Date(fravær.dato))}
-                      {fravær.timer &&
-                        ` (${fravær.timer} ${
-                          Number(fravær.timer) === 1 ? "time" : "timer"
-                        })`}
-                    </ListItem>
-                  ))}
-              </List>
+              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                  {fraværDelerAvDagen
+                    ?.filter((fravær) => Number(fravær.timer) > 0)
+                    .map((fravær, index) => (
+                      <ListItem key={index}>
+                        {formatDatoKort(new Date(fravær.dato))}
+                        {fravær.timer &&
+                          ` (${fravær.timer} ${
+                            Number(fravær.timer) === 1 ? "time" : "timer"
+                          })`}
+                      </ListItem>
+                    ))}
+                </List></Box>
             ) : (
               "Ingen dager med fravær bare deler av dagen"
             )}
@@ -118,14 +118,14 @@ export const OppsummeringOmsorgsdager = ({
           <FormSummaryAnswer>
             <FormSummaryLabel>Dager som skal trekkes</FormSummaryLabel>
             <FormSummaryValue>
-              <List>
-                {dagerSomSkalTrekkes?.map((dag, index) => (
-                  <ListItem key={index}>
-                    {formatDatoKort(new Date(dag.fom))}–
-                    {formatDatoKort(new Date(dag.tom))}
-                  </ListItem>
-                ))}
-              </List>
+              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                  {dagerSomSkalTrekkes?.map((dag, index) => (
+                    <ListItem key={index}>
+                      {formatDatoKort(new Date(dag.fom))}–
+                      {formatDatoKort(new Date(dag.tom))}
+                    </ListItem>
+                  ))}
+                </List></Box>
             </FormSummaryValue>
           </FormSummaryAnswer>
         )}
