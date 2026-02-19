@@ -11,6 +11,7 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/no-null": "off",
   "unicorn/prevent-abbreviations": "off",
   "unicorn/no-nested-ternary": "off",
+  "unicorn/prefer-top-level-await": "off",
 };
 
 export default tseslint.config(

@@ -138,12 +138,12 @@ export const opplysningerSchema = z.object({
   person: z.object({
     aktørId: z.string(),
     fødselsnummer: z.string(),
-    fornavn: z.string().transform(formatNavn),
+    fornavn: z.string().transform((v) => formatNavn(v) ?? v),
     mellomnavn: z
       .string()
-      .transform((mellomnavn) => formatNavn(mellomnavn || ""))
+      .transform((mellomnavn) => formatNavn(mellomnavn || "") ?? "")
       .optional(),
-    etternavn: z.string().transform(formatNavn),
+    etternavn: z.string().transform((v) => formatNavn(v) ?? v),
   }),
   innsender: z.object({
     fornavn: z.string(),
