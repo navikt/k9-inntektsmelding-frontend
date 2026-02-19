@@ -44,10 +44,11 @@ export const Steg3Oppsummering = () => {
             dessverre begynne på nytt.
           </BodyLong>
           <Button
+            data-color="neutral"
             as={Link}
             size="small"
             to={`/opprett?ytelseType=${opplysninger.ytelse}`}
-            variant="secondary-neutral"
+            variant="secondary"
           >
             Start på nytt
           </Button>
