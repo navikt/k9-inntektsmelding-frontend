@@ -18,8 +18,8 @@ const baseSchema = z.object({
     harSendtSøknad: z.boolean(),
   }),
   // Steg 1 fields
-  harUtbetaltLønn: z.preprocess((val) => val || "", z.string()),
-  årForRefusjon: z.preprocess((val) => val || "", z.string()),
+  harUtbetaltLønn: z.string().catch(""),
+  årForRefusjon: z.string().catch(""),
 
   // Steg 2 fields
   kontaktperson: z.object({
@@ -33,7 +33,7 @@ const baseSchema = z.object({
   organisasjonsnummer: z.string().optional(),
 
   // Steg 3 fields
-  harDekket10FørsteOmsorgsdager: z.preprocess((val) => val || "", z.string()),
+  harDekket10FørsteOmsorgsdager: z.string().catch(""),
   fraværHeleDager: z.array(
     z.object({
       fom: z.string(),
@@ -42,8 +42,8 @@ const baseSchema = z.object({
   ),
   fraværDelerAvDagen: z.array(
     z.object({
-      dato: z.preprocess((val) => val || "", z.string()),
-      timer: z.preprocess((val) => String(val) || "", z.string()),
+      dato: z.string().catch(""),
+      timer: z.string().catch(""),
     }),
   ),
   dagerSomSkalTrekkes: z.array(

@@ -4,29 +4,29 @@ import { z } from "zod";
 import { SERVER_URL } from "~/api/mutations";
 import { SendInntektsmeldingRequestDtoSchema } from "~/types/api-models.ts";
 
-const RefusjonOmsorgspengerDtoSchema =
-  SendInntektsmeldingRequestDtoSchema.extend({
-    foresporselUuid: z.undefined(),
-    omsorgspenger: z.object({
-      fraværHeleDager: z
-        .array(
-          z.object({
-            fom: z.string(),
-            tom: z.string(),
-          }),
-        )
-        .optional(),
-      fraværDelerAvDagen: z
-        .array(
-          z.object({
-            dato: z.string(),
-            timer: z.preprocess(String, z.string()),
-          }),
-        )
-        .optional(),
-      harUtbetaltPliktigeDager: z.boolean(),
-    }),
-  });
+const RefusjonOmsorgspengerDtoSchema = SendInntektsmeldingRequestDtoSchema.omit(
+  { foresporselUuid: true },
+).extend({
+  omsorgspenger: z.object({
+    fraværHeleDager: z
+      .array(
+        z.object({
+          fom: z.string(),
+          tom: z.string(),
+        }),
+      )
+      .optional(),
+    fraværDelerAvDagen: z
+      .array(
+        z.object({
+          dato: z.string(),
+          timer: z.coerce.string(),
+        }),
+      )
+      .optional(),
+    harUtbetaltPliktigeDager: z.boolean(),
+  }),
+});
 
 export const RefusjonOmsorgspengerResponseDtoSchema =
   RefusjonOmsorgspengerDtoSchema.extend({
