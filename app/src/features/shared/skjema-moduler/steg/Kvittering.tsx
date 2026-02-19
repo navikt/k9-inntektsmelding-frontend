@@ -65,8 +65,8 @@ export const Kvittering = ({
   };
 
   return (
-    <div className="mx-4 mt-12 md:mx-0">
-      <div className="p-6 bg-surface-success-subtle rounded-full mx-auto w-fit">
+    <div className="mx-4 mt-12 ax-md:mx-0">
+      <div className="p-6 bg-ax-bg-success-soft rounded-full mx-auto w-fit">
         <CheckmarkIcon aria-hidden fontSize="2.5em" />
       </div>
       <Heading className="mt-6 mb-12 text-center" level="2" size="medium">
@@ -93,7 +93,7 @@ export const Kvittering = ({
                 <HStack align="center" gap="4">
                   <div
                     aria-hidden
-                    className="p-2 bg-surface-info-subtle rounded-full w-fit"
+                    className="p-2 bg-ax-bg-info-soft rounded-full w-fit"
                   >
                     {spørsmål.ikon}
                   </div>

@@ -168,7 +168,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
 
         return (
           <div
-            className="border-solid border-0 border-l-4 border-bg-subtle p-4"
+            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft p-4"
             key={field.id}
           >
             <div className="flex gap-4 flex-col items-start relative">

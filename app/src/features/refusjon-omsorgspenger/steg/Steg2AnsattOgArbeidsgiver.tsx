@@ -72,14 +72,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
 
   const fulltNavn = data ? lagFulltNavn(data.personinformasjon) : "";
   return (
-    <div className="bg-bg-default rounded-md flex flex-col gap-6">
+    <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
       <Heading level="1" size="large">
         Den ansatte og arbeidsgiver
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={2} />
       <form className="space-y-4" onSubmit={onSubmit}>
         <Informasjonsseksjon tittel="Den ansatte">
-          <div className="flex gap-4 flex-col md:flex-row">
+          <div className="flex gap-4 flex-col ax-md:flex-row">
             <Controller
               control={control}
               name="ansattesFødselsnummer"
@@ -193,7 +193,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
           kilde="Fra Altinn og Folkeregisteret"
           tittel="Kontaktinformasjon"
         >
-          <div className="flex gap-4 flex-col md:flex-row">
+          <div className="flex gap-4 flex-col ax-md:flex-row">
             <div className="flex-1">
               <TextField
                 label="Navn"

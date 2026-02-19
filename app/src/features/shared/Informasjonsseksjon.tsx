@@ -16,11 +16,11 @@ export const Informasjonsseksjon = ({
   return (
     <div
       className={clsx(
-        "bg-bg-subtle p-4 flex flex-col gap-4 rounded-md flex-1",
+        "bg-ax-bg-neutral-soft p-4 flex flex-col gap-4 rounded-md flex-1",
         className,
       )}
     >
-      <div className="flex flex-col-reverse md:flex-row align-start md:justify-between md:items-center gap-2">
+      <div className="flex flex-col-reverse ax-md:flex-row align-start ax-md:justify-between ax-md:items-center gap-2">
         <Label size="small">{tittel}</Label>
         {kilde && (
           <Detail className="uppercase flex items-center">{kilde}</Detail>

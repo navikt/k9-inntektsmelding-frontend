@@ -111,8 +111,8 @@ export function Inntekt({
           <BodyShort>Beregnet månedslønn</BodyShort>
           <strong
             className={clsx(
-              "text-heading-medium",
-              isOpen && "text-text-subtle line-through",
+              "text-ax-heading-medium",
+              isOpen && "text-ax-text-neutral-subtle line-through",
             )}
           >
             {formatKroner(inntektsopplysninger.gjennomsnittLønn)}
@@ -467,7 +467,7 @@ function Endringsårsaker({
       {fields.map((field, index) => {
         return (
           <div
-            className="pl-4 border-solid border-0 border-l-4 border-bg-subtle flex flex-col gap-4 relative"
+            className="pl-4 border-solid border-0 border-l-4 border-ax-bg-neutral-soft flex flex-col gap-4 relative"
             key={field.id}
           >
             <Select
@@ -503,7 +503,7 @@ function Endringsårsaker({
             {index > 0 ? (
               <Button
                 aria-label="Slett endringsårsak"
-                className="w-fit md:absolute top-8 right-0"
+                className="w-fit ax-md:absolute top-8 right-0"
                 icon={<TrashIcon />}
                 onClick={() => remove(index)}
                 type="button"

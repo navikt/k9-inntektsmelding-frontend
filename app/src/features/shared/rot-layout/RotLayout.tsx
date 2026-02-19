@@ -44,12 +44,12 @@ export const RotLayout = ({
   return (
     <main id="maincontent">
       <Page background={background}>
-        <Page.Block className="bg-bg-default border-border-focus-on-inverted border-b-4 py-5">
+        <Page.Block className="bg-ax-bg-default border-ax-border-focus border-b-4 py-5">
           <Page.Block width="md">
             <HStack align="center">
               <img
                 alt=""
-                className="hidden md:block ml-3"
+                className="hidden ax-md:block ml-3"
                 height="52"
                 src={illustrasjonUrl}
                 width="52"
@@ -66,7 +66,7 @@ export const RotLayout = ({
         <Page.Block width="md">
           {medHjelpetekstToggle && <HjelpetekstToggle />}
           {medHvitBoks ? (
-            <div className="bg-bg-default px-5 py-6 rounded-md flex gap-6 flex-col mt-2">
+            <div className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col mt-2">
               {children}
             </div>
           ) : (

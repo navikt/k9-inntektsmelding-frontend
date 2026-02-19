@@ -292,7 +292,7 @@ function Refusjonsperioder() {
     <VStack className="py-4" gap={{ xs: "5", md: "3" }}>
       {fields.map((field, index) => (
         <HGrid
-          className="px-4 border-l-4 border-bg-subtle"
+          className="px-4 border-l-4 border-ax-bg-neutral-soft"
           columns={{ xs: "1fr", md: "min-content 1fr 1fr" }}
           gap="6"
           key={field.id}

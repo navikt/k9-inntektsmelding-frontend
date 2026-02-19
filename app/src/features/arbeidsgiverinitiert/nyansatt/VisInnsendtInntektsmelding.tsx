@@ -55,7 +55,7 @@ export const VisInntektsmelding = () => {
 
   return (
     <section className="mt-4">
-      <VStack className="bg-bg-default px-5 py-6 rounded-md" gap="6">
+      <VStack className="bg-ax-bg-default px-5 py-6 rounded-md" gap="6">
         <HStack gap="2" justify="space-between">
           <VStack>
             <Heading level="1" size="medium">

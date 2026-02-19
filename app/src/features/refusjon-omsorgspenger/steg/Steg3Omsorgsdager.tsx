@@ -122,7 +122,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   );
 
   return (
-    <div className="bg-bg-default rounded-md flex flex-col gap-6">
+    <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
       <Heading level="1" size="large">
         Omsorgsdager dere søker refusjon for
       </Heading>
@@ -219,7 +219,7 @@ const FraværHeleDagen = () => {
       </Heading>
       {fields.map((periode, index) => (
         <HStack
-          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2 relative"
+          className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
           gap="4"
           key={periode.id}
         >
@@ -279,7 +279,7 @@ const FraværDelerAvDagen = () => {
         return (
           <HStack
             align="start"
-            className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2"
+            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2"
             gap="4"
             key={periode.id}
           >
@@ -327,7 +327,7 @@ const FraværDelerAvDagen = () => {
       })}
       {fields.length > 0 && (
         <>
-          <BodyLong className="text-text-subtle" size="small">
+          <BodyLong className="text-ax-text-neutral-subtle" size="small">
             Timer skal avrundes til nærmeste halve time og beregnes basert på en
             7,5 timers arbeidsdag. Hvis arbeidstakeren har en annen ordinær
             arbeidstid, må fraværet omregnes.
@@ -395,7 +395,7 @@ const DagerSomSkalTrekkes = () => {
 
       {fields.map((periode, index) => (
         <HStack
-          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2 relative"
+          className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
           gap="4"
           key={periode.id}
         >
@@ -422,7 +422,7 @@ const DagerSomSkalTrekkes = () => {
       ))}
       {fields.length > 0 && (
         <>
-          <BodyLong className="text-text-subtle" size="small">
+          <BodyLong className="text-ax-text-neutral-subtle" size="small">
             Dager eller perioder du legger inn her vil trekke/korrigere
             tidligere innsendt refusjonskrav for de samme dagene. Skal du endre
             en dag fra hel dag med refusjon til delvis dag med refusjon, må du
@@ -529,7 +529,7 @@ const TidligereInnsendinger = ({
     tidligereInnsendinger.length > antallInnsendingerSomSkalVises;
 
   return (
-    <Box className="bg-bg-subtle p-4">
+    <Box className="bg-ax-bg-neutral-soft p-4">
       <div className="flex justify-between">
         <Label size="small">
           {`Tidligere innsendinger for ${årForRefusjon}`}
@@ -545,17 +545,17 @@ const TidligereInnsendinger = ({
         </Detail>
       )}
       <Theme theme="dark">
-        <Accordion className="bg-bg-subtle mt-4" indent>
-          <div className="flex flex-col text-text-default">
+        <Accordion className="bg-ax-bg-neutral-soft mt-4" indent>
+          <div className="flex flex-col text-ax-text-neutral">
             {innsendingerSomSkalVises?.map((innsending) => (
               <Accordion.Item key={innsending.id}>
-                <Accordion.Header className="text-text-action">
+                <Accordion.Header className="text-ax-text-accent-subtle">
                   {innsending.erRefusjon
                     ? "Refusjonskrav - sendt inn"
                     : "Inntektsmelding - sendt inn"}{" "}
                   {formatDatoKort(innsending.opprettetDato)}
                 </Accordion.Header>
-                <Accordion.Content className="pl-5 mt-4 border-l-2! border-solid! border-surface-neutral-subtle! border-y-0! border-r-0!">
+                <Accordion.Content className="pl-5 mt-4 border-l-2! border-solid! border-ax-bg-neutral-soft! border-y-0! border-r-0!">
                   <div className="flex flex-col gap-4">
                     {innsending.heleDager &&
                       innsending.heleDager?.length > 0 && (
@@ -568,7 +568,7 @@ const TidligereInnsendinger = ({
                             </Label>
                             {!innsending.erRefusjon && (
                               <Theme theme="light">
-                                <div className="bg-bg-subtle">
+                                <div className="bg-ax-bg-neutral-soft">
                                   <HelpText title="Dager med oppgitt fravær">
                                     Hvis den ansatte har hatt oppgitt fravær
                                     deler av dagen, viser vi kun datoen for

@@ -69,7 +69,7 @@ export const VisInnsendtRefusjonskrav = () => {
       : `for ${unikeMåneder?.slice(0, -1).join(", ")} og ${sisteMåned}`;
   return (
     <FormProvider {...form}>
-      <div className="bg-bg-default rounded-md flex flex-col gap-6">
+      <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
         <div>
           <Heading level="2" size="medium">
             {`Innsendt refusjonskrav ${månedtekst}`}

@@ -93,7 +93,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
   }
 
   return (
-    <div className="bg-bg-default rounded-md flex flex-col gap-6">
+    <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
       <Heading level="1" size="large">
         Beregnet månedslønn for refusjon
       </Heading>

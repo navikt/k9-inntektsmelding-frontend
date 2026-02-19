@@ -128,13 +128,13 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
   const opplysninger = useOpplysninger();
 
   return (
-    <Box className="bg-bg-subtle p-4">
+    <Box className="bg-ax-bg-neutral-soft p-4">
       <div className="flex justify-between">
         <Label size="small">{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
         <BodyShort size="small">FRA SØKNAD</BodyShort>
       </div>
       <Theme theme="dark">
-        <div className="bg-bg-subtle mt-4 flex flex-col text-text-default gap-4">
+        <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">
           {opplysninger.etterspurtePerioder &&
           opplysninger.etterspurtePerioder?.length > 0 ? (
             <div>

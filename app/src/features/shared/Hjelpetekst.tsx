@@ -59,7 +59,7 @@ export function HjelpetekstToggle() {
   const { visHjelpetekster, setVisHjelpetekster } = useHjelpetekst();
 
   return (
-    <Page.Block className="mt-2 mx-5 lg:mx-0" width="md">
+    <Page.Block className="mt-2 mx-5 ax-lg:mx-0" width="md">
       <Switch
         checked={visHjelpetekster.vis}
         onChange={(e) => {

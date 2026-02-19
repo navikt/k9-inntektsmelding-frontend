@@ -42,7 +42,7 @@ export const Steg3Oppsummering = () => {
       inntektsmeldingSkjemaStateError,
     );
     return (
-      <Alert className="mt-4 mx-4 md:mx-0" variant="error">
+      <Alert className="mt-4 mx-4 ax-md:mx-0" variant="error">
         <Stack gap="4">
           <BodyLong>
             Noe gikk galt med utfyllingen av inntektsmeldingen din. Du må
@@ -63,7 +63,7 @@ export const Steg3Oppsummering = () => {
 
   return (
     <section>
-      <div className="bg-bg-default mt-4 px-5 py-6 rounded-md flex flex-col gap-6">
+      <div className="bg-ax-bg-default mt-4 px-5 py-6 rounded-md flex flex-col gap-6">
         <Heading level="2" size="large">
           Oppsummering
         </Heading>

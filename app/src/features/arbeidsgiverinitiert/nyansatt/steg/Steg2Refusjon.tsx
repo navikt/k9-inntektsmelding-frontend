@@ -156,7 +156,7 @@ export function Steg2Refusjon() {
     <FormProvider {...formMethods}>
       <section className="mt-2">
         <form
-          className="bg-bg-default px-5 py-6 rounded-md flex gap-6 flex-col"
+          className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col"
           onSubmit={onSubmit}
         >
           <Heading level="3" size="large">
@@ -188,7 +188,7 @@ export function Steg2Refusjon() {
                   </Heading>
                   <BodyLong>
                     Første fraværsdag i forrige innsending var{" "}
-                    <span className="font-bold">
+                    <span className="font-ax-bold">
                       {formatDatoKort(
                         new Date(sisteInntektsmeldingFørsteFraværsdag),
                       )}
