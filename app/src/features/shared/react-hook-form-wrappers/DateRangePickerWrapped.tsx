@@ -1,6 +1,7 @@
 import {
   DatePicker,
   DatePickerProps,
+  ErrorMessage,
   useRangeDatepicker,
 } from "@navikt/ds-react";
 import { forwardRef } from "react";
@@ -54,25 +55,42 @@ export const DateRangePickerWrapped = forwardRef<
       to: toField.value ? new Date(toField.value) : undefined,
     },
   });
+  const fomFeilId = `${name}-fom-feil`;
+  const tomFeilId = `${name}-tom-feil`;
+
   return (
     <DatePicker {...useRangeDatepickerProps}>
-      <div className="flex gap-4 w-full items-baseline" ref={ref}>
+      <div className="flex gap-4" ref={ref}>
         <DatePicker.Input
           {...fromInputProps}
+          aria-describedby={fromFieldState.error ? fomFeilId : undefined}
+          aria-invalid={!!fromFieldState.error}
           className="w-full max-w-[50%]"
-          error={fromFieldState.error?.message}
           label="Fra og med"
           onBlur={fromField.onBlur}
           ref={fromField.ref}
         />
         <DatePicker.Input
           {...toInputProps}
+          aria-describedby={toFieldState.error ? tomFeilId : undefined}
+          aria-invalid={!!toFieldState.error}
           className="w-full max-w-[50%]"
-          error={toFieldState.error?.message}
           label="Til og med"
           onBlur={toField.onBlur}
           ref={toField.ref}
         />
+      </div>
+      <div className="mt-2">
+        {fromFieldState.error?.message && (
+          <ErrorMessage id={fomFeilId} showIcon>
+            Fra og med: {fromFieldState.error.message}
+          </ErrorMessage>
+        )}
+        {toFieldState.error?.message && (
+          <ErrorMessage id={tomFeilId} showIcon>
+            Til og med: {toFieldState.error.message}
+          </ErrorMessage>
+        )}
       </div>
     </DatePicker>
   );

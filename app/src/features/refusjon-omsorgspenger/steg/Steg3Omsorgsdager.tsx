@@ -52,11 +52,21 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
     "Omsorgsdager - søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
 
-  const { register, formState, watch, handleSubmit, getValues, setValue } =
-    useSkjemaState();
+  const {
+    register,
+    formState,
+    watch,
+    handleSubmit,
+    getValues,
+    setValue,
+    clearErrors,
+  } = useSkjemaState();
 
   const årForRefusjon = watch("årForRefusjon");
   const harUtbetaltLønn = watch("harUtbetaltLønn");
+  const fraværHeleDager = watch("fraværHeleDager");
+  const fraværDelerAvDagen = watch("fraværDelerAvDagen");
+  const dagerSomSkalTrekkes = watch("dagerSomSkalTrekkes");
   const navigate = useNavigate();
 
   const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
@@ -83,6 +93,18 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
       });
     }
   }, [årForRefusjon, harUtbetaltLønn]);
+
+  useEffect(() => {
+    if (formState.errors.manglerFraværEllerTrekk) {
+      const harFravær =
+        fraværHeleDager.length > 0 ||
+        fraværDelerAvDagen.length > 0 ||
+        dagerSomSkalTrekkes.length > 0;
+      if (harFravær) {
+        clearErrors("manglerFraværEllerTrekk");
+      }
+    }
+  }, [fraværHeleDager, fraværDelerAvDagen, dagerSomSkalTrekkes]);
 
   const onSubmit = handleSubmit(() => {
     navigate({
@@ -134,9 +156,11 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
             </Radio>
           </RadioGroup>
           <TiFørsteOmsorgsdagerInfo />
-          {formState.errors.fraværHeleDager?.message && (
+          {formState.errors.manglerFraværEllerTrekk?.message && (
             <Alert aria-live="polite" variant="error">
-              <BodyLong>{formState.errors.fraværHeleDager.message}</BodyLong>
+              <BodyLong>
+                {formState.errors.manglerFraværEllerTrekk.message}
+              </BodyLong>
             </Alert>
           )}
           <VStack gap="8">
@@ -195,7 +219,7 @@ const FraværHeleDagen = () => {
       </Heading>
       {fields.map((periode, index) => (
         <HStack
-          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2"
+          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2 relative"
           gap="4"
           key={periode.id}
         >
@@ -205,21 +229,19 @@ const FraværHeleDagen = () => {
             }}
             name={`fraværHeleDager.${index}`}
           />
-          <div>
-            <Button
-              aria-label="Slett periode"
-              className="md:mt-10"
-              icon={<TrashIcon />}
-              onClick={() => {
-                remove(index);
-              }}
-              size="small"
-              type="button"
-              variant="tertiary"
-            >
-              Slett
-            </Button>
-          </div>
+          <Button
+            aria-label="Slett periode"
+            className="absolute top-9 right-20"
+            icon={<TrashIcon />}
+            onClick={() => {
+              remove(index);
+            }}
+            size="small"
+            type="button"
+            variant="tertiary"
+          >
+            Slett
+          </Button>
         </HStack>
       ))}
       <div>
@@ -373,7 +395,7 @@ const DagerSomSkalTrekkes = () => {
 
       {fields.map((periode, index) => (
         <HStack
-          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2"
+          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2 relative"
           gap="4"
           key={periode.id}
         >
@@ -383,21 +405,19 @@ const DagerSomSkalTrekkes = () => {
             }}
             name={`dagerSomSkalTrekkes.${index}`}
           />
-          <div>
-            <Button
-              aria-label="Slett periode"
-              className="md:mt-10"
-              icon={<TrashIcon />}
-              onClick={() => {
-                remove(index);
-              }}
-              size="small"
-              type="button"
-              variant="tertiary"
-            >
-              Slett
-            </Button>
-          </div>
+          <Button
+            aria-label="Slett periode"
+            className="absolute top-9 right-20"
+            icon={<TrashIcon />}
+            onClick={() => {
+              remove(index);
+            }}
+            size="small"
+            type="button"
+            variant="tertiary"
+          >
+            Slett
+          </Button>
         </HStack>
       ))}
       {fields.length > 0 && (
