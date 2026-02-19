@@ -59,30 +59,28 @@ export const DateRangePickerWrapped = forwardRef<
   const tomFeilId = `${name}-tom-feil`;
 
   return (
-    <>
-      <DatePicker {...useRangeDatepickerProps}>
-        <div className="flex gap-4" ref={ref}>
-          <DatePicker.Input
-            {...fromInputProps}
-            aria-describedby={fromFieldState.error ? fomFeilId : undefined}
-            aria-invalid={!!fromFieldState.error}
-            className="w-full max-w-[50%]"
-            label="Fra og med"
-            onBlur={fromField.onBlur}
-            ref={fromField.ref}
-          />
-          <DatePicker.Input
-            {...toInputProps}
-            aria-describedby={toFieldState.error ? tomFeilId : undefined}
-            aria-invalid={!!toFieldState.error}
-            className="w-full max-w-[50%]"
-            label="Til og med"
-            onBlur={toField.onBlur}
-            ref={toField.ref}
-          />
-        </div>
-      </DatePicker>
-      <div>
+    <DatePicker {...useRangeDatepickerProps}>
+      <div className="flex gap-4" ref={ref}>
+        <DatePicker.Input
+          {...fromInputProps}
+          aria-describedby={fromFieldState.error ? fomFeilId : undefined}
+          aria-invalid={!!fromFieldState.error}
+          className="w-full max-w-[50%]"
+          label="Fra og med"
+          onBlur={fromField.onBlur}
+          ref={fromField.ref}
+        />
+        <DatePicker.Input
+          {...toInputProps}
+          aria-describedby={toFieldState.error ? tomFeilId : undefined}
+          aria-invalid={!!toFieldState.error}
+          className="w-full max-w-[50%]"
+          label="Til og med"
+          onBlur={toField.onBlur}
+          ref={toField.ref}
+        />
+      </div>
+      <div className="mt-2">
         {fromFieldState.error?.message && (
           <ErrorMessage id={fomFeilId} showIcon>
             Fra og med: {fromFieldState.error.message}
@@ -94,7 +92,7 @@ export const DateRangePickerWrapped = forwardRef<
           </ErrorMessage>
         )}
       </div>
-    </>
+    </DatePicker>
   );
 });
 
