@@ -195,7 +195,7 @@ const FraværHeleDagen = () => {
       </Heading>
       {fields.map((periode, index) => (
         <HStack
-          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2"
+          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2 relative"
           gap="4"
           key={periode.id}
         >
@@ -205,21 +205,19 @@ const FraværHeleDagen = () => {
             }}
             name={`fraværHeleDager.${index}`}
           />
-          <div>
-            <Button
-              aria-label="Slett periode"
-              className="md:mt-10"
-              icon={<TrashIcon />}
-              onClick={() => {
-                remove(index);
-              }}
-              size="small"
-              type="button"
-              variant="tertiary"
-            >
-              Slett
-            </Button>
-          </div>
+          <Button
+            aria-label="Slett periode"
+            className="absolute top-9 right-20"
+            icon={<TrashIcon />}
+            onClick={() => {
+              remove(index);
+            }}
+            size="small"
+            type="button"
+            variant="tertiary"
+          >
+            Slett
+          </Button>
         </HStack>
       ))}
       <div>
@@ -373,7 +371,7 @@ const DagerSomSkalTrekkes = () => {
 
       {fields.map((periode, index) => (
         <HStack
-          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2"
+          className="border-solid border-0 border-l-4 border-bg-subtle pl-4 py-2 relative"
           gap="4"
           key={periode.id}
         >
@@ -383,21 +381,19 @@ const DagerSomSkalTrekkes = () => {
             }}
             name={`dagerSomSkalTrekkes.${index}`}
           />
-          <div>
-            <Button
-              aria-label="Slett periode"
-              className="md:mt-10"
-              icon={<TrashIcon />}
-              onClick={() => {
-                remove(index);
-              }}
-              size="small"
-              type="button"
-              variant="tertiary"
-            >
-              Slett
-            </Button>
-          </div>
+          <Button
+            aria-label="Slett periode"
+            className="absolute top-9 right-20"
+            icon={<TrashIcon />}
+            onClick={() => {
+              remove(index);
+            }}
+            size="small"
+            type="button"
+            variant="tertiary"
+          >
+            Slett
+          </Button>
         </HStack>
       ))}
       {fields.length > 0 && (
