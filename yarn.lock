@@ -4275,7 +4275,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:5":
+"express@npm:^5.2.1":
   version: 5.2.1
   resolution: "express@npm:5.2.1"
   dependencies:
@@ -6239,7 +6239,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.5"
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     eslint-plugin-unicorn: "npm:^63.0.0"
-    express: "npm:5"
+    express: "npm:^5.2.1"
     html-react-parser: "npm:^5.2.16"
     http-proxy-middleware: "npm:3.0.5"
     jsdom: "npm:^28.1.0"
