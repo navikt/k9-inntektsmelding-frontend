@@ -1,4 +1,4 @@
-import { FormSummary, List, VStack, Box } from "@navikt/ds-react";
+import { Box, FormSummary, List, VStack } from "@navikt/ds-react";
 import {
   FormSummaryAnswer,
   FormSummaryAnswers,
@@ -63,7 +63,8 @@ export const Skjemaoppsummering = ({
               <FormSummaryLabel>Dager med oppgitt fravær</FormSummaryLabel>
               <FormSummaryValue>
                 {fravær ? (
-                  <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                  <Box marginBlock="space-16" asChild>
+                    <List data-aksel-migrated-v8>
                       {fravær?.map((periode, index) =>
                         periode.fom && periode.tom ? (
                           <ListItem key={index}>
@@ -72,7 +73,8 @@ export const Skjemaoppsummering = ({
                           </ListItem>
                         ) : null,
                       )}
-                    </List></Box>
+                    </List>
+                  </Box>
                 ) : (
                   "Ingen dager med oppgitt fravær"
                 )}
@@ -156,7 +158,8 @@ function InntektOppsummering({
           <FormSummary.Label>Beregnet månedslønn</FormSummary.Label>
           <FormSummary.Value>
             {harEndretInntekt ? (
-              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+              <Box marginBlock="space-16" asChild>
+                <List data-aksel-migrated-v8>
                   <List.Item>
                     Estimert:{" "}
                     <span className="line-through">
@@ -166,7 +169,8 @@ function InntektOppsummering({
                   <List.Item>
                     Endret til: {formatKroner(gjeldendeInntekt)}
                   </List.Item>
-                </List></Box>
+                </List>
+              </Box>
             ) : (
               formatKroner(gjeldendeInntekt)
             )}

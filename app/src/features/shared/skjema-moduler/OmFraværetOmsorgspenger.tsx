@@ -97,10 +97,11 @@ const OmFraværetOmsorgspenger = () => {
             <ReadMore header="Slik sender du dokumentasjon">
               <BodyShort>
                 Dokumentasjon kan sendes til oss på to måter:
-                <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+                <Box marginBlock="space-16" asChild>
+                  <List data-aksel-migrated-v8>
                     <List.Item>
-                      Gi dokumentasjonen til den ansatte, som selv ettersender den
-                      digitalt ved å logge inn på nav.no.
+                      Gi dokumentasjonen til den ansatte, som selv ettersender
+                      den digitalt ved å logge inn på nav.no.
                     </List.Item>
                     <List.Item>
                       Gå til{" "}
@@ -110,11 +111,12 @@ const OmFraværetOmsorgspenger = () => {
                       >
                         siden for ettersendelse
                       </Link>
-                      , og velg ettersend i posten. Husk å notere den ansatte sitt
-                      fødsels- og personnummer når du henter ut førsteside for
-                      innsendelse.
+                      , og velg ettersend i posten. Husk å notere den ansatte
+                      sitt fødsels- og personnummer når du henter ut førsteside
+                      for innsendelse.
                     </List.Item>
-                  </List></Box>
+                  </List>
+                </Box>
               </BodyShort>
             </ReadMore>
           </div>
@@ -138,14 +140,18 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
           {opplysninger.etterspurtePerioder &&
           opplysninger.etterspurtePerioder?.length > 0 ? (
             <div>
-              <div className="flex flex-col gap-2 mt-1"><Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+              <div className="flex flex-col gap-2 mt-1">
+                <Box marginBlock="space-16" asChild>
+                  <List data-aksel-migrated-v8>
                     {opplysninger.etterspurtePerioder?.map((periode) => (
                       <List.Item key={periode.fom}>
                         {formatDatoKort(new Date(periode.fom))} -{" "}
                         {formatDatoKort(new Date(periode.tom))}
                       </List.Item>
                     ))}
-                  </List></Box></div>
+                  </List>
+                </Box>
+              </div>
             </div>
           ) : (
             <BodyLong>Ingen dager med oppgitt fravær</BodyLong>

@@ -1,4 +1,4 @@
-import { List, Box } from "@navikt/ds-react";
+import { Box, List } from "@navikt/ds-react";
 import {
   FormSummary,
   FormSummaryAnswer,
@@ -69,7 +69,8 @@ export const OppsummeringOmsorgsdager = ({
           <FormSummaryLabel>Dager med fravær hele dagen</FormSummaryLabel>
           <FormSummaryValue>
             {harFraværHeleDager ? (
-              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+              <Box marginBlock="space-16" asChild>
+                <List data-aksel-migrated-v8>
                   {fraværHeleDager?.map((periode, index) =>
                     periode.fom && periode.tom ? (
                       <ListItem key={index}>
@@ -78,7 +79,8 @@ export const OppsummeringOmsorgsdager = ({
                       </ListItem>
                     ) : null,
                   )}
-                </List></Box>
+                </List>
+              </Box>
             ) : (
               "Ingen dager med fravær hele dagen"
             )}
@@ -93,7 +95,8 @@ export const OppsummeringOmsorgsdager = ({
           </FormSummaryLabel>
           <FormSummaryValue>
             {harFraværDelerAvDagen ? (
-              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+              <Box marginBlock="space-16" asChild>
+                <List data-aksel-migrated-v8>
                   {fraværDelerAvDagen
                     ?.filter((fravær) => Number(fravær.timer) > 0)
                     .map((fravær, index) => (
@@ -105,7 +108,8 @@ export const OppsummeringOmsorgsdager = ({
                           })`}
                       </ListItem>
                     ))}
-                </List></Box>
+                </List>
+              </Box>
             ) : (
               "Ingen dager med fravær bare deler av dagen"
             )}
@@ -118,14 +122,16 @@ export const OppsummeringOmsorgsdager = ({
           <FormSummaryAnswer>
             <FormSummaryLabel>Dager som skal trekkes</FormSummaryLabel>
             <FormSummaryValue>
-              <Box marginBlock="space-16" asChild><List data-aksel-migrated-v8>
+              <Box marginBlock="space-16" asChild>
+                <List data-aksel-migrated-v8>
                   {dagerSomSkalTrekkes?.map((dag, index) => (
                     <ListItem key={index}>
                       {formatDatoKort(new Date(dag.fom))}–
                       {formatDatoKort(new Date(dag.tom))}
                     </ListItem>
                   ))}
-                </List></Box>
+                </List>
+              </Box>
             </FormSummaryValue>
           </FormSummaryAnswer>
         )}
