@@ -58,7 +58,7 @@ export function setupStaticRoutes(router: Router) {
     });
   }
 
-  router.get("*", async (request, response) => {
+  router.get("{*path}", async (request, response) => {
     const viteModeHtml = response.viteModeHtml;
 
     if (viteModeHtml) {

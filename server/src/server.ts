@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 setupActuators(app);
 
 const protectedRouter = express.Router();
-app.set("trust proxy", 1);
+app.set("trust proxy", true);
 
 app.use(verifyToken);
 
