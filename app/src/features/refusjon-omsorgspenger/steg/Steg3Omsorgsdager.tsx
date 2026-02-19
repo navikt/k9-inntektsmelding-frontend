@@ -52,11 +52,21 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
     "Omsorgsdager - søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
 
-  const { register, formState, watch, handleSubmit, getValues, setValue } =
-    useSkjemaState();
+  const {
+    register,
+    formState,
+    watch,
+    handleSubmit,
+    getValues,
+    setValue,
+    clearErrors,
+  } = useSkjemaState();
 
   const årForRefusjon = watch("årForRefusjon");
   const harUtbetaltLønn = watch("harUtbetaltLønn");
+  const fraværHeleDager = watch("fraværHeleDager");
+  const fraværDelerAvDagen = watch("fraværDelerAvDagen");
+  const dagerSomSkalTrekkes = watch("dagerSomSkalTrekkes");
   const navigate = useNavigate();
 
   const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
@@ -83,6 +93,18 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
       });
     }
   }, [årForRefusjon, harUtbetaltLønn]);
+
+  useEffect(() => {
+    if (formState.errors.manglerFraværEllerTrekk) {
+      const harFravær =
+        fraværHeleDager.length > 0 ||
+        fraværDelerAvDagen.length > 0 ||
+        dagerSomSkalTrekkes.length > 0;
+      if (harFravær) {
+        clearErrors("manglerFraværEllerTrekk");
+      }
+    }
+  }, [fraværHeleDager, fraværDelerAvDagen, dagerSomSkalTrekkes]);
 
   const onSubmit = handleSubmit(() => {
     navigate({
@@ -134,9 +156,11 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
             </Radio>
           </RadioGroup>
           <TiFørsteOmsorgsdagerInfo />
-          {formState.errors.fraværHeleDager?.message && (
+          {formState.errors.manglerFraværEllerTrekk?.message && (
             <Alert aria-live="polite" variant="error">
-              <BodyLong>{formState.errors.fraværHeleDager.message}</BodyLong>
+              <BodyLong>
+                {formState.errors.manglerFraværEllerTrekk.message}
+              </BodyLong>
             </Alert>
           )}
           <VStack gap="8">

@@ -53,6 +53,8 @@ const baseSchema = z.object({
     }),
   ),
 
+  manglerFraværEllerTrekk: z.string().optional(),
+
   // Steg 4 fields
   inntekt: beløpSchema.optional(),
   korrigertInntekt: beløpSchema.optional(),
@@ -170,7 +172,7 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           code: z.ZodIssueCode.custom,
           message:
             "Du må oppgi fravær enten som hele dager, deler av dager eller dager som skal trekkes",
-          path: ["fraværHeleDager"],
+          path: ["manglerFraværEllerTrekk"],
         });
       }
 
