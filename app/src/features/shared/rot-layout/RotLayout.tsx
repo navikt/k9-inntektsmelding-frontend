@@ -42,7 +42,7 @@ export const RotLayout = ({
 }: RotLayoutProps) => {
   return (
     <main id="maincontent">
-      <Page>
+      <Page className="bg-ax-bg-neutral-moderate">
         <Page.Block className="bg-ax-bg-default border-solid border-b-4 border-ax-border-accent-subtle py-5">
           <Page.Block width="md">
             <HStack align="center">
