@@ -23,7 +23,15 @@ export function useSessionStorageState<T = unknown>(
     () => parseStorageItem(sessionStorage, key, schema) ?? defaultValue,
   );
   useEffect(() => {
-    sessionStorage.setItem(key, JSON.stringify(state));
+    try {
+      sessionStorage.setItem(key, JSON.stringify(state));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `useSessionStorageState: Feil ved serialisering av nøkkel "${key}"`,
+        error,
+      );
+    }
   }, [key, state]);
   return [state, setState] as const;
 }
@@ -37,7 +45,15 @@ export function useLocalStorageState<T = unknown>(
     () => parseStorageItem(localStorage, key, schema) ?? defaultValue,
   );
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state));
+    try {
+      localStorage.setItem(key, JSON.stringify(state));
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `useLocalStorageState: Feil ved serialisering av nøkkel "${key}"`,
+        error,
+      );
+    }
   }, [key, state]);
   return [state, setState] as const;
 }

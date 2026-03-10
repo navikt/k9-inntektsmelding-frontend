@@ -55,8 +55,18 @@ export const InntektsmeldingSkjemaStateProviderAGIUnntattAaRegister = ({
       InntektsmeldingSkjemaStateSchemaUnntattAaregister,
     );
 
-  const gyldigInntektsmeldingSkjemaState =
-    AGIValidatedInntektsmeldingUnntattAaregister.safeParse(state);
+  let gyldigInntektsmeldingSkjemaState;
+  try {
+    gyldigInntektsmeldingSkjemaState =
+      AGIValidatedInntektsmeldingUnntattAaregister.safeParse(state);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(
+      "InntektsmeldingSkjemaStateProviderAGIUnntattAaRegister: Feil ved safeParse",
+      error,
+    );
+    throw error;
+  }
 
   if (!gyldigInntektsmeldingSkjemaState.success) {
     logDev("error", gyldigInntektsmeldingSkjemaState.error);

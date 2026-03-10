@@ -52,8 +52,18 @@ export const InntektsmeldingSkjemaStateProvider = ({
     InntektsmeldingSkjemaStateSchema,
   );
 
-  const gyldigInntektsmeldingSkjemaState =
-    InntektsmeldingSkjemaStateSchemaValidated.safeParse(state);
+  let gyldigInntektsmeldingSkjemaState;
+  try {
+    gyldigInntektsmeldingSkjemaState =
+      InntektsmeldingSkjemaStateSchemaValidated.safeParse(state);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(
+      `InntektsmeldingSkjemaStateProvider: Feil ved safeParse for skjemaId "${skjemaId}"`,
+      error,
+    );
+    throw error;
+  }
 
   if (!gyldigInntektsmeldingSkjemaState.success) {
     logDev("error", gyldigInntektsmeldingSkjemaState.error);

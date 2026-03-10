@@ -56,8 +56,18 @@ export const InntektsmeldingSkjemaStateProviderAGINyansatt = ({
       InntektsmeldingSkjemaStateSchemaNyansatt,
     );
 
-  const gyldigInntektsmeldingSkjemaState =
-    AGIValidatedInntektsmeldingNyansatt.safeParse(state);
+  let gyldigInntektsmeldingSkjemaState;
+  try {
+    gyldigInntektsmeldingSkjemaState =
+      AGIValidatedInntektsmeldingNyansatt.safeParse(state);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(
+      "InntektsmeldingSkjemaStateProviderAGINyansatt: Feil ved safeParse",
+      error,
+    );
+    throw error;
+  }
 
   if (!gyldigInntektsmeldingSkjemaState.success) {
     logDev("error", gyldigInntektsmeldingSkjemaState.error);
