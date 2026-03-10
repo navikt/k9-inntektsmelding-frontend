@@ -46,21 +46,14 @@ export function UtbetalingOgRefusjon() {
     required: "Du må svare på dette spørsmålet",
   });
   const korrigertInntekt = watch("korrigertInntekt");
-  useEffect(() => {
-    if (korrigertInntekt) {
-      setValue("refusjon.0.beløp", korrigertInntekt);
-    }
-  }, [korrigertInntekt]);
-
-  // Denne bolken er kun relevant hvis A-inntekt er nede. Da vil bruker endre på inntekts-feltet.
-  // I alle andre tilfeller er det korrigertInntekt de vil endre.
-  // Dette fordi når A-inntekt er nede forventer vi ingen endringsårsak da bruker ikke fikk noen foreslått inntekt til å begynne med
   const inntekt = watch("inntekt");
   useEffect(() => {
-    if (inntekt) {
-      setValue("refusjon.0.beløp", inntekt);
+    // Hvis korrigertInntekt finnes, bruk den. Ellers bruk inntekt (relevant hvis A-inntekt er nede).
+    const beløp = korrigertInntekt || inntekt;
+    if (beløp) {
+      setValue("refusjon.0.beløp", beløp);
     }
-  }, [inntekt]);
+  }, [korrigertInntekt, inntekt, setValue]);
 
   const skalRefunderes = watch("skalRefunderes");
 
@@ -132,7 +125,7 @@ function Over6GAlert() {
   const { watch } = useFormContext<InntektOgRefusjonForm>();
   const GRUNNBELØP = useQuery(hentGrunnbeløpOptions()).data;
 
-  const refusjonsbeløpPerMåned = watch("refusjon")[0];
+  const refusjonsbeløpPerMåned = watch("refusjon.0.beløp");
   const refusjonsbeløpPerMånedSomNummer = Number(refusjonsbeløpPerMåned);
   const erRefusjonOver6G =
     !Number.isNaN(refusjonsbeløpPerMånedSomNummer) &&
