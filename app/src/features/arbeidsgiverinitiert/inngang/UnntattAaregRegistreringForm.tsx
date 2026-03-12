@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
@@ -6,6 +5,7 @@ import {
   Button,
   Heading,
   HStack,
+  Label,
   TextField,
   VStack,
 } from "@navikt/ds-react";
@@ -14,17 +14,17 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
+import { hentOpplysningerUnntattAaregister } from "~/api/queries.ts";
 import { featureToggles } from "~/feature-toggles/featureToggles";
+import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFeil";
 import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
+import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
-import {
-  OpplysningerDto,
-  OpplysningerRequest,
-  Ytelsetype,
-} from "~/types/api-models.ts";
+import { OpplysningerRequest, Ytelsetype } from "~/types/api-models.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";
+import { VelgArbeidsgiver } from "./VelgArbeidsgiver";
 
 export function UnntattAaregRegistreringForm({
   ytelseType,
@@ -33,53 +33,11 @@ export function UnntattAaregRegistreringForm({
 }) {
   const formMethods = useFormContext<FormType>();
   const navigate = useNavigate();
-
-  //TODO: Erstatt med egen usePersonOppslag hook for unntatt_aaregister
   const hentPersonMutation = usePersonOppslagUnntattAareg();
 
-  //TODO: Gjenbruk, denne kan være lik som i NyAnsattForm
   const opprettOpplysningerMutation = useMutation({
-    // @ts-expect-error(TODO: Erstatt med ekte endepunkt når det er implementert)
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
-      // stub
-      return Promise.resolve({
-        forespørselUuid: undefined,
-        person: {
-          fornavn: "Ola",
-          etternavn: "Nordmann",
-          fødselsnummer: "26448515302",
-          aktørId: "1234567890123",
-        },
-        arbeidsgiver: {
-          organisasjonNavn: "NAV",
-          organisasjonNummer: "315853370",
-        },
-        ytelse: "PLEIEPENGER_SYKT_BARN",
-        innsender: {
-          fornavn: "Emil",
-          etternavn: "Johansen",
-          mellomnavn: undefined,
-          telefon: undefined,
-        },
-        inntektsopplysninger: {
-          gjennomsnittLønn: 50_000,
-          // tre siste måneder med rapportert lønn
-          månedsinntekter: Array.from({ length: 3 }, (_, index) => ({
-            fom: new Date(
-              new Date().setMonth(new Date().getMonth() - index),
-            ).toISOString(),
-            tom: new Date(
-              new Date().setMonth(new Date().getMonth() - index),
-            ).toISOString(),
-            beløp: 50_000,
-            status: "BRUKT_I_GJENNOMSNITT",
-          })),
-        },
-        forespørselStatus: "UNDER_BEHANDLING",
-        forespørselType: "BESTILT_AV_FAGSYSTEM",
-        skjæringstidspunkt: new Date().toDateString(),
-        førsteUttaksdato: new Date().toISOString(),
-      }) satisfies Promise<OpplysningerDto>;
+      return hentOpplysningerUnntattAaregister(opplysningerRequest);
     },
     onSuccess: (opplysninger) => {
       if (opplysninger.forespørselUuid === undefined) {
@@ -111,19 +69,28 @@ export function UnntattAaregRegistreringForm({
     },
   });
 
+  const isPending =
+    hentPersonMutation.isPending || opprettOpplysningerMutation.isPending;
+
   const handleSubmit = (values: FormType) => {
-    hentPersonMutation.mutate(undefined, {
-      onSuccess: (data) => {
-        if (data.arbeidsforhold.length === 1) {
-          return opprettOpplysningerMutation.mutate({
-            fødselsnummer: values.fødselsnummer,
-            førsteFraværsdag: values.førsteFraværsdag,
-            ytelseType,
-            organisasjonsnummer: data.arbeidsforhold[0].organisasjonsnummer,
-          });
-        }
+    hentPersonMutation.mutate(
+      {
+        fødselsnummer: values.fødselsnummer,
+        ytelse: ytelseType,
       },
-    });
+      {
+        onSuccess: (data) => {
+          if (data.arbeidsforhold.length === 1) {
+            return opprettOpplysningerMutation.mutate({
+              fødselsnummer: values.fødselsnummer,
+              førsteFraværsdag: values.førsteFraværsdag,
+              ytelseType,
+              organisasjonsnummer: data.arbeidsforhold[0].organisasjonsnummer,
+            });
+          }
+        },
+      },
+    );
   };
   if (!featureToggles.AGI_UREGISTRERT) {
     return (
@@ -154,12 +121,35 @@ export function UnntattAaregRegistreringForm({
             error={formMethods.formState.errors.fødselsnummer?.message}
             label="Ansattes fødselsnummer"
           />
+          <VStack gap="space-16">
+            <Label>Navn</Label>
+            {hentPersonMutation.data && (
+              <BodyShort>
+                {hentPersonMutation.data.fornavn}{" "}
+                {hentPersonMutation.data.etternavn}
+              </BodyShort>
+            )}
+          </VStack>
         </HStack>
-        <div>
-          <Button type="submit" variant="secondary">
-            Hent opplysninger
-          </Button>
-        </div>
+        <DatePickerWrapped
+          label="Første fraværsdag med refusjon"
+          name="førsteFraværsdag"
+          rules={{ required: "Må oppgis" }}
+        />
+        <Button
+          className="w-fit"
+          loading={isPending}
+          type="submit"
+          variant="secondary"
+        >
+          Hent opplysninger
+        </Button>
+        <VelgArbeidsgiver data={hentPersonMutation.data} />
+        <PersonOppslagError
+          context="person_oppslag"
+          error={hentPersonMutation.error}
+          ytelse={ytelseType}
+        />
         <HentOpplysningerError error={opprettOpplysningerMutation.error} />
         {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
           <Button

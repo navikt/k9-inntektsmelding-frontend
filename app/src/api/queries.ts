@@ -16,7 +16,6 @@ import {
   OpplysningerRequest,
   opplysningerSchema,
   SendInntektsmeldingResponseDto,
-  SlåOppArbeidstakerResponseDto,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-models";
@@ -216,23 +215,46 @@ export async function hentPersonFraFnr(
   return parsedJson.data;
 }
 
-export async function hentPersonFraFnrUnntattAareg(): Promise<SlåOppArbeidstakerResponseDto> {
-  // foreløpig stub
-  return new Promise<SlåOppArbeidstakerResponseDto>((resolve) => {
-    setTimeout(() => {
-      return resolve({
-        fornavn: "Ola",
-        etternavn: "Nordmann",
-        arbeidsforhold: [
-          {
-            organisasjonsnavn: "NAV",
-            organisasjonsnummer: "315853370",
-          },
-        ],
-        kjønn: "MANN",
-      });
-    }, 1000);
-  });
+export async function hentPersonFraFnrUnntattAareg(
+  fnr: string,
+  ytelsetype: Ytelsetype,
+) {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsgivere/uregistrert`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fødselsnummer: fnr,
+        ytelseType: ytelsetype,
+      }),
+    },
+  );
+
+  if (response.status === 404) {
+    throw new Error("FANT_IKKE_PERSON");
+  }
+
+  if (!response.ok) {
+    const json = await response.json();
+    const parsedFeil = feilmeldingSchema.safeParse(json);
+    if (!parsedFeil.success) {
+      logDev("error", parsedFeil.error);
+      throw new Error("Kunne ikke hente opplysninger");
+    }
+    throw new Error(parsedFeil.data.type);
+  }
+
+  const json = await response.json();
+  const parsedJson = SlåOppArbeidstakerResponseDtoSchema.safeParse(json);
+  if (!parsedJson.success) {
+    logDev("error", parsedJson.error);
+    throw new Error("Responsen fra serveren matchet ikke forventet format");
+  }
+
+  return parsedJson.data;
 }
 
 export async function hentOpplysninger(
@@ -264,6 +286,40 @@ export async function hentOpplysninger(
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
 
+    throw new Error("Responsen fra serveren matchet ikke forventet format");
+  }
+
+  return parsedJson.data;
+}
+
+export async function hentOpplysningerUnntattAaregister(
+  opplysningerRequest: OpplysningerRequest,
+) {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/uregistrert`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(opplysningerRequest),
+    },
+  );
+  if (!response.ok) {
+    const json = await response.json();
+    const parsedFeil = feilmeldingSchema.safeParse(json);
+    if (!parsedFeil.success) {
+      logDev("error", parsedFeil.error);
+      throw new Error("Kunne ikke hente opplysninger");
+    }
+    throw new Error(parsedFeil.data.type);
+  }
+
+  const json = await response.json();
+  const parsedJson = opplysningerSchema.safeParse(json);
+
+  if (!parsedJson.success) {
+    logDev("error", parsedJson.error);
     throw new Error("Responsen fra serveren matchet ikke forventet format");
   }
 
