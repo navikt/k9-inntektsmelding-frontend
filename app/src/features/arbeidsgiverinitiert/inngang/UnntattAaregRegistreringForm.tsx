@@ -31,7 +31,12 @@ export function UnntattAaregRegistreringForm({
 }: {
   ytelseType: Ytelsetype;
 }) {
-  const formMethods = useFormContext<FormType>();
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    formState,
+    watch,
+  } = useFormContext<FormType>();
   const navigate = useNavigate();
   const hentPersonMutation = usePersonOppslagUnntattAareg();
 
@@ -92,6 +97,11 @@ export function UnntattAaregRegistreringForm({
       },
     );
   };
+
+  const nullstillFeilmeldinger = () => {
+    hentPersonMutation.reset();
+    opprettOpplysningerMutation.reset();
+  };
   if (!featureToggles.AGI_UREGISTRERT) {
     return (
       <Alert variant="info">
@@ -108,17 +118,18 @@ export function UnntattAaregRegistreringForm({
   }
 
   return (
-    <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
+    <form onSubmit={rhfHandleSubmit(handleSubmit)}>
       <VStack gap="space-32">
         <HStack gap="space-40">
           <TextField
-            {...formMethods.register("fødselsnummer", {
+            {...register("fødselsnummer", {
               required: "Må oppgis",
-              validate: (value) =>
+              validate: (value: string) =>
                 (value && fnr(value).status === "valid") ||
                 "Du må fylle ut et gyldig fødselsnummer",
+              onChange: nullstillFeilmeldinger,
             })}
-            error={formMethods.formState.errors.fødselsnummer?.message}
+            error={formState.errors.fødselsnummer?.message}
             label="Ansattes fødselsnummer"
           />
           <VStack gap="space-16">
@@ -134,6 +145,7 @@ export function UnntattAaregRegistreringForm({
         <DatePickerWrapped
           label="Første fraværsdag med refusjon"
           name="førsteFraværsdag"
+          callback={nullstillFeilmeldinger}
           rules={{ required: "Må oppgis" }}
         />
         <Button
@@ -159,9 +171,9 @@ export function UnntattAaregRegistreringForm({
             loading={opprettOpplysningerMutation.isPending}
             onClick={() =>
               opprettOpplysningerMutation.mutate({
-                fødselsnummer: formMethods.watch("fødselsnummer"),
-                førsteFraværsdag: formMethods.watch("førsteFraværsdag"),
-                organisasjonsnummer: formMethods.watch("organisasjonsnummer"),
+                fødselsnummer: watch("fødselsnummer"),
+                førsteFraværsdag: watch("førsteFraværsdag"),
+                organisasjonsnummer: watch("organisasjonsnummer"),
                 ytelseType,
               })
             }

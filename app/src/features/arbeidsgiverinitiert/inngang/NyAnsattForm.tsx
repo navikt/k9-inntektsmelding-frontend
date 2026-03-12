@@ -24,7 +24,12 @@ import { FormType } from "./types";
 import { VelgArbeidsgiver } from "./VelgArbeidsgiver";
 
 export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
-  const formMethods = useFormContext<FormType>();
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    formState,
+    watch,
+  } = useFormContext<FormType>();
   const navigate = useNavigate();
   const hentPersonMutation = usePersonOppslag();
 
@@ -87,18 +92,24 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
     );
   };
 
+  const nullstillFeilmeldinger = () => {
+    hentPersonMutation.reset();
+    opprettOpplysningerMutation.reset();
+  };
+
   return (
-    <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
+    <form onSubmit={rhfHandleSubmit(handleSubmit)}>
       <VStack gap="space-32">
         <HStack gap="space-40">
           <TextField
-            {...formMethods.register("fødselsnummer", {
+            {...register("fødselsnummer", {
               required: "Må oppgis",
               validate: (value) =>
                 (value && fnr(value).status === "valid") ||
                 "Du må fylle ut et gyldig fødselsnummer",
+              onChange: nullstillFeilmeldinger,
             })}
-            error={formMethods.formState.errors.fødselsnummer?.message}
+            error={formState.errors.fødselsnummer?.message}
             label="Ansattes fødselsnummer"
           />
           <VStack gap="space-16">
@@ -114,6 +125,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         <DatePickerWrapped
           label="Første fraværsdag med refusjon"
           name="førsteFraværsdag"
+          callback={nullstillFeilmeldinger}
           rules={{ required: "Må oppgis" }} // TODO: Forklare hvorfor det må oppgis
         />
         <Button
@@ -139,9 +151,9 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
             loading={opprettOpplysningerMutation.isPending}
             onClick={() =>
               opprettOpplysningerMutation.mutate({
-                fødselsnummer: formMethods.watch("fødselsnummer"),
-                førsteFraværsdag: formMethods.watch("førsteFraværsdag"),
-                organisasjonsnummer: formMethods.watch("organisasjonsnummer"),
+                fødselsnummer: watch("fødselsnummer"),
+                førsteFraværsdag: watch("førsteFraværsdag"),
+                organisasjonsnummer: watch("organisasjonsnummer"),
                 ytelseType,
               })
             }
