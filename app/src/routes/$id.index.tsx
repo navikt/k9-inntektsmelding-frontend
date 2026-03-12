@@ -21,6 +21,17 @@ export const Route = createFileRoute("/$id/")({
       });
     }
 
+    if (opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT") {
+      return redirect({
+        to: "/agi-unntatt-aaregister/$id/vis",
+        params: {
+          id: params.id,
+        },
+        replace: true,
+        throw: true,
+      });
+    }
+
     if (eksisterendeInntektsmeldinger[0] === undefined) {
       redirect({
         to: "/$id/dine-opplysninger",
