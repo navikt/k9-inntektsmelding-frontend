@@ -3,6 +3,7 @@ import { expect, Locator, Page } from "@playwright/test";
 import type { OpplysningerDto } from "~/types/api-models.ts";
 
 import { arbeidsforholdResponse } from "../arbeidsgiverinitiert/nyansatt/arbeidsforhold.ts";
+import { arbeidsforholdUregistrertResponse } from "../arbeidsgiverinitiert/uregistrert/arbeidsforhold.ts";
 import {
   ingenEksisterendeInntektsmeldingerResponse,
   mangeEksisterendeInntektsmeldingerResponse,
@@ -139,6 +140,38 @@ export const mockAGISendInntektsmelding = ({
 }: MockAGISendInntektsmeldingParams) => {
   return page.route(
     `**/*/imdialog/send-inntektsmelding/arbeidsgiverinitiert-nyansatt`,
+    async (route) => {
+      await route.fulfill({ json });
+    },
+  );
+};
+
+type MockHentPersonUregistrertParams = {
+  page: Page;
+  json?: typeof arbeidsforholdUregistrertResponse;
+};
+export const mockHentPersonUregistrert = ({
+  page,
+  json = arbeidsforholdUregistrertResponse,
+}: MockHentPersonUregistrertParams) => {
+  return page.route(
+    `**/*/arbeidsgiverinitiert/arbeidsgivere/uregistrert`,
+    async (route) => {
+      await route.fulfill({ json });
+    },
+  );
+};
+
+type MockAGIOpplysningerUregistrertParams = {
+  page: Page;
+  json?: OpplysningerDto;
+};
+export const mockAGIOpplysningerUregistrert = ({
+  page,
+  json,
+}: MockAGIOpplysningerUregistrertParams) => {
+  return page.route(
+    `**/*/arbeidsgiverinitiert/opplysninger/uregistrert`,
     async (route) => {
       await route.fulfill({ json });
     },

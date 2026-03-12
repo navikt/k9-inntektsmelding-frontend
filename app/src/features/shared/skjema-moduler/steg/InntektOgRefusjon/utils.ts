@@ -1,8 +1,13 @@
 import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import {
+  ARBEIDSGIVERINITERT_NYANSATT_ID,
+  ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
+} from "~/routes/opprett";
+import {
   OpplysningerDto,
   SendInntektsmeldingRequestDto,
+  SendInntektsmeldingRequestDtoUregistrert,
 } from "~/types/api-models";
 import { formatStrengTilTall } from "~/utils";
 
@@ -31,8 +36,13 @@ export function lagSendInntektsmeldingRequest(
     }),
   );
 
+  const fakeIder = [
+    ARBEIDSGIVERINITERT_NYANSATT_ID,
+    ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
+  ];
+
   return {
-    foresporselUuid: id,
+    foresporselUuid: fakeIder.includes(id) ? undefined : id,
     aktorId: opplysninger.person.aktørId,
     ytelse: opplysninger.ytelse,
     arbeidsgiverIdent: opplysninger.arbeidsgiver.organisasjonNummer,
@@ -50,7 +60,7 @@ export function lagSendInntektsmeldingRequest(
       skjemaState.bortfaltNaturalytelsePerioder,
     ),
     endringAvInntektÅrsaker,
-  } satisfies SendInntektsmeldingRequestDto;
+  } satisfies SendInntektsmeldingRequestDtoUregistrert;
 }
 
 function konverterNaturalytelsePerioder(

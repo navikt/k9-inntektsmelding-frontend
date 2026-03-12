@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import isEqual from "lodash/isEqual";
 
-import { sendInntektsmelding } from "~/api/mutations.ts";
+import { sendInntektsmeldingArbeidsgiverInitiertUnntattAaregister } from "~/api/mutations.ts";
 import { Skjemaoppsummering } from "~/features/inntektsmelding/visningskomponenter/Skjemaoppsummering";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
@@ -119,7 +119,9 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
         }
       }
 
-      return sendInntektsmelding(inntektsmeldingRequest);
+      return sendInntektsmeldingArbeidsgiverInitiertUnntattAaregister(
+        inntektsmeldingRequest,
+      );
     },
     onSuccess: (inntektsmeldingState) => {
       setInntektsmeldingSkjemaState(inntektsmeldingState);
