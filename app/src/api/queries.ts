@@ -176,7 +176,7 @@ export async function hentPersonFraFnr(
   førsteFraværsdag: string,
 ) {
   const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsforhold`,
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
     {
       method: "POST",
       headers: {
@@ -189,10 +189,6 @@ export async function hentPersonFraFnr(
       }),
     },
   );
-
-  if (response.status === 404) {
-    throw new Error("FANT_IKKE_PERSON");
-  }
 
   if (!response.ok) {
     const json = await response.json();
@@ -218,6 +214,7 @@ export async function hentPersonFraFnr(
 export async function hentPersonFraFnrUnntattAareg(
   fnr: string,
   ytelsetype: Ytelsetype,
+  førsteFraværsdag: string,
 ) {
   const response = await fetch(
     `${SERVER_URL}/arbeidsgiverinitiert/arbeidsgivere/uregistrert`,
@@ -229,13 +226,10 @@ export async function hentPersonFraFnrUnntattAareg(
       body: JSON.stringify({
         fødselsnummer: fnr,
         ytelseType: ytelsetype,
+        førsteFraværsdag,
       }),
     },
   );
-
-  if (response.status === 404) {
-    throw new Error("FANT_IKKE_PERSON");
-  }
 
   if (!response.ok) {
     const json = await response.json();
@@ -261,7 +255,7 @@ export async function hentOpplysninger(
   opplysningerRequest: OpplysningerRequest,
 ) {
   const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger`,
+    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/nyansatt`,
     {
       method: "POST",
       headers: {

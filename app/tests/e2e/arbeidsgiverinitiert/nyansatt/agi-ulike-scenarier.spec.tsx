@@ -177,11 +177,16 @@ test.describe("AGI Ulike scenarier", () => {
   test("Feilhåndtering ved henting av person", async ({ page }) => {
     // Mock en feil ved henting av person
     await page.route(
-      `**/*/arbeidsgiverinitiert/arbeidsforhold`,
+      `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
       async (route) => {
         await route.fulfill({
           status: 404,
-          json: { message: "Fant ikke person" },
+          contentType: "application/json",
+          body: JSON.stringify({
+            type: "PERSON_IKKE_FUNNET",
+            feilmelding: "Person ikke funnet",
+            callId: "test",
+          }),
         });
       },
     );
@@ -249,7 +254,7 @@ test.describe("AGI Ulike scenarier", () => {
   }) => {
     // Mock med kun ett arbeidsforhold
     await page.route(
-      `**/*/arbeidsgiverinitiert/arbeidsforhold`,
+      `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
       async (route) => {
         await route.fulfill({
           json: {

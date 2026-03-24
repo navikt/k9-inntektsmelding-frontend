@@ -18,7 +18,10 @@ export function PersonOppslagError({
     return null;
   }
 
-  if (error.message.includes("FANT_IKKE_PERSON")) {
+  if (
+    error.message === "INGEN_ARBEIDSFORHOLD" ||
+    error.message === "PERSON_IKKE_FUNNET"
+  ) {
     return (
       <Alert variant="error">
         <Heading level="3" size="small">

@@ -39,7 +39,7 @@ export const mockHentPersonOgArbeidsforhold = ({
   json = arbeidsforholdResponse,
 }: MockHentPersonOgArbeidsforholdParams) => {
   return page.route(
-    `**/*/arbeidsgiverinitiert/arbeidsforhold`,
+    `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
     async (route) => {
       await route.fulfill({ json });
     },
@@ -124,9 +124,12 @@ export const mockAGIOpplysninger = ({
   page,
   json,
 }: MockAGIOpplysningerParams) => {
-  return page.route(`**/*/arbeidsgiverinitiert/opplysninger`, async (route) => {
-    await route.fulfill({ json });
-  });
+  return page.route(
+    `**/*/arbeidsgiverinitiert/opplysninger/nyansatt`,
+    async (route) => {
+      await route.fulfill({ json });
+    },
+  );
 };
 
 type MockAGISendInntektsmeldingParams = {

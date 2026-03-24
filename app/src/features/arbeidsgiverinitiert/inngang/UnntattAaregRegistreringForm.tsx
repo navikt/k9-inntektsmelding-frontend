@@ -82,6 +82,7 @@ export function UnntattAaregRegistreringForm({
       {
         fødselsnummer: values.fødselsnummer,
         ytelse: ytelseType,
+        førsteFraværsdag: values.førsteFraværsdag,
       },
       {
         onSuccess: (data) => {

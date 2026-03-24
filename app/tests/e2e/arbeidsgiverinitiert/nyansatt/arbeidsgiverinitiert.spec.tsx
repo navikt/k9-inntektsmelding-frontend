@@ -33,14 +33,17 @@ test("Ny ansatt", async ({ page }) => {
   await page.getByLabel("Første fraværsdag med refusjon").fill("01.4.2024");
   await page.getByRole("button", { name: "Hent opplysninger" }).click();
 
-  await page.route(`**/*/arbeidsgiverinitiert/opplysninger`, async (route) => {
-    await route.fulfill({
-      json: {
-        ...enkeltOpplysningerResponse,
-        forespørselType: "ARBEIDSGIVERINITIERT_NYANSATT",
-      },
-    });
-  });
+  await page.route(
+    `**/*/arbeidsgiverinitiert/opplysninger/nyansatt`,
+    async (route) => {
+      await route.fulfill({
+        json: {
+          ...enkeltOpplysningerResponse,
+          forespørselType: "ARBEIDSGIVERINITIERT_NYANSATT",
+        },
+      });
+    },
+  );
 
   await page
     .getByTestId("steg-0-select-arbeidsgiver")
@@ -66,14 +69,17 @@ test("Skal ikke kunne velge NEI på refusjon hvis AGI og nyansatt", async ({
   await page.getByLabel("Første fraværsdag med refusjon").fill("01.4.2024");
   await page.getByRole("button", { name: "Hent opplysninger" }).click();
 
-  await page.route(`**/*/arbeidsgiverinitiert/opplysninger`, async (route) => {
-    await route.fulfill({
-      json: {
-        ...enkeltOpplysningerResponse,
-        forespørselType: "ARBEIDSGIVERINITIERT_NYANSATT",
-      },
-    });
-  });
+  await page.route(
+    `**/*/arbeidsgiverinitiert/opplysninger/nyansatt`,
+    async (route) => {
+      await route.fulfill({
+        json: {
+          ...enkeltOpplysningerResponse,
+          forespørselType: "ARBEIDSGIVERINITIERT_NYANSATT",
+        },
+      });
+    },
+  );
 
   await page
     .getByTestId("steg-0-select-arbeidsgiver")
