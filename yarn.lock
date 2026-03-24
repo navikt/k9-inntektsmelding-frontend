@@ -2242,20 +2242,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router-devtools@npm:1.166.10":
-  version: 1.166.10
-  resolution: "@tanstack/react-router-devtools@npm:1.166.10"
+"@tanstack/react-router-devtools@npm:1.166.7":
+  version: 1.166.7
+  resolution: "@tanstack/react-router-devtools@npm:1.166.7"
   dependencies:
-    "@tanstack/router-devtools-core": "npm:1.167.0"
+    "@tanstack/router-devtools-core": "npm:1.166.7"
   peerDependencies:
-    "@tanstack/react-router": ^1.168.0
-    "@tanstack/router-core": ^1.168.0
+    "@tanstack/react-router": ^1.166.7
+    "@tanstack/router-core": ^1.166.7
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
   peerDependenciesMeta:
     "@tanstack/router-core":
       optional: true
-  checksum: 10c0/622e9770ecf36fb43cb65ca8f3c36a1328a8644dc2722c7c56f3657fd921370dbfb81cb2ccfe05d88906a8f28601a45ad44c78cb5c59b3296311ef4281f22f9d
+  checksum: 10c0/520d2a70e7db84212f0de3b5d1a258e3f2f8875fdc6c1ce3cbafdf2994f8f3b5d5a880c9afe459b3ed9c2ba00e9aa93dea99d033e653ac4cea04bcc9a72ea0ba
   languageName: node
   linkType: hard
 
@@ -2320,39 +2320,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/router-devtools-core@npm:1.167.0":
-  version: 1.167.0
-  resolution: "@tanstack/router-devtools-core@npm:1.167.0"
+"@tanstack/router-devtools-core@npm:1.166.7":
+  version: 1.166.7
+  resolution: "@tanstack/router-devtools-core@npm:1.166.7"
   dependencies:
     clsx: "npm:^2.1.1"
     goober: "npm:^2.1.16"
     tiny-invariant: "npm:^1.3.3"
   peerDependencies:
-    "@tanstack/router-core": ^1.168.0
+    "@tanstack/router-core": ^1.166.7
     csstype: ^3.0.10
   peerDependenciesMeta:
     csstype:
       optional: true
-  checksum: 10c0/800da884c0337db55e333b038f597a19b0384708a78f9b5a4db6fba6fd05cc4304e593de74d078052b8b114b67393c2309224226ac806ec71e601292305431e6
+  checksum: 10c0/8cf38822caaa199b1fb071a07e9b7528e085821c9b8f7a18697a42af1cae230b8820dbc9c504bf573447050c362e1d769627bddb0d86b38fddf9025b6acff9a4
   languageName: node
   linkType: hard
 
-"@tanstack/router-devtools@npm:^1.166.7":
-  version: 1.166.10
-  resolution: "@tanstack/router-devtools@npm:1.166.10"
+"@tanstack/router-devtools@npm:1.166.7":
+  version: 1.166.7
+  resolution: "@tanstack/router-devtools@npm:1.166.7"
   dependencies:
-    "@tanstack/react-router-devtools": "npm:1.166.10"
+    "@tanstack/react-router-devtools": "npm:1.166.7"
     clsx: "npm:^2.1.1"
     goober: "npm:^2.1.16"
   peerDependencies:
-    "@tanstack/react-router": ^1.168.0
+    "@tanstack/react-router": ^1.166.7
     csstype: ^3.0.10
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
   peerDependenciesMeta:
     csstype:
       optional: true
-  checksum: 10c0/c007e8e2c71277c3d022c94c1efe6238832f00378920e97e5d758c4f6969b61dc5fb95493affec4c23d90e1d01c8ea224401937994ac518342e702b47635d7a1
+  checksum: 10c0/f9073749c268e736999d8193323734fd85a255ba88ac6553ddbbb2fc9d41d5e3e063346f3a5903ed252dd846f544cc166f51cb06f973da5269ca4f1eaf548b59
   languageName: node
   linkType: hard
 
@@ -3177,7 +3177,7 @@ __metadata:
     "@tanstack/react-query": "npm:5.90.21"
     "@tanstack/react-query-devtools": "npm:^5.91.3"
     "@tanstack/react-router": "npm:1.166.7"
-    "@tanstack/router-devtools": "npm:^1.166.7"
+    "@tanstack/router-devtools": "npm:1.166.7"
     "@tanstack/router-vite-plugin": "npm:^1.166.7"
     "@types/lodash": "npm:^4.17.24"
     "@types/node": "npm:^25.5.0"
