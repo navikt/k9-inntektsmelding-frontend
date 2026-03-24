@@ -41,9 +41,11 @@ export const HentOpplysninger = () => {
             legend="Årsak til at du vil opprette inntektsmelding"
             name={name}
           >
-            <Radio value="ny_ansatt" {...radioGroupProps}>
-              Ny ansatt som mottar ytelse fra Nav
-            </Radio>
+            {ytelseType !== "OMSORGSPENGER" && (
+              <Radio value="ny_ansatt" {...radioGroupProps}>
+                Ny ansatt som mottar ytelse fra Nav
+              </Radio>
+            )}
             <Radio
               description="(Ambassadepersonell, fiskere og utenlandske arbeidstakere)"
               value="unntatt_aaregister"
