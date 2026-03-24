@@ -51,7 +51,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock successful validation for the date
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         const request = route.request();
         const postData = JSON.parse(request.postData() || "{}");
@@ -115,11 +115,16 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock failed validation - person not found
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         await route.fulfill({
           status: 404,
-          json: { type: "FANT_IKKE_PERSON" },
+          contentType: "application/json",
+          body: JSON.stringify({
+            type: "PERSON_IKKE_FUNNET",
+            feilmelding: "Person ikke funnet",
+            callId: "test",
+          }),
         });
       },
     );
@@ -175,7 +180,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock failed validation - invalid date
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         await route.fulfill({
           status: 403,
@@ -327,7 +332,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock successful validation for the date (selv om vi ikke skal kunne gå videre)
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         await route.fulfill({
           json: {
@@ -372,7 +377,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock successful validation for the date
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         const request = route.request();
         const postData = JSON.parse(request.postData() || "{}");

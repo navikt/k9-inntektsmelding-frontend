@@ -15,6 +15,7 @@ export interface PersonOppslagParams {
 export interface PersonOppslagUnntattAaregParams {
   fødselsnummer: string;
   ytelse: Ytelsetype;
+  førsteFraværsdag: string;
 }
 
 export function usePersonOppslag() {
@@ -34,8 +35,13 @@ export function usePersonOppslagUnntattAareg() {
     mutationFn: async ({
       fødselsnummer,
       ytelse,
+      førsteFraværsdag,
     }: PersonOppslagUnntattAaregParams) => {
-      return await hentPersonFraFnrUnntattAareg(fødselsnummer, ytelse);
+      return await hentPersonFraFnrUnntattAareg(
+        fødselsnummer,
+        ytelse,
+        førsteFraværsdag,
+      );
     },
   });
 }

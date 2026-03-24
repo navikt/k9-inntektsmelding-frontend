@@ -226,6 +226,9 @@ export const feilmeldingSchema = z.object({
     "TOMT_RESULTAT_FEIL",
     "MANGLER_TILGANG_FEIL",
     "SENDT_FOR_TIDLIG",
+    "FINNES_I_AAREG",
+    "PERSON_IKKE_FUNNET",
+    "INGEN_ARBEIDSFORHOLD",
   ]),
 });
 
