@@ -31,6 +31,8 @@ const baseSchema = z.object({
   ansattesEtternavn: z.string().optional(),
   ansattesAktørId: z.string().optional(),
   organisasjonsnummer: z.string().optional(),
+  erUnntattAaregisteret: z.boolean().optional(),
+  førsteFraværsdatoForÅret: z.string().optional(),
 
   // Steg 3 fields
   harDekket10FørsteOmsorgsdager: z.string().catch(""),
@@ -149,6 +151,13 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           code: z.ZodIssueCode.custom,
           message: "Du må oppgi et organisasjonsnummer",
           path: ["organisasjonsnummer"],
+        });
+      }
+      if (data.erUnntattAaregisteret && !data.førsteFraværsdatoForÅret) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Du må oppgi første fraværsdato for inneværende år",
+          path: ["førsteFraværsdatoForÅret"],
         });
       }
     }

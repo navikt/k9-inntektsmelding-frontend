@@ -2,6 +2,10 @@ import { idnr } from "@navikt/fnrvalidator";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
+import {
+  hentOpplysningerUnntattAaregister,
+  hentPersonFraFnrUnntattAareg,
+} from "~/api/queries.ts";
 import { logDev } from "~/utils";
 
 import {
@@ -263,3 +267,50 @@ export const hentInntektsopplysningerOptions = (
     queryFn: () => hentInntektsopplysninger(args),
   });
 };
+
+export type ArbeidsgiverDto = {
+  organisasjonsnavn: string;
+  organisasjonsnummer: string;
+};
+
+type HentArbeidsgiverArgs = {
+  fødselsnummer: string;
+  førsteFraværsdatoForÅret: string;
+};
+
+export const hentArbeidsgiverOptions = (args: HentArbeidsgiverArgs | null) =>
+  queryOptions({
+    queryKey: ["arbeidsgiver", args] as const,
+    queryFn: () =>
+      hentPersonFraFnrUnntattAareg(
+        args!.fødselsnummer,
+        "OMSORGSPENGER",
+        args!.førsteFraværsdatoForÅret,
+      ),
+    enabled: args !== null,
+    staleTime: Infinity,
+    retry: false,
+  });
+
+type OpplysningerUnntattAaregisterArgs = {
+  fødselsnummer: string;
+  førsteFraværsdatoForÅret: string;
+  organisasjonsnummer: string;
+};
+
+export const hentPersonUnntattAaregisterOptions = (
+  args: OpplysningerUnntattAaregisterArgs | null,
+) =>
+  queryOptions({
+    queryKey: ["person-unntatt-aaregister", args] as const,
+    queryFn: () =>
+      hentOpplysningerUnntattAaregister({
+        fødselsnummer: args!.fødselsnummer,
+        ytelseType: "OMSORGSPENGER",
+        førsteFraværsdag: args!.førsteFraværsdatoForÅret,
+        organisasjonsnummer: args!.organisasjonsnummer,
+      }),
+    enabled: args !== null,
+    staleTime: Infinity,
+    retry: false,
+  });
