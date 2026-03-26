@@ -144,7 +144,7 @@ export function UnntattAaregRegistreringForm({
           </VStack>
         </HStack>
         <DatePickerWrapped
-          label="Første fraværsdag med refusjon"
+          label="Første fraværsdag"
           name="førsteFraværsdag"
           callback={nullstillFeilmeldinger}
           rules={{ required: "Må oppgis" }}
