@@ -278,16 +278,22 @@ type HentArbeidsgiverArgs = {
   førsteFraværsdatoForÅret: string;
 };
 
-export const hentArbeidsgiverOptions = (args: HentArbeidsgiverArgs | null) =>
+export const hentArbeidsgiverOptions = ({
+  fødselsnummer,
+  førsteFraværsdatoForÅret,
+}: HentArbeidsgiverArgs) =>
   queryOptions({
-    queryKey: ["arbeidsgiver", args] as const,
+    queryKey: [
+      "arbeidsgiver",
+      { fødselsnummer, førsteFraværsdatoForÅret },
+    ] as const,
     queryFn: () =>
       hentPersonFraFnrUnntattAareg(
-        args!.fødselsnummer,
+        fødselsnummer,
         "OMSORGSPENGER",
-        args!.førsteFraværsdatoForÅret,
+        førsteFraværsdatoForÅret,
       ),
-    enabled: args !== null,
+    enabled: fødselsnummer && førsteFraværsdatoForÅret ? true : false,
     staleTime: Infinity,
     retry: false,
   });

@@ -25,12 +25,123 @@ import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
 import {
+  ArbeidstakerOppslagDto,
   hentArbeidsgiverOptions,
   hentArbeidstakerOptions,
   hentPersonUnntattAaregisterOptions,
 } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
+
+type ArbeidsgiverSeksjonProps = {
+  arbeidsforhold: ArbeidstakerOppslagDto["arbeidsforhold"];
+};
+
+const ArbeidsgiverSeksjon = ({ arbeidsforhold }: ArbeidsgiverSeksjonProps) => {
+  const { register, formState } = useSkjemaState();
+
+  if (arbeidsforhold.length > 1) {
+    return (
+      <Select
+        label="Velg arbeidsforhold"
+        {...register("organisasjonsnummer")}
+        error={formState.errors.organisasjonsnummer?.message}
+      >
+        <option value="">Velg arbeidsforhold</option>
+        {arbeidsforhold.map((af) => (
+          <option key={af.organisasjonsnummer} value={af.organisasjonsnummer}>
+            {af.organisasjonsnavn} ({af.organisasjonsnummer})
+          </option>
+        ))}
+      </Select>
+    );
+  }
+
+  const [enkelt] = arbeidsforhold;
+  return (
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <Label>Virksomhetsnavn</Label>
+        <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
+        <input
+          type="hidden"
+          {...register("organisasjonsnummer", {
+            value: enkelt.organisasjonsnummer,
+          })}
+        />
+      </div>
+      <div className="flex-1">
+        <Label>Org.nr. for underenhet</Label>
+        <BodyShort>{enkelt.organisasjonsnummer}</BodyShort>
+      </div>
+    </div>
+  );
+};
+
+type ArbeidsgiverUnntattSeksjonProps = {
+  fødselsnummer: string;
+  førsteFraværsdatoForÅret: string;
+};
+
+const ArbeidsgiverUnntattSeksjon = ({
+  fødselsnummer,
+  førsteFraværsdatoForÅret,
+}: ArbeidsgiverUnntattSeksjonProps) => {
+  const { register, formState } = useSkjemaState();
+  const { data, isLoading, error } = useQuery(
+    hentArbeidsgiverOptions({ førsteFraværsdatoForÅret, fødselsnummer }),
+  );
+
+  if (isLoading) return <Loader title="Henter virksomheter" />;
+
+  if (error || data?.arbeidsforhold.length === 0) {
+    return (
+      <BodyShort>
+        Vi finner ikke fravær på denne datoen for denne personen. Sjekk at
+        opplysningene er korrekte.
+      </BodyShort>
+    );
+  }
+
+  if (!data) return null;
+
+  if (data.arbeidsforhold.length > 1) {
+    return (
+      <Select
+        label="Velg virksomhet"
+        {...register("organisasjonsnummer", { value: "" })}
+        error={formState.errors.organisasjonsnummer?.message}
+      >
+        <option value="">Velg virksomhet</option>
+        {data.arbeidsforhold.map((ag) => (
+          <option key={ag.organisasjonsnummer} value={ag.organisasjonsnummer}>
+            {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
+          </option>
+        ))}
+      </Select>
+    );
+  }
+
+  const [enkelt] = data.arbeidsforhold;
+  return (
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <Label>Virksomhetsnavn</Label>
+        <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
+        <input
+          type="hidden"
+          {...register("organisasjonsnummer", {
+            value: enkelt.organisasjonsnummer,
+          })}
+        />
+      </div>
+      <div className="flex-1">
+        <Label>Org.nr. for underenhet</Label>
+        <BodyShort>{enkelt.organisasjonsnummer}</BodyShort>
+      </div>
+    </div>
+  );
+};
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
   useScrollToTopOnMount();
@@ -61,17 +172,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
   const fantIngenPersoner =
     error && "feilkode" in error && error.feilkode === "fant ingen personer";
   const visUnntattLøype = erUnntattAaregisteret ?? false;
-
-  const arbeidsgiverArgs =
-    visUnntattLøype && fødselsnummer && førsteFraværsdatoForÅret
-      ? { fødselsnummer, førsteFraværsdatoForÅret }
-      : null;
-
-  const {
-    data: arbeidsgivereData,
-    isLoading: isLoadingArbeidsgivere,
-    error: arbeidsgivereError,
-  } = useQuery(hentArbeidsgiverOptions(arbeidsgiverArgs));
 
   const unntattOppslagArgs =
     visUnntattLøype &&
@@ -109,13 +209,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
     }
     fraværsdatoRef.current = førsteFraværsdatoForÅret;
   }, [førsteFraværsdatoForÅret]);
-
-  const harFlereEnnEttArbeidsforhold =
-    data?.arbeidsforhold && data.arbeidsforhold.length > 1;
-  const harEttArbeidsforhold =
-    data?.arbeidsforhold && data.arbeidsforhold.length === 1;
-  const ingenArbeidsforhold =
-    data?.arbeidsforhold && data.arbeidsforhold.length === 0;
 
   const onSubmit = handleSubmit(() => {
     navigate({
@@ -217,7 +310,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
               ) : null}
             </div>
           </div>
-          {(fantIngenPersoner || ingenArbeidsforhold) && (
+          {fantIngenPersoner && (
             <Box
               background="warning-soft"
               borderColor="warning"
@@ -254,102 +347,17 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
             />
           )}
         </Informasjonsseksjon>
-        {((data && !ingenArbeidsforhold) || visUnntattLøype) && (
+        {data && data.arbeidsforhold.length > 0 && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
-            {harFlereEnnEttArbeidsforhold ? (
-              <Select
-                label="Velg arbeidsforhold"
-                {...register("organisasjonsnummer")}
-                error={formState.errors.organisasjonsnummer?.message}
-              >
-                <option value="">Velg arbeidsforhold</option>
-                {data.arbeidsforhold.map((arbeidsforhold) => (
-                  <option
-                    key={arbeidsforhold.organisasjonsnummer}
-                    value={arbeidsforhold.organisasjonsnummer}
-                  >
-                    {arbeidsforhold.organisasjonsnavn} (
-                    {arbeidsforhold.organisasjonsnummer})
-                  </option>
-                ))}
-              </Select>
-            ) : harEttArbeidsforhold ? (
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Label>Virksomhetsnavn</Label>
-                  <BodyShort>
-                    {data.arbeidsforhold[0].organisasjonsnavn}
-                  </BodyShort>
-                  <input
-                    type="hidden"
-                    {...register("organisasjonsnummer", {
-                      value: data.arbeidsforhold[0].organisasjonsnummer,
-                    })}
-                  />
-                </div>
-                <div className="flex-1">
-                  <Label>Org.nr. for underenhet</Label>
-                  <BodyShort>
-                    {data.arbeidsforhold[0].organisasjonsnummer}
-                  </BodyShort>
-                </div>
-              </div>
-            ) : visUnntattLøype ? (
-              <VStack gap="space-16">
-                {isLoadingArbeidsgivere ? (
-                  <Loader title="Henter virksomheter" />
-                ) : arbeidsgivereError ||
-                  arbeidsgivereData?.arbeidsforhold.length === 0 ? (
-                  <BodyShort>
-                    Vi finner ikke fravær på denne datoen for denne personen.
-                    Sjekk at opplysningene er korrekte.
-                  </BodyShort>
-                ) : arbeidsgivereData &&
-                  arbeidsgivereData.arbeidsforhold.length > 1 ? (
-                  <Select
-                    label="Velg virksomhet"
-                    {...register("organisasjonsnummer", { value: "" })}
-                    error={formState.errors.organisasjonsnummer?.message}
-                  >
-                    <option value="">Velg virksomhet</option>
-                    {arbeidsgivereData.arbeidsforhold.map((ag) => (
-                      <option
-                        key={ag.organisasjonsnummer}
-                        value={ag.organisasjonsnummer}
-                      >
-                        {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
-                      </option>
-                    ))}
-                  </Select>
-                ) : arbeidsgivereData?.arbeidsforhold.length === 1 ? (
-                  <div className="flex gap-4">
-                    <div className="flex-1">
-                      <Label>Virksomhetsnavn</Label>
-                      <BodyShort>
-                        {arbeidsgivereData.arbeidsforhold[0].organisasjonsnavn}
-                      </BodyShort>
-                      <input
-                        type="hidden"
-                        {...register("organisasjonsnummer", {
-                          value:
-                            arbeidsgivereData.arbeidsforhold[0]
-                              .organisasjonsnummer,
-                        })}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <Label>Org.nr. for underenhet</Label>
-                      <BodyShort>
-                        {
-                          arbeidsgivereData.arbeidsforhold[0]
-                            .organisasjonsnummer
-                        }
-                      </BodyShort>
-                    </div>
-                  </div>
-                ) : null}
-              </VStack>
-            ) : null}
+            <ArbeidsgiverSeksjon arbeidsforhold={data.arbeidsforhold} />
+          </Informasjonsseksjon>
+        )}
+        {visUnntattLøype && fødselsnummer && førsteFraværsdatoForÅret && (
+          <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
+            <ArbeidsgiverUnntattSeksjon
+              fødselsnummer={fødselsnummer}
+              førsteFraværsdatoForÅret={førsteFraværsdatoForÅret}
+            />
           </Informasjonsseksjon>
         )}
         <Informasjonsseksjon
