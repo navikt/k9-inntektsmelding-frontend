@@ -14,7 +14,7 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
@@ -32,6 +32,26 @@ import {
 } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
+
+const PersonNavnVisning = ({ navn }: { navn: string | undefined }) => {
+  const [erNy, setErNy] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setErNy(false), 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <span
+      className="flex-1 flex flex-col justify-center px-2 py-1 rounded transition-colors duration-300"
+      style={{
+        backgroundColor: erNy ? "var(--ax-bg-success-soft)" : "transparent",
+      }}
+    >
+      {navn}
+    </span>
+  );
+};
 
 type ArbeidsgiverSeksjonProps = {
   arbeidsforhold: ArbeidstakerOppslagDto["arbeidsforhold"];
@@ -278,8 +298,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
               ) : isLoadingPersonUnntatt ? (
                 <Loader className="block mt-5" title="Henter informasjon" />
               ) : personUnntatt ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  {lagFulltNavn(personUnntatt.person)}
+                <>
+                  <PersonNavnVisning
+                    navn={lagFulltNavn(personUnntatt.person)}
+                  />
                   <input
                     type="hidden"
                     {...register("ansattesFornavn", {
@@ -298,7 +320,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
                       value: personUnntatt.person.aktørId,
                     })}
                   />
-                </BodyShort>
+                </>
               ) : fantIngenPersoner ? (
                 <BodyShort className="flex-1 flex flex-col justify-center">
                   Fant ikke person
