@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyLong,
   BodyShort,
+  Box,
   Button,
   Checkbox,
   Heading,
@@ -10,10 +10,11 @@ import {
   Loader,
   Select,
   TextField,
+  VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
@@ -66,8 +67,11 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
       ? { fødselsnummer, førsteFraværsdatoForÅret }
       : null;
 
-  const { data: arbeidsgivereData, isLoading: isLoadingArbeidsgivere } =
-    useQuery(hentArbeidsgiverOptions(arbeidsgiverArgs));
+  const {
+    data: arbeidsgivereData,
+    isLoading: isLoadingArbeidsgivere,
+    error: arbeidsgivereError,
+  } = useQuery(hentArbeidsgiverOptions(arbeidsgiverArgs));
 
   const unntattOppslagArgs =
     visUnntattLøype &&
@@ -81,11 +85,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
         }
       : null;
 
-  const {
-    data: personUnntatt,
-    isLoading: isLoadingPersonUnntatt,
-    error: errorPersonUnntatt,
-  } = useQuery(hentPersonUnntattAaregisterOptions(unntattOppslagArgs));
+  const { data: personUnntatt, isLoading: isLoadingPersonUnntatt } = useQuery(
+    hentPersonUnntattAaregisterOptions(unntattOppslagArgs),
+  );
 
   useEffect(() => {
     setValue("meta.step", 2);
@@ -96,6 +98,17 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
       });
     }
   }, []);
+
+  const fraværsdatoRef = useRef(førsteFraværsdatoForÅret);
+  useEffect(() => {
+    if (
+      fraværsdatoRef.current &&
+      fraværsdatoRef.current !== førsteFraværsdatoForÅret
+    ) {
+      setValue("organisasjonsnummer", undefined);
+    }
+    fraværsdatoRef.current = førsteFraværsdatoForÅret;
+  }, [førsteFraværsdatoForÅret]);
 
   const harFlereEnnEttArbeidsforhold =
     data?.arbeidsforhold && data.arbeidsforhold.length > 1;
@@ -131,7 +144,13 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
                   error={formState.errors.ansattesFødselsnummer?.message}
                   label="Ansattes fødselsnummer (11 siffer)"
                   onChange={(e) => {
-                    field.onChange(e.target.value.replaceAll(/\s/g, ""));
+                    const nyVerdi = e.target.value.replaceAll(/\s/g, "");
+                    if (nyVerdi !== field.value) {
+                      setValue("erUnntattAaregisteret", false);
+                      setValue("førsteFraværsdatoForÅret", undefined);
+                      setValue("organisasjonsnummer", undefined);
+                    }
+                    field.onChange(nyVerdi);
                   }}
                   value={formatFodselsnummer(field.value || "")}
                 />
@@ -141,16 +160,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
               <Label>Navn</Label>
               {isLoading ? (
                 <Loader className="block mt-5" title="Henter informasjon" />
-              ) : fantIngenPersoner ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  Fant ingen personer som du har tilgang til å se
-                  arbeidsforholdet til. Dobbeltsjekk fødselsnummer og prøv
-                  igjen.
-                </BodyShort>
-              ) : error ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  Kunne ikke hente data
-                </BodyShort>
               ) : data ? (
                 <BodyShort className="flex-1 flex flex-col justify-center">
                   {fulltNavn}
@@ -173,18 +182,87 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
                     })}
                   />
                 </BodyShort>
+              ) : isLoadingPersonUnntatt ? (
+                <Loader className="block mt-5" title="Henter informasjon" />
+              ) : personUnntatt ? (
+                <BodyShort className="flex-1 flex flex-col justify-center">
+                  {lagFulltNavn(personUnntatt.person)}
+                  <input
+                    type="hidden"
+                    {...register("ansattesFornavn", {
+                      value: personUnntatt.person.fornavn,
+                    })}
+                  />
+                  <input
+                    type="hidden"
+                    {...register("ansattesEtternavn", {
+                      value: personUnntatt.person.etternavn,
+                    })}
+                  />
+                  <input
+                    type="hidden"
+                    {...register("ansattesAktørId", {
+                      value: personUnntatt.person.aktørId,
+                    })}
+                  />
+                </BodyShort>
+              ) : fantIngenPersoner ? (
+                <BodyShort className="flex-1 flex flex-col justify-center">
+                  Fant ikke person
+                </BodyShort>
+              ) : error ? (
+                <BodyShort className="flex-1 flex flex-col justify-center">
+                  Kunne ikke hente data
+                </BodyShort>
               ) : null}
             </div>
           </div>
+          {(fantIngenPersoner || ingenArbeidsforhold) && (
+            <Box
+              background="warning-soft"
+              borderColor="warning"
+              borderWidth="1"
+              borderRadius="8"
+              padding="space-16"
+            >
+              <VStack gap="space-16">
+                <BodyLong>
+                  Vi fant ingen registrerte arbeidsforhold i dine virksomheter
+                  knyttet til denne personen. Sjekk at du har skrevet riktig
+                  fødselsnummer. Hvis arbeidstakeren ikke er registrert i
+                  Aa-registeret, kan du bekrefte dette nedenfor og fortsette.
+                </BodyLong>
+              </VStack>
+              <Controller
+                control={control}
+                name="erUnntattAaregisteret"
+                render={({ field }) => (
+                  <Checkbox
+                    checked={field.value ?? false}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                  >
+                    Arbeidstakeren er unntatt Aa-registeret
+                  </Checkbox>
+                )}
+              />
+            </Box>
+          )}
+          {visUnntattLøype && (
+            <DatePickerWrapped
+              label={`Første fraværsdato for ${new Date().getFullYear()}`}
+              name="førsteFraværsdatoForÅret"
+            />
+          )}
         </Informasjonsseksjon>
-        {(data || fantIngenPersoner) && (
+        {((data && !ingenArbeidsforhold) || visUnntattLøype) && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
             {harFlereEnnEttArbeidsforhold ? (
               <Select
                 label="Velg arbeidsforhold"
-                {...register("organisasjonsnummer", { value: "" })}
+                {...register("organisasjonsnummer")}
                 error={formState.errors.organisasjonsnummer?.message}
               >
+                <option value="">Velg arbeidsforhold</option>
                 {data.arbeidsforhold.map((arbeidsforhold) => (
                   <option
                     key={arbeidsforhold.organisasjonsnummer}
@@ -216,122 +294,61 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
                   </BodyShort>
                 </div>
               </div>
-            ) : ingenArbeidsforhold || fantIngenPersoner ? (
-              <div className="flex flex-col gap-4">
-                <Alert variant="warning">
-                  <BodyLong>
-                    Fant ingen arbeidsforhold for {fulltNavn || fødselsnummer}.
-                    Dette kan skyldes at fødselsnummeret er feil, eller at
-                    arbeidstakeren er unntatt Aa-registeret.
-                  </BodyLong>
-                </Alert>
-                <Controller
-                  control={control}
-                  name="erUnntattAaregisteret"
-                  render={({ field }) => (
-                    <Checkbox
-                      checked={field.value ?? false}
-                      onChange={(e) => field.onChange(e.target.checked)}
-                    >
-                      Arbeidstakeren er unntatt Aa-registeret
-                    </Checkbox>
-                  )}
-                />
-                {visUnntattLøype && (
-                  <>
-                    <DatePickerWrapped
-                      label="Første fraværsdato for inneværende år"
-                      name="førsteFraværsdatoForÅret"
-                    />
-                    {isLoadingArbeidsgivere ? (
-                      <Loader title="Henter virksomheter" />
-                    ) : arbeidsgivereData &&
-                      arbeidsgivereData.arbeidsforhold.length > 1 ? (
-                      <Select
-                        label="Velg virksomhet"
-                        {...register("organisasjonsnummer", { value: "" })}
-                        error={formState.errors.organisasjonsnummer?.message}
+            ) : visUnntattLøype ? (
+              <VStack gap="space-16">
+                {isLoadingArbeidsgivere ? (
+                  <Loader title="Henter virksomheter" />
+                ) : arbeidsgivereError ||
+                  arbeidsgivereData?.arbeidsforhold.length === 0 ? (
+                  <BodyShort>
+                    Vi finner ikke fravær på denne datoen for denne personen.
+                    Sjekk at opplysningene er korrekte.
+                  </BodyShort>
+                ) : arbeidsgivereData &&
+                  arbeidsgivereData.arbeidsforhold.length > 1 ? (
+                  <Select
+                    label="Velg virksomhet"
+                    {...register("organisasjonsnummer", { value: "" })}
+                    error={formState.errors.organisasjonsnummer?.message}
+                  >
+                    <option value="">Velg virksomhet</option>
+                    {arbeidsgivereData.arbeidsforhold.map((ag) => (
+                      <option
+                        key={ag.organisasjonsnummer}
+                        value={ag.organisasjonsnummer}
                       >
-                        {arbeidsgivereData.arbeidsforhold.map((ag) => (
-                          <option
-                            key={ag.organisasjonsnummer}
-                            value={ag.organisasjonsnummer}
-                          >
-                            {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
-                          </option>
-                        ))}
-                      </Select>
-                    ) : arbeidsgivereData?.arbeidsforhold.length === 1 ? (
-                      <div className="flex gap-4">
-                        <div className="flex-1">
-                          <Label>Virksomhetsnavn</Label>
-                          <BodyShort>
-                            {
-                              arbeidsgivereData.arbeidsforhold[0]
-                                .organisasjonsnavn
-                            }
-                          </BodyShort>
-                          <input
-                            type="hidden"
-                            {...register("organisasjonsnummer", {
-                              value:
-                                arbeidsgivereData.arbeidsforhold[0]
-                                  .organisasjonsnummer,
-                            })}
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <Label>Org.nr. for underenhet</Label>
-                          <BodyShort>
-                            {
-                              arbeidsgivereData.arbeidsforhold[0]
-                                .organisasjonsnummer
-                            }
-                          </BodyShort>
-                        </div>
-                      </div>
-                    ) : null}
-                    {unntattOppslagArgs && (
-                      <div className="flex flex-col">
-                        <Label>Navn</Label>
-                        {isLoadingPersonUnntatt ? (
-                          <Loader
-                            className="block mt-2"
-                            title="Henter informasjon"
-                          />
-                        ) : errorPersonUnntatt ? (
-                          <Alert variant="error">
-                            Kunne ikke slå opp personen. Sjekk at fødselsnummer
-                            og fraværsdato er korrekte.
-                          </Alert>
-                        ) : personUnntatt ? (
-                          <BodyShort>
-                            {lagFulltNavn(personUnntatt.person)}
-                            <input
-                              type="hidden"
-                              {...register("ansattesFornavn", {
-                                value: personUnntatt.person.fornavn,
-                              })}
-                            />
-                            <input
-                              type="hidden"
-                              {...register("ansattesEtternavn", {
-                                value: personUnntatt.person.etternavn,
-                              })}
-                            />
-                            <input
-                              type="hidden"
-                              {...register("ansattesAktørId", {
-                                value: personUnntatt.person.aktørId,
-                              })}
-                            />
-                          </BodyShort>
-                        ) : null}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+                        {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
+                      </option>
+                    ))}
+                  </Select>
+                ) : arbeidsgivereData?.arbeidsforhold.length === 1 ? (
+                  <div className="flex gap-4">
+                    <div className="flex-1">
+                      <Label>Virksomhetsnavn</Label>
+                      <BodyShort>
+                        {arbeidsgivereData.arbeidsforhold[0].organisasjonsnavn}
+                      </BodyShort>
+                      <input
+                        type="hidden"
+                        {...register("organisasjonsnummer", {
+                          value:
+                            arbeidsgivereData.arbeidsforhold[0]
+                              .organisasjonsnummer,
+                        })}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <Label>Org.nr. for underenhet</Label>
+                      <BodyShort>
+                        {
+                          arbeidsgivereData.arbeidsforhold[0]
+                            .organisasjonsnummer
+                        }
+                      </BodyShort>
+                    </div>
+                  </div>
+                ) : null}
+              </VStack>
             ) : null}
           </Informasjonsseksjon>
         )}
