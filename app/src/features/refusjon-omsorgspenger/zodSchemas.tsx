@@ -156,7 +156,7 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
       if (data.erUnntattAaregisteret && !data.førsteFraværsdatoForÅret) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Du må oppgi første fraværsdato for inneværende år",
+          message: "Du må oppgi første fraværsdato",
           path: ["førsteFraværsdatoForÅret"],
         });
       }
