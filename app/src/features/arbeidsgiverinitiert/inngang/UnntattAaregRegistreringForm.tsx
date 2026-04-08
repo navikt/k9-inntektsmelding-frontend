@@ -157,7 +157,10 @@ export function UnntattAaregRegistreringForm({
         >
           Hent opplysninger
         </Button>
-        <VelgArbeidsgiver data={hentPersonMutation.data} />
+        <VelgArbeidsgiver
+          data={hentPersonMutation.data}
+          description="Velg hvilken underenhet den ansatte jobber for."
+        />
         <PersonOppslagError
           context="person_oppslag"
           error={hentPersonMutation.error}
