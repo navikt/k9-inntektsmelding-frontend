@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RefusjonOmsorgspengerRedirectRouteImport } from './routes/refusjon-omsorgspenger-redirect'
 import { Route as OpprettRouteImport } from './routes/opprett'
 import { Route as IdRouteImport } from './routes/$id'
 import { Route as OpprettIndexRouteImport } from './routes/opprett.index'
@@ -40,6 +41,12 @@ import { Route as AgiUnntattAaregisterIdKvitteringRouteImport } from './routes/a
 import { Route as AgiUnntattAaregisterIdInntektOgRefusjonRouteImport } from './routes/agi-unntatt-aaregister.$id.inntekt-og-refusjon'
 import { Route as AgiUnntattAaregisterIdDineOpplysningerRouteImport } from './routes/agi-unntatt-aaregister.$id.dine-opplysninger'
 
+const RefusjonOmsorgspengerRedirectRoute =
+  RefusjonOmsorgspengerRedirectRouteImport.update({
+    id: '/refusjon-omsorgspenger-redirect',
+    path: '/refusjon-omsorgspenger-redirect',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OpprettRoute = OpprettRouteImport.update({
   id: '/opprett',
   path: '/opprett',
@@ -210,6 +217,7 @@ const AgiUnntattAaregisterIdDineOpplysningerRoute =
 export interface FileRoutesByFullPath {
   '/$id': typeof IdRouteWithChildren
   '/opprett': typeof OpprettRouteWithChildren
+  '/refusjon-omsorgspenger-redirect': typeof RefusjonOmsorgspengerRedirectRoute
   '/$id/dine-opplysninger': typeof IdDineOpplysningerRoute
   '/$id/inntekt-og-refusjon': typeof IdInntektOgRefusjonRoute
   '/$id/kvittering': typeof IdKvitteringRoute
@@ -240,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/agi-unntatt-aaregister/$id/': typeof AgiUnntattAaregisterIdIndexRoute
 }
 export interface FileRoutesByTo {
+  '/refusjon-omsorgspenger-redirect': typeof RefusjonOmsorgspengerRedirectRoute
   '/$id/dine-opplysninger': typeof IdDineOpplysningerRoute
   '/$id/inntekt-og-refusjon': typeof IdInntektOgRefusjonRoute
   '/$id/kvittering': typeof IdKvitteringRoute
@@ -272,6 +281,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/$id': typeof IdRouteWithChildren
   '/opprett': typeof OpprettRouteWithChildren
+  '/refusjon-omsorgspenger-redirect': typeof RefusjonOmsorgspengerRedirectRoute
   '/$id/dine-opplysninger': typeof IdDineOpplysningerRoute
   '/$id/inntekt-og-refusjon': typeof IdInntektOgRefusjonRoute
   '/$id/kvittering': typeof IdKvitteringRoute
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/$id'
     | '/opprett'
+    | '/refusjon-omsorgspenger-redirect'
     | '/$id/dine-opplysninger'
     | '/$id/inntekt-og-refusjon'
     | '/$id/kvittering'
@@ -336,6 +347,7 @@ export interface FileRouteTypes {
     | '/agi-unntatt-aaregister/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/refusjon-omsorgspenger-redirect'
     | '/$id/dine-opplysninger'
     | '/$id/inntekt-og-refusjon'
     | '/$id/kvittering'
@@ -367,6 +379,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/$id'
     | '/opprett'
+    | '/refusjon-omsorgspenger-redirect'
     | '/$id/dine-opplysninger'
     | '/$id/inntekt-og-refusjon'
     | '/$id/kvittering'
@@ -400,6 +413,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IdRoute: typeof IdRouteWithChildren
   OpprettRoute: typeof OpprettRouteWithChildren
+  RefusjonOmsorgspengerRedirectRoute: typeof RefusjonOmsorgspengerRedirectRoute
   AgiUnntattAaregisterIdRoute: typeof AgiUnntattAaregisterIdRouteWithChildren
   AgiIdRoute: typeof AgiIdRouteWithChildren
   RefusjonOmsorgspengerOrganisasjonsnummerRoute: typeof RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren
@@ -407,6 +421,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/refusjon-omsorgspenger-redirect': {
+      id: '/refusjon-omsorgspenger-redirect'
+      path: '/refusjon-omsorgspenger-redirect'
+      fullPath: '/refusjon-omsorgspenger-redirect'
+      preLoaderRoute: typeof RefusjonOmsorgspengerRedirectRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/opprett': {
       id: '/opprett'
       path: '/opprett'
@@ -733,6 +754,7 @@ const RefusjonOmsorgspengerOrganisasjonsnummerRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IdRoute: IdRouteWithChildren,
   OpprettRoute: OpprettRouteWithChildren,
+  RefusjonOmsorgspengerRedirectRoute: RefusjonOmsorgspengerRedirectRoute,
   AgiUnntattAaregisterIdRoute: AgiUnntattAaregisterIdRouteWithChildren,
   AgiIdRoute: AgiIdRouteWithChildren,
   RefusjonOmsorgspengerOrganisasjonsnummerRoute:
