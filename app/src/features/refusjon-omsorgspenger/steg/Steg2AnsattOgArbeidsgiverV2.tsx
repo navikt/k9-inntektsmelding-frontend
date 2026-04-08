@@ -1,167 +1,32 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   BodyLong,
-  BodyShort,
   Box,
   Button,
   Checkbox,
   Heading,
   Label,
-  Loader,
-  Select,
   TextField,
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
-import { formatFodselsnummer, lagFulltNavn } from "~/utils.ts";
+import { formatFodselsnummer } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
-import {
-  ArbeidstakerOppslagDto,
-  hentArbeidsgiverOptions,
-  hentArbeidstakerOptions,
-  hentPersonUnntattAaregisterOptions,
-} from "../api/queries.ts";
+import { hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
-
-const PersonNavnVisning = ({ navn }: { navn: string | undefined }) => {
-  const [erNy, setErNy] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setErNy(false), 2500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <span
-      className="flex-1 flex flex-col justify-center px-2 py-1 rounded transition-colors duration-300"
-      style={{
-        backgroundColor: erNy ? "var(--ax-bg-success-soft)" : "transparent",
-      }}
-    >
-      {navn}
-    </span>
-  );
-};
-
-type ArbeidsgiverSeksjonProps = {
-  arbeidsforhold: ArbeidstakerOppslagDto["arbeidsforhold"];
-};
-
-const ArbeidsgiverSeksjon = ({ arbeidsforhold }: ArbeidsgiverSeksjonProps) => {
-  const { register, formState } = useSkjemaState();
-
-  if (arbeidsforhold.length > 1) {
-    return (
-      <Select
-        label="Velg arbeidsforhold"
-        {...register("organisasjonsnummer")}
-        error={formState.errors.organisasjonsnummer?.message}
-      >
-        <option value="">Velg arbeidsforhold</option>
-        {arbeidsforhold.map((af) => (
-          <option key={af.organisasjonsnummer} value={af.organisasjonsnummer}>
-            {af.organisasjonsnavn} ({af.organisasjonsnummer})
-          </option>
-        ))}
-      </Select>
-    );
-  }
-
-  const [enkelt] = arbeidsforhold;
-  return (
-    <div className="flex gap-4">
-      <div className="flex-1">
-        <Label>Virksomhetsnavn</Label>
-        <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
-        <input
-          type="hidden"
-          {...register("organisasjonsnummer", {
-            value: enkelt.organisasjonsnummer,
-          })}
-        />
-      </div>
-      <div className="flex-1">
-        <Label>Org.nr. for underenhet</Label>
-        <BodyShort>{enkelt.organisasjonsnummer}</BodyShort>
-      </div>
-    </div>
-  );
-};
-
-type ArbeidsgiverUnntattSeksjonProps = {
-  fødselsnummer: string;
-  førsteFraværsdatoForÅret: string;
-};
-
-const ArbeidsgiverUnntattSeksjon = ({
-  fødselsnummer,
-  førsteFraværsdatoForÅret,
-}: ArbeidsgiverUnntattSeksjonProps) => {
-  const { register, formState } = useSkjemaState();
-  const { data, isLoading, error } = useQuery(
-    hentArbeidsgiverOptions({ førsteFraværsdatoForÅret, fødselsnummer }),
-  );
-
-  if (isLoading) return <Loader title="Henter virksomheter" />;
-
-  if (error || data?.arbeidsforhold.length === 0) {
-    return (
-      <BodyShort>
-        Vi finner ikke fravær på denne datoen for denne personen. Sjekk at
-        opplysningene er korrekte.
-      </BodyShort>
-    );
-  }
-
-  if (!data) return null;
-
-  if (data.arbeidsforhold.length > 1) {
-    return (
-      <Select
-        label="Velg virksomhet"
-        {...register("organisasjonsnummer", { value: "" })}
-        error={formState.errors.organisasjonsnummer?.message}
-      >
-        <option value="">Velg virksomhet</option>
-        {data.arbeidsforhold.map((ag) => (
-          <option key={ag.organisasjonsnummer} value={ag.organisasjonsnummer}>
-            {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
-          </option>
-        ))}
-      </Select>
-    );
-  }
-
-  const [enkelt] = data.arbeidsforhold;
-  return (
-    <div className="flex gap-4">
-      <div className="flex-1">
-        <Label>Virksomhetsnavn</Label>
-        <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
-        <input
-          type="hidden"
-          {...register("organisasjonsnummer", {
-            value: enkelt.organisasjonsnummer,
-          })}
-        />
-      </div>
-      <div className="flex-1">
-        <Label>Org.nr. for underenhet</Label>
-        <BodyShort>{enkelt.organisasjonsnummer}</BodyShort>
-      </div>
-    </div>
-  );
-};
+import { ArbeidsgiverSeksjon } from "./ArbeidsgiverSeksjon.tsx";
+import { ArbeidsgiverUnntattSeksjon } from "./ArbeidsgiverUnntattSeksjon.tsx";
+import { NavnVisning } from "./NavnVisning.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
   useScrollToTopOnMount();
@@ -183,31 +48,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
   const fødselsnummer = watch("ansattesFødselsnummer");
   const erUnntattAaregisteret = watch("erUnntattAaregisteret");
   const førsteFraværsdatoForÅret = watch("førsteFraværsdatoForÅret");
-  const valgtOrganisasjonsnummer = watch("organisasjonsnummer");
 
-  const { data, error, isLoading } = useQuery(
+  const { data, error } = useQuery(
     hentArbeidstakerOptions(fødselsnummer ?? ""),
   );
 
   const fantIngenPersoner =
     error && "feilkode" in error && error.feilkode === "fant ingen personer";
   const visUnntattLøype = erUnntattAaregisteret ?? false;
-
-  const unntattOppslagArgs =
-    visUnntattLøype &&
-    fødselsnummer &&
-    førsteFraværsdatoForÅret &&
-    valgtOrganisasjonsnummer
-      ? {
-          fødselsnummer,
-          førsteFraværsdatoForÅret,
-          organisasjonsnummer: valgtOrganisasjonsnummer,
-        }
-      : null;
-
-  const { data: personUnntatt, isLoading: isLoadingPersonUnntatt } = useQuery(
-    hentPersonUnntattAaregisterOptions(unntattOppslagArgs),
-  );
 
   useEffect(() => {
     setValue("meta.step", 2);
@@ -222,6 +70,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
   const fraværsdatoRef = useRef(førsteFraværsdatoForÅret);
   useEffect(() => {
     if (
+      visUnntattLøype &&
       fraværsdatoRef.current &&
       fraværsdatoRef.current !== førsteFraværsdatoForÅret
     ) {
@@ -236,8 +85,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
       to: "../3-omsorgsdager",
     });
   });
-
-  const fulltNavn = data ? lagFulltNavn(data.personinformasjon) : "";
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
@@ -271,65 +118,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
             />
             <div className="flex-1 flex flex-col">
               <Label>Navn</Label>
-              {isLoading ? (
-                <Loader className="block mt-5" title="Henter informasjon" />
-              ) : data ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  {fulltNavn}
-                  <input
-                    type="hidden"
-                    {...register("ansattesFornavn", {
-                      value: data.personinformasjon.fornavn,
-                    })}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesEtternavn", {
-                      value: data.personinformasjon.etternavn,
-                    })}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesAktørId", {
-                      value: data.personinformasjon.aktørId,
-                    })}
-                  />
-                </BodyShort>
-              ) : isLoadingPersonUnntatt ? (
-                <Loader className="block mt-5" title="Henter informasjon" />
-              ) : personUnntatt ? (
-                <>
-                  <PersonNavnVisning
-                    navn={lagFulltNavn(personUnntatt.person)}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesFornavn", {
-                      value: personUnntatt.person.fornavn,
-                    })}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesEtternavn", {
-                      value: personUnntatt.person.etternavn,
-                    })}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesAktørId", {
-                      value: personUnntatt.person.aktørId,
-                    })}
-                  />
-                </>
-              ) : fantIngenPersoner ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  Fant ikke person
-                </BodyShort>
-              ) : error ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  Kunne ikke hente data
-                </BodyShort>
-              ) : null}
+              <NavnVisning />
             </div>
           </div>
           {fantIngenPersoner && (
@@ -371,7 +160,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
         </Informasjonsseksjon>
         {data && data.arbeidsforhold.length > 0 && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
-            <ArbeidsgiverSeksjon arbeidsforhold={data.arbeidsforhold} />
+            <ArbeidsgiverSeksjon fødselsnummer={fødselsnummer} />
           </Informasjonsseksjon>
         )}
         {visUnntattLøype && fødselsnummer && førsteFraværsdatoForÅret && (
