@@ -28,7 +28,11 @@ export function Ytelsesperiode() {
         Periode med {formatYtelsesnavn(ytelse)}
       </Heading>
       <Informasjonsseksjon
-        kilde={`Fra søknaden til ${person.fornavn}`}
+        kilde={
+          opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+            ? undefined
+            : `Fra søknaden til ${person.fornavn}`
+        }
         tittel={`${capitalizeSetning(leggTilGenitiv(person.fornavn))} første dag med ${formatYtelsesnavn(ytelse)}`}
       >
         <BodyLong size="medium">{førsteDag}</BodyLong>
