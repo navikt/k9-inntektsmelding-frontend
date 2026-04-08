@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { RefusjonOmsorgspengerArbeidsgiverSteg2 } from "~/features/refusjon-omsorgspenger/steg/Steg2AnsattOgArbeidsgiver";
 import { RefusjonOmsorgspengerArbeidsgiverSteg2V2 } from "~/features/refusjon-omsorgspenger/steg/Steg2AnsattOgArbeidsgiverV2";
 
 export const Route = createFileRoute(
