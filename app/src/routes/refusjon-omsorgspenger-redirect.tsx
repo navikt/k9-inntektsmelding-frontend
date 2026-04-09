@@ -5,8 +5,9 @@ export const Route = createFileRoute("/refusjon-omsorgspenger-redirect")({
     const orgnr = localStorage.getItem("virksomhetsvelger_bedrift");
 
     if (!orgnr) {
-      const rootUrl = new URL(globalThis.location.href).origin;
-      return globalThis.location.assign(rootUrl + "/minside-arbeidsgiver");
+      return globalThis.location.assign(
+        "https://arbeidsgiver.nav.no/min-side-arbeidsgiver/",
+      );
     }
     return redirect({
       to: `/refusjon-omsorgspenger/$organisasjonsnummer/1-intro`,
