@@ -43,6 +43,15 @@ export function Steg2Refusjon() {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGINyansatt();
 
+  useEffect(() => {
+    setInntektsmeldingSkjemaState((prev) => ({
+      ...prev,
+      besøkteSteg: prev.besøkteSteg?.includes(2)
+        ? prev.besøkteSteg
+        : [...(prev.besøkteSteg ?? []), 2],
+    }));
+  }, []);
+
   const defaultInntekt = opplysninger.inntektsopplysninger.gjennomsnittLønn;
 
   const formMethods = useForm<RefusjonForm>({

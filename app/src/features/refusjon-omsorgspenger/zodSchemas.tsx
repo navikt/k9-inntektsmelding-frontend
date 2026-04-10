@@ -16,6 +16,7 @@ const baseSchema = z.object({
     step: z.number().min(1).max(5),
     skalKorrigereInntekt: z.boolean(),
     harSendtSøknad: z.boolean(),
+    besøkteSteg: z.array(z.number()).default([]),
   }),
   // Steg 1 fields
   harUtbetaltLønn: z.string().catch(""),
@@ -78,6 +79,7 @@ export const RefusjonOmsorgspengerSchema = baseSchema.extend({
     startdato: z.string().optional(),
     innsendtSøknadId: z.number().optional(),
     opprettetTidspunkt: z.string().optional(),
+    besøkteSteg: z.array(z.number()).default([]).optional(),
   }),
 });
 

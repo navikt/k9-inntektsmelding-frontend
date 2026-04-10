@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
@@ -43,6 +44,16 @@ type NaturalytelserSomMistesForm = {
 export const Steg2InntektOgRefusjon = () => {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGIUnntattAaRegister();
+
+  useEffect(() => {
+    setInntektsmeldingSkjemaState((prev) => ({
+      ...prev,
+      besøkteSteg: prev.besøkteSteg?.includes(2)
+        ? prev.besøkteSteg
+        : [...(prev.besøkteSteg ?? []), 2],
+    }));
+  }, []);
+
   useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(

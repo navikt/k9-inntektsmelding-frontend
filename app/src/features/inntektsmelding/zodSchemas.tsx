@@ -10,6 +10,7 @@ import { beløpSchema } from "~/utils.ts";
  * Minst streng skjema-state. Denne brukes underveis der mange av feltene er optional fordi de ikke er utfylt enda.
  */
 export const InntektsmeldingSkjemaStateSchema = z.object({
+  besøkteSteg: z.array(z.number()).default([]),
   kontaktperson: z
     .object({
       navn: z.string(),

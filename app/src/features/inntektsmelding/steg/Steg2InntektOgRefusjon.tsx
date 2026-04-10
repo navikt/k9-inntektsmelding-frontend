@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { formatYtelsesnavn } from "~/utils";
@@ -20,6 +21,15 @@ export const Steg2InntektOgRefusjon = () => {
   const { eksisterendeInntektsmeldinger } = getRouteApi("/$id").useLoaderData();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjema();
+
+  useEffect(() => {
+    setInntektsmeldingSkjemaState((prev) => ({
+      ...prev,
+      besøkteSteg: prev.besøkteSteg?.includes(2)
+        ? prev.besøkteSteg
+        : [...(prev.besøkteSteg ?? []), 2],
+    }));
+  }, []);
 
   const navigate = useNavigate();
 

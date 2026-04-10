@@ -1,7 +1,9 @@
+import { faro, LogLevel } from "@grafana/faro-web-sdk";
 import { ArrowLeftIcon, PaperplaneIcon } from "@navikt/aksel-icons";
 import { Alert, BodyLong, Button, Heading, Stack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import { sendInntektsmeldingArbeidsgiverInitiert } from "~/api/mutations.ts";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle.tsx";
@@ -26,11 +28,35 @@ export const Steg3Oppsummering = () => {
     `Oppsummering – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
 
-  const { gyldigInntektsmeldingSkjemaState, inntektsmeldingSkjemaStateError } =
-    useInntektsmeldingSkjemaAGINyansatt();
+  const {
+    gyldigInntektsmeldingSkjemaState,
+    inntektsmeldingSkjemaStateError,
+    inntektsmeldingSkjemaState,
+    setInntektsmeldingSkjemaState,
+  } = useInntektsmeldingSkjemaAGINyansatt();
+
+  useEffect(() => {
+    const besøkteSteg = inntektsmeldingSkjemaState.besøkteSteg ?? [];
+    if (!besøkteSteg.includes(3)) {
+      setInntektsmeldingSkjemaState((prev) => ({
+        ...prev,
+        besøkteSteg: [...(prev.besøkteSteg ?? []), 3],
+      }));
+    }
+  }, []);
 
   if (!gyldigInntektsmeldingSkjemaState) {
-    // På dette punktet "skal" skjemaet være gyldig med mindre noe har gått galt. Logg error til Grafana for innsikt.
+    const besøkteSteg = inntektsmeldingSkjemaState.besøkteSteg ?? [];
+    const forventedeSteg = [1, 2];
+    const manglendeSteg = forventedeSteg.filter(
+      (steg) => !besøkteSteg.includes(steg),
+    );
+    faro.api?.pushLog(
+      [
+        `Ugyldig skjemastate på oppsummeringssiden (AGI nyansatt). Manglende steg: [${manglendeSteg.join(", ")}]. Besøkte steg: [${besøkteSteg.join(", ")}]`,
+      ],
+      { level: LogLevel.WARN },
+    );
     // eslint-disable-next-line no-console
     console.error(
       "Ugyldig skjemaState på oppsummeringssiden",
