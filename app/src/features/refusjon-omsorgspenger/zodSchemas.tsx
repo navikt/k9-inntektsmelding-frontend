@@ -79,7 +79,7 @@ export const RefusjonOmsorgspengerSchema = baseSchema.extend({
     startdato: z.string().optional(),
     innsendtSøknadId: z.number().optional(),
     opprettetTidspunkt: z.string().optional(),
-    besøkteSteg: z.array(z.number()).optional().default([]),
+    besøkteSteg: z.array(z.number()).default([]).optional(),
   }),
 });
 
