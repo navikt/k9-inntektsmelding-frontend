@@ -25,9 +25,7 @@ export const Steg2InntektOgRefusjon = () => {
   useEffect(() => {
     setInntektsmeldingSkjemaState((prev) => ({
       ...prev,
-      besøkteSteg: prev.besøkteSteg?.includes(2)
-        ? prev.besøkteSteg
-        : [...(prev.besøkteSteg ?? []), 2],
+      besøkteSteg: [...(prev.besøkteSteg ?? []), 2],
     }));
   }, []);
 

@@ -41,13 +41,10 @@ export const Steg3Oppsummering = () => {
   } = useInntektsmeldingSkjema();
 
   useEffect(() => {
-    const besøkteSteg = inntektsmeldingSkjemaState.besøkteSteg ?? [];
-    if (!besøkteSteg.includes(3)) {
-      setInntektsmeldingSkjemaState((prev) => ({
-        ...prev,
-        besøkteSteg: [...(prev.besøkteSteg ?? []), 3],
-      }));
-    }
+    setInntektsmeldingSkjemaState((prev) => ({
+      ...prev,
+      besøkteSteg: [...(prev.besøkteSteg ?? []), 3],
+    }));
   }, []);
 
   if (!gyldigInntektsmeldingSkjemaState) {

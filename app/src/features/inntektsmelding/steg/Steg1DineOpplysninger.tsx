@@ -13,9 +13,7 @@ export const Steg1DineOpplysninger = () => {
   useEffect(() => {
     setInntektsmeldingSkjemaState((prev) => ({
       ...prev,
-      besøkteSteg: prev.besøkteSteg?.includes(1)
-        ? prev.besøkteSteg
-        : [...(prev.besøkteSteg ?? []), 1],
+      besøkteSteg: [...(prev.besøkteSteg ?? []), 1],
     }));
   }, []);
   const navigate = useNavigate();

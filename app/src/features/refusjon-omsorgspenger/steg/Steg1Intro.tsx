@@ -43,9 +43,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
   useEffect(() => {
     setValue("meta.step", 1);
     const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
-    if (!besøkteSteg.includes(1)) {
-      setValue("meta.besøkteSteg", [...besøkteSteg, 1]);
-    }
+    setValue("meta.besøkteSteg", [...besøkteSteg, 1]);
   }, []);
 
   const { name: harUtbetaltLønnName, ...harUtbetaltLønnRadioGroupProps } =

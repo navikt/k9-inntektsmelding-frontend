@@ -39,9 +39,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
   useEffect(() => {
     setValue("meta.step", 4);
     const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
-    if (!besøkteSteg.includes(4)) {
-      setValue("meta.besøkteSteg", [...besøkteSteg, 4]);
-    }
+    setValue("meta.besøkteSteg", [...besøkteSteg, 4]);
     if (getValues("meta.innsendtSøknadId")) {
       navigate({
         from: "/refusjon-omsorgspenger/$organisasjonsnummer/4-refusjon",

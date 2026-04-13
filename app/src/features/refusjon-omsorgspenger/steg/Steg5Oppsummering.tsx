@@ -36,9 +36,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
   useEffect(() => {
     setValue("meta.step", 5);
     const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
-    if (!besøkteSteg.includes(5)) {
-      setValue("meta.besøkteSteg", [...besøkteSteg, 5]);
-    }
+    setValue("meta.besøkteSteg", [...besøkteSteg, 5]);
     if (getValues("meta.innsendtSøknadId")) {
       navigateTilKvittering();
     }
