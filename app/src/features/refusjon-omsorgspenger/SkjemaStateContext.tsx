@@ -21,6 +21,7 @@ export const RefusjonOmsorgspengerArbeidsgiverForm = ({
     meta: {
       step: 1,
       skalKorrigereInntekt: false,
+      besøkteSteg: [],
     },
     fraværHeleDager: [],
     fraværDelerAvDagen: [],

@@ -1,8 +1,10 @@
+import { faro, LogLevel } from "@grafana/faro-web-sdk";
 import { ArrowLeftIcon, PaperplaneIcon } from "@navikt/aksel-icons";
 import { Alert, BodyLong, Button, Heading, Stack } from "@navikt/ds-react";
 import { useMutation } from "@tanstack/react-query";
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import isEqual from "lodash/isEqual";
+import { useEffect } from "react";
 
 import { sendInntektsmelding } from "~/api/mutations.ts";
 import { useInntektsmeldingSkjema } from "~/features/inntektsmelding/SkjemaStateContext";
@@ -31,11 +33,32 @@ export const Steg3Oppsummering = () => {
   );
   const { id } = route.useParams();
 
-  const { gyldigInntektsmeldingSkjemaState, inntektsmeldingSkjemaStateError } =
-    useInntektsmeldingSkjema();
+  const {
+    gyldigInntektsmeldingSkjemaState,
+    inntektsmeldingSkjemaStateError,
+    inntektsmeldingSkjemaState,
+    setInntektsmeldingSkjemaState,
+  } = useInntektsmeldingSkjema();
+
+  useEffect(() => {
+    setInntektsmeldingSkjemaState((prev) => ({
+      ...prev,
+      besøkteSteg: [...(prev.besøkteSteg ?? []), 3],
+    }));
+  }, []);
 
   if (!gyldigInntektsmeldingSkjemaState) {
-    // På dette punktet "skal" skjemaet være gyldig med mindre noe har gått galt. Logg error til Grafana for innsikt.
+    const besøkteSteg = inntektsmeldingSkjemaState.besøkteSteg ?? [];
+    const forventedeSteg = [1, 2];
+    const manglendeSteg = forventedeSteg.filter(
+      (steg) => !besøkteSteg.includes(steg),
+    );
+    faro.api?.pushLog(
+      [
+        `Ugyldig skjemastate på oppsummeringssiden (inntektsmelding). Manglende steg: [${manglendeSteg.join(", ")}]. Besøkte steg: [${besøkteSteg.join(", ")}]`,
+      ],
+      { level: LogLevel.WARN },
+    );
     // eslint-disable-next-line no-console
     console.error(
       "Ugyldig skjemaState på oppsummeringssiden",
@@ -122,7 +145,10 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
       return sendInntektsmelding(inntektsmeldingRequest);
     },
     onSuccess: (inntektsmeldingState) => {
-      setInntektsmeldingSkjemaState(inntektsmeldingState);
+      setInntektsmeldingSkjemaState({
+        ...inntektsmeldingState,
+        besøkteSteg: [],
+      });
       navigate({
         from: "/$id/oppsummering",
         to: "../kvittering",

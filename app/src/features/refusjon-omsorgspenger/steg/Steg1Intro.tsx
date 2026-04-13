@@ -30,7 +30,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
   const iÅr = new Date().getFullYear();
   const iFjor = iÅr - 1;
 
-  const { register, formState, watch, handleSubmit, setValue } =
+  const { register, formState, watch, handleSubmit, setValue, getValues } =
     useSkjemaState();
   const harUtbetaltLønn = watch("harUtbetaltLønn");
   const onSubmit = handleSubmit(() => {
@@ -42,6 +42,8 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
 
   useEffect(() => {
     setValue("meta.step", 1);
+    const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
+    setValue("meta.besøkteSteg", [...besøkteSteg, 1]);
   }, []);
 
   const { name: harUtbetaltLønnName, ...harUtbetaltLønnRadioGroupProps } =

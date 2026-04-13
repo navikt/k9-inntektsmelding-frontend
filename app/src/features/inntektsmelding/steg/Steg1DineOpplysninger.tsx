@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/zodSchemas";
 
@@ -8,6 +9,13 @@ import { useInntektsmeldingSkjema } from "../SkjemaStateContext";
 export const Steg1DineOpplysninger = () => {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjema();
+
+  useEffect(() => {
+    setInntektsmeldingSkjemaState((prev) => ({
+      ...prev,
+      besøkteSteg: [...(prev.besøkteSteg ?? []), 1],
+    }));
+  }, []);
   const navigate = useNavigate();
   const { eksisterendeInntektsmeldinger } = getRouteApi("/$id").useLoaderData();
   const handleSubmit = (

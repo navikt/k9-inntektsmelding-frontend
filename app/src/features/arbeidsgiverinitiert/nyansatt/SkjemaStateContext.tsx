@@ -38,6 +38,7 @@ type InntektsmeldingSkjemaStateProviderProps = {
 const defaultSkjemaState = () => {
   const { innsender } = useOpplysninger();
   return {
+    besøkteSteg: [],
     kontaktperson: {
       navn: innsender.fornavn + " " + innsender.etternavn,
       telefonnummer: "",

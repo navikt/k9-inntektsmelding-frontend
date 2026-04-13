@@ -1,3 +1,4 @@
+import { faro, LogLevel } from "@grafana/faro-web-sdk";
 import { ArrowLeftIcon, PaperplaneIcon } from "@navikt/aksel-icons";
 import { Alert, Button, Heading, VStack } from "@navikt/ds-react";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -34,10 +35,26 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
 
   useEffect(() => {
     setValue("meta.step", 5);
+    const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
+    setValue("meta.besøkteSteg", [...besøkteSteg, 5]);
     if (getValues("meta.innsendtSøknadId")) {
       navigateTilKvittering();
     }
   }, []);
+
+  const loggManglendeSteg = () => {
+    const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
+    const forventedeSteg = [1, 2, 3, 4];
+    const manglendeSteg = forventedeSteg.filter(
+      (steg) => !besøkteSteg.includes(steg),
+    );
+    faro.api?.pushLog(
+      [
+        `Ugyldig skjemastate på oppsummeringssiden. Manglende steg: [${manglendeSteg.join(", ")}]. Besøkte steg: [${besøkteSteg.join(", ")}]`,
+      ],
+      { level: LogLevel.WARN },
+    );
+  };
 
   const {
     mutate: sendInntektsmeldingOmsorgspengerRefusjon,
@@ -88,10 +105,15 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
           icon={<PaperplaneIcon />}
           iconPosition="right"
           loading={isPending}
-          onClick={handleSubmit((values) => {
-            const request = mapSkjemaTilSendInntektsmeldingRequest(values);
-            sendInntektsmeldingOmsorgspengerRefusjon(request);
-          })}
+          onClick={handleSubmit(
+            (values) => {
+              const request = mapSkjemaTilSendInntektsmeldingRequest(values);
+              sendInntektsmeldingOmsorgspengerRefusjon(request);
+            },
+            () => {
+              loggManglendeSteg();
+            },
+          )}
           variant="primary"
         >
           Send inn
