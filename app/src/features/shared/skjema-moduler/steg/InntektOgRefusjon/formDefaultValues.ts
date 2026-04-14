@@ -17,7 +17,8 @@ export const defaultValues = (
 ) => {
   const defaultInntekt =
     inntektsmeldingSkjemaState.inntekt ||
-    opplysninger.inntektsopplysninger.gjennomsnittLønn;
+    opplysninger.inntektsopplysninger.gjennomsnittLønn ||
+    "";
 
   return {
     inntekt: defaultInntekt,
