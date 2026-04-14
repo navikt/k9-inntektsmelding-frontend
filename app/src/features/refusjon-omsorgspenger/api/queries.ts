@@ -320,3 +320,14 @@ export const hentPersonUnntattAaregisterOptions = (
     staleTime: Infinity,
     retry: false,
   });
+
+export const hentArbeidsgiversOrganisasjoner = () => {
+  return queryOptions({
+    queryKey: ["arbeidsgivers-organisasjoner"],
+    queryFn: async () => {
+      return { arbeidsforhold: [] };
+    },
+    staleTime: Infinity,
+    retry: false,
+  });
+};

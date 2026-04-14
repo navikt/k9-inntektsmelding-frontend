@@ -11,7 +11,7 @@ import {
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
@@ -67,18 +67,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
     }
   }, []);
 
-  const fraværsdatoRef = useRef(førsteFraværsdatoForÅret);
-  useEffect(() => {
-    if (
-      visUnntattLøype &&
-      fraværsdatoRef.current &&
-      fraværsdatoRef.current !== førsteFraværsdatoForÅret
-    ) {
-      setValue("organisasjonsnummer", undefined);
-    }
-    fraværsdatoRef.current = førsteFraværsdatoForÅret;
-  }, [førsteFraværsdatoForÅret]);
-
   const onSubmit = handleSubmit(() => {
     navigate({
       from: "/refusjon-omsorgspenger/$organisasjonsnummer/2-ansatt-og-arbeidsgiver",
@@ -107,7 +95,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
                     const nyVerdi = e.target.value.replaceAll(/\s/g, "");
                     if (nyVerdi !== field.value) {
                       setValue("erUnntattAaregisteret", false);
-                      setValue("førsteFraværsdatoForÅret", undefined);
                       setValue("organisasjonsnummer", undefined);
                     }
                     field.onChange(nyVerdi);
@@ -133,7 +120,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
                 <BodyLong>
                   Vi fant ingen registrerte arbeidsforhold i dine virksomheter
                   knyttet til denne personen. Sjekk at du har skrevet riktig
-                  fødselsnummer. Hvis arbeidstakeren ikke er registrert i
+                  fødselsnummer. Hvis arbeidstakeren er unntatt registrering i
                   Aa-registeret, kan du bekrefte dette nedenfor og fortsette.
                 </BodyLong>
               </VStack>
@@ -165,10 +152,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
         )}
         {visUnntattLøype && fødselsnummer && førsteFraværsdatoForÅret && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
-            <ArbeidsgiverUnntattSeksjon
-              fødselsnummer={fødselsnummer}
-              førsteFraværsdatoForÅret={førsteFraværsdatoForÅret}
-            />
+            <ArbeidsgiverUnntattSeksjon />
           </Informasjonsseksjon>
         )}
         <Informasjonsseksjon

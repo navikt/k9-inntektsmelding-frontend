@@ -2,21 +2,13 @@ import { BodyShort, Label, Loader, Select } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-import { hentArbeidsgiverOptions } from "../api/queries.ts";
+import { hentArbeidsgiversOrganisasjoner } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
-type ArbeidsgiverUnntattSeksjonProps = {
-  fødselsnummer: string;
-  førsteFraværsdatoForÅret: string;
-};
-
-export const ArbeidsgiverUnntattSeksjon = ({
-  fødselsnummer,
-  førsteFraværsdatoForÅret,
-}: ArbeidsgiverUnntattSeksjonProps) => {
+export const ArbeidsgiverUnntattSeksjon = () => {
   const { register, formState, setValue } = useSkjemaState();
   const { data, isLoading, error } = useQuery(
-    hentArbeidsgiverOptions({ førsteFraværsdatoForÅret, fødselsnummer }),
+    hentArbeidsgiversOrganisasjoner(),
   );
 
   const enkelt =
@@ -30,8 +22,8 @@ export const ArbeidsgiverUnntattSeksjon = ({
   if (error || data?.arbeidsforhold.length === 0) {
     return (
       <BodyShort>
-        Vi finner ikke fravær på denne datoen for denne personen. Sjekk at
-        opplysningene er korrekte.
+        Vi finner ingen finner ingen organisasjoner knyttet til innlogget
+        bruker.
       </BodyShort>
     );
   }
