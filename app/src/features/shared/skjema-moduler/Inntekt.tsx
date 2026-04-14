@@ -126,7 +126,7 @@ export function Inntekt({
           description={gjennomsnittAvMånederTekst}
           htmlSize={20}
           inputMode="numeric"
-          label="Beregnet måndslønn"
+          label="Beregnet månedslønn"
           min={0}
           name="inntekt"
           required

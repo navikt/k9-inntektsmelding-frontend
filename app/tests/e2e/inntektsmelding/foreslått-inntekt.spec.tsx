@@ -248,7 +248,10 @@ test("A-inntekt er nede", async ({ page }) => {
     page.getByText("Gjennomsnittet av lønn fra februar, mars og april"),
   ).toBeVisible();
 
-  await page.getByLabel("Beregnet måndslønn").fill("34000");
+  await page
+    .locator("label")
+    .filter({ hasText: "Beregnet månedslønn" })
+    .fill("34000");
 
   await expect(
     beregnetMånedslønn.getByTestId("alert-ikke-rapportert-brukt-i-snitt"),
