@@ -15,6 +15,7 @@ const ORGANISASJONSNUMMER = "123456789";
 
 test.describe("Refusjon Omsorgspenger - Valideringer", () => {
   test.beforeEach(async ({ page }) => {
+    await page.clock.install({ time: new Date("2026-03-15").getTime() });
     await mockInnloggetBruker({ page });
     await mockGrunnbeløp({ page });
     await mockInntektsmeldingForÅr({ page, json: [] });

@@ -18,6 +18,7 @@ import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
 import { useSkjemaState } from "../SkjemaStateContext.tsx";
 import { useInnloggetBruker } from "../useInnloggetBruker.tsx";
+import { ÅrForRefusjon } from "../visningskomponenter/ÅrForRefusjon.tsx";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
@@ -48,9 +49,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
 
   const { name: harUtbetaltLønnName, ...harUtbetaltLønnRadioGroupProps } =
     register("harUtbetaltLønn");
-
-  const { name: årForRefusjonName, ...årForRefusjonRadioGroupProps } =
-    register("årForRefusjon");
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
@@ -108,19 +106,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
               </BodyLong>
             </Alert>
           )}
-          <RadioGroup
-            error={formState.errors.årForRefusjon?.message}
-            legend="Hvilket år søker dere refusjon for?"
-            name={årForRefusjonName}
-          >
-            <Radio value={String(iFjor)} {...årForRefusjonRadioGroupProps}>
-              {iFjor}
-            </Radio>
-            <Radio value={String(iÅr)} {...årForRefusjonRadioGroupProps}>
-              {iÅr}
-            </Radio>
-          </RadioGroup>
-
+          <ÅrForRefusjon />
           <div>
             <Button
               disabled={harUtbetaltLønn === "nei"}
