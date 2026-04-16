@@ -18,7 +18,12 @@ import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
 import { useSkjemaState } from "../SkjemaStateContext.tsx";
 import { useInnloggetBruker } from "../useInnloggetBruker.tsx";
-import { ÅrForRefusjon } from "../visningskomponenter/ÅrForRefusjon.tsx";
+import {
+  ÅrForRefusjon,
+  iÅr,
+  iFjor,
+  kanVelgeFjoråret,
+} from "../visningskomponenter/ÅrForRefusjon.tsx";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
@@ -28,8 +33,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
   const innloggetBruker = useInnloggetBruker();
 
   const navigate = useNavigate();
-  const iÅr = new Date().getFullYear();
-  const iFjor = iÅr - 1;
 
   const { register, formState, watch, handleSubmit, setValue, getValues } =
     useSkjemaState();
@@ -50,6 +53,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
   const { name: harUtbetaltLønnName, ...harUtbetaltLønnRadioGroupProps } =
     register("harUtbetaltLønn");
 
+  const infoOmToSeparateSøknader = kanVelgeFjoråret
+    ? `Du kan kun søke om refusjon innenfor ett kalenderår av gangen.
+       Det betyr at hvis du skal søke om refusjon for perioder i både ${iFjor} og ${iÅr}, må du sende to separate søknader.`
+    : "";
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
       <Heading level="1" size="large">
@@ -66,8 +73,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
             sykt barn.
           </BodyLong>
           <BodyLong>
-            {`Du kan søke for perioder inntil tre måneder tilbake i tid. Du kan kun søke om refusjon innenfor ett kalenderår av gangen.
-            Det betyr at hvis du skal søke om refusjon for perioder i både ${iFjor} og ${iÅr}, må du sende to separate søknader.`}
+            {`Du kan søke for perioder inntil tre måneder tilbake i tid. ${infoOmToSeparateSøknader}`}
           </BodyLong>
           <BodyLong>
             Du må også sende inn som separate refusjonskrav hvis en har hatt

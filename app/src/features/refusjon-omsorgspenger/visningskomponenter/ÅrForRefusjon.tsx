@@ -4,11 +4,10 @@ import { useEffect } from "react";
 
 import { useSkjemaState } from "../SkjemaStateContext";
 
-const førsteApril = dayjs().month(3).date(1);
-const kanVelgeFjoråret = dayjs().isBefore(førsteApril);
-const iÅr = dayjs().year();
-const iFjor = iÅr - 1;
-
+export const førsteApril = dayjs().month(3).date(1);
+export const kanVelgeFjoråret = dayjs().isBefore(førsteApril);
+export const iÅr = dayjs().year();
+export const iFjor = iÅr - 1;
 // Man kan kreve refusjon tre måneder tilbake i tid.
 // Det betyr at man kan søke om refusjon for fjoråret frem til 1. april.
 export const ÅrForRefusjon = () => {
