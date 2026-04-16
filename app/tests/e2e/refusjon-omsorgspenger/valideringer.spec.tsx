@@ -12,7 +12,7 @@ import { formatDatoKort } from "~/utils";
 
 const VALID_FNR = "16878397960";
 const ORGANISASJONSNUMMER = "123456789";
-const DAGENS_DATO = new Date("2024-03-15").getTime();
+const DAGENS_DATO = new Date("2026-03-15").getTime();
 const FJORÅRET = 2025;
 
 test.describe("Refusjon Omsorgspenger - Valideringer", () => {
