@@ -12,10 +12,12 @@ import { formatDatoKort } from "~/utils";
 
 const VALID_FNR = "16878397960";
 const ORGANISASJONSNUMMER = "123456789";
+const DAGENS_DATO = new Date("2024-03-15").getTime();
+const FJORÅRET = 2025;
 
 test.describe("Refusjon Omsorgspenger - Valideringer", () => {
   test.beforeEach(async ({ page }) => {
-    await page.clock.install({ time: new Date("2026-03-15").getTime() });
+    await page.clock.install({ time: DAGENS_DATO });
     await mockInnloggetBruker({ page });
     await mockGrunnbeløp({ page });
     await mockInntektsmeldingForÅr({ page, json: [] });
@@ -52,7 +54,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible();
 
     // Fix the error by selecting year - error should disappear and we can proceed
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
 
     // Error should be gone
@@ -86,7 +88,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -180,7 +182,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -267,7 +269,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     // 31.12.YYYY
     const endOfYear = new Date(previousYear, 11, 31);
     await page.getByRole("radio", { name: String(previousYear) }).click();
@@ -369,7 +371,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     // 31.12.YYYY
     const endOfYear = new Date(previousYear, 11, 31);
     await page.getByRole("radio", { name: String(previousYear) }).click();
@@ -504,7 +506,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -599,7 +601,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -685,7 +687,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -763,7 +765,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -830,7 +832,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -917,7 +919,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -1002,7 +1004,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -1089,7 +1091,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -1162,7 +1164,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -1251,7 +1253,7 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
 
     // Fill step 1
     await page.getByRole("radio", { name: "Ja" }).click();
-    const previousYear = new Date().getFullYear() - 1;
+    const previousYear = FJORÅRET;
     await page.getByRole("radio", { name: String(previousYear) }).click();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
