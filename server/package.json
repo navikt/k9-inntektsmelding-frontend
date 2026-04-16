@@ -20,21 +20,21 @@
     "express": "5.2.1",
     "html-react-parser": "5.2.16",
     "http-proxy-middleware": "3.0.5",
-    "react": "19.2.4"
+    "react": "19.2.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "10.0.1",
     "@types/express": "5.0.6",
     "@types/react": "19.2.14",
-    "@typescript-eslint/eslint-plugin": "8.58.0",
-    "eslint": "10.1.0",
+    "@typescript-eslint/eslint-plugin": "8.58.1",
+    "eslint": "10.2.0",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-unicorn": "63.0.0",
-    "jsdom": "29.0.1",
+    "jsdom": "29.0.2",
     "prettier": "3.8.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.58.0"
+    "typescript-eslint": "8.58.1"
   }
 }
