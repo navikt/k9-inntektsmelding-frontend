@@ -3,6 +3,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
 import {
+  hentArbeidsgiversOrganisasjoner,
   hentOpplysningerUnntattAaregister,
   hentPersonFraFnrUnntattAareg,
 } from "~/api/queries.ts";
@@ -321,13 +322,78 @@ export const hentPersonUnntattAaregisterOptions = (
     retry: false,
   });
 
-export const hentArbeidsgiversOrganisasjoner = () => {
+export const hentArbeidsgiversOrganisasjonerOptions = () => {
   return queryOptions({
     queryKey: ["arbeidsgivers-organisasjoner"],
-    queryFn: async () => {
-      return { arbeidsforhold: [] };
-    },
-    staleTime: Infinity,
+    queryFn: async () => hentArbeidsgiversOrganisasjoner(),
     retry: false,
   });
 };
+
+const AnsattNavnDtoSchema = z.object({
+  fornavn: z.string(),
+  mellomnavn: z.string().optional(),
+  etternavn: z.string(),
+  kjønn: z.enum(["MANN", "KVINNE", "UKJENT"]),
+});
+export type AnsattNavnDto = z.infer<typeof AnsattNavnDtoSchema>;
+
+type AnsattNavnFeil =
+  | { feilkode: "fant ingen personer" }
+  | { feilkode: "generell feil" }
+  | { feilkode: "uventet respons" };
+
+const hentAnsattNavn = async (fødselsnummer: string) => {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidstaker`,
+    {
+      method: "POST",
+      body: JSON.stringify({ fødselsnummer }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+  );
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw { feilkode: "fant ingen personer" } satisfies AnsattNavnFeil;
+    }
+    logDev("error", "Henting av ansatt-navn feilet", json);
+    throw { feilkode: "generell feil" } satisfies AnsattNavnFeil;
+  }
+
+  const parsedResponse = AnsattNavnDtoSchema.safeParse(json);
+  if (!parsedResponse.success) {
+    logDev(
+      "error",
+      "Mottok en uventet respons fra serveren",
+      parsedResponse.error,
+    );
+    throw { feilkode: "uventet respons" } satisfies AnsattNavnFeil;
+  }
+  return parsedResponse.data;
+};
+
+export const hentAnsattNavnOptions = (
+  fødselsnummer: string,
+  enabled: boolean,
+) =>
+  queryOptions<
+    AnsattNavnDto,
+    AnsattNavnFeil,
+    AnsattNavnDto,
+    ["ansatt-navn", string]
+  >({
+    queryKey: ["ansatt-navn", fødselsnummer],
+    queryFn: ({ queryKey }) => hentAnsattNavn(queryKey[1]),
+    enabled: enabled && idnr(fødselsnummer).status === "valid",
+    staleTime: Infinity,
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });

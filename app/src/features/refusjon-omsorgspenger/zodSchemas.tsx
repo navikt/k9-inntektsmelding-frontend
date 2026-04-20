@@ -155,13 +155,6 @@ export const RefusjonOmsorgspengerSchemaMedValidering =
           path: ["organisasjonsnummer"],
         });
       }
-      if (data.erUnntattAaregisteret && !data.førsteFraværsdatoForÅret) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Du må oppgi første fraværsdato",
-          path: ["førsteFraværsdatoForÅret"],
-        });
-      }
     }
 
     // Validations for Step 3

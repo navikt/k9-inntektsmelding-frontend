@@ -15,7 +15,6 @@ import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
-import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
 import { formatFodselsnummer } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
@@ -47,7 +46,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
 
   const fødselsnummer = watch("ansattesFødselsnummer");
   const erUnntattAaregisteret = watch("erUnntattAaregisteret");
-  const førsteFraværsdatoForÅret = watch("førsteFraværsdatoForÅret");
 
   const { data, error } = useQuery(
     hentArbeidstakerOptions(fødselsnummer ?? ""),
@@ -138,19 +136,13 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
               />
             </Box>
           )}
-          {visUnntattLøype && (
-            <DatePickerWrapped
-              label={`Første fraværsdato for ${new Date().getFullYear()}`}
-              name="førsteFraværsdatoForÅret"
-            />
-          )}
         </Informasjonsseksjon>
         {data && data.arbeidsforhold.length > 0 && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
             <ArbeidsgiverSeksjon fødselsnummer={fødselsnummer} />
           </Informasjonsseksjon>
         )}
-        {visUnntattLøype && fødselsnummer && førsteFraværsdatoForÅret && (
+        {visUnntattLøype && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
             <ArbeidsgiverUnntattSeksjon />
           </Informasjonsseksjon>

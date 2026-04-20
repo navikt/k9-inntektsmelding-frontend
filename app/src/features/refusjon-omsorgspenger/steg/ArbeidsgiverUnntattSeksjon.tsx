@@ -1,25 +1,18 @@
 import { BodyShort, Label, Loader, Select } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
-import { hentArbeidsgiversOrganisasjoner } from "../api/queries.ts";
+import { hentArbeidsgiversOrganisasjonerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const ArbeidsgiverUnntattSeksjon = () => {
-  const { register, formState, setValue } = useSkjemaState();
+  const { register, formState } = useSkjemaState();
   const { data, isLoading, error } = useQuery(
-    hentArbeidsgiversOrganisasjoner(),
+    hentArbeidsgiversOrganisasjonerOptions(),
   );
-
-  const enkelt =
-    data && data.arbeidsforhold.length === 1 ? data.arbeidsforhold[0] : null;
-  useEffect(() => {
-    if (enkelt) setValue("organisasjonsnummer", enkelt.organisasjonsnummer);
-  }, [enkelt?.organisasjonsnummer]);
 
   if (isLoading) return <Loader title="Henter virksomheter" />;
 
-  if (error || data?.arbeidsforhold.length === 0) {
+  if (error || data?.organisasjoner.length === 0) {
     return (
       <BodyShort>
         Vi finner ingen finner ingen organisasjoner knyttet til innlogget
@@ -30,7 +23,7 @@ export const ArbeidsgiverUnntattSeksjon = () => {
 
   if (!data) return null;
 
-  if (data.arbeidsforhold.length > 1) {
+  if (data.organisasjoner.length > 1) {
     return (
       <Select
         label="Velg virksomhet"
@@ -38,7 +31,7 @@ export const ArbeidsgiverUnntattSeksjon = () => {
         error={formState.errors.organisasjonsnummer?.message}
       >
         <option value="">Velg virksomhet</option>
-        {data.arbeidsforhold.map((ag) => (
+        {data.organisasjoner.map((ag) => (
           <option key={ag.organisasjonsnummer} value={ag.organisasjonsnummer}>
             {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
           </option>
@@ -47,7 +40,7 @@ export const ArbeidsgiverUnntattSeksjon = () => {
     );
   }
 
-  const [enkeltUnntatt] = data.arbeidsforhold;
+  const [enkeltUnntatt] = data.organisasjoner;
   return (
     <div className="flex gap-4">
       <div className="flex-1">
@@ -56,6 +49,11 @@ export const ArbeidsgiverUnntattSeksjon = () => {
       </div>
       <div className="flex-1">
         <Label>Org.nr. for underenhet</Label>
+        <input
+          type="hidden"
+          {...register("organisasjonsnummer")}
+          value={enkeltUnntatt.organisasjonsnummer}
+        />
         <BodyShort>{enkeltUnntatt.organisasjonsnummer}</BodyShort>
       </div>
     </div>
