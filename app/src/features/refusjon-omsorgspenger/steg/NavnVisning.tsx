@@ -69,6 +69,12 @@ export const NavnVisning = () => {
             value: ansattNavnData.etternavn,
           })}
         />
+        <input
+          type="hidden"
+          {...register("ansattesAktørId", {
+            value: ansattNavnData.aktørId,
+          })}
+        />
       </BodyShort>
     );
   }

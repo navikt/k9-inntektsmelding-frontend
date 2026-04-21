@@ -335,6 +335,7 @@ const AnsattNavnDtoSchema = z.object({
   mellomnavn: z.string().optional(),
   etternavn: z.string(),
   kjønn: z.enum(["MANN", "KVINNE", "UKJENT"]),
+  aktørId: z.string(),
 });
 export type AnsattNavnDto = z.infer<typeof AnsattNavnDtoSchema>;
 
