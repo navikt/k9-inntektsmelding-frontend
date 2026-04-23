@@ -4,10 +4,8 @@ import { useEffect } from "react";
 
 import { RotLayout } from "../shared/rot-layout/RotLayout";
 import { RefusjonOmsorgspengerArbeidsgiverForm } from "./SkjemaStateContext";
-import { useInnloggetBruker } from "./useInnloggetBruker";
 
 export const RefusjonOmsorgspengerArbeidsgiverRotLayout = () => {
-  const innloggetBruker = useInnloggetBruker();
   const location = useLocation();
   const matches = useMatches();
 
