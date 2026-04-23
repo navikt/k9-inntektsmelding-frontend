@@ -138,13 +138,15 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
               <Alert variant="error">
                 Inntektsopplysninger kunne ikke hentes.
               </Alert>
-              <Button
-                icon={<ArrowCirclepathIcon />}
-                onClick={() => refetch()}
-                variant="secondary"
-              >
-                Forsøk å hente inntektsopplysninger på nytt
-              </Button>
+              <div>
+                <Button
+                  icon={<ArrowCirclepathIcon />}
+                  onClick={() => refetch()}
+                  variant="secondary"
+                >
+                  Forsøk å hente inntektsopplysninger på nytt
+                </Button>
+              </div>
             </>
           ) : null}
           <InntektAlert />

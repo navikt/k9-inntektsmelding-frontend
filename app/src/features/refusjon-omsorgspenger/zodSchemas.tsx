@@ -32,6 +32,8 @@ const baseSchema = z.object({
   ansattesEtternavn: z.string().optional(),
   ansattesAktørId: z.string().optional(),
   organisasjonsnummer: z.string().optional(),
+  erUnntattAaregisteret: z.boolean().optional(),
+  førsteFraværsdatoForÅret: z.string().optional(),
 
   // Steg 3 fields
   harDekket10FørsteOmsorgsdager: z.string().catch(""),
@@ -80,6 +82,7 @@ export const RefusjonOmsorgspengerSchema = baseSchema.extend({
     innsendtSøknadId: z.number().optional(),
     opprettetTidspunkt: z.string().optional(),
     besøkteSteg: z.array(z.number()).default([]).optional(),
+    organisasjonsnavn: z.string().optional(),
   }),
 });
 

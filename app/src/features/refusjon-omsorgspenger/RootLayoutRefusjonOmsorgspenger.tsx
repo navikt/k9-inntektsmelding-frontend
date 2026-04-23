@@ -4,10 +4,8 @@ import { useEffect } from "react";
 
 import { RotLayout } from "../shared/rot-layout/RotLayout";
 import { RefusjonOmsorgspengerArbeidsgiverForm } from "./SkjemaStateContext";
-import { useInnloggetBruker } from "./useInnloggetBruker";
 
 export const RefusjonOmsorgspengerArbeidsgiverRotLayout = () => {
-  const innloggetBruker = useInnloggetBruker();
   const location = useLocation();
   const matches = useMatches();
 
@@ -47,15 +45,6 @@ export const RefusjonOmsorgspengerArbeidsgiverRotLayout = () => {
           }
           medHvitBoks={!erPåKvitteringssiden}
           tittel="Søknad om refusjon for omsorgspenger"
-          undertittel={
-            <div className="flex gap-3">
-              <span>{innloggetBruker.organisasjonsnavn}</span>
-              <span aria-hidden="true">|</span>
-              <span className="text-nowrap">
-                Org.nr.: {innloggetBruker.organisasjonsnummer}
-              </span>
-            </div>
-          }
         >
           <Outlet />
         </RotLayout>

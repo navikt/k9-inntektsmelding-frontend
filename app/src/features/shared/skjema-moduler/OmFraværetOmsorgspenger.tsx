@@ -13,7 +13,6 @@ import {
   Radio,
   RadioGroup,
   ReadMore,
-  Theme,
 } from "@navikt/ds-react";
 import { createLink } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
@@ -135,29 +134,27 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
         <Label size="small">{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
         <BodyShort size="small">FRA SØKNAD</BodyShort>
       </div>
-      <Theme theme="dark">
-        <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">
-          {opplysninger.etterspurtePerioder &&
-          opplysninger.etterspurtePerioder?.length > 0 ? (
-            <div>
-              <div className="flex flex-col gap-2 mt-1">
-                <Box marginBlock="space-16" asChild>
-                  <List data-aksel-migrated-v8>
-                    {opplysninger.etterspurtePerioder?.map((periode) => (
-                      <List.Item key={periode.fom}>
-                        {formatDatoKort(new Date(periode.fom))} -{" "}
-                        {formatDatoKort(new Date(periode.tom))}
-                      </List.Item>
-                    ))}
-                  </List>
-                </Box>
-              </div>
+      <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">
+        {opplysninger.etterspurtePerioder &&
+        opplysninger.etterspurtePerioder?.length > 0 ? (
+          <div>
+            <div className="flex flex-col gap-2 mt-1">
+              <Box marginBlock="space-16" asChild>
+                <List data-aksel-migrated-v8>
+                  {opplysninger.etterspurtePerioder?.map((periode) => (
+                    <List.Item key={periode.fom}>
+                      {formatDatoKort(new Date(periode.fom))} -{" "}
+                      {formatDatoKort(new Date(periode.tom))}
+                    </List.Item>
+                  ))}
+                </List>
+              </Box>
             </div>
-          ) : (
-            <BodyLong>Ingen dager med oppgitt fravær</BodyLong>
-          )}
-        </div>
-      </Theme>
+          </div>
+        ) : (
+          <BodyLong>Ingen dager med oppgitt fravær</BodyLong>
+        )}
+      </div>
       <Detail className="mt-4">
         Dette er dager den ansatte har søkt omsorgspenger, hvis du mener
         fraværet er feil må du ta kontakt med den ansatte. Har den ansatte hatt

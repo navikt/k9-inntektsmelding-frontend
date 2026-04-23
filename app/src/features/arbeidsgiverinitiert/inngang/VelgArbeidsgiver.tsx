@@ -7,8 +7,10 @@ import { FormType } from "./types";
 
 export function VelgArbeidsgiver({
   data,
+  description = "Den ansatte har flere arbeidsforhold hos samme arbeidsgiver. Velg hvilken underenhet inntektsmeldingen gjelder for.",
 }: {
   data?: SlåOppArbeidstakerResponseDto;
+  description?: string;
 }) {
   const formMethods = useFormContext<FormType>();
 
@@ -19,7 +21,7 @@ export function VelgArbeidsgiver({
   return (
     <Select
       data-testid="steg-0-select-arbeidsgiver"
-      description="Den ansatte har flere arbeidsforhold hos samme arbeidsgiver. Velg hvilken underenhet inntektsmeldingen gjelder for. "
+      description={description}
       error={formMethods.formState.errors.organisasjonsnummer?.message}
       label="Arbeidsgiver"
       {...formMethods.register(`organisasjonsnummer`, {

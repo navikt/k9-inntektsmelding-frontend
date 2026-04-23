@@ -272,7 +272,7 @@ const FraværDelerAvDagen = () => {
   const årForRefusjon = Number(watch("årForRefusjon"));
 
   return (
-    <VStack gap="space-8">
+    <VStack gap="space-16">
       <Heading level="3" size="small">
         Delvise dager dere søker refusjon for
       </Heading>

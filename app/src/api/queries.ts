@@ -319,3 +319,29 @@ export async function hentOpplysningerUnntattAaregister(
 
   return parsedJson.data;
 }
+
+export async function hentArbeidsgiversOrganisasjoner() {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsgiver/organisasjoner`,
+  );
+  if (!response.ok) {
+    throw new Error("Kunne ikke hente organisasjoner");
+  }
+  const json = await response.json();
+  const parsedJson = z
+    .object({
+      organisasjoner: z.array(
+        z.object({
+          organisasjonsnavn: z.string(),
+          organisasjonsnummer: z.string(),
+        }),
+      ),
+    })
+    .safeParse(json);
+
+  if (!parsedJson.success) {
+    logDev("error", parsedJson.error);
+  }
+
+  return parsedJson.data;
+}
