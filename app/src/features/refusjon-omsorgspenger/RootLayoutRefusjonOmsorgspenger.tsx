@@ -47,15 +47,6 @@ export const RefusjonOmsorgspengerArbeidsgiverRotLayout = () => {
           }
           medHvitBoks={!erPåKvitteringssiden}
           tittel="Søknad om refusjon for omsorgspenger"
-          undertittel={
-            <div className="flex gap-3">
-              <span>{innloggetBruker.organisasjonsnavn}</span>
-              <span aria-hidden="true">|</span>
-              <span className="text-nowrap">
-                Org.nr.: {innloggetBruker.organisasjonsnummer}
-              </span>
-            </div>
-          }
         >
           <Outlet />
         </RotLayout>

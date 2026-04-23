@@ -1,11 +1,12 @@
 import { BodyShort, Label, Loader, Select } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 import { hentArbeidsgiversOrganisasjonerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const ArbeidsgiverUnntattSeksjon = () => {
-  const { register, formState } = useSkjemaState();
+  const { register, formState, setValue } = useSkjemaState();
   const { data, isLoading, error } = useQuery(
     hentArbeidsgiversOrganisasjonerOptions(),
   );
@@ -27,7 +28,15 @@ export const ArbeidsgiverUnntattSeksjon = () => {
     return (
       <Select
         label="Velg virksomhet"
-        {...register("organisasjonsnummer", { value: "" })}
+        {...register("organisasjonsnummer", {
+          value: "",
+          onChange: (e) => {
+            const valgt = data.organisasjoner.find(
+              (org) => org.organisasjonsnummer === e.target.value,
+            );
+            setValue("meta.organisasjonsnavn", valgt?.organisasjonsnavn ?? "");
+          },
+        })}
         error={formState.errors.organisasjonsnummer?.message}
       >
         <option value="">Velg virksomhet</option>
@@ -41,6 +50,11 @@ export const ArbeidsgiverUnntattSeksjon = () => {
   }
 
   const [enkeltUnntatt] = data.organisasjoner;
+
+  useEffect(() => {
+    setValue("meta.organisasjonsnavn", enkeltUnntatt.organisasjonsnavn);
+  }, [enkeltUnntatt.organisasjonsnavn]);
+
   return (
     <div className="flex gap-4">
       <div className="flex-1">

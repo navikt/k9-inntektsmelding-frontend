@@ -12,7 +12,6 @@ import {
 import { Link } from "@tanstack/react-router";
 
 import { useSkjemaState } from "~/features/refusjon-omsorgspenger/SkjemaStateContext";
-import { useInnloggetBruker } from "~/features/refusjon-omsorgspenger/useInnloggetBruker";
 import {
   formatFodselsnummer,
   formatTelefonnummer,
@@ -27,7 +26,6 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
   redigerbar: boolean;
 }) => {
   const { getValues, formState } = useSkjemaState();
-  const innloggetBruker = useInnloggetBruker();
   return (
     <FormSummary>
       <FormSummaryHeader>
@@ -40,7 +38,7 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
           <FormSummaryAnswer>
             <FormSummaryLabel>Virksomhetsnavn</FormSummaryLabel>
             <FormSummaryValue>
-              {innloggetBruker.organisasjonsnavn}
+              {getValues("meta.organisasjonsnavn")}
             </FormSummaryValue>
           </FormSummaryAnswer>
           <FormSummaryAnswer>

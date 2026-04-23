@@ -21,6 +21,10 @@ export const ArbeidsgiverSeksjon = ({
         "organisasjonsnummer",
         data.arbeidsforhold[0].organisasjonsnummer,
       );
+      setValue(
+        "meta.organisasjonsnavn",
+        data.arbeidsforhold[0].organisasjonsnavn,
+      );
     }
   }, [data]);
 
@@ -30,7 +34,14 @@ export const ArbeidsgiverSeksjon = ({
     return (
       <Select
         label="Velg arbeidsforhold"
-        {...register("organisasjonsnummer")}
+        {...register("organisasjonsnummer", {
+          onChange: (e) => {
+            const valgt = data.arbeidsforhold.find(
+              (af) => af.organisasjonsnummer === e.target.value,
+            );
+            setValue("meta.organisasjonsnavn", valgt?.organisasjonsnavn ?? "");
+          },
+        })}
         error={formState.errors.organisasjonsnummer?.message}
       >
         <option value="">Velg arbeidsforhold</option>
