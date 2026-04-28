@@ -5,11 +5,11 @@ import z from "zod";
 import { SERVER_URL } from "~/api/mutations";
 import {
   hentOpplysningerData,
-  mapInntektsmeldingResponseTilValidState,
+  mapInntektsmeldingUregistrertResponseTilValidState,
 } from "~/api/queries";
 import { InntektsmeldingRootUnntattAaregister } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
-import { InntektsmeldingResponseDtoSchema } from "~/types/api-models";
+import { InntektsmeldingResponseDtoUregistrertSchema } from "~/types/api-models";
 import { OpplysningerDto } from "~/types/api-models";
 import { logDev } from "~/utils";
 
@@ -33,7 +33,9 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
     );
   }
   const json = await response.json();
-  const parsedJson = z.array(InntektsmeldingResponseDtoSchema).safeParse(json);
+  const parsedJson = z
+    .array(InntektsmeldingResponseDtoUregistrertSchema)
+    .safeParse(json);
 
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
@@ -42,7 +44,7 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
   }
 
   return parsedJson.data.map((im) =>
-    mapInntektsmeldingResponseTilValidState(im),
+    mapInntektsmeldingUregistrertResponseTilValidState(im),
   );
 }
 export const Route = createFileRoute("/agi-unntatt-aaregister/$id")({

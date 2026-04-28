@@ -2,6 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
 import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import {
@@ -16,6 +17,7 @@ import {
   OpplysningerRequest,
   opplysningerSchema,
   SendInntektsmeldingResponseDto,
+  SendInntektsmeldingResponseDtoUregistrert,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-models";
@@ -83,10 +85,46 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
 
 export function mapInntektsmeldingResponseTilValidState(
   inntektsmelding: SendInntektsmeldingResponseDto,
-): InntektsmeldingSkjemaStateValidAGIUnntattAaregister & {
+): InntektsmeldingSkjemaStateValid & {
   opprettetTidspunkt: string;
   id: number;
 } {
+  return {
+    kontaktperson: inntektsmelding.kontaktperson,
+    refusjon: inntektsmelding.refusjon ?? [],
+    bortfaltNaturalytelsePerioder:
+      inntektsmelding.bortfaltNaturalytelsePerioder?.map((periode) => ({
+        navn: periode.naturalytelsetype,
+        fom: periode.fom,
+        beløp: periode.beløp,
+        inkluderTom: periode.tom !== undefined,
+        tom: periode.tom,
+      })) ?? [],
+    endringAvInntektÅrsaker: (
+      inntektsmelding.endringAvInntektÅrsaker ?? []
+    ).map((endringÅrsak) => ({
+      ...endringÅrsak,
+      ignorerTom:
+        endringÅrsak.tom === undefined &&
+        PÅKREVDE_ENDRINGSÅRSAK_FELTER[endringÅrsak.årsak]?.tomErValgfritt,
+    })),
+    inntekt: inntektsmelding.inntekt,
+    skalRefunderes:
+      (inntektsmelding.refusjon ?? []).length > 1
+        ? "JA_VARIERENDE_REFUSJON"
+        : (inntektsmelding.refusjon ?? []).length === 1
+          ? "JA_LIK_REFUSJON"
+          : "NEI",
+    misterNaturalytelser:
+      (inntektsmelding.bortfaltNaturalytelsePerioder?.length ?? 0) > 0,
+    opprettetTidspunkt: inntektsmelding.opprettetTidspunkt,
+    id: inntektsmelding.id,
+  };
+}
+
+export function mapInntektsmeldingUregistrertResponseTilValidState(
+  inntektsmelding: SendInntektsmeldingResponseDtoUregistrert,
+): InntektsmeldingSkjemaStateValidAGIUnntattAaregister {
   return {
     kontaktperson: inntektsmelding.kontaktperson,
     refusjon: inntektsmelding.refusjon ?? [],

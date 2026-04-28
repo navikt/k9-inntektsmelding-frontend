@@ -157,6 +157,16 @@ export type SendInntektsmeldingRequestDtoUregistrert = z.infer<
   typeof SendInntektsmeldingRequestDtoUregistrertSchema
 >;
 
+export const InntektsmeldingResponseDtoUregistrertSchema =
+  SendInntektsmeldingRequestDtoUregistrertSchema.extend({
+    opprettetTidspunkt: z.string(),
+    id: z.number(),
+  });
+
+export type SendInntektsmeldingResponseDtoUregistrert = z.infer<
+  typeof InntektsmeldingResponseDtoUregistrertSchema
+>;
+
 export const opplysningerSchema = z.object({
   forespørselUuid: z.string().optional(),
   person: z.object({
