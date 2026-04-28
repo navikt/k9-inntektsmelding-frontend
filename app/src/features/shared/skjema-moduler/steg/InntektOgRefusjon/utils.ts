@@ -60,6 +60,19 @@ export function lagSendInntektsmeldingRequest(
       skjemaState.bortfaltNaturalytelsePerioder,
     ),
     endringAvInntektÅrsaker,
+    ...(opplysninger.ytelse === "OMSORGSPENGER" && {
+      omsorgspenger: {
+        harUtbetaltPliktigeDager: skjemaState.skalRefunderes !== "NEI",
+        fraværHeleDager: skjemaState.fraværHeleDager?.map((p) => ({
+          fom: p.fom,
+          tom: p.tom,
+        })),
+        fraværDelerAvDagen: skjemaState.fraværDelerAvDagen?.map((d) => ({
+          dato: d.dato,
+          timer: d.timer,
+        })),
+      },
+    }),
   } satisfies SendInntektsmeldingRequestDtoUregistrert;
 }
 

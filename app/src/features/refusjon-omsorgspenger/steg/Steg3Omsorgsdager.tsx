@@ -22,7 +22,6 @@ import {
   List,
   Radio,
   RadioGroup,
-  TextField,
   Theme,
   VStack,
 } from "@navikt/ds-react";
@@ -32,14 +31,12 @@ import { useFieldArray } from "react-hook-form";
 
 import { formatDatoKort } from "~/utils.ts";
 
-import {
-  HjelpetekstAlert,
-  HjelpetekstReadMore,
-} from "../../shared/Hjelpetekst.tsx";
+import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
-import { DatePickerWrapped } from "../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
 import { DateRangePickerWrapped } from "../../shared/react-hook-form-wrappers/DateRangePickerWrapped.tsx";
+import { FraværDelerAvDagenListeInput } from "../../shared/skjema-moduler/FraværDelerAvDagenListeInput.tsx";
+import { FraværHeleDagerListeInput } from "../../shared/skjema-moduler/FraværHeleDagerListeInput.tsx";
 import { RefusjonOmsorgspengerResponseDto } from "../api/mutations.ts";
 import { useHentInntektsmeldingForÅr } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
@@ -170,8 +167,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
               inntektsmeldinger={inntektsmeldingerForÅr}
               årForRefusjon={årForRefusjon}
             />
-            <FraværHeleDagen />
-            <FraværDelerAvDagen />
+            <FraværHeleDagerListeInput
+              overskrift="Hele dager dere søker refusjon for"
+              år={Number(årForRefusjon)}
+            />
+            <FraværDelerAvDagenListeInput
+              overskrift="Delvise dager dere søker refusjon for"
+              år={Number(årForRefusjon)}
+            />
             <DagerSomSkalTrekkes />
           </VStack>
 
@@ -196,190 +199,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
         </VStack>
       </form>
     </div>
-  );
-};
-
-const FraværHeleDagen = () => {
-  const { control, watch, setValue } = useSkjemaState();
-
-  useEffect(() => {
-    setValue("meta.step", 3);
-  }, []);
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "fraværHeleDager",
-  });
-
-  const årForRefusjon = Number(watch("årForRefusjon"));
-  // Trigger validation for all periods when any period changes
-
-  return (
-    <VStack gap="space-16">
-      <Heading level="3" size="small">
-        Hele dager dere søker refusjon for
-      </Heading>
-      {fields.map((periode, index) => (
-        <HStack
-          className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
-          gap="space-16"
-          key={periode.id}
-        >
-          <DateRangePickerWrapped
-            datepickerProps={{
-              defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
-            }}
-            name={`fraværHeleDager.${index}`}
-          />
-          <Button
-            aria-label="Slett periode"
-            className="absolute top-9 right-20"
-            icon={<TrashIcon />}
-            onClick={() => {
-              remove(index);
-            }}
-            size="small"
-            type="button"
-            variant="tertiary"
-          >
-            Slett
-          </Button>
-        </HStack>
-      ))}
-      <div>
-        <Button
-          icon={<PlusIcon />}
-          onClick={() => {
-            append({ fom: "", tom: "" }, { shouldFocus: false });
-          }}
-          size="small"
-          type="button"
-          variant="secondary"
-        >
-          Legg til periode
-        </Button>
-      </div>
-    </VStack>
-  );
-};
-
-const FraværDelerAvDagen = () => {
-  const { control, register, formState, watch, setValue } = useSkjemaState();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "fraværDelerAvDagen",
-  });
-  const årForRefusjon = Number(watch("årForRefusjon"));
-
-  return (
-    <VStack gap="space-16">
-      <Heading level="3" size="small">
-        Delvise dager dere søker refusjon for
-      </Heading>
-      {fields.map((periode, index) => {
-        return (
-          <HStack
-            align="start"
-            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2"
-            gap="space-16"
-            key={periode.id}
-          >
-            <DatePickerWrapped
-              datepickerProps={{
-                defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
-              }}
-              label="Dato"
-              name={`fraværDelerAvDagen.${index}.dato`}
-            />
-            <TextField
-              label="Timer fravær"
-              {...register(`fraværDelerAvDagen.${index}.timer`, {
-                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  const valueWithoutCommas = value.replaceAll(",", ".");
-                  setValue(
-                    `fraværDelerAvDagen.${index}.timer`,
-                    valueWithoutCommas,
-                  );
-                },
-              })}
-              error={
-                formState.touchedFields.fraværDelerAvDagen?.[index]?.timer &&
-                formState.errors.fraværDelerAvDagen?.[index]?.timer?.message
-              }
-            />
-            <div>
-              <Button
-                aria-label="Slett periode"
-                className="md:mt-10"
-                icon={<TrashIcon />}
-                onClick={() => {
-                  remove(index);
-                }}
-                size="small"
-                type="button"
-                variant="tertiary"
-              >
-                Slett
-              </Button>
-            </div>
-          </HStack>
-        );
-      })}
-      {fields.length > 0 && (
-        <>
-          <BodyLong className="text-ax-text-neutral-subtle" size="small">
-            Timer skal avrundes til nærmeste halve time og beregnes basert på en
-            7,5 timers arbeidsdag. Hvis arbeidstakeren har en annen ordinær
-            arbeidstid, må fraværet omregnes.
-          </BodyLong>
-          <HjelpetekstReadMore header="Eksempler på hvordan du oppgir og omregner arbeidstid">
-            <Label>Eksempel 1:</Label>
-            <BodyLong>
-              Arbeidstaker jobber vanligvis 7,5 timer per dag og har vært borte
-              en halv dag.
-            </BodyLong>
-            <Box marginBlock="space-16" asChild>
-              <List data-aksel-migrated-v8>
-                <List.Item className="my-8">
-                  Fraværet utgjør 3,75 timer, som skal avrundes til nærmeste
-                  halve time. Dette betyr at du oppgir 4 timer i
-                  refusjonskravet. Ved flere halve dager kan det oppgis som 3,5
-                  og 4 timer annenhver dag.
-                </List.Item>
-                <Label>Eksempel 2:</Label>
-                <BodyLong>
-                  Arbeidstaker jobber vanligvis 9 timer per dag og er borte i 4
-                  av disse. Du deler da antall timer fravær på antall timer
-                  arbeidstakeren skulle jobbet. Tallet du får ganger du med 7,5.
-                </BodyLong>
-                <List.Item className="my-8">
-                  4 timer fravær / 9 timer arbeidstid = 0,440,44 × 7,5 = 3,33
-                  timer, som avrundes til 3,5 timer i refusjonskravet
-                </List.Item>
-                <BodyLong>
-                  Du kan regne på samme måte om ordinær arbeidstid er over eller
-                  under 7,5 time.
-                </BodyLong>
-              </List>
-            </Box>
-          </HjelpetekstReadMore>
-        </>
-      )}
-      <div>
-        <Button
-          icon={<PlusIcon />}
-          onClick={() => {
-            append({ dato: "", timer: "" }, { shouldFocus: false });
-          }}
-          size="small"
-          type="button"
-          variant="secondary"
-        >
-          Legg til dag
-        </Button>
-      </div>
-    </VStack>
   );
 };
 

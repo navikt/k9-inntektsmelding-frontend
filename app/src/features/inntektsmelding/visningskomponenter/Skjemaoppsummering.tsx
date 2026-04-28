@@ -45,7 +45,14 @@ export const Skjemaoppsummering = ({
   const kanEndres = opplysninger.forespørselStatus !== "UTGÅTT";
 
   if (opplysninger.ytelse === "OMSORGSPENGER") {
-    const fravær = opplysninger.etterspurtePerioder;
+    const erUregistrert =
+      opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT";
+    const fravær = erUregistrert
+      ? skjemaState.fraværHeleDager
+      : opplysninger.etterspurtePerioder;
+    const fraværDelerAvDagen = erUregistrert
+      ? skjemaState.fraværDelerAvDagen
+      : undefined;
     const harUtbetaltLønn = skjemaState.skalRefunderes === "JA_LIK_REFUSJON";
     return (
       <VStack gap="space-16">
@@ -80,6 +87,24 @@ export const Skjemaoppsummering = ({
                 )}
               </FormSummaryValue>
             </FormSummaryAnswer>
+
+            {fraværDelerAvDagen && fraværDelerAvDagen.length > 0 && (
+              <FormSummaryAnswer>
+                <FormSummaryLabel>Delvise dager</FormSummaryLabel>
+                <FormSummaryValue>
+                  <Box marginBlock="space-16" asChild>
+                    <List data-aksel-migrated-v8>
+                      {fraværDelerAvDagen.map((dag, index) => (
+                        <ListItem key={index}>
+                          {formatDatoKort(new Date(dag.dato))} – {dag.timer}{" "}
+                          timer
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                </FormSummaryValue>
+              </FormSummaryAnswer>
+            )}
 
             {harUtbetaltLønn !== undefined && (
               <FormSummaryAnswer>

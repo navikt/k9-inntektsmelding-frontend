@@ -56,5 +56,7 @@ export const defaultValues = (
               { fom: undefined, beløp: 0 },
             ]
           : inntektsmeldingSkjemaState.refusjon,
+    fraværHeleDager: inntektsmeldingSkjemaState.fraværHeleDager ?? [],
+    fraværDelerAvDagen: inntektsmeldingSkjemaState.fraværDelerAvDagen ?? [],
   } satisfies DefaultValues<InntektOgRefusjonForm>;
 };

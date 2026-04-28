@@ -32,6 +32,8 @@ export type InntektOgRefusjonForm = {
   misterNaturalytelser: JaNei;
   bortfaltNaturalytelsePerioder: NaturalytelserSomMistesForm[];
   endringAvInntektÅrsaker: EndringsÅrsakerForm[];
+  fraværHeleDager: { fom: string; tom: string }[];
+  fraværDelerAvDagen: { dato: string; timer: string }[];
 } & Pick<
   InntektsmeldingSkjemaState,
   "refusjon" | "inntekt" | "korrigertInntekt"

@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 import {
+  FraværDelerAvDagSchema,
+  FraværHeleDagSchema,
+} from "~/features/shared/skjema-moduler/omsorgspengerFraværSchema";
+import {
   EndringAvInntektÅrsakerSchema,
   NaturalytelseTypeSchema,
 } from "~/types/api-models.ts";
@@ -51,6 +55,8 @@ export const InntektsmeldingSkjemaStateSchema = z.object({
       inkluderTom: z.boolean(),
     }),
   ),
+  fraværHeleDager: z.array(FraværHeleDagSchema).optional(),
+  fraværDelerAvDagen: z.array(FraværDelerAvDagSchema).optional(),
 });
 
 export const InntektsmeldingSkjemaStateSchemaValidatedArbeidsgiverInitiert =
@@ -104,6 +110,22 @@ export const InntektsmeldingSkjemaStateSchemaValidated =
         inkluderTom: z.boolean(),
       }),
     ),
+    fraværHeleDager: z
+      .array(
+        z.object({
+          fom: z.string(),
+          tom: z.string(),
+        }),
+      )
+      .optional(),
+    fraværDelerAvDagen: z
+      .array(
+        z.object({
+          dato: z.string(),
+          timer: z.string(),
+        }),
+      )
+      .optional(),
     // TODO: Disse burde flyttes til en egen schema for eksisterende inntektsmeldinger
   });
 

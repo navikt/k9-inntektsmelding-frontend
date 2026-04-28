@@ -133,9 +133,24 @@ export type SendInntektsmeldingRequestDto = z.infer<
   typeof SendInntektsmeldingRequestDtoSchema
 >;
 
+export const OmsorgspengerRequestDtoSchema = z.object({
+  harUtbetaltPliktigeDager: z.boolean(),
+  fraværHeleDager: z
+    .array(z.object({ fom: z.string(), tom: z.string() }))
+    .optional(),
+  fraværDelerAvDagen: z
+    .array(z.object({ dato: z.string(), timer: z.string() }))
+    .optional(),
+});
+
+export type OmsorgspengerRequestDto = z.infer<
+  typeof OmsorgspengerRequestDtoSchema
+>;
+
 export const SendInntektsmeldingRequestDtoUregistrertSchema =
   SendInntektsmeldingRequestDtoSchema.extend({
     foresporselUuid: z.string().optional(),
+    omsorgspenger: OmsorgspengerRequestDtoSchema.optional(),
   });
 
 export type SendInntektsmeldingRequestDtoUregistrert = z.infer<

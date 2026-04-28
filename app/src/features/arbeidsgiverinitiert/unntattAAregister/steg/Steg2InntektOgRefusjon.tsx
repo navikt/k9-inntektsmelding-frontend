@@ -21,6 +21,8 @@ export type InntektOgRefusjonForm = {
   misterNaturalytelser: JaNei;
   bortfaltNaturalytelsePerioder: NaturalytelserSomMistesForm[];
   endringAvInntektÅrsaker: EndringsÅrsakerForm[];
+  fraværHeleDager: { fom: string; tom: string }[];
+  fraværDelerAvDagen: { dato: string; timer: string }[];
 } & Pick<
   InntektsmeldingSkjemaStateAGIUnntattAaregister,
   "refusjon" | "inntekt" | "korrigertInntekt"
@@ -85,6 +87,8 @@ export const Steg2InntektOgRefusjon = () => {
       skalRefunderes,
       misterNaturalytelser,
       bortfaltNaturalytelsePerioder,
+      fraværHeleDager: skjemadata.fraværHeleDager,
+      fraværDelerAvDagen: skjemadata.fraværDelerAvDagen,
     }));
     navigate({
       from: "/agi-unntatt-aaregister/$id/inntekt-og-refusjon",

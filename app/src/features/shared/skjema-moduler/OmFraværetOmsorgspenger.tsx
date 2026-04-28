@@ -14,7 +14,7 @@ import {
   RadioGroup,
   ReadMore,
 } from "@navikt/ds-react";
-import { createLink } from "@tanstack/react-router";
+import { createLink, useLocation } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
@@ -22,12 +22,18 @@ import { formatDatoKort, lagFulltNavn } from "~/utils";
 
 import { useHjelpetekst } from "../../shared/Hjelpetekst";
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
+import { FraværDelerAvDagenListeInput } from "./FraværDelerAvDagenListeInput.tsx";
+import { FraværHeleDagerListeInput } from "./FraværHeleDagerListeInput.tsx";
 
 const OmFraværetOmsorgspenger = () => {
   const { register, formState, watch } =
     useFormContext<InntektOgRefusjonForm>();
   const opplysninger = useOpplysninger();
   const { vis } = useHjelpetekst().visHjelpetekster;
+  const location = useLocation();
+  const erAGIUnntattAaregister = location.pathname.startsWith(
+    "/agi-unntatt-aaregister",
+  );
 
   const { name, ...radioGroupProps } = register("skalRefunderes", {
     required: "Du må svare på dette spørsmålet",
@@ -45,7 +51,14 @@ const OmFraværetOmsorgspenger = () => {
       <Heading id="om-fraværet-omsorgspenger" level="4" size="medium">
         Om fraværet
       </Heading>
-      <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
+      {erAGIUnntattAaregister ? (
+        <div className="flex flex-col gap-6">
+          <FraværHeleDagerListeInput overskrift="Dager med fravær" />
+          <FraværDelerAvDagenListeInput overskrift="Delvise dager" />
+        </div>
+      ) : (
+        <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
+      )}
       <RadioGroup
         className="mt-5"
         error={formState.errors.skalRefunderes?.message}

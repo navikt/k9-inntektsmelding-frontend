@@ -3,6 +3,10 @@ import { isBefore } from "date-fns";
 import { z } from "zod";
 
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt";
+import {
+  FraværDelerAvDagSchema,
+  FraværHeleDagSchema,
+} from "~/features/shared/skjema-moduler/omsorgspengerFraværSchema";
 import { EndringAvInntektÅrsakerSchema } from "~/types/api-models";
 import { beløpSchema, formatDatoKort } from "~/utils";
 import { perioderOverlapper } from "~/utils/date-utils";
@@ -37,24 +41,14 @@ const baseSchema = z.object({
 
   // Steg 3 fields
   harDekket10FørsteOmsorgsdager: z.string().catch(""),
-  fraværHeleDager: z.array(
-    z.object({
-      fom: z.string(),
-      tom: z.string(),
-    }),
-  ),
+  fraværHeleDager: z.array(FraværHeleDagSchema),
   fraværDelerAvDagen: z.array(
-    z.object({
+    FraværDelerAvDagSchema.extend({
       dato: z.string().catch(""),
       timer: z.string().catch(""),
     }),
   ),
-  dagerSomSkalTrekkes: z.array(
-    z.object({
-      fom: z.string(),
-      tom: z.string(),
-    }),
-  ),
+  dagerSomSkalTrekkes: z.array(FraværHeleDagSchema),
 
   manglerFraværEllerTrekk: z.string().optional(),
 
