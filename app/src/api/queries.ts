@@ -124,7 +124,10 @@ export function mapInntektsmeldingResponseTilValidState(
 
 export function mapInntektsmeldingUregistrertResponseTilValidState(
   inntektsmelding: SendInntektsmeldingResponseDtoUregistrert,
-): InntektsmeldingSkjemaStateValidAGIUnntattAaregister {
+): InntektsmeldingSkjemaStateValidAGIUnntattAaregister & {
+  opprettetTidspunkt: string;
+  id: number;
+} {
   return {
     kontaktperson: inntektsmelding.kontaktperson,
     refusjon: inntektsmelding.refusjon ?? [],
