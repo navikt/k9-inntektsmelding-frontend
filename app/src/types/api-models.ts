@@ -118,9 +118,19 @@ export const SendInntektsmeldingRequestDtoSchema =
       )
       .optional(), // TODO: Når databasen er wipet, kan vi fjerne optional her.
   });
+export const OmsorgspengerRequestDtoSchema = z.object({
+  harUtbetaltPliktigeDager: z.boolean(),
+  fraværHeleDager: z
+    .array(z.object({ fom: z.string(), tom: z.string() }))
+    .optional(),
+  fraværDelerAvDagen: z
+    .array(z.object({ dato: z.string(), timer: z.string() }))
+    .optional(),
+});
 
 export const InntektsmeldingResponseDtoSchema =
   SendInntektsmeldingRequestDtoSchema.extend({
+    omsorgspenger: OmsorgspengerRequestDtoSchema.optional(),
     opprettetTidspunkt: z.string(),
     id: z.number(),
   });
@@ -132,16 +142,6 @@ export type SendInntektsmeldingResponseDto = z.infer<
 export type SendInntektsmeldingRequestDto = z.infer<
   typeof SendInntektsmeldingRequestDtoSchema
 >;
-
-export const OmsorgspengerRequestDtoSchema = z.object({
-  harUtbetaltPliktigeDager: z.boolean(),
-  fraværHeleDager: z
-    .array(z.object({ fom: z.string(), tom: z.string() }))
-    .optional(),
-  fraværDelerAvDagen: z
-    .array(z.object({ dato: z.string(), timer: z.string() }))
-    .optional(),
-});
 
 export type OmsorgspengerRequestDto = z.infer<
   typeof OmsorgspengerRequestDtoSchema

@@ -15,6 +15,7 @@ import {
   ReadMore,
 } from "@navikt/ds-react";
 import { createLink, useLocation } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
@@ -26,7 +27,7 @@ import { FraværDelerAvDagenListeInput } from "./FraværDelerAvDagenListeInput.t
 import { FraværHeleDagerListeInput } from "./FraværHeleDagerListeInput.tsx";
 
 const OmFraværetOmsorgspenger = () => {
-  const { register, formState, watch } =
+  const { register, formState, watch, clearErrors } =
     useFormContext<InntektOgRefusjonForm>();
   const opplysninger = useOpplysninger();
   const { vis } = useHjelpetekst().visHjelpetekster;
@@ -34,6 +35,18 @@ const OmFraværetOmsorgspenger = () => {
   const erAGIUnntattAaregister = location.pathname.startsWith(
     "/agi-unntatt-aaregister",
   );
+
+  const fraværHeleDager = watch("fraværHeleDager");
+  const fraværDelerAvDagen = watch("fraværDelerAvDagen");
+
+  useEffect(() => {
+    if (
+      erAGIUnntattAaregister &&
+      (fraværHeleDager?.length > 0 || fraværDelerAvDagen?.length > 0)
+    ) {
+      clearErrors("fraværHeleDager");
+    }
+  }, [fraværHeleDager, fraværDelerAvDagen, erAGIUnntattAaregister]);
 
   const { name, ...radioGroupProps } = register("skalRefunderes", {
     required: "Du må svare på dette spørsmålet",
@@ -55,6 +68,11 @@ const OmFraværetOmsorgspenger = () => {
         <div className="flex flex-col gap-6">
           <FraværHeleDagerListeInput overskrift="Dager med fravær" />
           <FraværDelerAvDagenListeInput overskrift="Delvise dager" />
+          {formState.errors.fraværHeleDager?.message && (
+            <Alert variant="error">
+              {formState.errors.fraværHeleDager.message}
+            </Alert>
+          )}
         </div>
       ) : (
         <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />

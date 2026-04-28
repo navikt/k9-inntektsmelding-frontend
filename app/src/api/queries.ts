@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import {
@@ -83,7 +83,7 @@ export async function hentEksisterendeInntektsmeldinger(uuid: string) {
 
 export function mapInntektsmeldingResponseTilValidState(
   inntektsmelding: SendInntektsmeldingResponseDto,
-): InntektsmeldingSkjemaStateValid & {
+): InntektsmeldingSkjemaStateValidAGIUnntattAaregister & {
   opprettetTidspunkt: string;
   id: number;
 } {
@@ -117,6 +117,16 @@ export function mapInntektsmeldingResponseTilValidState(
       (inntektsmelding.bortfaltNaturalytelsePerioder?.length ?? 0) > 0,
     opprettetTidspunkt: inntektsmelding.opprettetTidspunkt,
     id: inntektsmelding.id,
+    fraværDelerAvDagen:
+      inntektsmelding.omsorgspenger?.fraværDelerAvDagen?.map((fravær) => ({
+        dato: fravær.dato,
+        timer: fravær.timer,
+      })) ?? [],
+    fraværHeleDager:
+      inntektsmelding.omsorgspenger?.fraværHeleDager?.map((periode) => ({
+        fom: periode.fom,
+        tom: periode.tom,
+      })) ?? [],
   };
 }
 

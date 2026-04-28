@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas.tsx";
@@ -78,12 +78,33 @@ export function InntektOgRefusjon({
     defaultValues: defaultValues(inntektsmeldingSkjemaState, opplysninger),
   });
 
+  const location = useLocation();
+  const erAGIUnntattAaregister = location.pathname.startsWith(
+    "/agi-unntatt-aaregister",
+  );
+
+  const validerOgSubmit = (data: InntektOgRefusjonForm) => {
+    if (
+      erAGIUnntattAaregister &&
+      opplysninger.ytelse === "OMSORGSPENGER" &&
+      data.fraværHeleDager.length === 0 &&
+      data.fraværDelerAvDagen.length === 0
+    ) {
+      formMethods.setError("fraværHeleDager", {
+        type: "required",
+        message: "Du må legge til minst én fraværsperiode",
+      });
+      return;
+    }
+    onSubmit(data);
+  };
+
   return (
     <FormProvider {...formMethods}>
       <section className="mt-2">
         <form
           className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col"
-          onSubmit={formMethods.handleSubmit(onSubmit)}
+          onSubmit={formMethods.handleSubmit(validerOgSubmit)}
         >
           <Heading level="3" size="large">
             Inntekt og refusjon
