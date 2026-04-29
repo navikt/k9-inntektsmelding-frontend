@@ -163,7 +163,7 @@ export function mapInntektsmeldingUregistrertResponseTilValidState(
     fraværDelerAvDagen:
       inntektsmelding.omsorgspenger?.fraværDelerAvDagen?.map((fravær) => ({
         dato: fravær.dato,
-        timer: fravær.timer,
+        timer: String(fravær.timer),
       })) ?? [],
     fraværHeleDager:
       inntektsmelding.omsorgspenger?.fraværHeleDager?.map((periode) => ({

@@ -110,7 +110,7 @@ export const OmsorgspengerRequestDtoSchema = z.object({
     .array(z.object({ fom: z.string(), tom: z.string() }))
     .optional(),
   fraværDelerAvDagen: z
-    .array(z.object({ dato: z.string(), timer: z.number() }))
+    .array(z.object({ dato: z.string(), timer: z.string() }))
     .optional(),
 });
 

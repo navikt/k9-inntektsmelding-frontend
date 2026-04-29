@@ -1,10 +1,7 @@
 import { BodyShort, Loader } from "@navikt/ds-react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import {
-  hentEksisterendeInntektsmeldinger,
-  hentOpplysningerData,
-} from "~/api/queries";
+import { hentOpplysningerData } from "~/api/queries";
 import { OppgaveErUtgåttFeilside } from "~/features/shared/error-boundary/OppgaveErUtgåttFeilside";
 import { InntektsmeldingRoot } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
@@ -31,21 +28,10 @@ export const Route = createFileRoute("/$id")({
     </RotLayout>
   ),
   loader: async ({ params }) => {
-    const [opplysninger, eksisterendeInntektsmeldinger] = await Promise.all([
-      hentOpplysningerData(params.id),
-      hentEksisterendeInntektsmeldinger(params.id),
-    ]);
-
-    if (
-      opplysninger.forespørselStatus === "UTGÅTT" &&
-      eksisterendeInntektsmeldinger.length === 0
-    ) {
-      throw new Error(FEILKODER.OPPGAVE_ER_UTGÅTT);
-    }
+    const opplysninger = await hentOpplysningerData(params.id);
 
     return {
       opplysninger: opplysninger,
-      eksisterendeInntektsmeldinger,
     };
   },
 });
