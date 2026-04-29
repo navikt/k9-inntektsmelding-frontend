@@ -8,7 +8,6 @@ import {
 import { ZodError } from "zod";
 
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
-import { logDev } from "~/utils";
 
 import { useSessionStorageState } from "../../shared/hooks/usePersistedState.tsx";
 import {
@@ -56,22 +55,8 @@ export const InntektsmeldingSkjemaStateProviderAGIUnntattAaRegister = ({
       InntektsmeldingSkjemaStateSchemaUnntattAaregister,
     );
 
-  let gyldigInntektsmeldingSkjemaState;
-  try {
-    gyldigInntektsmeldingSkjemaState =
-      AGIValidatedInntektsmeldingUnntattAaregister.safeParse(state);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(
-      "InntektsmeldingSkjemaStateProviderAGIUnntattAaRegister: Feil ved safeParse",
-      error,
-    );
-    throw error;
-  }
-
-  if (!gyldigInntektsmeldingSkjemaState.success) {
-    logDev("error", gyldigInntektsmeldingSkjemaState.error);
-  }
+  const gyldigInntektsmeldingSkjemaState =
+    AGIValidatedInntektsmeldingUnntattAaregister.safeParse(state);
 
   return (
     <InntektsmeldingSkjemaStateContextAGIUnntattAaregister.Provider
