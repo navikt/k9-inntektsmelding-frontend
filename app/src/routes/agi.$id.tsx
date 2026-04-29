@@ -4,14 +4,14 @@ import z from "zod";
 
 import { SERVER_URL } from "~/api/mutations";
 import { hentOpplysningerData } from "~/api/queries";
-import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/zodSchemas";
-import { InntektsmeldingRootAGI } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
-import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/frontendSchemas";
 import {
   InntektsmeldingResponseDtoSchema,
   SendInntektsmeldingResponseDto,
-} from "~/types/api-models";
-import { OpplysningerDto } from "~/types/api-models";
+} from "~/features/inntektsmelding/api-schemas";
+import { InntektsmeldingRootAGI } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
+import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
+import { OpplysningerDto } from "~/types/api-schemas";
 import { logDev } from "~/utils";
 
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "./opprett";

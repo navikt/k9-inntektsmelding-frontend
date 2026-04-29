@@ -8,7 +8,7 @@ import { lagFulltNavn } from "~/utils";
 import {
   RefusjonOmsorgspengerFormData,
   RefusjonOmsorgspengerSchemaMedValidering,
-} from "./zodSchemas.tsx";
+} from "./frontendSchemas.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverForm = ({
   children,

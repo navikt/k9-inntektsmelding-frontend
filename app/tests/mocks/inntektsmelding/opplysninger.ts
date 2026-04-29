@@ -1,4 +1,4 @@
-import { OpplysningerDto } from "~/types/api-models.ts";
+import { OpplysningerDto } from "~/types/api-schemas.ts";
 
 const STANDARD_OPPLYSNINGER = {
   person: {

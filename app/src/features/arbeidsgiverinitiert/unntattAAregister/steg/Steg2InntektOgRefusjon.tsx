@@ -5,11 +5,14 @@ import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { useScrollToTopOnMount } from "~/features/shared/hooks/useScrollToTopOnMount";
 import { InntektOgRefusjon } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
-import { EndringAvInntektÅrsaker, Naturalytelsetype } from "~/types/api-models";
+import {
+  EndringAvInntektÅrsaker,
+  Naturalytelsetype,
+} from "~/types/api-schemas";
 import { formatYtelsesnavn } from "~/utils";
 
+import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../frontendSchemas.tsx";
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext.tsx";
-import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../zodSchemas.tsx";
 
 type JaNei = "ja" | "nei";
 

@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
 
-import { OpplysningerDto } from "~/types/api-models";
+import { OpplysningerDto } from "~/types/api-schemas";
 import { dagerTilPerioder, periodeTilDager } from "~/utils/date-utils";
 
 import {
   RefusjonOmsorgspengerDto,
   RefusjonOmsorgspengerResponseDto,
 } from "./api/mutations";
-import { RefusjonOmsorgspengerFormData } from "./zodSchemas";
+import { RefusjonOmsorgspengerFormData } from "./frontendSchemas";
 
 const mapJaNeiTilBoolean = (value: "ja" | "nei") => {
   if (value === "ja") {

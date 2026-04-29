@@ -1,10 +1,10 @@
 import { mapInntektsmeldingResponseTilValidState } from "~/api/queries.ts";
+import { SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType } from "~/features/arbeidsgiverinitiert/nyansatt/api-schemas";
+import { SendInntektsmeldingRequestDtoUregistrert } from "~/features/arbeidsgiverinitiert/unntattAAregister/api-schemas";
 import {
   InntektsmeldingResponseDtoSchema,
   SendInntektsmeldingRequestDto,
-  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
-  SendInntektsmeldingRequestDtoUregistrert,
-} from "~/types/api-models.ts";
+} from "~/features/inntektsmelding/api-schemas";
 import { logDev } from "~/utils.ts";
 
 export const SERVER_URL = `${import.meta.env.BASE_URL}/server/api`;

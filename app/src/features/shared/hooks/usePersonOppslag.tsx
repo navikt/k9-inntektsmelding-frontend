@@ -4,7 +4,7 @@ import {
   hentPersonFraFnr,
   hentPersonFraFnrUnntattAareg,
 } from "~/api/queries.ts";
-import { Ytelsetype } from "~/types/api-models.ts";
+import { Ytelsetype } from "~/types/api-schemas.ts";
 
 export interface PersonOppslagParams {
   fødselsnummer: string;

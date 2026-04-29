@@ -7,7 +7,7 @@ import {
   FraværDelerAvDagSchema,
   FraværHeleDagSchema,
 } from "~/features/shared/skjema-moduler/omsorgspengerFraværSchema";
-import { EndringAvInntektÅrsakerSchema } from "~/types/api-models";
+import { EndringAvInntektÅrsakerSchema } from "~/types/api-schemas";
 import { beløpSchema, formatDatoKort } from "~/utils";
 import { perioderOverlapper } from "~/utils/date-utils";
 import { validateInntekt, validateTimer } from "~/validators";

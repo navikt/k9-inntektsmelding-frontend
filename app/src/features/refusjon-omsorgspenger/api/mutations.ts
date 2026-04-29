@@ -2,42 +2,41 @@ import { MutationOptions, useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 
 import { SERVER_URL } from "~/api/mutations";
-import { SendInntektsmeldingRequestDtoSchema } from "~/types/api-models.ts";
+import {
+  endringAvInntektDtoSchema,
+  kontaktpersonDtoSchema,
+  naturalytelsePerioderDtoSchema,
+  refusjonDtoSchema,
+  YtelsetypeSchema,
+} from "~/types/api-schemas.ts";
 
-const RefusjonOmsorgspengerDtoSchema = SendInntektsmeldingRequestDtoSchema.omit(
-  { foresporselUuid: true },
-).extend({
+export const RefusjonOmsorgspengerResponseDtoSchema = z.object({
+  aktorId: z.string(),
+  ytelse: YtelsetypeSchema,
+  arbeidsgiverIdent: z.string(),
+  kontaktperson: kontaktpersonDtoSchema,
+  refusjon: refusjonDtoSchema,
+  startdato: z.string(),
+  inntekt: z.number(),
+  endringAvInntektÅrsaker: endringAvInntektDtoSchema,
+  bortfaltNaturalytelsePerioder: naturalytelsePerioderDtoSchema,
   omsorgspenger: z.object({
     fraværHeleDager: z
-      .array(
-        z.object({
-          fom: z.string(),
-          tom: z.string(),
-        }),
-      )
+      .array(z.object({ fom: z.string(), tom: z.string() }))
       .optional(),
     fraværDelerAvDagen: z
-      .array(
-        z.object({
-          dato: z.string(),
-          timer: z.coerce.string(),
-        }),
-      )
+      .array(z.object({ dato: z.string(), timer: z.coerce.string() }))
       .optional(),
     harUtbetaltPliktigeDager: z.boolean(),
   }),
+  id: z.number(),
+  opprettetTidspunkt: z.string(),
+  innsendtTidspunkt: z.string().optional(),
+  foresporselUuid: z.string(),
 });
 
-export const RefusjonOmsorgspengerResponseDtoSchema =
-  RefusjonOmsorgspengerDtoSchema.extend({
-    id: z.number(),
-    opprettetTidspunkt: z.string(),
-    innsendtTidspunkt: z.string().optional(),
-    foresporselUuid: z.string(),
-  });
-
 export type RefusjonOmsorgspengerDto = z.infer<
-  typeof RefusjonOmsorgspengerDtoSchema
+  typeof RefusjonOmsorgspengerResponseDtoSchema
 >;
 
 export type RefusjonOmsorgspengerResponseDto = z.infer<

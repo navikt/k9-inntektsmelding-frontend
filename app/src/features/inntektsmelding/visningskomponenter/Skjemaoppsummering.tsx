@@ -12,13 +12,13 @@ import {
 import { ListItem } from "@navikt/ds-react/List";
 import { Link } from "@tanstack/react-router";
 
-import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/zodSchemas.tsx";
-import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas.tsx";
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas.tsx";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/frontendSchemas.tsx";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas.tsx";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas.tsx";
 import { endringsårsak } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import { REFUSJON_RADIO_VALG } from "~/features/shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
-import type { OpplysningerDto } from "~/types/api-models.ts";
-import { EndringAvInntektÅrsakerSchema } from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
+import { EndringAvInntektÅrsakerSchema } from "~/types/api-schemas.ts";
 import {
   capitalize,
   formatDatoKort,

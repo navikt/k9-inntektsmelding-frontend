@@ -16,8 +16,8 @@ import { usePersonOppslag } from "../../../shared/hooks/usePersonOppslag.tsx";
 import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
 import { DatePickerWrapped } from "../../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
 import { UtbetalingOgRefusjon } from "../../../shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
+import { InntektsmeldingSkjemaStateAGINyansatt } from "../frontendSchemas.tsx";
 import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext";
-import { InntektsmeldingSkjemaStateAGINyansatt } from "../zodSchemas.tsx";
 
 export type RefusjonForm = {
   meta: {

@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Heading } from "@navikt/ds-react";
 
-import { Ytelsetype } from "~/types/api-models.ts";
+import { Ytelsetype } from "~/types/api-schemas.ts";
 import { formatYtelsesnavn } from "~/utils";
 
 interface PersonOppslagErrorProps {

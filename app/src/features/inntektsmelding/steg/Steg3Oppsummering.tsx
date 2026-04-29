@@ -7,11 +7,11 @@ import isEqual from "lodash/isEqual";
 import { useEffect } from "react";
 
 import { sendInntektsmelding } from "~/api/mutations.ts";
+import { SendInntektsmeldingRequestDto } from "~/features/inntektsmelding/api-schemas.ts";
 import { useInntektsmeldingSkjema } from "~/features/inntektsmelding/SkjemaStateContext";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator";
-import type { OpplysningerDto } from "~/types/api-models.ts";
-import { SendInntektsmeldingRequestDto } from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
 import {
   finnSenesteInntektsmelding,
   formatStrengTilTall,
@@ -20,8 +20,8 @@ import {
 
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount";
+import { InntektsmeldingSkjemaStateValid } from "../frontendSchemas";
 import { Skjemaoppsummering } from "../visningskomponenter/Skjemaoppsummering";
-import { InntektsmeldingSkjemaStateValid } from "../zodSchemas";
 
 const route = getRouteApi("/$id");
 

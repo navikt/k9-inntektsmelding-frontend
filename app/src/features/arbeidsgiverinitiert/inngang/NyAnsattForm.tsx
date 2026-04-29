@@ -17,7 +17,7 @@ import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFe
 import { usePersonOppslag } from "~/features/shared/hooks/usePersonOppslag";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
-import { OpplysningerRequest, Ytelsetype } from "~/types/api-models.ts";
+import { OpplysningerRequest, Ytelsetype } from "~/types/api-schemas.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";

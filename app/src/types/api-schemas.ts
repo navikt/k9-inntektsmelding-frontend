@@ -70,54 +70,40 @@ export type SlåOppArbeidstakerResponseDto = z.infer<
   typeof SlåOppArbeidstakerResponseDtoSchema
 >;
 
-export const SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert = z.object(
-  {
-    aktorId: z.string(),
-    ytelse: YtelsetypeSchema,
-    arbeidsgiverIdent: z.string(),
-    kontaktperson: z.object({
-      telefonnummer: z.string(),
-      navn: z.string(),
-    }),
-    refusjon: z.array(
-      z.object({
-        fom: z.string().optional(),
-        beløp: z.number(),
-      }),
-    ),
-    startdato: z.string(),
-    foresporselUuid: z.string().optional(),
-  },
+export const kontaktpersonDtoSchema = z.object({
+  telefonnummer: z.string(),
+  navn: z.string(),
+});
+
+export const refusjonDtoSchema = z.array(
+  z.object({
+    fom: z.string().optional(),
+    beløp: z.number(),
+  }),
 );
 
-export type SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType =
-  z.infer<typeof SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert>;
+export const endringAvInntektDtoSchema = z
+  .array(
+    z.object({
+      årsak: EndringAvInntektÅrsakerSchema,
+      fom: z.string().optional(),
+      tom: z.string().optional(),
+      bleKjentFom: z.string().optional(),
+    }),
+  )
+  .optional(); //TODO: midlertidig optional
 
-export const SendInntektsmeldingRequestDtoSchema =
-  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiert.extend({
-    foresporselUuid: z.string(),
-    inntekt: z.number(),
-    endringAvInntektÅrsaker: z
-      .array(
-        z.object({
-          årsak: EndringAvInntektÅrsakerSchema,
-          fom: z.string().optional(),
-          tom: z.string().optional(),
-          bleKjentFom: z.string().optional(),
-        }),
-      )
-      .optional(), //TODO: midlertidig optional
-    bortfaltNaturalytelsePerioder: z
-      .array(
-        z.object({
-          fom: z.string(),
-          tom: z.string().optional(),
-          beløp: z.number(),
-          naturalytelsetype: NaturalytelseTypeSchema,
-        }),
-      )
-      .optional(), // TODO: Når databasen er wipet, kan vi fjerne optional her.
-  });
+export const naturalytelsePerioderDtoSchema = z
+  .array(
+    z.object({
+      fom: z.string(),
+      tom: z.string().optional(),
+      beløp: z.number(),
+      naturalytelsetype: NaturalytelseTypeSchema,
+    }),
+  )
+  .optional(); // TODO: Når databasen er wipet, kan vi fjerne optional her.
+
 export const OmsorgspengerRequestDtoSchema = z.object({
   harUtbetaltPliktigeDager: z.boolean(),
   fraværHeleDager: z
@@ -128,43 +114,8 @@ export const OmsorgspengerRequestDtoSchema = z.object({
     .optional(),
 });
 
-export const InntektsmeldingResponseDtoSchema =
-  SendInntektsmeldingRequestDtoSchema.extend({
-    omsorgspenger: OmsorgspengerRequestDtoSchema.optional(),
-    opprettetTidspunkt: z.string(),
-    id: z.number(),
-  });
-
-export type SendInntektsmeldingResponseDto = z.infer<
-  typeof InntektsmeldingResponseDtoSchema
->;
-
-export type SendInntektsmeldingRequestDto = z.infer<
-  typeof SendInntektsmeldingRequestDtoSchema
->;
-
 export type OmsorgspengerRequestDto = z.infer<
   typeof OmsorgspengerRequestDtoSchema
->;
-
-export const SendInntektsmeldingRequestDtoUregistrertSchema =
-  SendInntektsmeldingRequestDtoSchema.extend({
-    foresporselUuid: z.string().optional(),
-    omsorgspenger: OmsorgspengerRequestDtoSchema.optional(),
-  });
-
-export type SendInntektsmeldingRequestDtoUregistrert = z.infer<
-  typeof SendInntektsmeldingRequestDtoUregistrertSchema
->;
-
-export const InntektsmeldingResponseDtoUregistrertSchema =
-  SendInntektsmeldingRequestDtoUregistrertSchema.extend({
-    opprettetTidspunkt: z.string(),
-    id: z.number(),
-  });
-
-export type SendInntektsmeldingResponseDtoUregistrert = z.infer<
-  typeof InntektsmeldingResponseDtoUregistrertSchema
 >;
 
 export const opplysningerSchema = z.object({

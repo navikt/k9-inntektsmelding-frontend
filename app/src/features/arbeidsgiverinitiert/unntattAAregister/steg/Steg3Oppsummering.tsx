@@ -7,18 +7,18 @@ import isEqual from "lodash/isEqual";
 import { useEffect } from "react";
 
 import { sendInntektsmeldingArbeidsgiverInitiertUnntattAaregister } from "~/api/mutations.ts";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
 import { Skjemaoppsummering } from "~/features/inntektsmelding/visningskomponenter/Skjemaoppsummering";
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { useScrollToTopOnMount } from "~/features/shared/hooks/useScrollToTopOnMount";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator";
 import { lagSendInntektsmeldingRequest } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/utils";
-import type { OpplysningerDto } from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
 import { finnSenesteInntektsmelding, formatYtelsesnavn } from "~/utils";
 
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "../frontendSchemas";
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext";
-import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "../zodSchemas";
 
 export const Steg3Oppsummering = () => {
   useScrollToTopOnMount();

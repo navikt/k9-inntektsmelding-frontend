@@ -1,4 +1,4 @@
-import { SendInntektsmeldingResponseDto } from "~/types/api-models.ts";
+import { SendInntektsmeldingResponseDto } from "~/features/inntektsmelding/api-schemas.ts";
 
 export const agiSendInntektsmeldingResponse = {
   id: 2_000_801,

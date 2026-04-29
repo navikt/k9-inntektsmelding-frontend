@@ -3,14 +3,17 @@ import { Button, Heading } from "@navikt/ds-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 
-import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas.tsx";
+import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas.tsx";
 import {
   InntektsmeldingSkjemaState,
   InntektsmeldingSkjemaStateValid,
-} from "~/features/inntektsmelding/zodSchemas.tsx";
+} from "~/features/inntektsmelding/frontendSchemas.tsx";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
-import { EndringAvInntektÅrsaker, Naturalytelsetype } from "~/types/api-models";
+import {
+  EndringAvInntektÅrsaker,
+  Naturalytelsetype,
+} from "~/types/api-schemas";
 import { formatYtelsesnavn } from "~/utils";
 
 import { useDocumentTitle } from "../../../hooks/useDocumentTitle.tsx";

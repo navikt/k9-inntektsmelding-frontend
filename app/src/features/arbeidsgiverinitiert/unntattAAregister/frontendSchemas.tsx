@@ -7,7 +7,7 @@ import {
 import {
   EndringAvInntektÅrsakerSchema,
   NaturalytelseTypeSchema,
-} from "~/types/api-models.ts";
+} from "~/types/api-schemas.ts";
 import { beløpSchema } from "~/utils.ts";
 
 // Før vi er i oppsummeringssteget

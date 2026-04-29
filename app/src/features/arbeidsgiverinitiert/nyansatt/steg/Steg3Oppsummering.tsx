@@ -9,17 +9,15 @@ import { sendInntektsmeldingArbeidsgiverInitiert } from "~/api/mutations.ts";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
-import type {
-  OpplysningerDto,
-  SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType,
-} from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
 import { formatStrengTilTall, formatYtelsesnavn } from "~/utils";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
 import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
+import type { SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType } from "../api-schemas.ts";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "../frontendSchemas.tsx";
 import { Skjemaoppsummering } from "../Skjemaoppsummering.tsx";
 import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext.tsx";
-import { InntektsmeldingSkjemaStateValidAGINyansatt } from "../zodSchemas.tsx";
 
 export const Steg3Oppsummering = () => {
   useScrollToTopOnMount();

@@ -13,11 +13,11 @@ import { useSessionStorageState } from "../shared/hooks/usePersistedState";
 import {
   InntektsmeldingSkjemaState,
   InntektsmeldingSkjemaStateValid,
-} from "./zodSchemas";
+} from "./frontendSchemas";
 import {
   InntektsmeldingSkjemaStateSchema,
   InntektsmeldingSkjemaStateSchemaValidated,
-} from "./zodSchemas";
+} from "./frontendSchemas";
 
 type InntektsmeldingSkjemaStateContextType = {
   gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValid;

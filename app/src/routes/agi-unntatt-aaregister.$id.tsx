@@ -7,10 +7,10 @@ import {
   hentOpplysningerData,
   mapInntektsmeldingUregistrertResponseTilValidState,
 } from "~/api/queries";
+import { InntektsmeldingResponseDtoUregistrertSchema } from "~/features/arbeidsgiverinitiert/unntattAAregister/api-schemas";
 import { InntektsmeldingRootUnntattAaregister } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
-import { InntektsmeldingResponseDtoUregistrertSchema } from "~/types/api-models";
-import { OpplysningerDto } from "~/types/api-models";
+import { OpplysningerDto } from "~/types/api-schemas";
 import { logDev } from "~/utils";
 
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "./opprett";

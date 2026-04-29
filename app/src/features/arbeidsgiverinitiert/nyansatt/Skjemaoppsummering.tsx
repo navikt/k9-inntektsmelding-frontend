@@ -1,11 +1,11 @@
-import { OpplysningerDto } from "~/types/api-models";
+import { OpplysningerDto } from "~/types/api-schemas";
 
 import {
   ArbeidsgiverOgAnsattOppsummering,
   RefusjonOppsummering,
   UtbetalingOgRefusjonOppsummering,
 } from "../../inntektsmelding/visningskomponenter/Skjemaoppsummering.tsx";
-import { InntektsmeldingSkjemaStateValidAGINyansatt } from "./zodSchemas.tsx";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "./frontendSchemas.tsx";
 
 export const Skjemaoppsummering = ({
   opplysninger,

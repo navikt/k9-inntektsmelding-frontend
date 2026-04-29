@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { OpplysningerDto } from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
 
 export function leggTilGenitiv(navn?: string) {
   if (!navn) {

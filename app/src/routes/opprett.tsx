@@ -2,7 +2,7 @@ import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { InntektsmeldingRootLayoutComponent } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
-import { YtelsetypeSchema } from "~/types/api-models";
+import { YtelsetypeSchema } from "~/types/api-schemas";
 
 export const ARBEIDSGIVERINITERT_NYANSATT_ID = "agi";
 export const ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID =

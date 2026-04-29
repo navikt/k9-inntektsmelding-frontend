@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 
-import type { OpplysningerDto } from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
 
 import { arbeidsforholdResponse } from "../arbeidsgiverinitiert/nyansatt/arbeidsforhold.ts";
 import { arbeidsforholdUregistrertResponse } from "../arbeidsgiverinitiert/uregistrert/arbeidsforhold.ts";

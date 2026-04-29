@@ -1,7 +1,7 @@
 import { Select } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 
-import { SlåOppArbeidstakerResponseDto } from "~/types/api-models.ts";
+import { SlåOppArbeidstakerResponseDto } from "~/types/api-schemas.ts";
 
 import { FormType } from "./types";
 

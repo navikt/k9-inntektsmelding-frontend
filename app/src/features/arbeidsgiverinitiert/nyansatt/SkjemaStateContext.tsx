@@ -16,8 +16,8 @@ import {
   AGIValidatedInntektsmeldingNyansatt,
   InntektsmeldingSkjemaStateAGINyansatt,
   InntektsmeldingSkjemaStateValidAGINyansatt,
-} from "./zodSchemas.tsx";
-import { InntektsmeldingSkjemaStateSchemaNyansatt } from "./zodSchemas.tsx";
+} from "./frontendSchemas.tsx";
+import { InntektsmeldingSkjemaStateSchemaNyansatt } from "./frontendSchemas.tsx";
 
 type InntektsmeldingSkjemaStateContextTypeAGI = {
   gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValidAGINyansatt;

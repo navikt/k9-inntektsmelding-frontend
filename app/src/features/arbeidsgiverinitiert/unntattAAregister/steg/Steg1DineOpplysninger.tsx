@@ -5,8 +5,8 @@ import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
 import { DineOpplysninger } from "../../../shared/skjema-moduler/steg/DineOpplysninger.tsx";
+import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../frontendSchemas.tsx";
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext.tsx";
-import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../zodSchemas.tsx";
 
 export const Steg1DineOpplysningerAGIUnntattAaregister = () => {
   const opplysninger = useOpplysninger();

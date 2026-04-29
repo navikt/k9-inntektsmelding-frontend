@@ -1,8 +1,13 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
-import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
+import { SendInntektsmeldingResponseDtoUregistrert } from "~/features/arbeidsgiverinitiert/unntattAAregister/api-schemas";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas";
+import {
+  InntektsmeldingResponseDtoSchema,
+  SendInntektsmeldingResponseDto,
+} from "~/features/inntektsmelding/api-schemas";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import {
@@ -12,15 +17,12 @@ import {
 import {
   feilmeldingSchema,
   grunnbeløpSchema,
-  InntektsmeldingResponseDtoSchema,
   OpplysningerDto,
   OpplysningerRequest,
   opplysningerSchema,
-  SendInntektsmeldingResponseDto,
-  SendInntektsmeldingResponseDtoUregistrert,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
-} from "~/types/api-models";
+} from "~/types/api-schemas";
 import { logDev } from "~/utils.ts";
 
 const SERVER_URL = `${import.meta.env.BASE_URL}/server/api`;

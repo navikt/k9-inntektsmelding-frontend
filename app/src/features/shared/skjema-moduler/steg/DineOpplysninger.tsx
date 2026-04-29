@@ -11,12 +11,12 @@ import {
 } from "@navikt/ds-react";
 import { useForm } from "react-hook-form";
 
-import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/zodSchemas";
-import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
+import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/frontendSchemas";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
 import { useHjelpetekst } from "~/features/shared/Hjelpetekst";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
-import type { OpplysningerDto } from "~/types/api-models.ts";
+import type { OpplysningerDto } from "~/types/api-schemas.ts";
 import {
   capitalizeSetning,
   formatFødselsnummer,

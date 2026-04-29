@@ -16,7 +16,7 @@ import {
   InntektsmeldingSkjemaStateAGIUnntattAaregister,
   InntektsmeldingSkjemaStateSchemaUnntattAaregister,
   InntektsmeldingSkjemaStateValidAGIUnntattAaregister,
-} from "./zodSchemas.tsx";
+} from "./frontendSchemas.tsx";
 
 type InntektsmeldingSkjemaStateContextTypeAGIUnntattAaregister = {
   gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValidAGIUnntattAaregister;
