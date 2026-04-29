@@ -6,7 +6,7 @@ import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import isEqual from "lodash/isEqual";
 import { useEffect } from "react";
 
-import { sendInntektsmeldingArbeidsgiverInitiertUnntattAaregister } from "~/api/mutations.ts";
+import { sendInntektsmeldingArbeidsgiverInitiertUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/api/mutations";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
 import { Skjemaoppsummering } from "~/features/inntektsmelding/visningskomponenter/Skjemaoppsummering";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";

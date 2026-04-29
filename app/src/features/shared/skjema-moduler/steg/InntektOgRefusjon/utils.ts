@@ -69,7 +69,7 @@ export function lagSendInntektsmeldingRequest(
         fraværDelerAvDagen:
           skjemaState.fraværDelerAvDagen?.map((d) => ({
             dato: d.dato,
-            timer: d.timer,
+            timer: Number(d.timer),
           })) || [],
       },
     }),

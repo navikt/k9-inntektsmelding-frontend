@@ -6,7 +6,7 @@ import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import isEqual from "lodash/isEqual";
 import { useEffect } from "react";
 
-import { sendInntektsmelding } from "~/api/mutations.ts";
+import { sendInntektsmelding } from "~/features/inntektsmelding/api/mutations";
 import { SendInntektsmeldingRequestDto } from "~/features/inntektsmelding/api-schemas.ts";
 import { useInntektsmeldingSkjema } from "~/features/inntektsmelding/SkjemaStateContext";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";

@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import { sendInntektsmeldingArbeidsgiverInitiert } from "~/api/mutations.ts";
+import { sendInntektsmeldingArbeidsgiverInitiert } from "~/features/arbeidsgiverinitiert/nyansatt/api/mutations";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";

@@ -65,14 +65,18 @@ export const mapSkjemaTilSendInntektsmeldingRequest = (
       };
     });
 
-  const fraværDelerAvDagen = [
+  const alleFraværDelerAvDagen = [
     ...validatedSkjemaState.fraværDelerAvDagen,
     ...trukketDager,
   ];
+  const fraværDelerAvDagen = alleFraværDelerAvDagen.map((d) => ({
+    dato: d.dato,
+    timer: Number(d.timer),
+  }));
   const førsteFraværsdag = dayjs(
     utledFørsteFraværsdag(
       validatedSkjemaState.fraværHeleDager,
-      fraværDelerAvDagen,
+      alleFraværDelerAvDagen,
     ),
   ).format("YYYY-MM-DD");
   const inntekt =

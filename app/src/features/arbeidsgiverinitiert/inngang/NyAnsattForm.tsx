@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
-import { hentOpplysninger } from "~/api/queries.ts";
+import { hentOpplysninger } from "~/features/arbeidsgiverinitiert/nyansatt/api/queries";
 import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFeil";
 import { usePersonOppslag } from "~/features/shared/hooks/usePersonOppslag";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";

@@ -1,7 +1,7 @@
 import { MutationOptions, useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 
-import { SERVER_URL } from "~/api/mutations";
+import { SERVER_URL } from "~/api/config";
 import {
   endringAvInntektDtoSchema,
   kontaktpersonDtoSchema,
@@ -9,6 +9,27 @@ import {
   refusjonDtoSchema,
   YtelsetypeSchema,
 } from "~/types/api-schemas.ts";
+
+export const RefusjonOmsorgspengerRequestDtoSchema = z.object({
+  aktorId: z.string(),
+  ytelse: YtelsetypeSchema,
+  arbeidsgiverIdent: z.string(),
+  kontaktperson: kontaktpersonDtoSchema,
+  refusjon: refusjonDtoSchema,
+  startdato: z.string(),
+  inntekt: z.number(),
+  endringAvInntektÅrsaker: endringAvInntektDtoSchema,
+  bortfaltNaturalytelsePerioder: naturalytelsePerioderDtoSchema,
+  omsorgspenger: z.object({
+    fraværHeleDager: z
+      .array(z.object({ fom: z.string(), tom: z.string() }))
+      .optional(),
+    fraværDelerAvDagen: z
+      .array(z.object({ dato: z.string(), timer: z.number() }))
+      .optional(),
+    harUtbetaltPliktigeDager: z.boolean(),
+  }),
+});
 
 export const RefusjonOmsorgspengerResponseDtoSchema = z.object({
   aktorId: z.string(),
@@ -36,7 +57,7 @@ export const RefusjonOmsorgspengerResponseDtoSchema = z.object({
 });
 
 export type RefusjonOmsorgspengerDto = z.infer<
-  typeof RefusjonOmsorgspengerResponseDtoSchema
+  typeof RefusjonOmsorgspengerRequestDtoSchema
 >;
 
 export type RefusjonOmsorgspengerResponseDto = z.infer<

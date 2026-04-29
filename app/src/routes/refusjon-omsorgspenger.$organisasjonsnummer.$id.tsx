@@ -3,7 +3,7 @@ import { BodyShort } from "@navikt/ds-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { SERVER_URL } from "~/api/mutations";
+import { SERVER_URL } from "~/api/config";
 import { hentOpplysningerData } from "~/api/queries";
 import { RefusjonOmsorgspengerResponseDtoSchema } from "~/features/refusjon-omsorgspenger/api/mutations";
 import { VisInnsendtRefusjonskrav } from "~/features/refusjon-omsorgspenger/visningskomponenter/VisInnsendtRefusjonskrav.tsx";

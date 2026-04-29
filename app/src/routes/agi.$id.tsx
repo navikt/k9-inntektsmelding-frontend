@@ -2,7 +2,7 @@ import { BodyShort, Loader } from "@navikt/ds-react";
 import { createFileRoute } from "@tanstack/react-router";
 import z from "zod";
 
-import { SERVER_URL } from "~/api/mutations";
+import { SERVER_URL } from "~/api/config";
 import { hentOpplysningerData } from "~/api/queries";
 import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/frontendSchemas";
 import {
