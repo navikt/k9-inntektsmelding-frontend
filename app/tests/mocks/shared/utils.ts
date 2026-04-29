@@ -180,3 +180,20 @@ export const mockAGIOpplysningerUregistrert = ({
     },
   );
 };
+
+type MockAGISendInntektsmeldingUregistrertParams = {
+  page: Page;
+  json?: unknown;
+};
+
+export const mockAGISendInntektsmeldingUregistrert = ({
+  page,
+  json,
+}: MockAGISendInntektsmeldingUregistrertParams) => {
+  return page.route(
+    `**/*/imdialog/send-inntektsmelding/arbeidsgiverinitiert-uregistrert`,
+    async (route) => {
+      await route.fulfill({ json });
+    },
+  );
+};
