@@ -63,17 +63,13 @@ test.describe("Inntektsmelding – vis-rute", () => {
     await expect(page.getByText("Endret til:", { exact: false })).toBeVisible();
 
     // Refusjonsbeløp med dato (varierende refusjon)
-    await expect(
-      page.getByText("80 kr", { exact: false }),
-    ).toBeVisible();
+    await expect(page.getByText("80 kr", { exact: false })).toBeVisible();
     await expect(page.getByText(/25. oktober 2024/)).toBeVisible();
 
     // Naturalytelser
     await expect(page.getByText("Naturalytelser").first()).toBeVisible();
     await expect(page.getByText("Losji")).toBeVisible();
-    await expect(
-      page.getByText("50 kr", { exact: false }),
-    ).toBeVisible();
+    await expect(page.getByText("50 kr", { exact: false })).toBeVisible();
     await expect(page.getByText(/12\.09\.2024/)).toBeVisible();
 
     await expect(page.getByText("Last ned inntektsmeldingen")).toBeVisible();

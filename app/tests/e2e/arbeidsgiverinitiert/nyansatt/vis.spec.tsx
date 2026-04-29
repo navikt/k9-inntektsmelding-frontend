@@ -67,9 +67,7 @@ test.describe("AGI nyansatt – vis-rute", () => {
     await expect(
       page.getByText("Refusjonsbeløp per måned", { exact: false }),
     ).toBeVisible();
-    await expect(
-      page.getByText("45 000 kr", { exact: false }),
-    ).toBeVisible();
+    await expect(page.getByText("45 000 kr", { exact: false })).toBeVisible();
 
     await expect(page.getByText("Last ned inntektsmeldingen")).toBeVisible();
   });
