@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/$id/")({
-  loader: async ({ parentMatchPromise }) => {
+  loader: async ({ parentMatchPromise, params }) => {
     const { loaderData } = await parentMatchPromise;
     const opplysninger = loaderData?.opplysninger;
     const eksisterendeInntektsmeldinger =
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/$id/")({
       return redirect({
         to: "/agi/$id/vis",
         params: {
-          id: opplysninger.forespørselUuid ?? "",
+          id: params.id,
         },
         replace: true,
         throw: true,
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/$id/")({
       return redirect({
         to: "/agi-unntatt-aaregister/$id/vis",
         params: {
-          id: opplysninger.forespørselUuid ?? "",
+          id: params.id,
         },
         replace: true,
         throw: true,
@@ -43,14 +43,14 @@ export const Route = createFileRoute("/$id/")({
     if (harSendtInn) {
       redirect({
         to: "/$id/vis",
-        params: { id: opplysninger.forespørselUuid ?? "" },
+        params: { id: params.id },
         replace: true,
         throw: true,
       });
     } else {
       redirect({
         to: "/$id/dine-opplysninger",
-        params: { id: opplysninger.forespørselUuid ?? "" },
+        params: { id: params.id },
         replace: true,
         throw: true,
       });
