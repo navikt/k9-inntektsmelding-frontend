@@ -85,7 +85,7 @@ test.describe("Refusjon Omsorgspenger – steg 2 unntatt Aa-registeret", () => {
 
     // Da skal arbeidsgiver-seksjonen vise virksomheten fra innlogget bruker
     await expect(page.getByText("TEST ORGANISASJON AS")).toBeVisible();
-    await expect(page.getByText(ORGANISASJONSNUMMER).first()).toBeVisible();
+    await expect(page.getByText(ORGANISASJONSNUMMER).last()).toBeVisible();
 
     // Vi kan gå videre
     await page.getByRole("button", { name: "Neste steg" }).click();
