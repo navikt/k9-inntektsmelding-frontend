@@ -19,4 +19,6 @@ export const agiUregistrertSendInntektsmeldingResponse = {
     },
   ],
   opprettetTidspunkt: "2024-04-15T10:30:00.000",
+  endringAvInntektÅrsaker: [],
+  bortfaltNaturalytelsePerioder: [],
 } satisfies SendInntektsmeldingResponseDto;

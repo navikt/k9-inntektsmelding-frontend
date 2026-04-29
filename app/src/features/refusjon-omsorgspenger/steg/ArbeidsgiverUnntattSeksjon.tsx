@@ -11,6 +11,17 @@ export const ArbeidsgiverUnntattSeksjon = () => {
     hentArbeidsgiversOrganisasjonerOptions(),
   );
 
+  const enkeltUnntatt =
+    !isLoading && !error && data?.organisasjoner.length === 1
+      ? data.organisasjoner[0]
+      : null;
+
+  useEffect(() => {
+    if (enkeltUnntatt) {
+      setValue("meta.organisasjonsnavn", enkeltUnntatt.organisasjonsnavn);
+    }
+  }, [enkeltUnntatt?.organisasjonsnavn]);
+
   if (isLoading) return <Loader title="Henter virksomheter" />;
 
   if (error || data?.organisasjoner.length === 0) {
@@ -49,26 +60,20 @@ export const ArbeidsgiverUnntattSeksjon = () => {
     );
   }
 
-  const [enkeltUnntatt] = data.organisasjoner;
-
-  useEffect(() => {
-    setValue("meta.organisasjonsnavn", enkeltUnntatt.organisasjonsnavn);
-  }, [enkeltUnntatt.organisasjonsnavn]);
-
   return (
     <div className="flex gap-4">
       <div className="flex-1">
         <Label>Virksomhetsnavn</Label>
-        <BodyShort>{enkeltUnntatt.organisasjonsnavn}</BodyShort>
+        <BodyShort>{enkeltUnntatt!.organisasjonsnavn}</BodyShort>
       </div>
       <div className="flex-1">
         <Label>Org.nr. for underenhet</Label>
         <input
           type="hidden"
           {...register("organisasjonsnummer")}
-          value={enkeltUnntatt.organisasjonsnummer}
+          value={enkeltUnntatt!.organisasjonsnummer}
         />
-        <BodyShort>{enkeltUnntatt.organisasjonsnummer}</BodyShort>
+        <BodyShort>{enkeltUnntatt!.organisasjonsnummer}</BodyShort>
       </div>
     </div>
   );

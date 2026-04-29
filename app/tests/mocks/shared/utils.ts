@@ -4,10 +4,7 @@ import type { OpplysningerDto } from "~/types/api-schemas.ts";
 
 import { arbeidsforholdResponse } from "../arbeidsgiverinitiert/nyansatt/arbeidsforhold.ts";
 import { arbeidsforholdUregistrertResponse } from "../arbeidsgiverinitiert/uregistrert/arbeidsforhold.ts";
-import {
-  ingenEksisterendeInntektsmeldingerResponse,
-  mangeEksisterendeInntektsmeldingerResponse,
-} from "../inntektsmelding/eksisterende-inntektsmeldinger";
+import { ingenEksisterendeInntektsmeldingerResponse } from "../inntektsmelding/eksisterende-inntektsmeldinger";
 import { enkeltOpplysningerResponse } from "../inntektsmelding/opplysninger.ts";
 import { grunnbeløpResponse } from "./grunnbeløp";
 
@@ -64,7 +61,7 @@ export const mockGrunnbeløp = ({
 
 type MockInntektsmeldingerParams = {
   page: Page;
-  json?: typeof mangeEksisterendeInntektsmeldingerResponse;
+  json?: unknown[];
   uuid?: string;
 };
 
