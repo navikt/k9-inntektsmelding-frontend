@@ -1,5 +1,6 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import {
+  Alert,
   BodyLong,
   Box,
   Button,
@@ -137,6 +138,17 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2V2 = () => {
             </Box>
           )}
         </Informasjonsseksjon>
+        {data && data.arbeidsforhold.length === 0 && (
+          <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
+            <Alert variant="warning">
+              <BodyLong>
+                Kunne ikke finne noen arbeidsforhold for denne ansatte. Vent
+                litt og prøv igjen, eller velg at den ansatte er unntatt
+                Aa-registeret hvis det gjelder.
+              </BodyLong>
+            </Alert>
+          </Informasjonsseksjon>
+        )}
         {data && data.arbeidsforhold.length > 0 && (
           <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
             <ArbeidsgiverSeksjon fødselsnummer={fødselsnummer} />
