@@ -169,7 +169,7 @@ test.describe("AGI Ulike scenarier", () => {
     // Skal vise melding om at det ikke er mulig å opprette for andre årsaker
     await expect(
       page.getByText(
-        "Det er ikke mulig å opprette inntektsmelding for andre årsaker enda",
+        "Det er ikke mulig å opprette inntektsmelding for andre årsaker",
       ),
     ).toBeVisible();
   });
