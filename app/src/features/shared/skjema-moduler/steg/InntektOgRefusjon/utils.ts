@@ -1,14 +1,12 @@
-import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/zodSchemas";
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
+import { SendInntektsmeldingRequestDtoUregistrert } from "~/features/arbeidsgiverinitiert/unntattAAregister/api-schemas";
+import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas";
+import { SendInntektsmeldingRequestDto } from "~/features/inntektsmelding/api-schemas";
+import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
 import {
   ARBEIDSGIVERINITERT_NYANSATT_ID,
   ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
 } from "~/routes/opprett";
-import {
-  OpplysningerDto,
-  SendInntektsmeldingRequestDto,
-  SendInntektsmeldingRequestDtoUregistrert,
-} from "~/types/api-models";
+import { OpplysningerDto } from "~/types/api-schemas";
 import { formatStrengTilTall } from "~/utils";
 
 export function lagSendInntektsmeldingRequest(
@@ -60,6 +58,21 @@ export function lagSendInntektsmeldingRequest(
       skjemaState.bortfaltNaturalytelsePerioder,
     ),
     endringAvInntektÅrsaker,
+    ...(opplysninger.ytelse === "OMSORGSPENGER" && {
+      omsorgspenger: {
+        harUtbetaltPliktigeDager: skjemaState.skalRefunderes !== "NEI",
+        fraværHeleDager:
+          skjemaState.fraværHeleDager?.map((p) => ({
+            fom: p.fom,
+            tom: p.tom,
+          })) || [],
+        fraværDelerAvDagen:
+          skjemaState.fraværDelerAvDagen?.map((d) => ({
+            dato: d.dato,
+            timer: Number(d.timer),
+          })) || [],
+      },
+    }),
   } satisfies SendInntektsmeldingRequestDtoUregistrert;
 }
 

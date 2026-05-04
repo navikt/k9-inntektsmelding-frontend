@@ -13,9 +13,9 @@ import {
   Radio,
   RadioGroup,
   ReadMore,
-  Theme,
 } from "@navikt/ds-react";
-import { createLink } from "@tanstack/react-router";
+import { createLink, useLocation } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
@@ -23,12 +23,30 @@ import { formatDatoKort, lagFulltNavn } from "~/utils";
 
 import { useHjelpetekst } from "../../shared/Hjelpetekst";
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
+import { FraværDelerAvDagenListeInput } from "./FraværDelerAvDagenListeInput.tsx";
+import { FraværHeleDagerListeInput } from "./FraværHeleDagerListeInput.tsx";
 
 const OmFraværetOmsorgspenger = () => {
-  const { register, formState, watch } =
+  const { register, formState, watch, clearErrors } =
     useFormContext<InntektOgRefusjonForm>();
   const opplysninger = useOpplysninger();
   const { vis } = useHjelpetekst().visHjelpetekster;
+  const location = useLocation();
+  const erAGIUnntattAaregister = location.pathname.startsWith(
+    "/agi-unntatt-aaregister",
+  );
+
+  const fraværHeleDager = watch("fraværHeleDager");
+  const fraværDelerAvDagen = watch("fraværDelerAvDagen");
+
+  useEffect(() => {
+    if (
+      erAGIUnntattAaregister &&
+      (fraværHeleDager?.length > 0 || fraværDelerAvDagen?.length > 0)
+    ) {
+      clearErrors("fraværHeleDager");
+    }
+  }, [fraværHeleDager, fraværDelerAvDagen, erAGIUnntattAaregister]);
 
   const { name, ...radioGroupProps } = register("skalRefunderes", {
     required: "Du må svare på dette spørsmålet",
@@ -46,7 +64,19 @@ const OmFraværetOmsorgspenger = () => {
       <Heading id="om-fraværet-omsorgspenger" level="4" size="medium">
         Om fraværet
       </Heading>
-      <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
+      {erAGIUnntattAaregister ? (
+        <div className="flex flex-col gap-6">
+          <FraværHeleDagerListeInput overskrift="Dager med fravær" />
+          <FraværDelerAvDagenListeInput overskrift="Delvise dager" />
+          {formState.errors.fraværHeleDager?.message && (
+            <Alert variant="error">
+              {formState.errors.fraværHeleDager.message}
+            </Alert>
+          )}
+        </div>
+      ) : (
+        <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
+      )}
       <RadioGroup
         className="mt-5"
         error={formState.errors.skalRefunderes?.message}
@@ -135,29 +165,27 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
         <Label size="small">{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
         <BodyShort size="small">FRA SØKNAD</BodyShort>
       </div>
-      <Theme theme="dark">
-        <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">
-          {opplysninger.etterspurtePerioder &&
-          opplysninger.etterspurtePerioder?.length > 0 ? (
-            <div>
-              <div className="flex flex-col gap-2 mt-1">
-                <Box marginBlock="space-16" asChild>
-                  <List data-aksel-migrated-v8>
-                    {opplysninger.etterspurtePerioder?.map((periode) => (
-                      <List.Item key={periode.fom}>
-                        {formatDatoKort(new Date(periode.fom))} -{" "}
-                        {formatDatoKort(new Date(periode.tom))}
-                      </List.Item>
-                    ))}
-                  </List>
-                </Box>
-              </div>
+      <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">
+        {opplysninger.etterspurtePerioder &&
+        opplysninger.etterspurtePerioder?.length > 0 ? (
+          <div>
+            <div className="flex flex-col gap-2 mt-1">
+              <Box marginBlock="space-16" asChild>
+                <List data-aksel-migrated-v8>
+                  {opplysninger.etterspurtePerioder?.map((periode) => (
+                    <List.Item key={periode.fom}>
+                      {formatDatoKort(new Date(periode.fom))} -{" "}
+                      {formatDatoKort(new Date(periode.tom))}
+                    </List.Item>
+                  ))}
+                </List>
+              </Box>
             </div>
-          ) : (
-            <BodyLong>Ingen dager med oppgitt fravær</BodyLong>
-          )}
-        </div>
-      </Theme>
+          </div>
+        ) : (
+          <BodyLong>Ingen dager med oppgitt fravær</BodyLong>
+        )}
+      </div>
       <Detail className="mt-4">
         Dette er dager den ansatte har søkt omsorgspenger, hvis du mener
         fraværet er feil må du ta kontakt med den ansatte. Har den ansatte hatt

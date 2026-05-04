@@ -20,7 +20,7 @@ import {
   Naturalytelsetype,
   NaturalytelseTypeSchema,
   OpplysningerDto,
-} from "~/types/api-models.ts";
+} from "~/types/api-schemas.ts";
 
 import { FormattertTallTextField } from "../react-hook-form-wrappers/FormattertTallTextField";
 

@@ -7,17 +7,15 @@ import {
 } from "react";
 import { ZodError } from "zod";
 
-import { logDev } from "~/utils";
-
 import { useSessionStorageState } from "../shared/hooks/usePersistedState";
 import {
   InntektsmeldingSkjemaState,
   InntektsmeldingSkjemaStateValid,
-} from "./zodSchemas";
+} from "./frontendSchemas";
 import {
   InntektsmeldingSkjemaStateSchema,
   InntektsmeldingSkjemaStateSchemaValidated,
-} from "./zodSchemas";
+} from "./frontendSchemas";
 
 type InntektsmeldingSkjemaStateContextType = {
   gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValid;
@@ -53,22 +51,8 @@ export const InntektsmeldingSkjemaStateProvider = ({
     InntektsmeldingSkjemaStateSchema,
   );
 
-  let gyldigInntektsmeldingSkjemaState;
-  try {
-    gyldigInntektsmeldingSkjemaState =
-      InntektsmeldingSkjemaStateSchemaValidated.safeParse(state);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(
-      `InntektsmeldingSkjemaStateProvider: Feil ved safeParse for skjemaId "${skjemaId}"`,
-      error,
-    );
-    throw error;
-  }
-
-  if (!gyldigInntektsmeldingSkjemaState.success) {
-    logDev("error", gyldigInntektsmeldingSkjemaState.error);
-  }
+  const gyldigInntektsmeldingSkjemaState =
+    InntektsmeldingSkjemaStateSchemaValidated.safeParse(state);
 
   return (
     <InntektsmeldingSkjemaStateContext.Provider

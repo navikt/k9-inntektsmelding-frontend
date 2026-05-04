@@ -8,7 +8,6 @@ import {
 import { ZodError } from "zod";
 
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
-import { logDev } from "~/utils";
 
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger.tsx";
 import { useSessionStorageState } from "../../shared/hooks/usePersistedState.tsx";
@@ -16,8 +15,8 @@ import {
   AGIValidatedInntektsmeldingNyansatt,
   InntektsmeldingSkjemaStateAGINyansatt,
   InntektsmeldingSkjemaStateValidAGINyansatt,
-} from "./zodSchemas.tsx";
-import { InntektsmeldingSkjemaStateSchemaNyansatt } from "./zodSchemas.tsx";
+} from "./frontendSchemas.tsx";
+import { InntektsmeldingSkjemaStateSchemaNyansatt } from "./frontendSchemas.tsx";
 
 type InntektsmeldingSkjemaStateContextTypeAGI = {
   gyldigInntektsmeldingSkjemaState?: InntektsmeldingSkjemaStateValidAGINyansatt;
@@ -57,22 +56,8 @@ export const InntektsmeldingSkjemaStateProviderAGINyansatt = ({
       InntektsmeldingSkjemaStateSchemaNyansatt,
     );
 
-  let gyldigInntektsmeldingSkjemaState;
-  try {
-    gyldigInntektsmeldingSkjemaState =
-      AGIValidatedInntektsmeldingNyansatt.safeParse(state);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(
-      "InntektsmeldingSkjemaStateProviderAGINyansatt: Feil ved safeParse",
-      error,
-    );
-    throw error;
-  }
-
-  if (!gyldigInntektsmeldingSkjemaState.success) {
-    logDev("error", gyldigInntektsmeldingSkjemaState.error);
-  }
+  const gyldigInntektsmeldingSkjemaState =
+    AGIValidatedInntektsmeldingNyansatt.safeParse(state);
 
   return (
     <InntektsmeldingSkjemaStateContextAGI.Provider

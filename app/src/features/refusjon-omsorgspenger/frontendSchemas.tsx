@@ -3,7 +3,11 @@ import { isBefore } from "date-fns";
 import { z } from "zod";
 
 import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt";
-import { EndringAvInntektÅrsakerSchema } from "~/types/api-models";
+import {
+  FraværDelerAvDagSchema,
+  FraværHeleDagSchema,
+} from "~/features/shared/skjema-moduler/omsorgspengerFraværSchema";
+import { EndringAvInntektÅrsakerSchema } from "~/types/api-schemas";
 import { beløpSchema, formatDatoKort } from "~/utils";
 import { perioderOverlapper } from "~/utils/date-utils";
 import { validateInntekt, validateTimer } from "~/validators";
@@ -32,27 +36,19 @@ const baseSchema = z.object({
   ansattesEtternavn: z.string().optional(),
   ansattesAktørId: z.string().optional(),
   organisasjonsnummer: z.string().optional(),
+  erUnntattAaregisteret: z.boolean().optional(),
+  førsteFraværsdatoForÅret: z.string().optional(),
 
   // Steg 3 fields
   harDekket10FørsteOmsorgsdager: z.string().catch(""),
-  fraværHeleDager: z.array(
-    z.object({
-      fom: z.string(),
-      tom: z.string(),
-    }),
-  ),
+  fraværHeleDager: z.array(FraværHeleDagSchema),
   fraværDelerAvDagen: z.array(
-    z.object({
+    FraværDelerAvDagSchema.extend({
       dato: z.string().catch(""),
       timer: z.string().catch(""),
     }),
   ),
-  dagerSomSkalTrekkes: z.array(
-    z.object({
-      fom: z.string(),
-      tom: z.string(),
-    }),
-  ),
+  dagerSomSkalTrekkes: z.array(FraværHeleDagSchema),
 
   manglerFraværEllerTrekk: z.string().optional(),
 
@@ -80,6 +76,7 @@ export const RefusjonOmsorgspengerSchema = baseSchema.extend({
     innsendtSøknadId: z.number().optional(),
     opprettetTidspunkt: z.string().optional(),
     besøkteSteg: z.array(z.number()).default([]).optional(),
+    organisasjonsnavn: z.string().optional(),
   }),
 });
 

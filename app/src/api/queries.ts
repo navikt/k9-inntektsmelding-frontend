@@ -1,9 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
-import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/zodSchemas";
 import { parseStorageItem } from "~/features/shared/hooks/usePersistedState";
-import { PÅKREVDE_ENDRINGSÅRSAK_FELTER } from "~/features/shared/skjema-moduler/Inntekt.tsx";
 import {
   ARBEIDSGIVERINITERT_NYANSATT_ID,
   ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID,
@@ -11,14 +9,12 @@ import {
 import {
   feilmeldingSchema,
   grunnbeløpSchema,
-  InntektsmeldingResponseDtoSchema,
   OpplysningerDto,
   OpplysningerRequest,
   opplysningerSchema,
-  SendInntektsmeldingResponseDto,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
-} from "~/types/api-models";
+} from "~/types/api-schemas";
 import { logDev } from "~/utils.ts";
 
 const SERVER_URL = `${import.meta.env.BASE_URL}/server/api`;
@@ -51,73 +47,6 @@ async function hentGrunnbeløp() {
   } catch {
     return Infinity;
   }
-}
-
-export async function hentEksisterendeInntektsmeldinger(uuid: string) {
-  const response = await fetch(
-    `${SERVER_URL}/imdialog/inntektsmeldinger?foresporselUuid=${uuid}`,
-  );
-
-  if (response.status === 404) {
-    throw new Error("Forespørsel ikke funnet");
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      "Kunne ikke hente eksisterende inntektsmeldinger for forespørsel",
-    );
-  }
-  const json = await response.json();
-  const parsedJson = z.array(InntektsmeldingResponseDtoSchema).safeParse(json);
-
-  if (!parsedJson.success) {
-    logDev("error", parsedJson.error);
-
-    throw new Error("Responsen fra serveren matchet ikke forventet format");
-  }
-
-  return parsedJson.data.map((im) =>
-    mapInntektsmeldingResponseTilValidState(im),
-  );
-}
-
-export function mapInntektsmeldingResponseTilValidState(
-  inntektsmelding: SendInntektsmeldingResponseDto,
-): InntektsmeldingSkjemaStateValid & {
-  opprettetTidspunkt: string;
-  id: number;
-} {
-  return {
-    kontaktperson: inntektsmelding.kontaktperson,
-    refusjon: inntektsmelding.refusjon ?? [],
-    bortfaltNaturalytelsePerioder:
-      inntektsmelding.bortfaltNaturalytelsePerioder?.map((periode) => ({
-        navn: periode.naturalytelsetype,
-        fom: periode.fom,
-        beløp: periode.beløp,
-        inkluderTom: periode.tom !== undefined,
-        tom: periode.tom,
-      })) ?? [],
-    endringAvInntektÅrsaker: (
-      inntektsmelding.endringAvInntektÅrsaker ?? []
-    ).map((endringÅrsak) => ({
-      ...endringÅrsak,
-      ignorerTom:
-        endringÅrsak.tom === undefined &&
-        PÅKREVDE_ENDRINGSÅRSAK_FELTER[endringÅrsak.årsak]?.tomErValgfritt,
-    })),
-    inntekt: inntektsmelding.inntekt,
-    skalRefunderes:
-      (inntektsmelding.refusjon ?? []).length > 1
-        ? "JA_VARIERENDE_REFUSJON"
-        : (inntektsmelding.refusjon ?? []).length === 1
-          ? "JA_LIK_REFUSJON"
-          : "NEI",
-    misterNaturalytelser:
-      (inntektsmelding.bortfaltNaturalytelsePerioder?.length ?? 0) > 0,
-    opprettetTidspunkt: inntektsmelding.opprettetTidspunkt,
-    id: inntektsmelding.id,
-  };
 }
 
 export async function hentOpplysningerData(
@@ -251,41 +180,6 @@ export async function hentPersonFraFnrUnntattAareg(
   return parsedJson.data;
 }
 
-export async function hentOpplysninger(
-  opplysningerRequest: OpplysningerRequest,
-) {
-  const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/nyansatt`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(opplysningerRequest),
-    },
-  );
-  if (!response.ok) {
-    const json = await response.json();
-    const parsedFeil = feilmeldingSchema.safeParse(json);
-    if (!parsedFeil.success) {
-      logDev("error", parsedFeil.error);
-      throw new Error("Kunne ikke hente opplysninger");
-    }
-    throw new Error(parsedFeil.data.type);
-  }
-
-  const json = await response.json();
-  const parsedJson = opplysningerSchema.safeParse(json);
-
-  if (!parsedJson.success) {
-    logDev("error", parsedJson.error);
-
-    throw new Error("Responsen fra serveren matchet ikke forventet format");
-  }
-
-  return parsedJson.data;
-}
-
 export async function hentOpplysningerUnntattAaregister(
   opplysningerRequest: OpplysningerRequest,
 ) {
@@ -315,6 +209,32 @@ export async function hentOpplysningerUnntattAaregister(
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
     throw new Error("Responsen fra serveren matchet ikke forventet format");
+  }
+
+  return parsedJson.data;
+}
+
+export async function hentArbeidsgiversOrganisasjoner() {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsgiver/organisasjoner`,
+  );
+  if (!response.ok) {
+    throw new Error("Kunne ikke hente organisasjoner");
+  }
+  const json = await response.json();
+  const parsedJson = z
+    .object({
+      organisasjoner: z.array(
+        z.object({
+          organisasjonsnavn: z.string(),
+          organisasjonsnummer: z.string(),
+        }),
+      ),
+    })
+    .safeParse(json);
+
+  if (!parsedJson.success) {
+    logDev("error", parsedJson.error);
   }
 
   return parsedJson.data;

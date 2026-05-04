@@ -2,6 +2,11 @@ import { idnr } from "@navikt/fnrvalidator";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
+import {
+  hentArbeidsgiversOrganisasjoner,
+  hentOpplysningerUnntattAaregister,
+  hentPersonFraFnrUnntattAareg,
+} from "~/api/queries.ts";
 import { logDev } from "~/utils";
 
 import {
@@ -263,3 +268,133 @@ export const hentInntektsopplysningerOptions = (
     queryFn: () => hentInntektsopplysninger(args),
   });
 };
+
+export type ArbeidsgiverDto = {
+  organisasjonsnavn: string;
+  organisasjonsnummer: string;
+};
+
+type HentArbeidsgiverArgs = {
+  fødselsnummer: string;
+  førsteFraværsdatoForÅret: string;
+};
+
+export const hentArbeidsgiverOptions = ({
+  fødselsnummer,
+  førsteFraværsdatoForÅret,
+}: HentArbeidsgiverArgs) =>
+  queryOptions({
+    queryKey: [
+      "arbeidsgiver",
+      { fødselsnummer, førsteFraværsdatoForÅret },
+    ] as const,
+    queryFn: () =>
+      hentPersonFraFnrUnntattAareg(
+        fødselsnummer,
+        "OMSORGSPENGER",
+        førsteFraværsdatoForÅret,
+      ),
+    enabled: fødselsnummer && førsteFraværsdatoForÅret ? true : false,
+    staleTime: Infinity,
+    retry: false,
+  });
+
+type OpplysningerUnntattAaregisterArgs = {
+  fødselsnummer: string;
+  førsteFraværsdatoForÅret: string;
+  organisasjonsnummer: string;
+};
+
+export const hentPersonUnntattAaregisterOptions = (
+  args: OpplysningerUnntattAaregisterArgs | null,
+) =>
+  queryOptions({
+    queryKey: ["person-unntatt-aaregister", args] as const,
+    queryFn: () =>
+      hentOpplysningerUnntattAaregister({
+        fødselsnummer: args!.fødselsnummer,
+        ytelseType: "OMSORGSPENGER",
+        førsteFraværsdag: args!.førsteFraværsdatoForÅret,
+        organisasjonsnummer: args!.organisasjonsnummer,
+      }),
+    enabled: args !== null,
+    staleTime: Infinity,
+    retry: false,
+  });
+
+export const hentArbeidsgiversOrganisasjonerOptions = () => {
+  return queryOptions({
+    queryKey: ["arbeidsgivers-organisasjoner"],
+    queryFn: async () => hentArbeidsgiversOrganisasjoner(),
+    retry: false,
+  });
+};
+
+const AnsattNavnDtoSchema = z.object({
+  fornavn: z.string(),
+  mellomnavn: z.string().optional(),
+  etternavn: z.string(),
+  kjønn: z.enum(["MANN", "KVINNE", "UKJENT"]),
+  aktørId: z.string(),
+});
+export type AnsattNavnDto = z.infer<typeof AnsattNavnDtoSchema>;
+
+type AnsattNavnFeil =
+  | { feilkode: "fant ingen personer" }
+  | { feilkode: "generell feil" }
+  | { feilkode: "uventet respons" };
+
+const hentAnsattNavn = async (fødselsnummer: string) => {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidstaker`,
+    {
+      method: "POST",
+      body: JSON.stringify({ fødselsnummer }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+  );
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw { feilkode: "fant ingen personer" } satisfies AnsattNavnFeil;
+    }
+    logDev("error", "Henting av ansatt-navn feilet", json);
+    throw { feilkode: "generell feil" } satisfies AnsattNavnFeil;
+  }
+
+  const parsedResponse = AnsattNavnDtoSchema.safeParse(json);
+  if (!parsedResponse.success) {
+    logDev(
+      "error",
+      "Mottok en uventet respons fra serveren",
+      parsedResponse.error,
+    );
+    throw { feilkode: "uventet respons" } satisfies AnsattNavnFeil;
+  }
+  return parsedResponse.data;
+};
+
+export const hentAnsattNavnOptions = (
+  fødselsnummer: string,
+  enabled: boolean,
+) =>
+  queryOptions<
+    AnsattNavnDto,
+    AnsattNavnFeil,
+    AnsattNavnDto,
+    ["ansatt-navn", string]
+  >({
+    queryKey: ["ansatt-navn", fødselsnummer],
+    queryFn: ({ queryKey }) => hentAnsattNavn(queryKey[1]),
+    enabled: enabled && idnr(fødselsnummer).status === "valid",
+    staleTime: Infinity,
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });

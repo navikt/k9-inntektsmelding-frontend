@@ -35,7 +35,7 @@ import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/ste
 import {
   EndringAvInntektÅrsaker,
   OpplysningerDto,
-} from "~/types/api-models.ts";
+} from "~/types/api-schemas.ts";
 import {
   capitalizeSetning,
   formatDatoKort,

@@ -1,7 +1,7 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/zodSchemas";
+import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/frontendSchemas";
 
 import { DineOpplysninger } from "../../shared/skjema-moduler/steg/DineOpplysninger";
 import { useInntektsmeldingSkjema } from "../SkjemaStateContext";

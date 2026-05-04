@@ -1,4 +1,4 @@
-import { SendInntektsmeldingResponseDto } from "~/types/api-models.ts";
+import { SendInntektsmeldingResponseDto } from "~/features/inntektsmelding/api-schemas.ts";
 
 export const enkelSendInntektsmeldingResponse = {
   id: 1_000_801,

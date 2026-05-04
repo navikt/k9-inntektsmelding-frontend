@@ -5,11 +5,14 @@ import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { useScrollToTopOnMount } from "~/features/shared/hooks/useScrollToTopOnMount";
 import { InntektOgRefusjon } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
-import { EndringAvInntektÅrsaker, Naturalytelsetype } from "~/types/api-models";
+import {
+  EndringAvInntektÅrsaker,
+  Naturalytelsetype,
+} from "~/types/api-schemas";
 import { formatYtelsesnavn } from "~/utils";
 
+import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../frontendSchemas.tsx";
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext.tsx";
-import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "../zodSchemas.tsx";
 
 type JaNei = "ja" | "nei";
 
@@ -21,6 +24,8 @@ export type InntektOgRefusjonForm = {
   misterNaturalytelser: JaNei;
   bortfaltNaturalytelsePerioder: NaturalytelserSomMistesForm[];
   endringAvInntektÅrsaker: EndringsÅrsakerForm[];
+  fraværHeleDager: { fom: string; tom: string }[];
+  fraværDelerAvDagen: { dato: string; timer: string }[];
 } & Pick<
   InntektsmeldingSkjemaStateAGIUnntattAaregister,
   "refusjon" | "inntekt" | "korrigertInntekt"
@@ -85,6 +90,8 @@ export const Steg2InntektOgRefusjon = () => {
       skalRefunderes,
       misterNaturalytelser,
       bortfaltNaturalytelsePerioder,
+      fraværHeleDager: skjemadata.fraværHeleDager,
+      fraværDelerAvDagen: skjemadata.fraværDelerAvDagen,
     }));
     navigate({
       from: "/agi-unntatt-aaregister/$id/inntekt-og-refusjon",

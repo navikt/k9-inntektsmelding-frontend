@@ -23,9 +23,9 @@ import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
 import { Inntekt } from "../../shared/skjema-moduler/Inntekt";
 import { hentInntektsopplysningerOptions } from "../api/queries.ts";
+import { RefusjonOmsorgspengerFormData } from "../frontendSchemas.tsx";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
-import { RefusjonOmsorgspengerFormData } from "../zodSchemas.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
   useScrollToTopOnMount();
@@ -138,13 +138,15 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
               <Alert variant="error">
                 Inntektsopplysninger kunne ikke hentes.
               </Alert>
-              <Button
-                icon={<ArrowCirclepathIcon />}
-                onClick={() => refetch()}
-                variant="secondary"
-              >
-                Forsøk å hente inntektsopplysninger på nytt
-              </Button>
+              <div>
+                <Button
+                  icon={<ArrowCirclepathIcon />}
+                  onClick={() => refetch()}
+                  variant="secondary"
+                >
+                  Forsøk å hente inntektsopplysninger på nytt
+                </Button>
+              </div>
             </>
           ) : null}
           <InntektAlert />

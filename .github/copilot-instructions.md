@@ -45,31 +45,6 @@ You are thoughtful, give nuanced answers, and are brilliant at reasoning. You ca
 
 ### Frontend (`app/`)
 
-- **Framework**: React 19.2.0
-- **Build Tool**: Vite 7.1.12
-- **Language**: TypeScript 5.9.3
-- **Routing**: Tanstack Router 1.133.32
-- **Data Fetching**: Tanstack Query 5.90.5
-- **Form Handling**: React Hook Form 7.65.0
-- **Validation**: Zod 3.25.76
-- **Styling**:
-  - TailwindCSS 4.1.16
-  - NAV Aksel Design System 7.32.3 (@navikt/ds-react, @navikt/ds-css, @navikt/ds-tailwind)
-- **Date Handling**: date-fns 4.1.0, dayjs 1.11.18
-- **Utilities**: lodash 4.17.21, clsx 2.1.1
-- **Testing**:
-  - Playwright 1.56.1 (E2E)
-  - Vitest 4.0.4 (Unit)
-- **Monitoring**: Grafana Faro 1.19.0
-
-### Backend (`server/`)
-
-- **Framework**: Express 4.21.2
-- **Language**: TypeScript 5.9.3
-- **Proxy**: http-proxy-middleware 3.0.5
-- **Security**: csp-header 6.2.0
-- **NAV Tools**: @navikt/oasis 4.1.0, @navikt/vite-mode 0.12.0
-
 ## Code Implementation Guidelines
 
 ### General Code Style

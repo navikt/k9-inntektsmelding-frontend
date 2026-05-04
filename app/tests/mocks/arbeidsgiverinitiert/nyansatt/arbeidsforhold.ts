@@ -1,4 +1,4 @@
-import { SlåOppArbeidstakerResponseDto } from "~/types/api-models.ts";
+import { SlåOppArbeidstakerResponseDto } from "~/types/api-schemas.ts";
 
 export const arbeidsforholdResponse = {
   fornavn: "MOMENTAN",

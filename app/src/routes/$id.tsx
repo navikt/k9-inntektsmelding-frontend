@@ -1,10 +1,8 @@
 import { BodyShort, Loader } from "@navikt/ds-react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import {
-  hentEksisterendeInntektsmeldinger,
-  hentOpplysningerData,
-} from "~/api/queries";
+import { hentOpplysningerData } from "~/api/queries";
+import { hentEksisterendeInntektsmeldinger } from "~/features/inntektsmelding/api/queries";
 import { OppgaveErUtgåttFeilside } from "~/features/shared/error-boundary/OppgaveErUtgåttFeilside";
 import { InntektsmeldingRoot } from "~/features/shared/rot-layout/InntektsmeldingRootLayout";
 import { RotLayout } from "~/features/shared/rot-layout/RotLayout";
@@ -15,6 +13,7 @@ enum FEILKODER {
 
 export const Route = createFileRoute("/$id")({
   component: InntektsmeldingRoot,
+  pendingMs: 0,
   errorComponent: ({ error }) => {
     if (error.message === FEILKODER.OPPGAVE_ER_UTGÅTT) {
       return <OppgaveErUtgåttFeilside />;
@@ -31,10 +30,17 @@ export const Route = createFileRoute("/$id")({
     </RotLayout>
   ),
   loader: async ({ params }) => {
-    const [opplysninger, eksisterendeInntektsmeldinger] = await Promise.all([
-      hentOpplysningerData(params.id),
-      hentEksisterendeInntektsmeldinger(params.id),
-    ]);
+    const opplysninger = await hentOpplysningerData(params.id);
+
+    if (
+      opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_NYANSATT" ||
+      opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+    ) {
+      return { opplysninger, eksisterendeInntektsmeldinger: [] };
+    }
+
+    const eksisterendeInntektsmeldinger =
+      await hentEksisterendeInntektsmeldinger(params.id);
 
     if (
       opplysninger.forespørselStatus === "UTGÅTT" &&
@@ -43,9 +49,6 @@ export const Route = createFileRoute("/$id")({
       throw new Error(FEILKODER.OPPGAVE_ER_UTGÅTT);
     }
 
-    return {
-      opplysninger: opplysninger,
-      eksisterendeInntektsmeldinger,
-    };
+    return { opplysninger, eksisterendeInntektsmeldinger };
   },
 });

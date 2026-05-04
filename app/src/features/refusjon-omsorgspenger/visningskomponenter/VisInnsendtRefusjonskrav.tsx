@@ -13,11 +13,11 @@ import { formatDatoTidKort } from "~/utils.ts";
 import { navnPåMåned } from "~/utils/date-utils.ts";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { mapSendInntektsmeldingTilSkjema } from "../utils.ts";
 import {
   RefusjonOmsorgspengerFormData,
   RefusjonOmsorgspengerSchemaMedValidering,
-} from "../zodSchemas.tsx";
+} from "../frontendSchemas.tsx";
+import { mapSendInntektsmeldingTilSkjema } from "../utils.ts";
 
 export const VisInnsendtRefusjonskrav = () => {
   useDocumentTitle(

@@ -1,12 +1,12 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/$id/")({
-  loader: async ({ params, parentMatchPromise }) => {
+  loader: async ({ parentMatchPromise, params }) => {
     const { loaderData } = await parentMatchPromise;
+    const opplysninger = loaderData?.opplysninger;
     const eksisterendeInntektsmeldinger =
       loaderData?.eksisterendeInntektsmeldinger;
-    const opplysninger = loaderData?.opplysninger;
-    if (!eksisterendeInntektsmeldinger || !opplysninger) {
+    if (!opplysninger) {
       throw new Error("No loader data");
     }
 
@@ -32,17 +32,25 @@ export const Route = createFileRoute("/$id/")({
       });
     }
 
-    if (eksisterendeInntektsmeldinger[0] === undefined) {
+    if (!eksisterendeInntektsmeldinger) {
+      throw new Error("No loader data");
+    }
+
+    const harSendtInn = eksisterendeInntektsmeldinger.some(
+      (im) => im.opprettetTidspunkt !== undefined,
+    );
+
+    if (harSendtInn) {
       redirect({
-        to: "/$id/dine-opplysninger",
-        params,
+        to: "/$id/vis",
+        params: { id: params.id },
         replace: true,
         throw: true,
       });
     } else {
       redirect({
-        to: "/$id/vis",
-        params,
+        to: "/$id/dine-opplysninger",
+        params: { id: params.id },
         replace: true,
         throw: true,
       });

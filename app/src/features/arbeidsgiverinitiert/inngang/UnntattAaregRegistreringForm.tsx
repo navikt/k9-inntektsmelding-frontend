@@ -20,7 +20,7 @@ import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFe
 import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
-import { OpplysningerRequest, Ytelsetype } from "~/types/api-models.ts";
+import { OpplysningerRequest, Ytelsetype } from "~/types/api-schemas.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";
@@ -144,7 +144,7 @@ export function UnntattAaregRegistreringForm({
           </VStack>
         </HStack>
         <DatePickerWrapped
-          label="Første fraværsdag med refusjon"
+          label="Første fraværsdag"
           name="førsteFraværsdag"
           callback={nullstillFeilmeldinger}
           rules={{ required: "Må oppgis" }}
@@ -157,7 +157,10 @@ export function UnntattAaregRegistreringForm({
         >
           Hent opplysninger
         </Button>
-        <VelgArbeidsgiver data={hentPersonMutation.data} />
+        <VelgArbeidsgiver
+          data={hentPersonMutation.data}
+          description="Velg hvilken underenhet den ansatte jobber for."
+        />
         <PersonOppslagError
           context="person_oppslag"
           error={hentPersonMutation.error}
