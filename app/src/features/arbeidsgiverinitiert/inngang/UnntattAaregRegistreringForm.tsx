@@ -2,7 +2,6 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   BodyShort,
   Button,
-  Heading,
   HStack,
   Label,
   TextField,
