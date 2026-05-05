@@ -1,14 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyLong,
-  BodyShort,
+  Box,
   Button,
+  Checkbox,
   Heading,
   Label,
-  Loader,
-  Select,
   TextField,
+  VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -16,7 +15,7 @@ import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
-import { formatFodselsnummer, lagFulltNavn } from "~/utils.ts";
+import { formatFodselsnummer } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
@@ -24,6 +23,9 @@ import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.
 import { hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
+import { ArbeidsgiverSeksjon } from "./ArbeidsgiverSeksjon.tsx";
+import { ArbeidsgiverUnntattSeksjon } from "./ArbeidsgiverUnntattSeksjon.tsx";
+import { NavnVisning } from "./NavnVisning.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   useScrollToTopOnMount();
@@ -41,15 +43,20 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
     getValues,
     control,
   } = useSkjemaState();
+
   const fødselsnummer = watch("ansattesFødselsnummer");
-  const { data, error, isLoading } = useQuery(
+  const erUnntattAaregisteret = watch("erUnntattAaregisteret");
+
+  const { data, error } = useQuery(
     hentArbeidstakerOptions(fødselsnummer ?? ""),
   );
 
+  const fantIngenPersoner =
+    error && "feilkode" in error && error.feilkode === "fant ingen personer";
+  const visUnntattLøype = erUnntattAaregisteret ?? false;
+
   useEffect(() => {
     setValue("meta.step", 2);
-    const besøkteSteg = getValues("meta.besøkteSteg") ?? [];
-    setValue("meta.besøkteSteg", [...besøkteSteg, 2]);
     if (getValues("meta.innsendtSøknadId")) {
       navigate({
         from: "/refusjon-omsorgspenger/$organisasjonsnummer/2-ansatt-og-arbeidsgiver",
@@ -58,13 +65,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
     }
   }, []);
 
-  const fantIngenPersoner =
-    error && "feilkode" in error && error.feilkode === "fant ingen personer";
-  const harFlereEnnEttArbeidsforhold =
-    data?.arbeidsforhold && data.arbeidsforhold.length > 1;
-  const harEttArbeidsforhold =
-    data?.arbeidsforhold && data.arbeidsforhold.length === 1;
-
   const onSubmit = handleSubmit(() => {
     navigate({
       from: "/refusjon-omsorgspenger/$organisasjonsnummer/2-ansatt-og-arbeidsgiver",
@@ -72,7 +72,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
     });
   });
 
-  const fulltNavn = data ? lagFulltNavn(data.personinformasjon) : "";
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
       <Heading level="1" size="large">
@@ -91,8 +90,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                   error={formState.errors.ansattesFødselsnummer?.message}
                   label="Ansattes fødselsnummer (11 siffer)"
                   onChange={(e) => {
-                    // Store raw value without spaces in form state
-                    field.onChange(e.target.value.replaceAll(/\s/g, ""));
+                    const nyVerdi = e.target.value.replaceAll(/\s/g, "");
+                    if (nyVerdi !== field.value) {
+                      setValue("erUnntattAaregisteret", false);
+                      setValue("organisasjonsnummer", undefined);
+                    }
+                    field.onChange(nyVerdi);
                   }}
                   value={formatFodselsnummer(field.value || "")}
                 />
@@ -100,95 +103,48 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             />
             <div className="flex-1 flex flex-col">
               <Label>Navn</Label>
-              {isLoading ? (
-                <Loader className="block mt-5" title="Henter informasjon" />
-              ) : fantIngenPersoner ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  Fant ingen personer som du har tilgang til å se
-                  arbeidsforholdet til. Dobbeltsjekk fødselsnummer og prøv
-                  igjen.
-                </BodyShort>
-              ) : error ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  Kunne ikke hente data
-                </BodyShort>
-              ) : data ? (
-                <BodyShort className="flex-1 flex flex-col justify-center">
-                  {fulltNavn}
-                  <input
-                    type="hidden"
-                    {...register("ansattesFornavn", {
-                      value: data.personinformasjon.fornavn,
-                    })}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesEtternavn", {
-                      value: data.personinformasjon.etternavn,
-                    })}
-                  />
-                  <input
-                    type="hidden"
-                    {...register("ansattesAktørId", {
-                      value: data.personinformasjon.aktørId,
-                    })}
-                  />
-                </BodyShort>
-              ) : null}
+              <NavnVisning />
             </div>
           </div>
-        </Informasjonsseksjon>
-        {data && (
-          <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
-            {harFlereEnnEttArbeidsforhold ? (
-              <>
-                <Select
-                  label="Velg arbeidsforhold"
-                  {...register("organisasjonsnummer", {
-                    value: "",
-                  })}
-                  error={formState.errors.organisasjonsnummer?.message}
-                >
-                  {data.arbeidsforhold.map((arbeidsforhold) => (
-                    <option
-                      key={arbeidsforhold.organisasjonsnummer}
-                      value={arbeidsforhold.organisasjonsnummer}
-                    >
-                      {arbeidsforhold.organisasjonsnavn} (
-                      {arbeidsforhold.organisasjonsnummer})
-                    </option>
-                  ))}
-                </Select>
-              </>
-            ) : harEttArbeidsforhold ? (
-              <div className="flex gap-4">
-                <div className="flex-1">
-                  <Label>Virksomhetsnavn</Label>
-                  <BodyShort>
-                    {data.arbeidsforhold[0].organisasjonsnavn}
-                  </BodyShort>
-                  <input
-                    type="hidden"
-                    {...register("organisasjonsnummer", {
-                      value: data.arbeidsforhold[0].organisasjonsnummer,
-                    })}
-                  />
-                </div>
-                <div className="flex-1">
-                  <Label>Org.nr. for underenhet</Label>
-                  <BodyShort>
-                    {data.arbeidsforhold[0].organisasjonsnummer}
-                  </BodyShort>
-                </div>
-              </div>
-            ) : (
-              <Alert variant="warning">
+          {fantIngenPersoner && (
+            <Box
+              background="warning-soft"
+              borderColor="warning"
+              borderWidth="1"
+              borderRadius="8"
+              padding="space-16"
+            >
+              <VStack gap="space-16">
                 <BodyLong>
-                  Kunne ikke finne noen arbeidsforhold for {fulltNavn}. Vent
-                  litt, og prøv igjen.
+                  Vi fant ingen registrerte arbeidsforhold i dine virksomheter
+                  knyttet til denne personen. Sjekk at du har skrevet riktig
+                  fødselsnummer. Hvis arbeidstakeren er unntatt registrering i
+                  Aa-registeret, kan du bekrefte dette nedenfor og fortsette.
                 </BodyLong>
-              </Alert>
-            )}
+              </VStack>
+              <Controller
+                control={control}
+                name="erUnntattAaregisteret"
+                render={({ field }) => (
+                  <Checkbox
+                    checked={field.value ?? false}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                  >
+                    Arbeidstakeren er unntatt Aa-registeret
+                  </Checkbox>
+                )}
+              />
+            </Box>
+          )}
+        </Informasjonsseksjon>
+        {data && data.arbeidsforhold.length > 0 && (
+          <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
+            <ArbeidsgiverSeksjon fødselsnummer={fødselsnummer} />
+          </Informasjonsseksjon>
+        )}
+        {visUnntattLøype && (
+          <Informasjonsseksjon kilde="Fra Altinn" tittel="Arbeidsgiver">
+            <ArbeidsgiverUnntattSeksjon />
           </Informasjonsseksjon>
         )}
         <Informasjonsseksjon

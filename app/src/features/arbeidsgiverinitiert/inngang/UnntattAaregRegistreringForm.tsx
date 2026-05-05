@@ -1,6 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyShort,
   Button,
   Heading,
@@ -15,7 +14,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
 import { hentOpplysningerUnntattAaregister } from "~/api/queries.ts";
-import { featureToggles } from "~/feature-toggles/featureToggles";
 import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFeil";
 import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
@@ -103,21 +101,6 @@ export function UnntattAaregRegistreringForm({
     hentPersonMutation.reset();
     opprettOpplysningerMutation.reset();
   };
-  if (!featureToggles.AGI_UREGISTRERT) {
-    return (
-      <Alert variant="info">
-        <Heading level="3" size="small">
-          Du må sende inn inntektsmelding via Altinn
-        </Heading>
-        <BodyShort>
-          Skal du sende inn inntektsmelding for en ansatt som er unntatt for
-          registrering i Aa-registeret, må du enn så lenge sende inn
-          inntektsmelding i Altinn.
-        </BodyShort>
-      </Alert>
-    );
-  }
-
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
       <VStack gap="space-32">
