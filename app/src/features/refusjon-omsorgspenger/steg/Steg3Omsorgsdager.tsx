@@ -154,13 +154,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
             </Radio>
           </RadioGroup>
           <TiFørsteOmsorgsdagerInfo />
-          {formState.errors.manglerFraværEllerTrekk?.message && (
-            <Alert aria-live="polite" variant="error">
-              <BodyLong>
-                {formState.errors.manglerFraværEllerTrekk.message}
-              </BodyLong>
-            </Alert>
-          )}
           <VStack gap="space-32">
             <TidligereInnsendinger
               inntektsmeldinger={inntektsmeldingerForÅr}
@@ -175,6 +168,13 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
               år={Number(årForRefusjon)}
             />
             <DagerSomSkalTrekkes />
+            {formState.errors.manglerFraværEllerTrekk?.message && (
+              <Alert aria-live="polite" variant="error">
+                <BodyLong>
+                  {formState.errors.manglerFraværEllerTrekk.message}
+                </BodyLong>
+              </Alert>
+            )}
           </VStack>
 
           <div className="flex gap-4 mt-8">
