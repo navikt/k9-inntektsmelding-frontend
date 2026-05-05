@@ -94,6 +94,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                     if (nyVerdi !== field.value) {
                       setValue("erUnntattAaregisteret", false);
                       setValue("organisasjonsnummer", undefined);
+                      setValue("meta.organisasjonsnavn", undefined);
                     }
                     field.onChange(nyVerdi);
                   }}
