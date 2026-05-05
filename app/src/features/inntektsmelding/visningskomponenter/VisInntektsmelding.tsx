@@ -31,10 +31,7 @@ export const VisInntektsmelding = () => {
   // Sett IM i skjemaStaten hvis den finnes
   useEffect(() => {
     if (sisteInntektsmelding) {
-      setInntektsmeldingSkjemaState({
-        ...sisteInntektsmelding,
-        besøkteSteg: [],
-      });
+      setInntektsmeldingSkjemaState(sisteInntektsmelding);
     }
   }, [sisteInntektsmelding]);
 

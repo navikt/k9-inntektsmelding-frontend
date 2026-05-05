@@ -1,5 +1,4 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 
@@ -13,12 +12,6 @@ export const Steg1DineOpplysninger = () => {
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGINyansatt();
 
-  useEffect(() => {
-    setInntektsmeldingSkjemaState((prev) => ({
-      ...prev,
-      besøkteSteg: [...(prev.besøkteSteg ?? []), 1],
-    }));
-  }, []);
   const navigate = useNavigate();
   const { eksisterendeInntektsmeldinger } =
     getRouteApi("/agi/$id").useLoaderData();

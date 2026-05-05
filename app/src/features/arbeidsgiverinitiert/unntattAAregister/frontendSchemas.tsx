@@ -12,7 +12,6 @@ import { beløpSchema } from "~/utils.ts";
 
 // Før vi er i oppsummeringssteget
 export const InntektsmeldingSkjemaStateSchemaUnntattAaregister = z.object({
-  besøkteSteg: z.array(z.number()).default([]),
   kontaktperson: z
     .object({
       navn: z.string(),

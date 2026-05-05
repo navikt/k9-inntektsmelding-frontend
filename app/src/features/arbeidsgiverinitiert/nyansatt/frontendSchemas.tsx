@@ -15,7 +15,6 @@ const skalRefunderesSchema = z.union([
 
 // Før vi er i oppsummeringssteget
 export const InntektsmeldingSkjemaStateSchemaNyansatt = z.object({
-  besøkteSteg: z.array(z.number()).default([]),
   kontaktperson: kontaktpersonSchema,
   refusjon: z.array(
     z
