@@ -22,7 +22,6 @@ import {
   List,
   Radio,
   RadioGroup,
-  Theme,
   VStack,
 } from "@navikt/ds-react";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -365,105 +364,97 @@ const TidligereInnsendinger = ({
           )} av ${tidligereInnsendinger.length} innsendinger`}
         </Detail>
       )}
-      <Theme theme="dark">
-        <Accordion className="bg-ax-bg-neutral-soft mt-4" indent>
-          <div className="flex flex-col text-ax-text-neutral">
-            {innsendingerSomSkalVises?.map((innsending) => (
-              <Accordion.Item key={innsending.id}>
-                <Accordion.Header className="text-ax-text-accent-subtle">
-                  {innsending.erRefusjon
-                    ? "Refusjonskrav - sendt inn"
-                    : "Inntektsmelding - sendt inn"}{" "}
-                  {formatDatoKort(innsending.opprettetDato)}
-                </Accordion.Header>
-                <Accordion.Content className="pl-5 mt-4 border-l-2! border-solid! border-ax-bg-neutral-soft! border-y-0! border-r-0!">
-                  <div className="flex flex-col gap-4">
-                    {innsending.heleDager &&
-                      innsending.heleDager?.length > 0 && (
-                        <div>
-                          <div className="flex gap-2 items-center">
-                            <Label>
-                              {innsending.erRefusjon
-                                ? "Hele dager dere søkte refusjon for"
-                                : "Dager med oppgitt fravær"}
-                            </Label>
-                            {!innsending.erRefusjon && (
-                              <Theme theme="light">
-                                <div className="bg-ax-bg-neutral-soft">
-                                  <HelpText title="Dager med oppgitt fravær">
-                                    Hvis den ansatte har hatt oppgitt fravær
-                                    deler av dagen, viser vi kun datoen for
-                                    fraværet og ikke antall timer fra
-                                    inntektsmeldingen
-                                  </HelpText>
-                                </div>
-                              </Theme>
-                            )}
+      <Accordion className="bg-ax-bg-neutral-soft mt-4" indent>
+        <div className="flex flex-col text-ax-text-neutral">
+          {innsendingerSomSkalVises?.map((innsending) => (
+            <Accordion.Item key={innsending.id}>
+              <Accordion.Header className="text-ax-text-accent-subtle">
+                {innsending.erRefusjon
+                  ? "Refusjonskrav - sendt inn"
+                  : "Inntektsmelding - sendt inn"}{" "}
+                {formatDatoKort(innsending.opprettetDato)}
+              </Accordion.Header>
+              <Accordion.Content className="pl-5 mt-4 border-l-2! border-solid! border-ax-bg-neutral-soft! border-y-0! border-r-0!">
+                <div className="flex flex-col gap-4">
+                  {innsending.heleDager && innsending.heleDager?.length > 0 && (
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <Label>
+                          {innsending.erRefusjon
+                            ? "Hele dager dere søkte refusjon for"
+                            : "Dager med oppgitt fravær"}
+                        </Label>
+                        {!innsending.erRefusjon && (
+                          <div className="bg-ax-bg-neutral-soft">
+                            <HelpText title="Dager med oppgitt fravær">
+                              Hvis den ansatte har hatt oppgitt fravær deler av
+                              dagen, viser vi kun datoen for fraværet og ikke
+                              antall timer fra inntektsmeldingen
+                            </HelpText>
                           </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2 mt-1">
+                        <Box marginBlock="space-16" asChild>
+                          <List data-aksel-migrated-v8>
+                            {innsending.heleDager?.map((dag) => (
+                              <List.Item key={dag.fom}>
+                                {formatDatoKort(new Date(dag.fom))} -{" "}
+                                {formatDatoKort(new Date(dag.tom))}
+                              </List.Item>
+                            ))}
+                          </List>
+                        </Box>
+                      </div>
+                    </div>
+                  )}
+                  {innsending.delviseDager &&
+                    innsending.delviseDager?.length > 0 && (
+                      <div>
+                        <Dropdown.Menu.Divider />
+                        <div className="mt-4">
+                          <Label>Delvise dager dere søkte refusjon for</Label>
                           <div className="flex flex-col gap-2 mt-1">
                             <Box marginBlock="space-16" asChild>
                               <List data-aksel-migrated-v8>
-                                {innsending.heleDager?.map((dag) => (
-                                  <List.Item key={dag.fom}>
-                                    {formatDatoKort(new Date(dag.fom))} -{" "}
-                                    {formatDatoKort(new Date(dag.tom))}
+                                {innsending.delviseDager?.map((dag) => (
+                                  <List.Item key={dag.dato}>
+                                    {formatDatoKort(new Date(dag.dato))} -{" "}
+                                    {dag.timer} timer
                                   </List.Item>
                                 ))}
                               </List>
                             </Box>
                           </div>
                         </div>
-                      )}
-                    {innsending.delviseDager &&
-                      innsending.delviseDager?.length > 0 && (
-                        <div>
-                          <Dropdown.Menu.Divider />
-                          <div className="mt-4">
-                            <Label>Delvise dager dere søkte refusjon for</Label>
-                            <div className="flex flex-col gap-2 mt-1">
-                              <Box marginBlock="space-16" asChild>
-                                <List data-aksel-migrated-v8>
-                                  {innsending.delviseDager?.map((dag) => (
-                                    <List.Item key={dag.dato}>
-                                      {formatDatoKort(new Date(dag.dato))} -{" "}
-                                      {dag.timer} timer
-                                    </List.Item>
-                                  ))}
-                                </List>
-                              </Box>
-                            </div>
+                      </div>
+                    )}
+                  {innsending.dagerSomSkalTrekkes &&
+                    innsending.dagerSomSkalTrekkes?.length > 0 && (
+                      <div>
+                        <Dropdown.Menu.Divider />
+                        <div className="mt-4">
+                          <Label>Dager dere ønsker å trekke</Label>
+                          <div className="flex flex-col gap-2 mt-1">
+                            <Box marginBlock="space-16" asChild>
+                              <List data-aksel-migrated-v8>
+                                {innsending.dagerSomSkalTrekkes?.map((dag) => (
+                                  <List.Item key={dag.dato}>
+                                    {formatDatoKort(new Date(dag.dato))}
+                                  </List.Item>
+                                ))}
+                              </List>
+                            </Box>
                           </div>
                         </div>
-                      )}
-                    {innsending.dagerSomSkalTrekkes &&
-                      innsending.dagerSomSkalTrekkes?.length > 0 && (
-                        <div>
-                          <Dropdown.Menu.Divider />
-                          <div className="mt-4">
-                            <Label>Dager dere ønsker å trekke</Label>
-                            <div className="flex flex-col gap-2 mt-1">
-                              <Box marginBlock="space-16" asChild>
-                                <List data-aksel-migrated-v8>
-                                  {innsending.dagerSomSkalTrekkes?.map(
-                                    (dag) => (
-                                      <List.Item key={dag.dato}>
-                                        {formatDatoKort(new Date(dag.dato))}
-                                      </List.Item>
-                                    ),
-                                  )}
-                                </List>
-                              </Box>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                  </div>
-                </Accordion.Content>
-              </Accordion.Item>
-            ))}
-          </div>
-        </Accordion>
-      </Theme>
+                      </div>
+                    )}
+                </div>
+              </Accordion.Content>
+            </Accordion.Item>
+          ))}
+        </div>
+      </Accordion>
       {harFlereInnsendingerEnnAntallSomVises && (
         <Button
           className="mt-2"
