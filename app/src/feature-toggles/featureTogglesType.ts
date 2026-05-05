@@ -1,4 +1,2 @@
-export interface FeatureTogglesType {
-  AGI_UREGISTRERT: boolean;
-  REFUSJON_STEG2_V2: boolean;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface FeatureTogglesType {}
