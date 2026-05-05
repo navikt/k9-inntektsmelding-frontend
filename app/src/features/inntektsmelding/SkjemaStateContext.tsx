@@ -34,7 +34,6 @@ type InntektsmeldingSkjemaStateProviderProps = {
 };
 
 const defaultSkjemaState = {
-  besøkteSteg: [],
   inntekt: 0,
   refusjon: [],
   bortfaltNaturalytelsePerioder: [],
