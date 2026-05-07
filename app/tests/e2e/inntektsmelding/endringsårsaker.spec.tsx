@@ -179,13 +179,13 @@ test("oppsummering vises riktig når tomdato er gjort valgfri", async ({
   await page.getByText("Ansatt har fremdeles sykefravær").click();
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Nei" })
     .click();
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Nei" })
@@ -251,13 +251,13 @@ test("tariffendring vises riktig i oppsummering", async ({ page }) => {
   await page.getByLabel("Ble kjent fra").last().fill("15.03.2024");
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Nei" })
     .click();
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Nei" })
@@ -337,13 +337,13 @@ test("endringsårsak resetter felter når årsak endres - sørger for at verdier
 
   // Complete the rest of the form
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Nei" })
     .click();
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Nei" })
@@ -429,13 +429,13 @@ test("endringsårsak resetter ignorerTom når årsak endres", async ({ page }) =
   await page.getByLabel("Til og med").fill("10.03.2024");
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Nei" })
     .click();
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Nei" })
@@ -505,13 +505,13 @@ test("endringsårsak resetter bleKjentFom når årsak endres", async ({
     .selectOption("Bonus");
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Nei" })
     .click();
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Nei" })

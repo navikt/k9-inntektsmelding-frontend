@@ -90,7 +90,7 @@ test("Skal ikke kunne velge NEI på refusjon hvis AGI og nyansatt", async ({
   await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Nei" })

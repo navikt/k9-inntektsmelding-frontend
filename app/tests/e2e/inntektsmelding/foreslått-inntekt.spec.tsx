@@ -264,14 +264,14 @@ test("A-inntekt er nede", async ({ page }) => {
   ).toBeVisible({ visible: false });
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
     .click();
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Nei" })
