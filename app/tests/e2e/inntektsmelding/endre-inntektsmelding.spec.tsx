@@ -120,7 +120,7 @@ test('burde vise "vis IM"-siden for siste innsendte IM', async ({ page }) => {
   ).toBeVisible();
   await expect(
     page
-      .getByRole("group", {
+      .getByRole("radiogroup", {
         name: "Betaler dere lønn under fraværet og krever refusjon?",
       })
       .getByRole("radio", {
@@ -167,7 +167,7 @@ test('burde vise "vis IM"-siden for siste innsendte IM', async ({ page }) => {
 
   await expect(
     page
-      .getByRole("group", {
+      .getByRole("radiogroup", {
         name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
       })
       .getByRole("radio", { name: "Ja" }),
@@ -201,7 +201,7 @@ test('burde vise "vis IM"-siden for siste innsendte IM', async ({ page }) => {
   ).toHaveValue("50");
   await expect(
     naturalytelserBlokk
-      .getByRole("group", {
+      .getByRole("radiogroup", {
         name: "Vil naturalytelsen komme tilbake i løpet av fraværet?",
       })
       .getByRole("radio", { name: "Ja" }),

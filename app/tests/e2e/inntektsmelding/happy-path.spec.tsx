@@ -26,14 +26,14 @@ test.describe("Happy path", () => {
 
     // Nå er vi på "inntekt og refusjon" steget
     await page
-      .getByRole("group", {
+      .getByRole("radiogroup", {
         name: "Betaler dere lønn under fraværet og krever refusjon?",
       })
       .getByRole("radio", { name: "Nei" })
       .click();
 
     await page
-      .getByRole("group", {
+      .getByRole("radiogroup", {
         name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
       })
       .getByRole("radio", { name: "Nei" })

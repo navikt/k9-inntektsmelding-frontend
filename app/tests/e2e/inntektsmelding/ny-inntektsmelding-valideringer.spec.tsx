@@ -167,7 +167,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
    * Lik refusjon
    */
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
@@ -199,7 +199,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
    * Variabel refusjon
    */
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", {
@@ -275,7 +275,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   ).toHaveCount(0);
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
     })
     .getByRole("radio", { name: "Ja" })
@@ -317,7 +317,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await naturalytelserBlokk.getByText("Fra og med").fill("31.05.2024");
   await naturalytelserBlokk.getByText("Verdi pr. måned").fill("2500");
   await naturalytelserBlokk
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Vil naturalytelsen komme tilbake i løpet av fraværet?",
     })
     .getByRole("radio", { name: "Ja" })
@@ -360,7 +360,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     ),
   ).toBeVisible({ visible: false });
   await naturalytelserBlokk
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Vil naturalytelsen komme tilbake i løpet av fraværet?",
     })
     .getByRole("radio", { name: "Nei" })
@@ -421,7 +421,7 @@ test("tilbakestilling av inntekt skal også oppdatere ønsket refusjonsbeløp", 
   );
 
   await page
-    .getByRole("group", {
+    .getByRole("radiogroup", {
       name: "Betaler dere lønn under fraværet og krever refusjon?",
     })
     .getByRole("radio", { name: "Ja, likt beløp i hele perioden" })
