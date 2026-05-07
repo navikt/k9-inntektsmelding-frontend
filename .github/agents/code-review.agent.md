@@ -170,24 +170,24 @@ Only 34% of Nav developers agree that AI code passes review without extra work �
 | 🟡 | Rapids & Rivers: validate required keys in `River` |
 | 💭 | Error wrapping with `Result` or sealed classes |
 
-### TypeScript/Next.js (`src/**/*.{ts,tsx}`)
+### TypeScript/React/Vite/TanStack Router (`app/src/**/*.{ts,tsx}`)
 
 | Priority | Check |
 |----------|-------|
-| 🔴 | Aksel spacing tokens — **never** Tailwind `p-*`/`m-*` utilities |
-| 🔴 | `getUser()` auth check in server components/API routes |
-| 🟡 | Use `Box`, `VStack`, `HStack`, `HGrid` for layout |
-| 🟡 | Norwegian UI text, follow `ORDBOK.md` terminology |
-| 🟡 | Norwegian number formatting: `formatNumber(151354)` → `"151 354"` |
-| 💭 | Prefer server components over client components |
+| 🔴 | Routing følger TanStack Router-konvensjoner i `app/src/routes/` |
+| 🔴 | Skjema bruker React Hook Form med Zod-schema fra feature-modulen |
+| 🔴 | Bruk Aksel-komponenter fra `@navikt/ds-react` der det finnes egnede komponenter |
+| 🟡 | Bruk feature-spesifikk `SkjemaStateContext` for skjematilstand, unngå prop drilling |
+| 🟡 | Norsk UI-tekst og domenenavn på bokmål |
+| 🟡 | Bruk Tailwind for enkel styling, men foretrekk Aksel layout-komponenter når det gir bedre semantikk og konsistens |
+| 💭 | Queries og mutations holdes adskilt i `queries.ts` og `mutations.ts` |
 
 ```tsx
-// ❌ Tailwind spacing
-<div className="p-4 mx-8">
+// ❌ Egendefinert input uten skjemakobling og validering
+<input {...register("organisasjonsnummer")} />
 
-// ✅ Aksel spacing tokens
-<Box paddingBlock={{ xs: "space-16", md: "space-24" }}
-     paddingInline={{ xs: "space-16", md: "space-40" }}>
+// ✅ Wrapper + schema-basert skjemaoppsett i feature-modulen
+<TextFieldWrapper name="organisasjonsnummer" label="Organisasjonsnummer" />
 ```
 
 ### Go (`**/*.go`)
