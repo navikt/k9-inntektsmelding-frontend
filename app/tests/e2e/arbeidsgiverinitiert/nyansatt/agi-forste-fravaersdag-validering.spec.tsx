@@ -67,7 +67,7 @@ test.describe("AGI Første fraværsdag validering", () => {
             etternavn: "TRAKT",
             arbeidsforhold: [
               {
-                organisasjonsnavn: "NAV",
+                organisasjonsnavn: "Nav",
                 organisasjonsnummer: "974652293",
               },
             ],
@@ -340,7 +340,7 @@ test.describe("AGI Første fraværsdag validering", () => {
             etternavn: "TRAKT",
             arbeidsforhold: [
               {
-                organisasjonsnavn: "NAV",
+                organisasjonsnavn: "Nav",
                 organisasjonsnummer: "974652293",
               },
             ],
@@ -393,7 +393,7 @@ test.describe("AGI Første fraværsdag validering", () => {
             etternavn: "TRAKT",
             arbeidsforhold: [
               {
-                organisasjonsnavn: "NAV",
+                organisasjonsnavn: "Nav",
                 organisasjonsnummer: "974652293",
               },
             ],

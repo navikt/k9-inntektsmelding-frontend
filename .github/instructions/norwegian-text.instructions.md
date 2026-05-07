@@ -87,9 +87,9 @@ Bindestrek ved engelsk+norsk:
 ❌ Postgres operatoren, Kafka topicet, GitHub repoet (særskrivingsfeil)
 ```
 
-## Nav — ikke NAV
+## Nav — ikke Nav
 
-"Nav" med stor forbokstav og små bokstaver. Aldri "NAV" (gammelt akronym).
+"Nav" med stor forbokstav og små bokstaver. Aldri "Nav" (gammelt akronym).
 
 ## Overskrifter
 

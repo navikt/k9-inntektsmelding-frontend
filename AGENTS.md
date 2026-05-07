@@ -2,7 +2,7 @@
 
 ## Repository Overview
 
-Frontend for inntektsmelding (income reporting) for Team Sykdom i Familien at NAV. Handles:
+Frontend for inntektsmelding (income reporting) for Team Sykdom i Familien at Nav. Handles:
 
 1. **Inntektsmelding** – Standard income reporting
 2. **Arbeidsgiverinitiert (AGI)** – Employer-initiated income reporting
@@ -15,7 +15,7 @@ Split into `app/` (React frontend) and `server/` (Express server).
 - **React 19**, TypeScript, Vite
 - **Tanstack Query** (data fetching) + **Tanstack Router** (file-based routing)
 - **React Hook Form** + **Zod** (forms and validation)
-- **NAV Aksel** (`@navikt/ds-react`) – design system
+- **Nav Aksel** (`@navikt/ds-react`) – design system
 - **Tailwind CSS** – utility styling
 - **Playwright** (E2E tests) + **Vitest** (unit tests)
 

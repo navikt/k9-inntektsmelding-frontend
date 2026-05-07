@@ -9,7 +9,7 @@ export const arbeidsforholdResponse = {
       organisasjonsnummer: "315786940",
     },
     {
-      organisasjonsnavn: "NAV",
+      organisasjonsnavn: "Nav",
       organisasjonsnummer: "974652293",
     },
   ],

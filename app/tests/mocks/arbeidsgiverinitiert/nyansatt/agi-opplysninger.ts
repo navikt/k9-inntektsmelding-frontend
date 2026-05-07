@@ -8,7 +8,7 @@ export const agiOpplysningerResponseNyAnsatt = {
     aktørId: "1234567890123",
   },
   arbeidsgiver: {
-    organisasjonNavn: "NAV",
+    organisasjonNavn: "Nav",
     organisasjonNummer: "974652293",
   },
   innsender: {

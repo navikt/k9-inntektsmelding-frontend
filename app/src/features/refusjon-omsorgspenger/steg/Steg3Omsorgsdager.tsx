@@ -352,7 +352,7 @@ const TidligereInnsendinger = ({
         <Label size="small">
           {`Tidligere innsendinger for ${årForRefusjon}`}
         </Label>
-        <BodyShort size="small">FRA NAV</BodyShort>
+        <BodyShort size="small">FRA Nav</BodyShort>
       </div>
       {tidligereInnsendinger.length > 5 && (
         <Detail>
