@@ -1,4 +1,4 @@
-# AGENTS.md — navikt/ft-inntektsmelding-frontend
+# AGENTS.md — navikt/k9-inntektsmelding-frontend
 
 ## Repository Overview
 
