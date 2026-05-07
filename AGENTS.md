@@ -65,7 +65,7 @@ Each feature has:
 - Use Tailwind for custom styling — no `<style>` tags or plain CSS
 - Define Zod schemas in `zodSchemas.tsx` per feature
 - Use React Hook Form with `@hookform/resolvers/zod`
-- Queries/mutations in `queries.ts` / `mutations.ts` per feature
+- Hold queries/mutations separated in `queries.ts` / `mutations.ts`; use central `app/src/api/` and feature-specific `api/` folders where relevant
 
 ## Boundaries
 
