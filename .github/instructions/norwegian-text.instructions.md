@@ -10,7 +10,7 @@ For dypere tekstredaksjon, bruk `@forfatter`-agenten. Disse reglene gjelder auto
 
 ## Klarspråk
 
-Språkloven pålegger offentlige organer å bruke klart, korrekt språk tilpassa mottakerne.
+Språkloven pålegger offentlige organer å bruke klart, korrekt språk tilpasset mottakerne.
 
 - **Start med poenget.** Konklusjon først, bakgrunn etterpå.
 - **Bruk verb, ikke substantiv av verb.** "Vi vurderer" ikke "gjennomføring av en vurdering".
