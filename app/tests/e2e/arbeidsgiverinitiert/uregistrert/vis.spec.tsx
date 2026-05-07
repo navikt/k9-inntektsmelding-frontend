@@ -31,7 +31,7 @@ test.describe("AGI unntatt Aa-registeret – vis-rute", () => {
 
     // Arbeidsgiver og den ansatte
     await expect(page.getByText("Arbeidsgiver og den ansatte")).toBeVisible();
-    await expect(page.getByText("NAV").first()).toBeVisible();
+    await expect(page.getByText("Nav").first()).toBeVisible();
     await expect(
       page.getByText("974652293", { exact: false }).first(),
     ).toBeVisible();

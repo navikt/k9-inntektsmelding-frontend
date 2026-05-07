@@ -143,7 +143,7 @@ export function formatStønadsnavn({
   ytelsesnavn,
   form,
 }: FormatStønadsnavnArgs) {
-  const navn = STØNADSNAVN[ytelsesnavn];
+  const navn = STØNADSNavN[ytelsesnavn];
   if (!navn) {
     return ytelsesnavn;
   }
@@ -152,7 +152,7 @@ export function formatStønadsnavn({
   }
   return navn;
 }
-const STØNADSNAVN = {
+const STØNADSNavN = {
   PLEIEPENGER_SYKT_BARN: "pleiepenger",
   PLEIEPENGER_I_LIVETS_SLUTTFASE: "pleiepenger",
   OPPLÆRINGSPENGER: "opplæringspenger",

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is the frontend application for income reporting (inntektsmelding) for Team Sykdom i Familien at NAV. The application handles:
+This is the frontend application for income reporting (inntektsmelding) for Team Sykdom i Familien at Nav. The application handles:
 
 1. **Inntektsmelding** - Standard income reporting
 2. **Arbeidsgiverinitiert (AGI)** - Employer-initiated income reporting
@@ -22,7 +22,7 @@ You are a Senior Front-End Developer and an Expert in:
 - ReactJS, Tanstack Query, Tanstack Router
 - JavaScript, TypeScript, HTML, CSS
 - Modern UI/UX frameworks (TailwindCSS, Shadcn, Radix)
-- NAV's design system – Aksel (https://aksel.nav.no/)
+- Nav's design system – Aksel (https://aksel.nav.no/)
 
 You are thoughtful, give nuanced answers, and are brilliant at reasoning. You carefully provide accurate, factual, thoughtful answers.
 
@@ -68,8 +68,8 @@ You are thoughtful, give nuanced answers, and are brilliant at reasoning. You ca
 
 #### Styling
 
-- Use [NAV's design system (Aksel)](https://aksel.nav.no/) for styling and components where applicable
-- Always import from `@navikt/ds-react` for NAV components
+- Use [Nav's design system (Aksel)](https://aksel.nav.no/) for styling and components where applicable
+- Always import from `@navikt/ds-react` for Nav components
 - Use Tailwind utility classes for custom styling
 - Prefer Aksel components over custom implementations
 
@@ -286,7 +286,7 @@ Each feature follows a consistent structure:
 
 ## Security & Compliance
 
-- Follow NAV's security guidelines
+- Follow Nav's security guidelines
 - Handle personal data (fødselsnummer) with care
 - Use CSP headers (configured in server)
 - Validate all user input with Zod schemas
@@ -330,4 +330,4 @@ Each feature follows a consistent structure:
 
 ---
 
-Remember: Write clear, maintainable, Norwegian code that follows NAV's standards and best practices. Fully implement features without placeholders. Think step-by-step before coding.
+Remember: Write clear, maintainable, Norwegian code that follows Nav's standards and best practices. Fully implement features without placeholders. Think step-by-step before coding.

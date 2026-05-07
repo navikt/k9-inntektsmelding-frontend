@@ -105,7 +105,7 @@ test.describe("AGI Ulike scenarier", () => {
     await expect(page.getByText("MOMENTAN TRAKT")).toBeVisible();
 
     // Sjekk at arbeidsgiver-informasjon vises
-    await expect(page.getByText("NAV", { exact: true })).toBeVisible();
+    await expect(page.getByText("Nav", { exact: true })).toBeVisible();
 
     // Sjekk at kontaktperson-informasjon vises
     await expect(page.getByText(testNavn)).toBeVisible();
@@ -262,7 +262,7 @@ test.describe("AGI Ulike scenarier", () => {
             etternavn: "TRAKT",
             arbeidsforhold: [
               {
-                organisasjonsnavn: "NAV",
+                organisasjonsnavn: "Nav",
                 organisasjonsnummer: "974652293",
               },
             ],
