@@ -76,7 +76,7 @@ Testbruker delt med sykepenger
 PS: Vet ikke om denne brukeren har noe use case lenger. Ser ut som den mangler tilganger.
 
 - Velg BankID
-- Fødselsnummer: 10107400090
+- Fødselsnummer: 17420373147
 - Velg BankID med kodebrikke eller BankID med app – det har ikke noe å si
 - Legg inn engangskode: otp
 - Legg inn BankID passord: qwer1234

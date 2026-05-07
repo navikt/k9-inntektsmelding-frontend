@@ -81,6 +81,12 @@ jobs:
         id: set-image-ref
         run: echo "IMAGE=${{steps.docker-push.outputs.image}}" >> $GITHUB_OUTPUT
 
+  sif-code-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@v1
+
   deploy-dev-k9:
     name: Deploy DEV [K9]
     runs-on: ubuntu-latest
@@ -115,3 +121,5 @@ jobs:
           VARS: .deploy/prod-gcp-k9saksbehandling.json
           NAMESPACE: k9saksbehandling
           IMAGE: ${{ needs.build-app-k9.outputs.IMAGE }}
+
+
