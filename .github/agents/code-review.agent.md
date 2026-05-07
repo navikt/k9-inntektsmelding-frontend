@@ -24,11 +24,11 @@ Gjennomgår Kotlin, TypeScript, Go, Dockerfiles og GitHub Actions for feil, sikk
 Run with `run_in_terminal`:
 
 ```bash
-# Run all checks (lint, typecheck, format, tests)
-cd apps/<app-name> && mise check
+# Run all checks (lint, typecheck, tests)
+cd app && yarn lint && yarn check:types && yarn test:unit
 
 # Run tests only
-cd apps/<app-name> && mise test
+cd app && yarn test:unit
 ```
 
 ## Related Agents
