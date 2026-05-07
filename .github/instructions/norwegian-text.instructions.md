@@ -34,7 +34,7 @@ Erstatt eller fjern mønstre som avslører KI-generert tekst.
 
 - **"Ikke bare X, men også Y"** — skriv om til to setninger eller velg det viktigste
 - **"Det handler ikke om X, men om Y"** — si bare Y
-- **"I en tid der..." + avsluttende perspektiv** — kutt innramminga
+- **"I en tid der..." + avsluttende perspektiv** — kutt innrammingen
 - **Tredeling (trikolon)** i serie — én gang OK, gjentatt er AI-tegn
 - **Falsk muntlighet** — uformell åpning som brått skifter til polert byråkratspråk
 - **Rettferdiggjøringsavsnitt** — hele avsnitt som forklarer hvorfor noe er viktig uten ny informasjon
