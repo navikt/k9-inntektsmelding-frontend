@@ -1043,6 +1043,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/analytics-types@npm:0.0.9":
+  version: 0.0.9
+  resolution: "@navikt/analytics-types@npm:0.0.9::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fanalytics-types%2F0.0.9%2F5919241a6dbb782eb101fff3234ce5c36d16e942"
+  checksum: 10c0/25eeb6c324fe9133bfffc53a325bf115c526cef4380cabf28e2b3958906bb20fead03eb6ee471b92e0a910e45bfa435c1aa3026f9c6a8779d7d07b350efb9883
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:8.10.3":
   version: 8.10.3
   resolution: "@navikt/ds-css@npm:8.10.3::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fds-css%2F8.10.3%2F2c6d65719d3a85ff0f59aa178c3f8c77c78f9bca"
@@ -1096,16 +1103,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/nav-dekoratoren-moduler@npm:3.7.1":
-  version: 3.7.1
-  resolution: "@navikt/nav-dekoratoren-moduler@npm:3.7.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F3.7.1%2F09490a131cedd7779e35d413d20c36bd01ef57a0"
+"@navikt/nav-dekoratoren-moduler@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@navikt/nav-dekoratoren-moduler@npm:4.0.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fnav-dekoratoren-moduler%2F4.0.0%2F65595610e69365df6008576d13e7f24511715683"
   dependencies:
+    "@navikt/analytics-types": "npm:0.0.9"
     csp-header: "npm:6.3.1"
     js-cookie: "npm:3.0.5"
   peerDependencies:
     html-react-parser: ">=5.x"
     react: ">=17.x"
-  checksum: 10c0/e3954a273b939ed4b9950953db80ee30adcf2a30aebbfd1fae3980f539cf9d804ed69072333b8efa09b2d8bf5af094b3a298de7553ed716d5a6e6e6dc2172b1c
+  checksum: 10c0/f5cffee74156cc3d8853d2ef73be57b37892b33c466d9005b3c753c4470353ef2bfd3705d0f97e5730bc278a8b5c459ab823a15d3248825540b9a0942d54c002
   languageName: node
   linkType: hard
 
@@ -3164,7 +3172,7 @@ __metadata:
     "@navikt/ds-tailwind": "npm:8.10.3"
     "@navikt/ds-tokens": "npm:8.10.3"
     "@navikt/fnrvalidator": "npm:2.2.1"
-    "@navikt/nav-dekoratoren-moduler": "npm:3.7.1"
+    "@navikt/nav-dekoratoren-moduler": "npm:4.0.0"
     "@playwright/test": "npm:1.59.1"
     "@tailwindcss/vite": "npm:4.2.4"
     "@tanstack/eslint-plugin-query": "npm:5.100.6"
@@ -6409,7 +6417,7 @@ __metadata:
   dependencies:
     "@eslint/eslintrc": "npm:3.3.5"
     "@eslint/js": "npm:10.0.1"
-    "@navikt/nav-dekoratoren-moduler": "npm:3.7.1"
+    "@navikt/nav-dekoratoren-moduler": "npm:4.0.0"
     "@navikt/oasis": "npm:4.1.4"
     "@navikt/vite-mode": "npm:0.14.0"
     "@types/express": "npm:5.0.6"
