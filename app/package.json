@@ -63,7 +63,7 @@
     "tailwindcss": "4.2.4",
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.1",
-    "vite": "8.0.11",
+    "vite": "8.0.12",
     "vite-size": "0.0.6",
     "vitest": "4.1.5"
   }
