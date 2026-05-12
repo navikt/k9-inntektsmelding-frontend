@@ -47,7 +47,7 @@ export const HentOpplysninger = () => {
               </Radio>
             )}
             <Radio
-              description="(Ambassadepersonell, fiskere og utenlandske arbeidstakere)"
+              description="(Ambassadepersonell, fiskere og internasjonale organisasjoner)"
               value="unntatt_aaregister"
               {...radioGroupProps}
             >
