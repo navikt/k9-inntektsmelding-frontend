@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const førsteApril = dayjs().month(3).date(1);
-export const kanVelgeFjoråret = dayjs().isBefore(førsteApril);
+export const kanVelgeFjoråret = true; // FAGSYSTEM-431647 tillater midlertidig for å teste i Q
 export const iÅr = dayjs().year();
 export const iFjor = iÅr - 1;
 // Man kan kreve refusjon tre måneder tilbake i tid.
