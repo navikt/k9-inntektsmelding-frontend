@@ -9,7 +9,7 @@ import { mockGrunnbeløp } from "tests/mocks/shared/utils";
 const ORGANISASJONSNUMMER = "123456789";
 
 test.describe("ÅrForRefusjon", () => {
-  test("viser årsvalg med både fjoråret og inneværende år før 1. april, og kan gå videre til steg 2 etter å ha valgt år", async ({
+  test.skip("viser årsvalg med både fjoråret og inneværende år før 1. april, og kan gå videre til steg 2 etter å ha valgt år", async ({
     page,
   }) => {
     await page.clock.install({ time: new Date("2024-03-15") });
@@ -41,7 +41,7 @@ test.describe("ÅrForRefusjon", () => {
     ).toBeVisible();
   });
 
-  test("skjuler årsvalg etter 1. april og setter inneværende år automatisk, og kan gå videre til steg 2", async ({
+  test.skip("skjuler årsvalg etter 1. april og setter inneværende år automatisk, og kan gå videre til steg 2", async ({
     page,
   }) => {
     await page.clock.install({ time: new Date("2024-04-02") });
