@@ -1,19 +1,36 @@
-import { getRouteApi, useLocation } from "@tanstack/react-router";
+import { useLocation, useMatches } from "@tanstack/react-router";
+import { z } from "zod";
+
+const loaderDataSchema = z.object({
+  eksisterendeInntektsmeldinger: z.array(z.unknown()),
+});
+
+const inntektsmeldingRouteIder = new Set([
+  "/$id",
+  "/agi/$id",
+  "/agi-unntatt-aaregister/$id",
+]);
 
 export const useEksisterendeInntektsmeldinger = () => {
   const location = useLocation();
-
-  const erAGI = location.pathname.startsWith("/agi");
-  const erAGIUnntattAaregister = location.pathname.startsWith(
-    "/agi-unntatt-aaregister",
+  const matches = useMatches();
+  const aktivMatch = matches.find((match) =>
+    inntektsmeldingRouteIder.has(match.routeId),
   );
-  if (erAGIUnntattAaregister) {
-    return getRouteApi("/agi-unntatt-aaregister/$id").useLoaderData()
-      .eksisterendeInntektsmeldinger;
+
+  if (!aktivMatch) {
+    throw new Error(
+      `useEksisterendeInntektsmeldinger: fant ingen inntektsmelding-route i match-stack for path "${location.pathname}"`,
+    );
   }
-  if (erAGI) {
-    return getRouteApi("/agi/$id").useLoaderData()
-      .eksisterendeInntektsmeldinger;
+
+  const parsed = loaderDataSchema.safeParse(aktivMatch.loaderData);
+
+  if (!parsed.success) {
+    throw new Error(
+      `useEksisterendeInntektsmeldinger: mangler eksisterendeInntektsmeldinger i loader-data for route "${aktivMatch.routeId}" på path "${location.pathname}"`,
+    );
   }
-  return getRouteApi("/$id").useLoaderData().eksisterendeInntektsmeldinger;
+
+  return parsed.data.eksisterendeInntektsmeldinger;
 };
