@@ -24,7 +24,7 @@ const csp = await buildCspHeader(
         "connect-src": [
           "https://telemetry.ekstern.dev.nav.no/collect",
           "http://localhost:*",
-          "https://umami.nav.no",
+          "https://reops-event-proxy.ekstern.dev.nav.no",
         ],
       },
   { env: config.app.env },
