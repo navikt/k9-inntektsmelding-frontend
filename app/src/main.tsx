@@ -42,10 +42,7 @@ Sentry.init({
   dsn: "https://9e5264a622f8e8c763dc06b577a669ca@sentry.gc.nav.no/189",
   release: import.meta.env.VITE_SENTRY_RELEASE,
   integrations: [Sentry.browserTracingIntegration()],
-  // Tracing
   tracesSampleRate: 1, //  Capture 100% of the transactions
-  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
 });
 
 createRoot(document.querySelector("#root")!).render(
