@@ -5,5 +5,8 @@
   "workspaces": [
     "app",
     "server"
-  ]
+  ],
+  "dependencies": {
+    "@sentry/react": "^10.54.0"
+  }
 }

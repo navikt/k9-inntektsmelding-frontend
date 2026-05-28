@@ -11,6 +11,7 @@ import {
   Page,
   VStack,
 } from "@navikt/ds-react";
+import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
@@ -36,6 +37,15 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+Sentry.init({
+  dsn: "https://d21b87227642580797d8ec098887f1d6@sentry.gc.nav.no/190",
+  integrations: [Sentry.browserTracingIntegration()],
+  // Tracing
+  tracesSampleRate: 1, //  Capture 100% of the transactions
+  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+  tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
+});
 
 createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>
