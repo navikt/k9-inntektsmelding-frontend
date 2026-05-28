@@ -11,6 +11,7 @@ import {
   Page,
   VStack,
 } from "@navikt/ds-react";
+import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
@@ -36,6 +37,13 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+Sentry.init({
+  dsn: "https://9e5264a622f8e8c763dc06b577a669ca@sentry.gc.nav.no/189",
+  release: import.meta.env.VITE_SENTRY_RELEASE,
+  integrations: [Sentry.browserTracingIntegration()],
+  tracesSampleRate: 1, //  Capture 100% of the transactions
+});
 
 createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>
