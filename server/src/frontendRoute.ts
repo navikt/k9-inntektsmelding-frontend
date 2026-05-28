@@ -15,7 +15,10 @@ const csp = await buildCspHeader(
   config.app.env === "prod"
     ? {
         "img-src": ["data:", "'self'"],
-        "connect-src": ["https://telemetry.nav.no/collect", "https://sentry.gc.nav.no"],
+        "connect-src": [
+          "https://telemetry.nav.no/collect",
+          "https://sentry.gc.nav.no",
+        ],
       }
     : {
         "img-src": ["data:", "'self'"],
