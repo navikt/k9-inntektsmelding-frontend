@@ -39,7 +39,7 @@ declare module "@tanstack/react-router" {
 }
 
 Sentry.init({
-  dsn: "https://d21b87227642580797d8ec098887f1d6@sentry.gc.nav.no/190",
+  dsn: "https://9e5264a622f8e8c763dc06b577a669ca@sentry.gc.nav.no/189",
   integrations: [Sentry.browserTracingIntegration()],
   // Tracing
   tracesSampleRate: 1, //  Capture 100% of the transactions
