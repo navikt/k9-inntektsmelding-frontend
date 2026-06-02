@@ -11,12 +11,14 @@ import {
   Page,
   VStack,
 } from "@navikt/ds-react";
+import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
+import { finnEnvironmentForHostname } from "./feature-toggles/featureToggles";
 import { routeTree } from "./routeTree.gen";
 
 export const queryClient = new QueryClient();
@@ -36,6 +38,18 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+const sentryMiljo = finnEnvironmentForHostname(
+  globalThis?.location?.hostname ?? "",
+);
+
+Sentry.init({
+  dsn: "https://9e5264a622f8e8c763dc06b577a669ca@sentry.gc.nav.no/189",
+  environment: sentryMiljo,
+  release: import.meta.env.VITE_SENTRY_RELEASE,
+  integrations: [Sentry.browserTracingIntegration()],
+  tracesSampleRate: 1,
+});
 
 createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>

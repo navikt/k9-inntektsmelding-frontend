@@ -50,6 +50,12 @@ jobs:
         run: yarn workspaces focus app
 
       - name: Build webapp [K9]
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          SENTRY_RELEASE: ${{ github.sha }}
+          VITE_SENTRY_RELEASE: ${{ github.sha }}
         run: yarn workspace app build
 
       - name: Install dependencies server

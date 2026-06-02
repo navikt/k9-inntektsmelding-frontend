@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
@@ -26,7 +27,11 @@ export const Route = createRootRouteWithContext<{
     // Bruker prefetch for å ikke vente på dette nettverkskallet, men gjøre det klar i cache så fort som mulig
     context.queryClient.prefetchQuery(hentGrunnbeløpOptions());
   },
-  errorComponent: GenerellFeilside,
+  errorComponent: ({ error }) => {
+    Sentry.captureException(error);
+
+    return <GenerellFeilside />;
+  },
 
   component: () => {
     return (
