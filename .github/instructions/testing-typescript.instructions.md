@@ -1,7 +1,5 @@
 ---
-applyTo:
-  - "**/*.spec.{ts,tsx}"
-  - "**/*.test.{ts,tsx}"
+applyTo: "**/*.test.{ts,tsx}"
 ---
 
 # TypeScript Testing (Vitest)
@@ -95,6 +93,6 @@ describe("MetricCard", () => {
 ## Run Tests
 
 ```bash
-yarn test:unit
-yarn test:unit --coverage
+pnpm test
+pnpm test --coverage
 ```

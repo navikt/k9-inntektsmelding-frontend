@@ -1,6 +1,7 @@
 ---
 name: code-review-agent
 description: Kodegjennomgang for Nav-applikasjoner — finner feil, sikkerhetsproblemer og brudd på Nav-konvensjoner
+model: GPT-5.3-Codex
 tools:
   - execute
   - read
@@ -24,11 +25,11 @@ Gjennomgår Kotlin, TypeScript, Go, Dockerfiles og GitHub Actions for feil, sikk
 Run with `run_in_terminal`:
 
 ```bash
-# Run all checks (lint, typecheck, tests)
-cd app && yarn lint && yarn check:types && yarn test:unit
+# Run all checks (lint, typecheck, format, tests)
+cd apps/<app-name> && mise check
 
 # Run tests only
-cd app && yarn test:unit
+cd apps/<app-name> && mise test
 ```
 
 ## Related Agents
@@ -170,24 +171,24 @@ Only 34% of Nav developers agree that AI code passes review without extra work �
 | 🟡 | Rapids & Rivers: validate required keys in `River` |
 | 💭 | Error wrapping with `Result` or sealed classes |
 
-### TypeScript/React/Vite/TanStack Router (`app/src/**/*.{ts,tsx}`)
+### TypeScript/Next.js (`src/**/*.{ts,tsx}`)
 
 | Priority | Check |
 |----------|-------|
-| 🔴 | Routing følger TanStack Router-konvensjoner i `app/src/routes/` |
-| 🔴 | Skjema bruker React Hook Form med Zod-schema fra feature-modulen |
-| 🔴 | Bruk Aksel-komponenter fra `@navikt/ds-react` der det finnes egnede komponenter |
-| 🟡 | Bruk feature-spesifikk `SkjemaStateContext` for skjematilstand, unngå prop drilling |
-| 🟡 | Norsk UI-tekst og domenenavn på bokmål |
-| 🟡 | Bruk Tailwind for enkel styling, men foretrekk Aksel layout-komponenter når det gir bedre semantikk og konsistens |
-| 💭 | Queries og mutations holdes adskilt i `queries.ts` og `mutations.ts` |
+| 🔴 | Aksel spacing tokens — **never** Tailwind `p-*`/`m-*` utilities |
+| 🔴 | `getUser()` auth check in server components/API routes |
+| 🟡 | Use `Box`, `VStack`, `HStack`, `HGrid` for layout |
+| 🟡 | Norwegian UI text, follow `ORDBOK.md` terminology |
+| 🟡 | Norwegian number formatting: `formatNumber(151354)` → `"151 354"` |
+| 💭 | Prefer server components over client components |
 
 ```tsx
-// ❌ Egendefinert input uten skjemakobling og validering
-<input {...register("organisasjonsnummer")} />
+// ❌ Tailwind spacing
+<div className="p-4 mx-8">
 
-// ✅ Wrapper + schema-basert skjemaoppsett i feature-modulen
-<TextFieldWrapper name="organisasjonsnummer" label="Organisasjonsnummer" />
+// ✅ Aksel spacing tokens
+<Box paddingBlock={{ xs: "space-16", md: "space-24" }}
+     paddingInline={{ xs: "space-16", md: "space-40" }}>
 ```
 
 ### Go (`**/*.go`)

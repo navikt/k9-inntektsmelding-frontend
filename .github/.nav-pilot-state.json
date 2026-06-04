@@ -2,23 +2,20 @@
   "collection": "frontend",
   "version": "2026.06.03-174942-badb737",
   "scope": "repo",
-  "source_sha": "6d19a8e",
-  "installed_at": "2026-06-04T07:52:26Z",
+  "source_sha": "14cc32b",
+  "installed_at": "2026-06-04T08:08:09Z",
   "files": [
     {
       "path": ".github/agents/accessibility.agent.md",
-      "hash": "98867df3e31b8cd4",
-      "status": "conflict"
+      "hash": "243143499e16befb"
     },
     {
       "path": ".github/agents/aksel.agent.md",
-      "hash": "f3f31e695bc1df0f",
-      "status": "conflict"
+      "hash": "7103fb8df66fb0b1"
     },
     {
       "path": ".github/agents/code-review.agent.md",
-      "hash": "ce163af04f1ae01e",
-      "status": "conflict"
+      "hash": "3f32b4e215bca95d"
     },
     {
       "path": ".github/agents/forfatter.agent.md",
@@ -30,8 +27,7 @@
     },
     {
       "path": ".github/skills/aksel-spacing/",
-      "hash": "e3b0c44298fc1c14",
-      "status": "conflict"
+      "hash": "690f23009e204e36"
     },
     {
       "path": ".github/skills/conventional-commit/",
@@ -83,8 +79,7 @@
     },
     {
       "path": ".github/instructions/norwegian-text.instructions.md",
-      "hash": "7e05b88dd8f84bed",
-      "status": "conflict"
+      "hash": "890c8475efa051a5"
     },
     {
       "path": ".github/instructions/testing.instructions.md",
@@ -92,8 +87,7 @@
     },
     {
       "path": ".github/instructions/testing-typescript.instructions.md",
-      "hash": "55101a06bde18e08",
-      "status": "conflict"
+      "hash": "d3fd7e7d5f2ee256"
     },
     {
       "path": ".github/instructions/accessibility.instructions.md",

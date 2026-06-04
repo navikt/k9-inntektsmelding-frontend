@@ -10,7 +10,7 @@ For dypere tekstredaksjon, bruk `@forfatter`-agenten. Disse reglene gjelder auto
 
 ## Klarspråk
 
-Språkloven pålegger offentlige organer å bruke klart, korrekt språk tilpasset mottakerne.
+Språkloven pålegger offentlige organer å bruke klart, korrekt språk tilpassa mottakerne.
 
 - **Start med poenget.** Konklusjon først, bakgrunn etterpå.
 - **Bruk verb, ikke substantiv av verb.** "Vi vurderer" ikke "gjennomføring av en vurdering".
@@ -34,7 +34,7 @@ Erstatt eller fjern mønstre som avslører KI-generert tekst.
 
 - **"Ikke bare X, men også Y"** — skriv om til to setninger eller velg det viktigste
 - **"Det handler ikke om X, men om Y"** — si bare Y
-- **"I en tid der..." + avsluttende perspektiv** — kutt innrammingen
+- **"I en tid der..." + avsluttende perspektiv** — kutt innramminga
 - **Tredeling (trikolon)** i serie — én gang OK, gjentatt er AI-tegn
 - **Falsk muntlighet** — uformell åpning som brått skifter til polert byråkratspråk
 - **Rettferdiggjøringsavsnitt** — hele avsnitt som forklarer hvorfor noe er viktig uten ny informasjon
@@ -87,9 +87,9 @@ Bindestrek ved engelsk+norsk:
 ❌ Postgres operatoren, Kafka topicet, GitHub repoet (særskrivingsfeil)
 ```
 
-## Nav — ikke Nav
+## Nav — ikke NAV
 
-"Nav" med stor forbokstav og små bokstaver. Aldri "Nav" (gammelt akronym).
+"Nav" med stor forbokstav og små bokstaver. Aldri "NAV" (gammelt akronym).
 
 ## Overskrifter
 
@@ -102,3 +102,5 @@ Bindestrek ved engelsk+norsk:
 - "vi" og "du", ikke "bruker" og "man" i interne dokumenter
 - Unngå superlativer og amerikansk stil
 - Konsekvent bokmål, ikke bland inn nynorsk
+- Vanlige nynorsk-feil fra KI: -ingar (skal være -inger), -leg (skal være -lig), kv- (skal være hv-), ei-/eig- (skal være e-/eg-), medan→mens, vorte→blitt, vart→ble, berre→bare, mykje→mye, difor→derfor
+- Svensk som siver inn: engångs-→engangs-, ändring→endring (å/ä der bokmål har a/e)
