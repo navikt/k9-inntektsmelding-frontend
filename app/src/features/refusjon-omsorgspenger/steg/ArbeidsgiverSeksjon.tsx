@@ -64,10 +64,9 @@ export const ArbeidsgiverSeksjon = ({
         <Label>Virksomhetsnavn</Label>
         <VStack gap="space-2">
           <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
-          <Detail>
-            {enkelt.ansettelsesperiode.tom &&
-              `Arbeidsforholdet ble avsluttet ${dayjs(enkelt.ansettelsesperiode.tom).format("DD.MM.YYYY")}`}
-          </Detail>
+          {enkelt.ansettelsesperiode.tom && (
+            <Detail>{`Arbeidsforholdet ble avsluttet ${dayjs(enkelt.ansettelsesperiode.tom).format("DD.MM.YYYY")}`}</Detail>
+          )}
         </VStack>
       </div>
       <div className="flex-1">
