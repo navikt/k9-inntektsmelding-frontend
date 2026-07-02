@@ -86,7 +86,7 @@ const ArbeidstakerOppslagDtoSchema = z.object({
       organisasjonsnummer: z.string(),
       ansettelsesperiode: z.object({
         fom: z.string(),
-        tom: z.string().optional(),
+        tom: z.string().nullable(),
       }),
     }),
   ),
