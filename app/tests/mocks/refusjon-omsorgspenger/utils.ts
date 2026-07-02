@@ -43,6 +43,10 @@ export const mockArbeidstakerOppslag = ({
       {
         organisasjonsnavn: "Test Organisasjon",
         organisasjonsnummer: "123456789",
+        ansettelsesperiode: {
+          fom: "2024-01-01",
+          tom: null,
+        },
       },
     ],
   },
@@ -59,6 +63,10 @@ export const mockArbeidstakerOppslag = ({
     arbeidsforhold: Array<{
       organisasjonsnavn: string;
       organisasjonsnummer: string;
+      ansettelsesperiode: {
+        fom: string;
+        tom: string | null;
+      };
     }>;
   };
 }) => {
