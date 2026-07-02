@@ -19,7 +19,7 @@ const SERVER_URL = `${import.meta.env.BASE_URL}/server/api`;
 interface InntektsmeldingForÅrPayload {
   aktørId: string;
   arbeidsgiverIdent: string;
-  år: string;
+  år: number;
 }
 
 export const useHentInntektsmeldingForÅr = (
@@ -27,19 +27,18 @@ export const useHentInntektsmeldingForÅr = (
 ) => {
   const hentInntektsmeldinger = async () => {
     try {
-      const params = new URLSearchParams({
-        aktørId: payload.aktørId,
-        arbeidsgiverIdent: payload.arbeidsgiverIdent,
-        år: payload.år,
-      });
-
       const response = await fetch(
-        `${SERVER_URL}/imdialog/inntektsmeldinger-for-aar?${params.toString()}`,
+        `${SERVER_URL}/imdialog/inntektsmeldinger-for-aar`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            aktørId: payload.aktørId,
+            arbeidsgiverIdent: payload.arbeidsgiverIdent,
+            år: payload.år,
+          }),
         },
       );
 
