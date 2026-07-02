@@ -68,7 +68,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
     aktørId: watch("ansattesAktørId") as string,
     arbeidsgiverIdent: watch("organisasjonsnummer") as string,
-    år: årForRefusjon,
+    år: Number(årForRefusjon),
   });
 
   useEffect(() => {
