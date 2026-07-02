@@ -46,15 +46,24 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
 
   const fødselsnummer = watch("ansattesFødselsnummer");
   const erUnntattAaregisteret = watch("erUnntattAaregisteret");
+  const år = getValues("årForRefusjon");
 
   const { data, error } = useQuery(
-    hentArbeidstakerOptions(fødselsnummer ?? ""),
+    hentArbeidstakerOptions(getValues("ansattesFødselsnummer") ?? "", år),
   );
 
   const fantIngenPersoner =
     error && "feilkode" in error && error.feilkode === "fant ingen personer";
   const visUnntattLøype = erUnntattAaregisteret ?? false;
 
+  useEffect(() => {
+    if (!år) {
+      navigate({
+        from: "/refusjon-omsorgspenger/$organisasjonsnummer/2-ansatt-og-arbeidsgiver",
+        to: "../1-intro",
+      });
+    }
+  }, []);
   useEffect(() => {
     setValue("meta.step", 2);
     if (getValues("meta.innsendtSøknadId")) {

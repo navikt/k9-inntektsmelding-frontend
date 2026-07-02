@@ -1,5 +1,6 @@
-import { BodyShort, Label, Select } from "@navikt/ds-react";
+import { BodyShort, Detail, Label, Select, VStack } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
 import { useEffect } from "react";
 
 import { hentArbeidstakerOptions } from "../api/queries.ts";
@@ -12,8 +13,10 @@ type ArbeidsgiverSeksjonProps = {
 export const ArbeidsgiverSeksjon = ({
   fødselsnummer,
 }: ArbeidsgiverSeksjonProps) => {
-  const { register, formState, setValue } = useSkjemaState();
-  const { data } = useQuery(hentArbeidstakerOptions(fødselsnummer ?? ""));
+  const { register, formState, setValue, getValues } = useSkjemaState();
+  const { data } = useQuery(
+    hentArbeidstakerOptions(fødselsnummer ?? "", getValues("årForRefusjon")),
+  );
 
   useEffect(() => {
     if (data?.arbeidsforhold.length === 1) {
@@ -47,7 +50,7 @@ export const ArbeidsgiverSeksjon = ({
         <option value="">Velg arbeidsforhold</option>
         {data.arbeidsforhold.map((af) => (
           <option key={af.organisasjonsnummer} value={af.organisasjonsnummer}>
-            {af.organisasjonsnavn} ({af.organisasjonsnummer})
+            {`${af.organisasjonsnavn} (org.nr. ${af.organisasjonsnummer})${af.ansettelsesperiode.tom ? ` – avsluttet ${dayjs(af.ansettelsesperiode.tom).format("DD.MM.YYYY")}` : ""}`}
           </option>
         ))}
       </Select>
@@ -59,7 +62,13 @@ export const ArbeidsgiverSeksjon = ({
     <div className="flex gap-4">
       <div className="flex-1">
         <Label>Virksomhetsnavn</Label>
-        <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
+        <VStack gap="space-2">
+          <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
+          <Detail>
+            {enkelt.ansettelsesperiode.tom &&
+              `Arbeidsforholdet ble avsluttet ${dayjs(enkelt.ansettelsesperiode.tom).format("DD.MM.YYYY")}`}
+          </Detail>
+        </VStack>
       </div>
       <div className="flex-1">
         <Label>Org.nr. for underenhet</Label>
