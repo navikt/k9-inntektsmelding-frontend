@@ -53,7 +53,7 @@ export const ArbeidsgiverUnntattSeksjon = () => {
         <option value="">Velg virksomhet</option>
         {data.organisasjoner.map((ag) => (
           <option key={ag.organisasjonsnummer} value={ag.organisasjonsnummer}>
-            {ag.organisasjonsnavn} ({ag.organisasjonsnummer})
+            {`${ag.organisasjonsnavn} (org.nr. ${ag.organisasjonsnummer})`}
           </option>
         ))}
       </Select>

@@ -84,6 +84,10 @@ const ArbeidstakerOppslagDtoSchema = z.object({
     z.object({
       organisasjonsnavn: z.string(),
       organisasjonsnummer: z.string(),
+      ansettelsesperiode: z.object({
+        fom: z.string(),
+        tom: z.string().nullable(),
+      }),
     }),
   ),
 });
@@ -97,15 +101,15 @@ export type ArbeidstakerOppslagFeil =
   | { feilkode: "uventet respons" } // Zod-validering feilet
   | Error; // Programmeringsfeil
 
-export const hentArbeidstakerOptions = (fødselsnummer: string) => {
+export const hentArbeidstakerOptions = (fødselsnummer: string, år: string) => {
   return queryOptions<
     ArbeidstakerOppslagDto,
     ArbeidstakerOppslagFeil,
     ArbeidstakerOppslagDto,
-    ["arbeidstaker-oppslag", string]
+    ["arbeidstaker-oppslag", string, string]
   >({
-    queryKey: ["arbeidstaker-oppslag", fødselsnummer],
-    queryFn: ({ queryKey }) => hentArbeidstaker(queryKey[1]),
+    queryKey: ["arbeidstaker-oppslag", fødselsnummer, år],
+    queryFn: ({ queryKey }) => hentArbeidstaker(queryKey[1], queryKey[2]),
     enabled: idnr(fødselsnummer).status === "valid",
     staleTime: Infinity,
     retry: false,
@@ -115,7 +119,7 @@ export const hentArbeidstakerOptions = (fødselsnummer: string) => {
   });
 };
 
-const hentArbeidstaker = async (fødselsnummer: string) => {
+const hentArbeidstaker = async (fødselsnummer: string, år: string) => {
   const response = await fetch(
     `${SERVER_URL}/refusjon-omsorgsdager/arbeidstaker`,
     {
@@ -123,6 +127,7 @@ const hentArbeidstaker = async (fødselsnummer: string) => {
       body: JSON.stringify({
         fødselsnummer,
         ytelseType: "OMSORGSPENGER",
+        årstall: Number(år),
       }),
       headers: {
         "Content-Type": "application/json",

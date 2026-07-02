@@ -10,13 +10,16 @@ import {
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const NavnVisning = () => {
-  const { register, watch } = useSkjemaState();
+  const { register, watch, getValues } = useSkjemaState();
 
   const fødselsnummer = watch("ansattesFødselsnummer");
   const erUnntattAaregisteret = watch("erUnntattAaregisteret");
 
   const { data, error, isLoading } = useQuery(
-    hentArbeidstakerOptions(fødselsnummer ?? ""),
+    hentArbeidstakerOptions(
+      getValues("ansattesFødselsnummer") ?? "",
+      getValues("årForRefusjon"),
+    ),
   );
 
   const { data: ansattNavnData, isLoading: isLoadingNavn } = useQuery(
