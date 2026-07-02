@@ -69,6 +69,7 @@ export const useHentInntektsmeldingForÅr = (
   >({
     queryKey: ["inntektsmeldinger-for-aar", payload],
     queryFn: hentInntektsmeldinger,
+    enabled: !!payload.aktørId && !!payload.arbeidsgiverIdent && payload.år > 0,
   });
 };
 
