@@ -120,9 +120,6 @@ export const hentArbeidstakerOptions = (fødselsnummer: string, år: string) => 
 };
 
 const hentArbeidstaker = async (fødselsnummer: string, år: string) => {
-  if (!år) {
-    throw new Error("Fødselsnummer og år må være definert");
-  }
   const response = await fetch(
     `${SERVER_URL}/refusjon-omsorgsdager/arbeidstaker`,
     {
