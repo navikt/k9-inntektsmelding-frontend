@@ -16,6 +16,11 @@ export async function velgFraCombobox({
   alternativNavn: string | RegExp;
 }) {
   const combobox = page.getByTestId(testId);
+  await combobox.click();
   await combobox.fill(søketekst);
-  await page.getByRole("option", { name: alternativNavn }).click();
+
+  await page
+    .getByRole("listbox")
+    .getByRole("option", { name: alternativNavn })
+    .click();
 }
