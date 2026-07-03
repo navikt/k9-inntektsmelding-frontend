@@ -80,7 +80,7 @@ export function ComboboxWrapped({
           field.onChange(nyttValgtAlternativ?.value ?? verdi);
           onOptionSelected?.(nyttValgtAlternativ);
         } else {
-          field.onChange("");
+          field.onChange(undefined);
           onOptionSelected?.();
         }
       }}
