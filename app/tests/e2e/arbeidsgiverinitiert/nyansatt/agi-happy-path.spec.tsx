@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { velgFraCombobox } from "tests/e2e/utils";
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import { agiSendInntektsmeldingResponse } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-send-inntektsmelding";
 import {
@@ -36,9 +37,12 @@ test.describe("AGI Happy Path", () => {
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
     // Velg arbeidsgiver
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
 
     // Klikk "Opprett inntektsmelding"
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
@@ -97,9 +101,12 @@ test.describe("AGI Happy Path", () => {
 
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Fyll ut dine opplysninger
@@ -149,9 +156,12 @@ test.describe("AGI Happy Path", () => {
 
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Fyll ut dine opplysninger

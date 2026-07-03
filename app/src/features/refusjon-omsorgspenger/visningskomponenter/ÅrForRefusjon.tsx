@@ -12,8 +12,15 @@ export const iFjor = iÅr - 1;
 // Det betyr at man kan søke om refusjon for fjoråret frem til 1. april.
 export const ÅrForRefusjon = () => {
   const { register, formState, setValue } = useSkjemaState();
-  const { name: årForRefusjonName, ...årForRefusjonRadioGroupProps } =
-    register("årForRefusjon");
+  const { name: årForRefusjonName, ...årForRefusjonRadioGroupProps } = register(
+    "årForRefusjon",
+    {
+      onChange: () => {
+        setValue("organisasjonsnummer", undefined);
+        setValue("meta.organisasjonsnavn", undefined);
+      },
+    },
+  );
   useEffect(() => {
     if (!kanVelgeFjoråret) {
       setValue("årForRefusjon", String(iÅr));

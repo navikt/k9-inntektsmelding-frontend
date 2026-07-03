@@ -1,7 +1,9 @@
-import { BodyShort, Detail, Label, Select, VStack } from "@navikt/ds-react";
+import { BodyShort, Detail, Label, VStack } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useEffect } from "react";
+
+import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/ComboboxWrapped";
 
 import { hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
@@ -13,7 +15,7 @@ type ArbeidsgiverSeksjonProps = {
 export const ArbeidsgiverSeksjon = ({
   fødselsnummer,
 }: ArbeidsgiverSeksjonProps) => {
-  const { register, formState, setValue, getValues } = useSkjemaState();
+  const { setValue, getValues } = useSkjemaState();
   const { data } = useQuery(
     hentArbeidstakerOptions(fødselsnummer ?? "", getValues("årForRefusjon")),
   );
@@ -40,36 +42,39 @@ export const ArbeidsgiverSeksjon = ({
     const aktiveArbeidsforhold = data.arbeidsforhold.filter(
       (af) => !af.ansettelsesperiode.tom,
     );
-
-    // avsluttede arbeidsforhold legges sist i listen
-    const alfabetiskSorterteArbeidsforhold = [
+    const sorterteArbeidsforhold = [
       ...aktiveArbeidsforhold.toSorted((a, b) =>
-        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn),
+        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn, "nb"),
       ),
       ...avsluttedeArbeidsforhold.toSorted((a, b) =>
-        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn),
+        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn, "nb"),
       ),
     ];
+
+    const options = sorterteArbeidsforhold.map((af) => ({
+      value: af.organisasjonsnummer,
+      label: `${af.organisasjonsnavn} (org.nr. ${af.organisasjonsnummer})${
+        af.ansettelsesperiode.tom
+          ? ` – avsluttet ${dayjs(af.ansettelsesperiode.tom).format("DD.MM.YYYY")}`
+          : ""
+      }`,
+    }));
+
     return (
-      <Select
+      <ComboboxWrapped
         label="Velg arbeidsforhold"
-        {...register("organisasjonsnummer", {
-          onChange: (e) => {
-            const valgt = data.arbeidsforhold.find(
-              (af) => af.organisasjonsnummer === e.target.value,
-            );
-            setValue("meta.organisasjonsnavn", valgt?.organisasjonsnavn ?? "");
-          },
-        })}
-        error={formState.errors.organisasjonsnummer?.message}
-      >
-        <option value="">Velg arbeidsforhold</option>
-        {alfabetiskSorterteArbeidsforhold.map((af) => (
-          <option key={af.organisasjonsnummer} value={af.organisasjonsnummer}>
-            {`${af.organisasjonsnavn} (org.nr. ${af.organisasjonsnummer})${af.ansettelsesperiode.tom ? ` – avsluttet ${dayjs(af.ansettelsesperiode.tom).format("DD.MM.YYYY")}` : ""}`}
-          </option>
-        ))}
-      </Select>
+        name="organisasjonsnummer"
+        options={options}
+        onOptionSelected={(valgt) => {
+          const arbeidsforhold = data.arbeidsforhold.find(
+            (af) => af.organisasjonsnummer === valgt?.value,
+          );
+          setValue(
+            "meta.organisasjonsnavn",
+            arbeidsforhold?.organisasjonsnavn ?? "",
+          );
+        }}
+      />
     );
   }
 

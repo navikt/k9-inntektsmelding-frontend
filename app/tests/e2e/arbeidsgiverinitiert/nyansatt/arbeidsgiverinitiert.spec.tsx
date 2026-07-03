@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { velgFraCombobox } from "tests/e2e/utils";
 import { enkeltOpplysningerResponse } from "tests/mocks/inntektsmelding/opplysninger";
 import {
   expectError,
@@ -45,9 +46,12 @@ test("Ny ansatt", async ({ page }) => {
     },
   );
 
-  await page
-    .getByTestId("steg-0-select-arbeidsgiver")
-    .selectOption("974652293");
+  await velgFraCombobox({
+    page,
+    testId: "steg-0-combobox-arbeidsgiver",
+    søketekst: "974652293",
+    alternativNavn: /974652293/,
+  });
 
   await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
   await expect(
@@ -81,9 +85,12 @@ test("Skal ikke kunne velge NEI på refusjon hvis AGI og nyansatt", async ({
     },
   );
 
-  await page
-    .getByTestId("steg-0-select-arbeidsgiver")
-    .selectOption("974652293");
+  await velgFraCombobox({
+    page,
+    testId: "steg-0-combobox-arbeidsgiver",
+    søketekst: "974652293",
+    alternativNavn: /974652293/,
+  });
 
   await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
   await page.getByLabel("Telefon").fill("13371337");

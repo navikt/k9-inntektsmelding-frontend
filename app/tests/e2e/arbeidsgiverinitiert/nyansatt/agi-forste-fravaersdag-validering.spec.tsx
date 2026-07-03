@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { velgFraCombobox } from "tests/e2e/utils";
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import {
   mockAGIOpplysninger,
@@ -30,9 +31,12 @@ test.describe("AGI Første fraværsdag validering", () => {
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Gå gjennom dine opplysninger
@@ -99,9 +103,12 @@ test.describe("AGI Første fraværsdag validering", () => {
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Gå gjennom dine opplysninger
@@ -164,9 +171,12 @@ test.describe("AGI Første fraværsdag validering", () => {
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Gå gjennom dine opplysninger
@@ -220,9 +230,12 @@ test.describe("AGI Første fraværsdag validering", () => {
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Gå gjennom dine opplysninger

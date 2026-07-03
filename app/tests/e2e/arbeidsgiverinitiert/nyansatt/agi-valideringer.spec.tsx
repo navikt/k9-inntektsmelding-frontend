@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { velgFraCombobox } from "tests/e2e/utils";
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import {
   expectError,
@@ -59,9 +60,12 @@ test.describe("AGI Valideringer", () => {
 
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     // Verifiser at vi er på dine-opplysninger siden
@@ -88,9 +92,12 @@ test.describe("AGI Valideringer", () => {
 
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     await page.getByLabel("Telefon").fill("98765432");
@@ -115,9 +122,12 @@ test.describe("AGI Valideringer", () => {
 
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     await page.getByLabel("Telefon").fill("98765432");
@@ -151,7 +161,9 @@ test.describe("AGI Valideringer", () => {
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
 
     // Siden mock har flere arbeidsforhold, skal dropdown vises
-    await expect(page.getByTestId("steg-0-select-arbeidsgiver")).toBeVisible();
+    await expect(
+      page.getByTestId("steg-0-combobox-arbeidsgiver"),
+    ).toBeVisible();
 
     // Verifiser at "Opprett inntektsmelding" knappen vises
     await expect(
@@ -174,9 +186,12 @@ test.describe("AGI Valideringer", () => {
 
     await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
 
-    await page
-      .getByTestId("steg-0-select-arbeidsgiver")
-      .selectOption("974652293");
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
 
     await page.getByLabel("Telefon").fill("98765432");
