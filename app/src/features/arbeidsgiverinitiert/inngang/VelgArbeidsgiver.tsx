@@ -1,9 +1,5 @@
-import { Select } from "@navikt/ds-react";
-import { useFormContext } from "react-hook-form";
-
+import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/ComboboxWrapped";
 import { SlåOppArbeidstakerResponseDto } from "~/types/api-schemas.ts";
-
-import { FormType } from "./types";
 
 export function VelgArbeidsgiver({
   data,
@@ -12,32 +8,27 @@ export function VelgArbeidsgiver({
   data?: SlåOppArbeidstakerResponseDto;
   description?: string;
 }) {
-  const formMethods = useFormContext<FormType>();
-
   if (!data || data.arbeidsforhold.length <= 1) {
     return null;
   }
 
+  const options = data.arbeidsforhold
+    .toSorted((a, b) =>
+      a.organisasjonsnavn.localeCompare(b.organisasjonsnavn, "nb"),
+    )
+    .map((arbeidsforhold) => ({
+      value: arbeidsforhold.organisasjonsnummer,
+      label: `${arbeidsforhold.organisasjonsnavn} (${arbeidsforhold.organisasjonsnummer})`,
+    }));
+
   return (
-    <Select
-      data-testid="steg-0-select-arbeidsgiver"
+    <ComboboxWrapped
+      data-testid="steg-0-combobox-arbeidsgiver"
       description={description}
-      error={formMethods.formState.errors.organisasjonsnummer?.message}
       label="Arbeidsgiver"
-      {...formMethods.register(`organisasjonsnummer`, {
-        required: "Må oppgis",
-      })}
-    >
-      <option value="">Velg Organisasjon</option>
-      {data?.arbeidsforhold.map((arbeidsforhold) => (
-        <option
-          key={arbeidsforhold.organisasjonsnummer}
-          value={arbeidsforhold.organisasjonsnummer}
-        >
-          {arbeidsforhold.organisasjonsnavn} (
-          {arbeidsforhold.organisasjonsnummer})
-        </option>
-      ))}
-    </Select>
+      name="organisasjonsnummer"
+      options={options}
+      rules={{ required: "Må oppgis" }}
+    />
   );
 }

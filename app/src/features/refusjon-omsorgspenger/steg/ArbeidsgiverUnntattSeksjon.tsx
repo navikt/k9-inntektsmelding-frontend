@@ -1,12 +1,14 @@
-import { BodyShort, Label, Loader, Select } from "@navikt/ds-react";
+import { BodyShort, Label, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+
+import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/ComboboxWrapped";
 
 import { hentArbeidsgiversOrganisasjonerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const ArbeidsgiverUnntattSeksjon = () => {
-  const { register, formState, setValue } = useSkjemaState();
+  const { register, setValue } = useSkjemaState();
   const { data, isLoading, error } = useQuery(
     hentArbeidsgiversOrganisasjonerOptions(),
   );
@@ -36,27 +38,30 @@ export const ArbeidsgiverUnntattSeksjon = () => {
   if (!data) return null;
 
   if (data.organisasjoner.length > 1) {
+    const options = data.organisasjoner
+      .toSorted((a, b) =>
+        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn, "nb"),
+      )
+      .map((org) => ({
+        value: org.organisasjonsnummer,
+        label: `${org.organisasjonsnavn} (org.nr. ${org.organisasjonsnummer})`,
+      }));
+
     return (
-      <Select
+      <ComboboxWrapped
         label="Velg virksomhet"
-        {...register("organisasjonsnummer", {
-          value: "",
-          onChange: (e) => {
-            const valgt = data.organisasjoner.find(
-              (org) => org.organisasjonsnummer === e.target.value,
-            );
-            setValue("meta.organisasjonsnavn", valgt?.organisasjonsnavn ?? "");
-          },
-        })}
-        error={formState.errors.organisasjonsnummer?.message}
-      >
-        <option value="">Velg virksomhet</option>
-        {data.organisasjoner.map((ag) => (
-          <option key={ag.organisasjonsnummer} value={ag.organisasjonsnummer}>
-            {`${ag.organisasjonsnavn} (org.nr. ${ag.organisasjonsnummer})`}
-          </option>
-        ))}
-      </Select>
+        name="organisasjonsnummer"
+        options={options}
+        onOptionSelected={(valgt) => {
+          const organisasjon = data.organisasjoner.find(
+            (org) => org.organisasjonsnummer === valgt?.value,
+          );
+          setValue(
+            "meta.organisasjonsnavn",
+            organisasjon?.organisasjonsnavn ?? "",
+          );
+        }}
+      />
     );
   }
 
