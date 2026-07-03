@@ -36,14 +36,29 @@ export const ArbeidsgiverSeksjon = ({
   if (!data || data.arbeidsforhold.length === 0) return null;
 
   if (data.arbeidsforhold.length > 1) {
-    const options = data.arbeidsforhold
-      .toSorted((a, b) =>
+    const avsluttedeArbeidsforhold = data.arbeidsforhold.filter(
+      (af) => af.ansettelsesperiode.tom,
+    );
+    const aktiveArbeidsforhold = data.arbeidsforhold.filter(
+      (af) => !af.ansettelsesperiode.tom,
+    );
+    const sorterteArbeidsforhold = [
+      ...aktiveArbeidsforhold.toSorted((a, b) =>
         a.organisasjonsnavn.localeCompare(b.organisasjonsnavn, "nb"),
-      )
-      .map((af) => ({
-        value: af.organisasjonsnummer,
-        label: `${af.organisasjonsnavn} (org.nr. ${af.organisasjonsnummer})${af.ansettelsesperiode.tom ? ` – avsluttet ${dayjs(af.ansettelsesperiode.tom).format("DD.MM.YYYY")}` : ""}`,
-      }));
+      ),
+      ...avsluttedeArbeidsforhold.toSorted((a, b) =>
+        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn, "nb"),
+      ),
+    ];
+
+    const options = sorterteArbeidsforhold.map((af) => ({
+      value: af.organisasjonsnummer,
+      label: `${af.organisasjonsnavn} (org.nr. ${af.organisasjonsnummer})${
+        af.ansettelsesperiode.tom
+          ? ` – avsluttet ${dayjs(af.ansettelsesperiode.tom).format("DD.MM.YYYY")}`
+          : ""
+      }`,
+    }));
 
     return (
       <ComboboxWrapped
