@@ -2,7 +2,7 @@ import {
   type ComboboxProps,
   UNSAFE_Combobox as Combobox,
 } from "@navikt/ds-react";
-import { useController } from "react-hook-form";
+import { type RegisterOptions, useController } from "react-hook-form";
 
 export type ComboboxWrappedOption = {
   label: string;
@@ -14,8 +14,7 @@ type ComboboxWrappedProps = {
   label: React.ReactNode;
   description?: React.ReactNode;
   options: ComboboxWrappedOption[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- usikker på hvordan rules skal types, og om det er såå viktig.
-  rules?: any;
+  rules?: RegisterOptions;
   shouldUnregister?: boolean;
   onOptionSelected?: (option?: ComboboxWrappedOption) => void;
 } & Omit<
