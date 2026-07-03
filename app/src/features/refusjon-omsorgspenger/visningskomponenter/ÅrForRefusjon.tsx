@@ -11,9 +11,18 @@ export const iFjor = iÅr - 1;
 // Man kan kreve refusjon tre måneder tilbake i tid.
 // Det betyr at man kan søke om refusjon for fjoråret frem til 1. april.
 export const ÅrForRefusjon = () => {
-  const { register, formState, setValue } = useSkjemaState();
-  const { name: årForRefusjonName, ...årForRefusjonRadioGroupProps } =
-    register("årForRefusjon");
+  const { register, formState, setValue, getValues } = useSkjemaState();
+  const { name: årForRefusjonName, ...årForRefusjonRadioGroupProps } = register(
+    "årForRefusjon",
+    {
+      onChange: (e) => {
+        if (e.target.value !== getValues("årForRefusjon")) {
+          setValue("organisasjonsnummer", undefined);
+          setValue("meta.organisasjonsnavn", undefined);
+        }
+      },
+    },
+  );
   useEffect(() => {
     if (!kanVelgeFjoråret) {
       setValue("årForRefusjon", String(iÅr));
