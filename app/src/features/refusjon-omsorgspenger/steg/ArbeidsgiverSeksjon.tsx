@@ -34,6 +34,22 @@ export const ArbeidsgiverSeksjon = ({
   if (!data || data.arbeidsforhold.length === 0) return null;
 
   if (data.arbeidsforhold.length > 1) {
+    const avsluttedeArbeidsforhold = data.arbeidsforhold.filter(
+      (af) => af.ansettelsesperiode.tom,
+    );
+    const aktiveArbeidsforhold = data.arbeidsforhold.filter(
+      (af) => !af.ansettelsesperiode.tom,
+    );
+
+    // avsluttede arbeidsforhold legges sist i listen
+    const alfabetiskSorterteArbeidsforhold = [
+      ...aktiveArbeidsforhold.toSorted((a, b) =>
+        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn),
+      ),
+      ...avsluttedeArbeidsforhold.toSorted((a, b) =>
+        a.organisasjonsnavn.localeCompare(b.organisasjonsnavn),
+      ),
+    ];
     return (
       <Select
         label="Velg arbeidsforhold"
@@ -48,7 +64,7 @@ export const ArbeidsgiverSeksjon = ({
         error={formState.errors.organisasjonsnummer?.message}
       >
         <option value="">Velg arbeidsforhold</option>
-        {data.arbeidsforhold.map((af) => (
+        {alfabetiskSorterteArbeidsforhold.map((af) => (
           <option key={af.organisasjonsnummer} value={af.organisasjonsnummer}>
             {`${af.organisasjonsnavn} (org.nr. ${af.organisasjonsnummer})${af.ansettelsesperiode.tom ? ` – avsluttet ${dayjs(af.ansettelsesperiode.tom).format("DD.MM.YYYY")}` : ""}`}
           </option>
