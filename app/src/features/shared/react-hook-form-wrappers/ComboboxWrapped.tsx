@@ -80,6 +80,7 @@ export function ComboboxWrapped({
           field.onChange(nyttValgtAlternativ?.value ?? verdi);
           onOptionSelected?.(nyttValgtAlternativ);
         } else {
+          // eslint-disable-next-line unicorn/no-useless-undefined
           field.onChange(undefined);
           onOptionSelected?.();
         }
