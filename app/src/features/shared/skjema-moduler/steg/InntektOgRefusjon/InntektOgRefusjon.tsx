@@ -63,8 +63,7 @@ export function InntektOgRefusjon({
   onSubmit,
 }: {
   inntektsmeldingSkjemaState:
-    | InntektsmeldingSkjemaState
-    | InntektsmeldingSkjemaStateAGIUnntattAaregister;
+    InntektsmeldingSkjemaState | InntektsmeldingSkjemaStateAGIUnntattAaregister;
   eksisterendeInntektsmeldinger: InntektsmeldingSkjemaStateValid[];
   onSubmit: (skjemadata: InntektOgRefusjonForm) => void;
 }) {
