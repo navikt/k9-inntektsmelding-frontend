@@ -5,7 +5,11 @@ registries:
     url: https://maven.pkg.github.com/navikt/k9-inntektsmelding-frontend
     username: x-access-token
     password: ${{ secrets.READER_TOKEN }}
-
+  ghcr:
+    type: docker-registry
+    url: ghcr.io
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
 updates:
   - package-ecosystem: npm
     directory: "/"
@@ -36,3 +40,11 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+  - package-ecosystem: docker
+    directory: "/server"
+    schedule:
+      interval: daily
+    cooldown:
+      default-days: 7
+    registries:
+      - ghcr
