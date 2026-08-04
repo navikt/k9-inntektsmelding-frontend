@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7
-      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@v1
+      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@main
 
   deploy-dev-k9:
     name: Deploy DEV [K9]
