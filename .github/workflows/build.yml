@@ -77,7 +77,7 @@ jobs:
         run: echo "Generated build-version is ${{ steps.generate-build-version.outputs.build-version }}"
       - name: Bygg og push docker image k9saksbehandling
         id: docker-push
-        uses: navikt/sif-gha-workflows/.github/actions/maven/build-push-docker-image@fff3fe2e5b4305f7c4e9a83c9d5cb413dc2a729f # ratchet:navikt/sif-gha-workflows/.github/actions/maven/build-push-docker-image@main
+        uses: navikt/sif-gha-workflows/.github/actions/maven/build-push-docker-image@main
         with:
           docker_context: "./server"
           dockerfile: "./server/Dockerfile"
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7
-      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@97a944ba12c0db588a29cfeed8a7dcb22e087d3f # ratchet:navikt/sif-gha-workflows/.github/actions/sif-code-scan@v1
+      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@v1
 
   deploy-dev-k9:
     name: Deploy DEV [K9]
