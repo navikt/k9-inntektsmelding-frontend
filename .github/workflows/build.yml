@@ -90,8 +90,8 @@ jobs:
   sif-code-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7
+      - uses: navikt/sif-gha-workflows/.github/actions/sif-code-scan@main
 
   deploy-dev-k9:
     name: Deploy DEV [K9]
@@ -101,8 +101,8 @@ jobs:
       id-token: write
     needs: build-app-k9
     steps:
-      - uses: actions/checkout@v7
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7
+      - uses: nais/deploy/actions/deploy@fc3eae3edebabdf67f7592102ae16176d5ba3b5f # ratchet:nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
           RESOURCE: .deploy/naiserator.yaml
@@ -119,8 +119,8 @@ jobs:
       id-token: write
     needs: [build-app-k9, deploy-dev-k9]
     steps:
-      - uses: actions/checkout@v7
-      - uses: nais/deploy/actions/deploy@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # ratchet:actions/checkout@v7
+      - uses: nais/deploy/actions/deploy@fc3eae3edebabdf67f7592102ae16176d5ba3b5f # ratchet:nais/deploy/actions/deploy@v2
         env:
           CLUSTER: prod-gcp
           RESOURCE: .deploy/naiserator.yaml
