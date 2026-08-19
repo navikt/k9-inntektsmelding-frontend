@@ -1,6 +1,8 @@
 {
   "ingresses": [
-    "https://arbeidsgiver.intern.dev.nav.no/k9-im-dialog"
+    "https://arbeidsgiver.intern.dev.nav.no/k9-im-dialog",
+    "https://arbeidsgiver.ekstern.dev.nav.no/k9-im-dialog"
+
   ],
   "minReplicas": "1",
   "maxReplicas": "2",
