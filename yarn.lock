@@ -887,9 +887,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:5.8.0":
-  version: 5.8.0
-  resolution: "@hookform/resolvers@npm:5.8.0"
+"@hookform/resolvers@npm:5.9.1":
+  version: 5.9.1
+  resolution: "@hookform/resolvers@npm:5.9.1"
   dependencies:
     "@standard-schema/utils": "npm:^0.3.0"
   peerDependencies:
@@ -909,7 +909,7 @@ __metadata:
     fluentvalidation-ts: ^3.0.0
     fp-ts: ^2.7.0
     io-ts: ^2.0.0
-    joi: ^17.0.0
+    joi: ^17.0.0 || ^18.0.0
     nope-validator: ">=0.12.0"
     react-hook-form: ^7.55.0
     superstruct: ">=0.12.0"
@@ -967,7 +967,7 @@ __metadata:
       optional: true
     zod:
       optional: true
-  checksum: 10c0/5beb3e028bfb0e30e26918c11bcb6226f64294a4e11563868b24fee3e5d5ff6641d93d4ff905d28732d7e4fcc69df9004115fba411d452c6eae388a807c3fafe
+  checksum: 10c0/08d4e1455a072bea182468d878527e2e99c6d079fe56ffc5297e03a8219fe7544db092afcdf7a950e5421390d4dae3a21398c8ccd0b2c8639d0e0ff9e21410c2
   languageName: node
   linkType: hard
 
@@ -2363,18 +2363,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router@npm:1.170.27":
-  version: 1.170.27
-  resolution: "@tanstack/react-router@npm:1.170.27"
+"@tanstack/react-router@npm:1.170.29":
+  version: 1.170.29
+  resolution: "@tanstack/react-router@npm:1.170.29"
   dependencies:
     "@tanstack/history": "npm:1.162.1"
     "@tanstack/react-store": "npm:^0.9.3"
-    "@tanstack/router-core": "npm:1.171.22"
+    "@tanstack/router-core": "npm:1.171.24"
     isbot: "npm:^5.1.22"
   peerDependencies:
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
-  checksum: 10c0/1da66582de969c35d5a5e647ef852c65a18369c25332e53a29719162a1d3cb70020ef7f12c49512718569a982236a42fb6004f03bec82b17443a4b256e2cef7f
+  checksum: 10c0/65fc1cbd1300135eb256b50dd4c29c20f25e9b135afb2043f1536a246e74a469f6e8df60a1ded751b9d160434e15972254bf84bc6af9db531b2ac0120a69e2da
   languageName: node
   linkType: hard
 
@@ -2400,6 +2400,18 @@ __metadata:
     seroval: "npm:^1.6.2"
     seroval-plugins: "npm:^1.6.2"
   checksum: 10c0/3da7cc274b70dc670aa3cf13cc6ffc523e8e2180920ebfc5f70929166cb91347f5f155b06e94ac50706123397f4a9a19062d37eb5ddd728cdaf6e850f3b0d86d
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-core@npm:1.171.24":
+  version: 1.171.24
+  resolution: "@tanstack/router-core@npm:1.171.24"
+  dependencies:
+    "@tanstack/history": "npm:1.162.1"
+    cookie-es: "npm:^3.0.0"
+    seroval: "npm:^1.6.2"
+    seroval-plugins: "npm:^1.6.2"
+  checksum: 10c0/a58ef29ec641e770521c997f8b9fed3854df50164290f426ffe408648125e118bc3df9d61828cb08e3b9357910abb540a45c07e952470a3002adca61c485e78a
   languageName: node
   linkType: hard
 
@@ -3217,7 +3229,7 @@ __metadata:
     "@eslint/js": "npm:10.0.1"
     "@grafana/faro-web-sdk": "npm:2.9.0"
     "@grafana/faro-web-tracing": "npm:2.9.0"
-    "@hookform/resolvers": "npm:5.8.0"
+    "@hookform/resolvers": "npm:5.9.1"
     "@navikt/aksel-icons": "npm:8.16.1"
     "@navikt/ds-css": "npm:8.16.1"
     "@navikt/ds-react": "npm:8.16.1"
@@ -3232,7 +3244,7 @@ __metadata:
     "@tanstack/eslint-plugin-query": "npm:5.101.4"
     "@tanstack/react-query": "npm:5.101.4"
     "@tanstack/react-query-devtools": "npm:5.101.4"
-    "@tanstack/react-router": "npm:1.170.27"
+    "@tanstack/react-router": "npm:1.170.29"
     "@tanstack/router-devtools": "npm:1.167.1"
     "@tanstack/router-vite-plugin": "npm:1.167.30"
     "@types/lodash": "npm:4.17.25"
@@ -3245,7 +3257,7 @@ __metadata:
     clsx: "npm:2.1.1"
     core-js: "npm:3.50.0"
     date-fns: "npm:4.4.0"
-    dayjs: "npm:1.11.21"
+    dayjs: "npm:1.11.23"
     eslint: "npm:10.8.1"
     eslint-config-prettier: "npm:10.1.8"
     eslint-plugin-lodash: "npm:8.0.0"
@@ -3796,10 +3808,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:1.11.21":
-  version: 1.11.21
-  resolution: "dayjs@npm:1.11.21"
-  checksum: 10c0/bd97dfdc4bfea3c66268635690313828b386faa040fbc1f829ff42a2bd748b72c9d9b3c8f9616ce9e61fcb78923f1461a462c969c54b1084458ae1b715898fb0
+"dayjs@npm:1.11.23":
+  version: 1.11.23
+  resolution: "dayjs@npm:1.11.23"
+  checksum: 10c0/69ab04bf19c676e44ab50cc2fca223d265f3dafd107151ef3b0f3ad74d360c37caa602abe62f87cb25d90bd9f6bee003698af47df5b0dbf10a998b7b5f3bb3f1
   languageName: node
   linkType: hard
 
