@@ -561,7 +561,7 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
             required: "Må oppgis",
             validate: (date: string) => {
               return (
-                isAfter(skjæringstidspunkt, date) ||
+                isAfter(new Date(skjæringstidspunkt), new Date(date)) ||
                 "Fra og med dato for tariffendring må være før første fraværsdag"
               );
             },
