@@ -557,7 +557,15 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
         <DatePickerWrapped
           label="Fra og med"
           name={`endringAvInntektÅrsaker.${index}.fom`}
-          rules={{ required: "Må oppgis" }}
+          rules={{
+            required: "Må oppgis",
+            validate: (date: string) => {
+              return (
+                isAfter(new Date(skjæringstidspunkt), new Date(date)) ||
+                "Fra og med dato for tariffendring må være før første fraværsdag"
+              );
+            },
+          }}
         />
         <DatePickerWrapped
           label="Ble kjent fra"

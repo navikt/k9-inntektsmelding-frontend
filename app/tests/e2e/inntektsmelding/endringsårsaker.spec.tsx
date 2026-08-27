@@ -280,6 +280,92 @@ test("tariffendring vises riktig i oppsummering", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("tariffendring med fra og med dato etter første fraværsdag blokkeres", async ({
+  page,
+}) => {
+  await leggTilNyTariffendring(page);
+
+  await fyllUtTariffendring({
+    page,
+    fraOgMed: "31.05.2024",
+    bleKjentFra: "31.05.2024",
+  });
+  await besvarRefusjonOgNaturalytelser(page);
+  await page.getByRole("button", { name: "Neste steg" }).click();
+
+  await expectError({
+    page,
+    label: "Fra og med",
+    nth: TARIFFENDRING_FRA_OG_MED_INDEKS,
+    error: "Fra og med dato for tariffendring må være før første fraværsdag",
+  });
+  await expect(
+    page.getByRole("heading", { name: "Oppsummering" }),
+  ).toBeHidden();
+});
+
+test("tariffendring med fra og med dato lik første fraværsdag blokkeres", async ({
+  page,
+}) => {
+  await leggTilNyTariffendring(page);
+
+  await fyllUtTariffendring({
+    page,
+    fraOgMed: "30.05.2024",
+    bleKjentFra: "30.05.2024",
+  });
+  await besvarRefusjonOgNaturalytelser(page);
+  await page.getByRole("button", { name: "Neste steg" }).click();
+
+  await expectError({
+    page,
+    label: "Fra og med",
+    nth: TARIFFENDRING_FRA_OG_MED_INDEKS,
+    error: "Fra og med dato for tariffendring må være før første fraværsdag",
+  });
+  await expect(
+    page.getByRole("heading", { name: "Oppsummering" }),
+  ).toBeHidden();
+});
+
+test("tariffendring med fra og med dato før første fraværsdag godtas", async ({
+  page,
+}) => {
+  await leggTilNyTariffendring(page);
+
+  await fyllUtTariffendring({
+    page,
+    fraOgMed: "29.05.2024",
+    bleKjentFra: "30.05.2024",
+  });
+  await besvarRefusjonOgNaturalytelser(page);
+  await page.getByRole("button", { name: "Neste steg" }).click();
+
+  await expect(
+    page.getByRole("heading", { name: "Oppsummering" }),
+  ).toBeVisible();
+
+  await page.route(
+    `**/*/imdialog/send-inntektsmelding`,
+    async (route, request) => {
+      const payload = JSON.parse(request.postData() ?? "{}");
+      const tariffendring = payload.endringAvInntektÅrsaker.find(
+        (årsak: { årsak: string }) => årsak.årsak === "TARIFFENDRING",
+      );
+
+      expect(tariffendring).toEqual({
+        årsak: "TARIFFENDRING",
+        fom: "2024-05-29",
+        bleKjentFom: "2024-05-30",
+      });
+
+      await route.continue();
+    },
+  );
+
+  await page.getByRole("button", { name: "Send inn" }).click();
+});
+
 test("endringsårsak resetter felter når årsak endres - sørger for at verdier slettes når felter blir usynlige", async ({
   page,
 }) => {
@@ -570,4 +656,58 @@ const forventFomDatoForEndringsÅrsak = async ({
   });
   await expect(page.getByLabel("Fra og med")).toBeVisible({ visible: true });
   await expect(page.getByLabel("Til og med")).toBeVisible({ visible: false });
+};
+
+const FORESPØRSEL_MED_EKSISTERENDE_IM = "f29dcea7-febe-4a76-911c-ad8f6d3e8858";
+
+// Den innlastede inntektsmeldingen har allerede ferie og permisjon med "Fra og med", så tariffendringen blir nummer tre
+const TARIFFENDRING_FRA_OG_MED_INDEKS = 2;
+
+const leggTilNyTariffendring = async (page: Page) => {
+  await mockOpplysninger({ page, uuid: FORESPØRSEL_MED_EKSISTERENDE_IM });
+  await mockGrunnbeløp({ page });
+  await mockInntektsmeldinger({
+    page,
+    json: mangeEksisterendeInntektsmeldingerResponse,
+    uuid: FORESPØRSEL_MED_EKSISTERENDE_IM,
+  });
+
+  await page.goto(`/k9-im-dialog/${FORESPØRSEL_MED_EKSISTERENDE_IM}`);
+  await page.getByRole("link", { name: "Endre inntekt" }).click();
+  await page.getByRole("button", { name: "Legg til ny endringsårsak" }).click();
+
+  const endringsårsakSelects = page.getByLabel("Hva er årsaken til endringen?");
+  const antall = await endringsårsakSelects.count();
+  await endringsårsakSelects.nth(antall - 1).selectOption("Tariffendring");
+};
+
+const fyllUtTariffendring = async ({
+  page,
+  fraOgMed,
+  bleKjentFra,
+}: {
+  page: Page;
+  fraOgMed: string;
+  bleKjentFra: string;
+}) => {
+  await page
+    .getByLabel("Fra og med")
+    .nth(TARIFFENDRING_FRA_OG_MED_INDEKS)
+    .fill(fraOgMed);
+  await page.getByLabel("Ble kjent fra").last().fill(bleKjentFra);
+};
+
+const besvarRefusjonOgNaturalytelser = async (page: Page) => {
+  await page
+    .getByRole("radiogroup", {
+      name: "Betaler dere lønn under fraværet og krever refusjon?",
+    })
+    .getByRole("radio", { name: "Nei" })
+    .click();
+  await page
+    .getByRole("radiogroup", {
+      name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
+    })
+    .getByRole("radio", { name: "Nei" })
+    .click();
 };
