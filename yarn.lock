@@ -2328,10 +2328,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.101.4":
-  version: 5.101.4
-  resolution: "@tanstack/query-core@npm:5.101.4"
-  checksum: 10c0/a407960303431e6498c6518cf6f8cc7283d3e4a95dbdc5e9fa42c217b9dd7afaffb82a4f2d36b38f578f745e8cf69ff8551abb947f5abcc0a290f3e3e75dc654
+"@tanstack/query-core@npm:5.102.2":
+  version: 5.102.2
+  resolution: "@tanstack/query-core@npm:5.102.2"
+  checksum: 10c0/aa77d58d0f47fe1d660839d138e859cdeb814bea05f6757d5ace0dcf7da573a937899f4ff205e95073f567b10e071c1dae4bfc1c0b82325069bdf0cd867b4808
   languageName: node
   linkType: hard
 
@@ -2354,14 +2354,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:5.101.4":
-  version: 5.101.4
-  resolution: "@tanstack/react-query@npm:5.101.4"
+"@tanstack/react-query@npm:5.102.2":
+  version: 5.102.2
+  resolution: "@tanstack/react-query@npm:5.102.2"
   dependencies:
-    "@tanstack/query-core": "npm:5.101.4"
+    "@tanstack/query-core": "npm:5.102.2"
   peerDependencies:
     react: ^18 || ^19
-  checksum: 10c0/92e7c5b44740e753b05a6a19c166ea1a000df64c1bf5edb315d08a5b555a9f16a9d35288ac38f650bd38fc3015b135c392749fd6db24d09db42bfaf758d119fa
+  checksum: 10c0/3f1c4044bef914860f04feea8461ec322ebe6731c725b444f18f1058dd47e5e87dc70c13137490419eca1c4cc9bb3e301c27cac5b06cd06f975c1b721340b0dc
   languageName: node
   linkType: hard
 
@@ -2382,18 +2382,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router@npm:1.170.31":
-  version: 1.170.31
-  resolution: "@tanstack/react-router@npm:1.170.31"
+"@tanstack/react-router@npm:1.170.32":
+  version: 1.170.32
+  resolution: "@tanstack/react-router@npm:1.170.32"
   dependencies:
     "@tanstack/history": "npm:1.162.1"
     "@tanstack/react-store": "npm:^0.9.3"
-    "@tanstack/router-core": "npm:1.171.26"
+    "@tanstack/router-core": "npm:1.171.27"
     isbot: "npm:^5.1.22"
   peerDependencies:
     react: ">=18.0.0 || >=19.0.0"
     react-dom: ">=18.0.0 || >=19.0.0"
-  checksum: 10c0/65c0060538618b17cd363de7852cbd1036122e5dd53dfa0f247973f7cf223e09f2f459882dd8177edbc4c7ab4d6adaf097681368ffee281fe4cbf9964094fd55
+  checksum: 10c0/dd9f5e00959033e68220366abf7656c42f2253a80a77f1b149cc5825aba098f60607907647e66063fc22715e5e259528563ddc532d75515fa4bb17996ab01caa
   languageName: node
   linkType: hard
 
@@ -2419,6 +2419,18 @@ __metadata:
     seroval: "npm:^1.6.2"
     seroval-plugins: "npm:^1.6.2"
   checksum: 10c0/4e5974cf265c373e53d5f9e547c423cbbb2709e8fd6e542182db1756819d47169f8befe40327b6c3041204e6e7ede37d5812f46a11e3af1b997629cba63cfdad
+  languageName: node
+  linkType: hard
+
+"@tanstack/router-core@npm:1.171.27":
+  version: 1.171.27
+  resolution: "@tanstack/router-core@npm:1.171.27"
+  dependencies:
+    "@tanstack/history": "npm:1.162.1"
+    cookie-es: "npm:^3.0.0"
+    seroval: "npm:^1.6.2"
+    seroval-plugins: "npm:^1.6.2"
+  checksum: 10c0/408bd236312fd040a3ecb2a0e1dba25ca428c6a7a86749a76596c3a11710f8b19a0002f103f513a702cd19c70b1130bf9a2a220c1d83668228ed5ea769d8782d
   languageName: node
   linkType: hard
 
@@ -3252,9 +3264,9 @@ __metadata:
     "@sentry/vite-plugin": "npm:5.4.0"
     "@tailwindcss/vite": "npm:4.3.3"
     "@tanstack/eslint-plugin-query": "npm:5.101.4"
-    "@tanstack/react-query": "npm:5.101.4"
+    "@tanstack/react-query": "npm:5.102.2"
     "@tanstack/react-query-devtools": "npm:5.101.4"
-    "@tanstack/react-router": "npm:1.170.31"
+    "@tanstack/react-router": "npm:1.170.32"
     "@tanstack/router-devtools": "npm:1.167.1"
     "@tanstack/router-vite-plugin": "npm:1.167.34"
     "@types/lodash": "npm:4.17.25"
@@ -3278,7 +3290,7 @@ __metadata:
     prettier: "npm:3.9.6"
     react: "npm:19.2.8"
     react-dom: "npm:19.2.8"
-    react-hook-form: "npm:7.85.0"
+    react-hook-form: "npm:7.86.0"
     tailwindcss: "npm:4.3.3"
     typescript: "npm:6.0.3"
     typescript-eslint: "npm:8.67.0"
@@ -6219,12 +6231,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.85.0":
-  version: 7.85.0
-  resolution: "react-hook-form@npm:7.85.0"
+"react-hook-form@npm:7.86.0":
+  version: 7.86.0
+  resolution: "react-hook-form@npm:7.86.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/53e81f4116129efa8e08c620cd334f74541174a82f3e4ce7a8839193c69a561b9bed070b4a46f24654c4860c474ddbb504d2ad402297708c8c2b80f1f6116d59
+  checksum: 10c0/90cfaf2bbe18061f71d2a8e3e546ab4d9aa861aeab210f2ee3c2009d20e477aa98e290571bd2a2a593e7d412738f178abbea60b81df0b9a5c1b57f8a87b789df
   languageName: node
   linkType: hard
 
