@@ -7,6 +7,7 @@ import {
   hentOpplysningerUnntattAaregister,
   hentPersonFraFnrUnntattAareg,
 } from "~/api/queries.ts";
+import { MånedsinntektStatusSchema } from "~/types/api-schemas.ts";
 import { logDev } from "~/utils";
 
 import {
@@ -219,12 +220,7 @@ const InntektsopplysningerDtoSchema = z.object({
       fom: z.string(),
       tom: z.string(),
       beløp: z.number().optional(),
-      status: z.enum([
-        "NEDETID_AINNTEKT",
-        "BRUKT_I_GJENNOMSNITT",
-        "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT",
-        "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT",
-      ]),
+      status: MånedsinntektStatusSchema,
     }),
   ),
 });

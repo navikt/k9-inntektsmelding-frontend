@@ -151,7 +151,7 @@ app/src/
 │       └── skjema-moduler/
 ├── routes/                      # File-based routes
 ├── types/                       # TypeScript types
-│   └── api-models.ts
+│   └── api-schemas.ts
 ├── utils/                       # Utility functions
 └── main.tsx                     # App entry point
 ```
@@ -228,7 +228,7 @@ Each feature follows a consistent structure:
 
 ## API & Data Types
 
-- API models are defined in `app/src/types/api-models.ts`
+- API models are defined in `app/src/types/api-schemas.ts`
 - Use TypeScript types for all API responses
 - Keep API logic in `app/src/api/` folder
 - Use Tanstack Query's `useMutation` and `useQuery` hooks

@@ -54,6 +54,17 @@ export type EndringAvInntektÅrsaker = z.infer<
 >;
 export type Naturalytelsetype = z.infer<typeof NaturalytelseTypeSchema>;
 
+export const MånedsinntektStatusSchema = z.enum([
+  "NEDETID_AINNTEKT",
+  "BRUKT_I_GJENNOMSNITT",
+  "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT",
+  "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT",
+  "IKKE_RAPPORTERT_NYANSATT",
+]);
+
+export type MånedsinntektStatus = z.infer<typeof MånedsinntektStatusSchema>;
+export const MånedsinntektStatus = MånedsinntektStatusSchema.enum;
+
 export const SlåOppArbeidstakerResponseDtoSchema = z.object({
   fornavn: z.string(),
   mellomnavn: z.string().optional(),
@@ -147,13 +158,7 @@ export const opplysningerSchema = z.object({
         fom: z.string(),
         tom: z.string(),
         beløp: z.number().optional(),
-        status: z.enum([
-          "NEDETID_AINNTEKT",
-          "BRUKT_I_GJENNOMSNITT",
-          "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT",
-          "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT",
-          "IKKE_RAPPORTERT_NYANSATT",
-        ]),
+        status: MånedsinntektStatusSchema,
       }),
     ),
   }),

@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
 
 import { InntektsopplysningerDto } from "~/features/refusjon-omsorgspenger/api/queries";
+import { MånedsinntektStatus } from "~/types/api-schemas";
 
 export const mockInnloggetBruker = ({
   page,
@@ -114,11 +115,7 @@ export const mockInntektsopplysninger = ({
       fom: string;
       tom: string;
       beløp?: number;
-      status:
-        | "NEDETID_AINNTEKT"
-        | "BRUKT_I_GJENNOMSNITT"
-        | "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT"
-        | "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT";
+      status: MånedsinntektStatus;
     }>;
   };
 }) => {
