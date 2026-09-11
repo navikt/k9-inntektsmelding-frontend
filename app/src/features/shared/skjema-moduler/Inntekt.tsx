@@ -34,6 +34,7 @@ import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/Da
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import {
   EndringAvInntektÅrsaker,
+  MånedsinntektStatus,
   OpplysningerDto,
 } from "~/types/api-schemas.ts";
 import {
@@ -68,7 +69,7 @@ export function Inntekt({
     !!watch("korrigertInntekt"),
   );
   const erAInntektNede = inntektsopplysninger.månedsinntekter.some(
-    (inntekt) => inntekt.status === "NEDETID_AINNTEKT",
+    (inntekt) => inntekt.status === MånedsinntektStatus.NEDETID_AINNTEKT,
   );
   const førsteDag = formatDatoKort(new Date(skjæringstidspunkt));
 
@@ -76,7 +77,9 @@ export function Inntekt({
   ${formatOppramsing(
     inntektsopplysninger.månedsinntekter
       .filter(
-        (m) => m.status !== "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT",
+        (m) =>
+          m.status !==
+          MånedsinntektStatus.IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT,
       )
       .map((m) => navnPåMåned(m.fom).toLowerCase()),
   )}`;
@@ -255,13 +258,20 @@ const RapportertInntekt = ({
 }: {
   inntekt: OpplysningerDto["inntektsopplysninger"]["månedsinntekter"][0];
 }) => {
-  if (inntekt.status === "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT") {
+  if (
+    inntekt.status ===
+      MånedsinntektStatus.IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT ||
+    inntekt.status === MånedsinntektStatus.IKKE_RAPPORTERT_NYANSATT
+  ) {
     return "Ikke rapportert";
   }
-  if (inntekt.status === "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT") {
+  if (
+    inntekt.status ===
+    MånedsinntektStatus.IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT
+  ) {
     return "Ikke rapportert (0kr)";
   }
-  if (inntekt.status === "NEDETID_AINNTEKT") {
+  if (inntekt.status === MånedsinntektStatus.NEDETID_AINNTEKT) {
     return "-";
   }
 
@@ -275,16 +285,24 @@ const AlertOmRapportertLønn = ({
   månedsinntekter,
 }: AlertOmRapportertLønnProps) => {
   const AInntektErNede = månedsinntekter.some(
-    (inntekt) => inntekt.status === "NEDETID_AINNTEKT",
+    (inntekt) => inntekt.status === MånedsinntektStatus.NEDETID_AINNTEKT,
   );
 
   const harIkkeRapportertOgFristErPassert = månedsinntekter.some(
-    (inntekt) => inntekt.status === "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT",
+    (inntekt) =>
+      inntekt.status ===
+      MånedsinntektStatus.IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT,
   );
 
   const harIkkeRapportertMenFristIkkePassert = månedsinntekter.some(
     (inntekt) =>
-      inntekt.status === "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT",
+      inntekt.status ===
+      MånedsinntektStatus.IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT,
+  );
+
+  const harIkkeRapportertNyansatt = månedsinntekter.some(
+    (inntekt) =>
+      inntekt.status === MånedsinntektStatus.IKKE_RAPPORTERT_NYANSATT,
   );
 
   if (AInntektErNede) {
@@ -352,6 +370,21 @@ const AlertOmRapportertLønn = ({
           Det er ikke rapportert lønn for alle tre månedene før første
           fraværsdag. Vi har derfor estimert månedslønn basert på gjennomsnittet
           av de tre siste månedene med rapportert lønn.
+        </BodyShort>
+      </Alert>
+    );
+  }
+
+  if (harIkkeRapportertNyansatt) {
+    return (
+      <Alert
+        className="col-span-2"
+        data-testid="alert-ikke-rapportert-nyansatt"
+        variant="warning"
+      >
+        <BodyShort>
+          Arbeidstakeren er nylig innmeldt i nytt arbeidsforhold. Skal inntekten
+          korrigeres?
         </BodyShort>
       </Alert>
     );

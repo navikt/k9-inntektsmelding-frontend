@@ -44,7 +44,7 @@ app/src/
 │   ├── refusjon-omsorgspenger/ # Care days refund
 │   └── shared/                 # Shared feature code
 ├── routes/           # File-based routes (Tanstack Router)
-├── types/            # TypeScript types (api-models.ts)
+├── types/            # TypeScript types (api-schemas.ts)
 └── utils/            # Utility functions
 ```
 
