@@ -255,7 +255,10 @@ const RapportertInntekt = ({
 }: {
   inntekt: OpplysningerDto["inntektsopplysninger"]["månedsinntekter"][0];
 }) => {
-  if (inntekt.status === "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT") {
+  if (
+    inntekt.status === "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT" ||
+    inntekt.status === "IKKE_RAPPORTERT_NYANSATT"
+  ) {
     return "Ikke rapportert";
   }
   if (inntekt.status === "IKKE_RAPPORTERT_MEN_BRUKT_I_GJENNOMSNITT") {
@@ -285,6 +288,10 @@ const AlertOmRapportertLønn = ({
   const harIkkeRapportertMenFristIkkePassert = månedsinntekter.some(
     (inntekt) =>
       inntekt.status === "IKKE_RAPPORTERT_RAPPORTERINGSFRIST_IKKE_PASSERT",
+  );
+
+  const harIkkeRapportertNyansatt = månedsinntekter.some(
+    (inntekt) => inntekt.status === "IKKE_RAPPORTERT_NYANSATT",
   );
 
   if (AInntektErNede) {
@@ -352,6 +359,21 @@ const AlertOmRapportertLønn = ({
           Det er ikke rapportert lønn for alle tre månedene før første
           fraværsdag. Vi har derfor estimert månedslønn basert på gjennomsnittet
           av de tre siste månedene med rapportert lønn.
+        </BodyShort>
+      </Alert>
+    );
+  }
+
+  if (harIkkeRapportertNyansatt) {
+    return (
+      <Alert
+        className="col-span-2"
+        data-testid="alert-ikke-rapportert-nyansatt"
+        variant="warning"
+      >
+        <BodyShort>
+          Arbeidstakeren er nylig innmeldt i nytt arbeidsforhold. Skal inntekten
+          korrigeres?
         </BodyShort>
       </Alert>
     );
