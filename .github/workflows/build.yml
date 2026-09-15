@@ -37,14 +37,10 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: "@navikt"
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Configure Yarn for GitHub Packages
-        run: |
-          yarn config set npmScopes.navikt.npmRegistryServer "https://npm.pkg.github.com"
-          yarn config set npmScopes.navikt.npmAlwaysAuth true
-          yarn config set npmScopes.navikt.npmAuthToken ${{ secrets.READER_TOKEN }}
+        uses: ./.github/actions/configure-yarn
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         run: yarn workspaces focus app
