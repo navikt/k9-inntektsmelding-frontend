@@ -15,7 +15,10 @@ export const Route = createFileRoute("/$id")({
   component: InntektsmeldingRoot,
   pendingMs: 0,
   errorComponent: ({ error }) => {
-    if (error.message === FEILKODER.OPPGAVE_ER_UTGÅTT) {
+    if (
+      error instanceof Error &&
+      error.message === FEILKODER.OPPGAVE_ER_UTGÅTT
+    ) {
       return <OppgaveErUtgåttFeilside />;
     }
 

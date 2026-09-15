@@ -22,7 +22,10 @@ export const Route = createFileRoute(
     </div>
   ),
   errorComponent: ({ error }) => {
-    if (error.message === FEILKODER.OPPGAVE_ER_UTGÅTT) {
+    if (
+      error instanceof Error &&
+      error.message === FEILKODER.OPPGAVE_ER_UTGÅTT
+    ) {
       return <OppgaveErUtgåttFeilside />;
     }
 
