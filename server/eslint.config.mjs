@@ -9,6 +9,9 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/no-null": "off",
   "unicorn/prevent-abbreviations": "off",
   "unicorn/no-nested-ternary": "off",
+  "unicorn/name-replacements": "off",
+  "unicorn/no-top-level-side-effects": "off",
+  "unicorn/no-useless-else": "off",
 };
 
 export default tseslint.config(
