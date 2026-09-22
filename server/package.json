@@ -15,7 +15,7 @@
   "dependencies": {
     "@navikt/nav-dekoratoren-moduler": "4.3.0",
     "@navikt/oasis": "4.2.2",
-    "@navikt/vite-mode": "0.14.0",
+    "@navikt/vite-mode": "1.0.1",
     "csp-header": "6.4.0",
     "express": "5.2.1",
     "html-react-parser": "6.1.7",
