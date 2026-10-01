@@ -26,6 +26,7 @@ import { isAfter } from "date-fns";
 import { Fragment } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
+import { featureToggles } from "~/feature-toggles/featureToggles";
 import {
   HjelpetekstAlert,
   HjelpetekstReadMore,
@@ -492,8 +493,11 @@ function Endringsårsaker({
     name: "endringAvInntektÅrsaker",
   });
 
-  // Tariffendring skal kun være tilgjengelig dersom man endrer en IM, ikke for førstegangs-innsendelse
-  const muligeÅrsakerValg = harEksisterendeInntektsmeldinger
+  // Tariffendring er kun tilgjengelig ved endring av en IM, med mindre feature toggle tillater det også for første innsendelse
+  const kanVelgeTariffendring =
+    harEksisterendeInntektsmeldinger ||
+    featureToggles.tillatTariffendringVedFørsteInntektsmelding;
+  const muligeÅrsakerValg = kanVelgeTariffendring
     ? Object.values(endringsårsak)
     : Object.values(endringsårsak).filter(
         (årsak) => årsak.value !== "TARIFFENDRING",

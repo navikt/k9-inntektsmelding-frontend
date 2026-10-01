@@ -1,3 +1,5 @@
 import { FeatureTogglesType } from "./featureTogglesType";
 
-export const devGcpFeatureToggles = {} satisfies FeatureTogglesType;
+export const devGcpFeatureToggles = {
+  tillatTariffendringVedFørsteInntektsmelding: true,
+} satisfies FeatureTogglesType;
