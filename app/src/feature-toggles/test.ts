@@ -1,3 +1,5 @@
 import { FeatureTogglesType } from "./featureTogglesType";
 
-export const testFeatureToggles = {} satisfies FeatureTogglesType;
+export const testFeatureToggles = {
+  tillatTariffendringVedFørsteInntektsmelding: true,
+} satisfies FeatureTogglesType;
