@@ -26,7 +26,6 @@ import { isAfter } from "date-fns";
 import { Fragment } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
-import { featureToggles } from "~/feature-toggles/featureToggles";
 import {
   HjelpetekstAlert,
   HjelpetekstReadMore,
@@ -56,14 +55,9 @@ type InntektProps = {
     OpplysningerDto,
     "skjæringstidspunkt" | "person" | "inntektsopplysninger"
   >;
-  harEksisterendeInntektsmeldinger: boolean;
   children?: React.ReactNode;
 };
-export function Inntekt({
-  opplysninger,
-  harEksisterendeInntektsmeldinger,
-  children,
-}: InntektProps) {
+export function Inntekt({ opplysninger, children }: InntektProps) {
   const { skjæringstidspunkt, person, inntektsopplysninger } = opplysninger;
   const { watch, setValue } = useFormContext<InntektOgRefusjonForm>();
   const { isOpen, onOpen, onClose } = useDisclosure(
@@ -138,7 +132,6 @@ export function Inntekt({
       ) : isOpen ? (
         <EndreMånedslønn
           gjennomsnittLønn={inntektsopplysninger.gjennomsnittLønn}
-          harEksisterendeInntektsmeldinger={harEksisterendeInntektsmeldinger}
           onClose={() => {
             onClose();
             setValue("meta.skalKorrigereInntekt", false);
@@ -421,13 +414,11 @@ export const endringsårsak = [
 
 type EndreMånedslønnProps = {
   onClose: () => void;
-  harEksisterendeInntektsmeldinger: boolean;
   gjennomsnittLønn?: number;
   skjæringstidspunkt: string;
 };
 const EndreMånedslønn = ({
   onClose,
-  harEksisterendeInntektsmeldinger,
   gjennomsnittLønn,
   skjæringstidspunkt,
 }: EndreMånedslønnProps) => {
@@ -462,10 +453,7 @@ const EndreMånedslønn = ({
           Tilbakestill
         </Button>
       </div>
-      <Endringsårsaker
-        harEksisterendeInntektsmeldinger={harEksisterendeInntektsmeldinger}
-        skjæringstidspunkt={skjæringstidspunkt}
-      />
+      <Endringsårsaker skjæringstidspunkt={skjæringstidspunkt} />
     </>
   );
 };
@@ -479,13 +467,9 @@ export const ENDRINGSÅRSAK_TEMPLATE = {
 };
 
 type EndringsårsakerProps = {
-  harEksisterendeInntektsmeldinger: boolean;
   skjæringstidspunkt: string;
 };
-function Endringsårsaker({
-  harEksisterendeInntektsmeldinger,
-  skjæringstidspunkt,
-}: EndringsårsakerProps) {
+function Endringsårsaker({ skjæringstidspunkt }: EndringsårsakerProps) {
   const { control, register, formState } =
     useFormContext<InntektOgRefusjonForm>();
   const { fields, append, remove, update } = useFieldArray({
@@ -493,15 +477,7 @@ function Endringsårsaker({
     name: "endringAvInntektÅrsaker",
   });
 
-  // Tariffendring er kun tilgjengelig ved endring av en IM, med mindre feature toggle tillater det også for første innsendelse
-  const kanVelgeTariffendring =
-    harEksisterendeInntektsmeldinger ||
-    featureToggles.tillatTariffendringVedFørsteInntektsmelding;
-  const muligeÅrsakerValg = kanVelgeTariffendring
-    ? Object.values(endringsårsak)
-    : Object.values(endringsårsak).filter(
-        (årsak) => årsak.value !== "TARIFFENDRING",
-      );
+  const muligeÅrsakerValg = Object.values(endringsårsak);
 
   return (
     <VStack gap="space-16">

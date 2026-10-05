@@ -1,3 +1,1 @@
-export interface FeatureTogglesType {
-  tillatTariffendringVedFørsteInntektsmelding: boolean;
-}
+export type FeatureTogglesType = Record<string, boolean>;
