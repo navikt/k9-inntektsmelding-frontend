@@ -60,7 +60,7 @@
     "eslint-plugin-lodash": "8.1.0",
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-simple-import-sort": "14.0.0",
-    "eslint-plugin-unicorn": "74.0.0",
+    "eslint-plugin-unicorn": "76.0.0",
     "prettier": "3.9.8",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
