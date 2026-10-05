@@ -4,10 +4,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas.tsx";
-import {
-  InntektsmeldingSkjemaState,
-  InntektsmeldingSkjemaStateValid,
-} from "~/features/inntektsmelding/frontendSchemas.tsx";
+import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/frontendSchemas.tsx";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import {
@@ -59,12 +56,10 @@ type NaturalytelserSomMistesForm = {
 
 export function InntektOgRefusjon({
   inntektsmeldingSkjemaState,
-  eksisterendeInntektsmeldinger,
   onSubmit,
 }: {
   inntektsmeldingSkjemaState:
     InntektsmeldingSkjemaState | InntektsmeldingSkjemaStateAGIUnntattAaregister;
-  eksisterendeInntektsmeldinger: InntektsmeldingSkjemaStateValid[];
   onSubmit: (skjemadata: InntektOgRefusjonForm) => void;
 }) {
   useScrollToTopOnMount();
@@ -72,9 +67,6 @@ export function InntektOgRefusjon({
   useDocumentTitle(
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
-
-  const harEksisterendeInntektsmeldinger =
-    eksisterendeInntektsmeldinger.length > 0;
 
   const formMethods = useForm<InntektOgRefusjonForm>({
     defaultValues: defaultValues(inntektsmeldingSkjemaState, opplysninger),
@@ -117,10 +109,7 @@ export function InntektOgRefusjon({
             <OmFraværetOmsorgspenger />
           )}
           <hr />
-          <Inntekt
-            harEksisterendeInntektsmeldinger={harEksisterendeInntektsmeldinger}
-            opplysninger={opplysninger}
-          />
+          <Inntekt opplysninger={opplysninger} />
           {opplysninger.ytelse !== "OMSORGSPENGER" && (
             <>
               <UtbetalingOgRefusjon />

@@ -113,7 +113,6 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
         <VStack gap="space-16">
           {inntektsopplysninger ? (
             <Inntekt
-              harEksisterendeInntektsmeldinger={false}
               opplysninger={{
                 person: {
                   aktørId: getValues("ansattesAktørId")!,

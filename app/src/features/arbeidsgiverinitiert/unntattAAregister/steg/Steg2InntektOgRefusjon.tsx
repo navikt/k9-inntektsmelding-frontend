@@ -1,4 +1,4 @@
-import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
@@ -54,9 +54,6 @@ export const Steg2InntektOgRefusjon = () => {
   useDocumentTitle(
     `Inntekt og refusjon - inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
-  const { eksisterendeInntektsmeldinger } = getRouteApi(
-    "/agi-unntatt-aaregister/$id",
-  ).useLoaderData();
   const navigate = useNavigate();
 
   const onSubmit = (skjemadata: InntektOgRefusjonForm) => {
@@ -93,7 +90,6 @@ export const Steg2InntektOgRefusjon = () => {
 
   return (
     <InntektOgRefusjon
-      eksisterendeInntektsmeldinger={eksisterendeInntektsmeldinger}
       inntektsmeldingSkjemaState={inntektsmeldingSkjemaState}
       onSubmit={onSubmit}
     />
