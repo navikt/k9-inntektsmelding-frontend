@@ -84,7 +84,7 @@ export function Naturalytelser({ opplysninger }: NaturalytelserProps) {
 }
 
 const naturalytelser: Record<Naturalytelsetype, string> = {
-  ELEKTRONISK_KOMMUNIKASJONƒ: "Elektronisk kommunikasjon",
+  ELEKTRONISK_KOMMUNIKASJON: "Elektronisk kommunikasjon",
   AKSJER_GRUNNFONDSBEVIS_TIL_UNDERKURS:
     "Aksjer / grunnfondsbevis til underkurs",
   LOSJI: "Losji",
