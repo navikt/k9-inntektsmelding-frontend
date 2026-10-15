@@ -1,8 +1,11 @@
 import { describe, expect, test } from "vitest";
 
+import { MIDLERTIDIG_NATURALYTELSETYPE } from "~/feature-toggles/midlertidigKompatibilitet";
 import { InntektsmeldingResponseDtoUregistrertSchema } from "~/features/arbeidsgiverinitiert/unntattAAregister/api-schemas";
 import { InntektsmeldingResponseDtoSchema } from "~/features/inntektsmelding/api-schemas";
 import {
+  naturalytelsePerioderDtoSchema,
+  NaturalytelseTypeSchema,
   opplysningerSchema,
   SlåOppArbeidstakerResponseDtoSchema,
 } from "~/types/api-schemas";
@@ -21,6 +24,41 @@ import {
   utgåttOpplysningerResponse,
 } from "../../tests/mocks/inntektsmelding/opplysninger";
 import { enkelSendInntektsmeldingResponse } from "../../tests/mocks/inntektsmelding/send-inntektsmelding";
+
+describe("naturalytelsePerioderDtoSchema", () => {
+  test.each([
+    // Midlertidig testtilfelle. Fjern når backend ikke lenger returnerer ELEKTRISK_KOMMUNIKASJON.
+    [MIDLERTIDIG_NATURALYTELSETYPE, "ELEKTRONISK_KOMMUNIKASJON"] as const,
+    ...NaturalytelseTypeSchema.options.map((type) => [type, type] as const),
+  ])("parser %s som %s", (naturalytelsetype, forventetType) => {
+    const periode = {
+      fom: "2026-01-01",
+      beløp: 100,
+      naturalytelsetype,
+    };
+
+    expect(naturalytelsePerioderDtoSchema.parse([periode])).toEqual([
+      { ...periode, naturalytelsetype: forventetType },
+    ]);
+  });
+
+  test.each(["UKJENT_TYPE", null, 123, undefined])(
+    "avviser ugyldig naturalytelsetype %s",
+    (naturalytelsetype) => {
+      expect(
+        naturalytelsePerioderDtoSchema.safeParse([
+          { fom: "2026-01-01", beløp: 100, naturalytelsetype },
+        ]).success,
+      ).toBe(false);
+    },
+  );
+
+  test("tilbyr ikke den gamle verdien i enumen", () => {
+    expect(NaturalytelseTypeSchema.options).not.toContain(
+      MIDLERTIDIG_NATURALYTELSETYPE,
+    );
+  });
+});
 
 describe("opplysningerSchema parser alle mock-respons", () => {
   test.each([
