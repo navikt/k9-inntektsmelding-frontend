@@ -13,7 +13,7 @@ export const YtelsetypeSchema = z.enum([
 export type Ytelsetype = z.infer<typeof YtelsetypeSchema>;
 
 export const NaturalytelseTypeSchema = z.enum([
-  "ELEKTRISK_KOMMUNIKASJON",
+  "ELEKTRONISK_KOMMUNIKASJON",
   "AKSJER_GRUNNFONDSBEVIS_TIL_UNDERKURS",
   "LOSJI",
   "KOST_DOEGN",
