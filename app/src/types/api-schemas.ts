@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-import { MIDLERTIDIG_NATURALYTELSETYPE } from "~/feature-toggles/midlertidigKompatibilitet";
 import { formatNavn } from "~/utils.ts";
 
 export const YtelsetypeSchema = z.enum([
@@ -33,14 +32,6 @@ export const NaturalytelseTypeSchema = z.enum([
   "YRKEBIL_TJENESTLIGBEHOV_LISTEPRIS",
   "INNBETALING_TIL_UTENLANDSK_PENSJONSORDNING",
 ]);
-
-const NaturalytelseTypeFraApiSchema = z.preprocess(
-  (verdi) =>
-    verdi === MIDLERTIDIG_NATURALYTELSETYPE
-      ? "ELEKTRONISK_KOMMUNIKASJON"
-      : verdi,
-  NaturalytelseTypeSchema,
-);
 
 export const EndringAvInntektÅrsakerSchema = z.enum([
   "PERMITTERING",
@@ -119,7 +110,7 @@ export const naturalytelsePerioderDtoSchema = z
       fom: z.string(),
       tom: z.string().optional(),
       beløp: z.number(),
-      naturalytelsetype: NaturalytelseTypeFraApiSchema,
+      naturalytelsetype: NaturalytelseTypeSchema,
     }),
   )
   .optional(); // TODO: Når databasen er wipet, kan vi fjerne optional her.
