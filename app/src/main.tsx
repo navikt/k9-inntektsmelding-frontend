@@ -41,6 +41,7 @@ init({
   app: "k9-inntektsmelding-frontend",
   namespace: "k9saksbehandling",
   devConsoleEcho: false,
+  tracing: true,
 });
 
 createRoot(document.querySelector("#root")!).render(
