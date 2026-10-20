@@ -17,7 +17,6 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import { finnEnvironmentForHostname } from "./feature-toggles/featureToggles";
 import { routeTree } from "./routeTree.gen";
 
 export const queryClient = new QueryClient();
@@ -38,13 +37,11 @@ declare module "@tanstack/react-router" {
   }
 }
 
-if (import.meta.env.PROD) {
-  init({
-    app: "k9-inntektsmelding-frontend",
-    namespace: "k9saksbehandling",
-    environment: finnEnvironmentForHostname(globalThis.location.hostname),
-  });
-}
+init({
+  app: "k9-inntektsmelding-frontend",
+  namespace: "k9saksbehandling",
+  devConsoleEcho: false,
+});
 
 createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>
