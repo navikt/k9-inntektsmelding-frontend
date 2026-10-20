@@ -1,8 +1,8 @@
 import "./index.css";
-import "./settOppGrafanaFaro.ts";
 // Polyfill for toSorted. Ble introdusert i ES2023, så den mangler i eldre browsere og fører til feil for disse brukerne hvis vi ikke polyfiller.
 import "core-js/actual/array/to-sorted";
 
+import { init } from "@nais/apm";
 import {
   BodyShort,
   Box,
@@ -11,7 +11,6 @@ import {
   Page,
   VStack,
 } from "@navikt/ds-react";
-import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
@@ -39,17 +38,13 @@ declare module "@tanstack/react-router" {
   }
 }
 
-const sentryMiljo = finnEnvironmentForHostname(
-  globalThis?.location?.hostname ?? "",
-);
-
-Sentry.init({
-  dsn: "https://9e5264a622f8e8c763dc06b577a669ca@sentry.gc.nav.no/189",
-  environment: sentryMiljo,
-  release: import.meta.env.VITE_SENTRY_RELEASE,
-  integrations: [Sentry.browserTracingIntegration()],
-  tracesSampleRate: 1,
-});
+if (import.meta.env.PROD) {
+  init({
+    app: "k9-inntektsmelding-frontend",
+    namespace: "k9saksbehandling",
+    environment: finnEnvironmentForHostname(globalThis.location.hostname),
+  });
+}
 
 createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>

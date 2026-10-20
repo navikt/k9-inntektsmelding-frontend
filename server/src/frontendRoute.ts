@@ -17,7 +17,6 @@ const csp = await buildCspHeader(
         "img-src": ["data:", "'self'"],
         "connect-src": [
           "https://telemetry.nav.no/collect",
-          "https://sentry.gc.nav.no",
         ],
       }
     : {
@@ -28,7 +27,6 @@ const csp = await buildCspHeader(
           "https://telemetry.ekstern.dev.nav.no/collect",
           "http://localhost:*",
           "https://reops-event-proxy.ekstern.dev.nav.no",
-          "https://sentry.gc.nav.no",
         ],
       },
   { env: config.app.env },
