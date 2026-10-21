@@ -61,12 +61,6 @@ jobs:
       - name: Build server
         run: yarn workspace server build
 
-      - name: Copy server node_modules to server folder
-        run: cp -r ./node_modules ./server/node_modules
-
-      - name: Copy webapp into public directory of server
-        run: cp -r ./app/dist/ ./server/public
-
       - name: Generate build version
         id: generate-build-version
         run: echo "build-version=k9-$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
@@ -76,7 +70,7 @@ jobs:
         id: docker-push
         uses: navikt/sif-gha-workflows/.github/actions/maven/build-push-docker-image@main
         with:
-          docker_context: "./server"
+          docker_context: "."
           dockerfile: "./server/Dockerfile"
           build-version: ${{ steps.generate-build-version.outputs.build-version }}
           push-image: true
