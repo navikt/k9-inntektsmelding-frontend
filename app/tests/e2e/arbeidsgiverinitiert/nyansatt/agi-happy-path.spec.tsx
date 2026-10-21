@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { velgFraCombobox } from "tests/e2e/utils";
+import {
+  fortsettHvisRefusjonsvarselVises,
+  velgFraCombobox,
+} from "tests/e2e/utils";
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import { agiSendInntektsmeldingResponse } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-send-inntektsmelding";
 import {
@@ -46,6 +49,13 @@ test.describe("AGI Happy Path", () => {
 
     // Klikk "Opprett inntektsmelding"
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+
+    await expect(
+      page.getByRole("link", { name: "kontakte Nav på telefon" }),
+    ).toHaveAttribute("href", "https://www.nav.no/arbeidsgiver/kontaktoss");
+    await page
+      .getByRole("button", { name: "Fortsett til inntektsmeldingen" })
+      .click();
 
     // Vi er nå på "dine-opplysninger" steget
     await expect(
@@ -108,6 +118,7 @@ test.describe("AGI Happy Path", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Fyll ut dine opplysninger
     await page.getByLabel("Telefon").fill("98765432");
@@ -163,6 +174,7 @@ test.describe("AGI Happy Path", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Fyll ut dine opplysninger
     await page.getByLabel("Telefon").fill("98765432");

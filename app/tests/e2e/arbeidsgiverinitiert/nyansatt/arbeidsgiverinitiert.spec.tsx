@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { velgFraCombobox } from "tests/e2e/utils";
+import {
+  fortsettHvisRefusjonsvarselVises,
+  velgFraCombobox,
+} from "tests/e2e/utils";
 import { enkeltOpplysningerResponse } from "tests/mocks/inntektsmelding/opplysninger";
 import {
   expectError,
@@ -54,6 +57,7 @@ test("Ny ansatt", async ({ page }) => {
   });
 
   await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+  await fortsettHvisRefusjonsvarselVises(page);
   await expect(
     page.getByRole("heading", { name: "Dine opplysninger" }),
   ).toBeVisible();
@@ -93,6 +97,7 @@ test("Skal ikke kunne velge NEI på refusjon hvis AGI og nyansatt", async ({
   });
 
   await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+  await fortsettHvisRefusjonsvarselVises(page);
   await page.getByLabel("Telefon").fill("13371337");
   await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
 
