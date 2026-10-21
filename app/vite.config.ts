@@ -6,6 +6,9 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
+const CDN_URL =
+  "https://cdn.nav.no/k9saksbehandling/k9-inntektsmelding-frontend/dist";
+
 export default defineConfig({
   plugins: [
     tailwindcss(),
@@ -21,7 +24,11 @@ export default defineConfig({
     },
   },
   build: {
-    sourcemap: false,
+    sourcemap: true,
+  },
+  experimental: {
+    // BASE_URL må forbli /k9-im-dialog (router og API). Bare statiske filer skal serveres fra CDN.
+    renderBuiltUrl: (filnavn) => `${CDN_URL}/${filnavn}`,
   },
   server: {
     cors: {
