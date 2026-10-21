@@ -15,20 +15,20 @@ const csp = await buildCspHeader(
   config.app.env === "prod"
     ? {
         "img-src": ["data:", "'self'"],
-        "connect-src": [
-          "https://telemetry.nav.no/collect",
-          "https://sentry.gc.nav.no",
-        ],
+        "script-src-elem": ["https://cdn.nav.no"],
+        "style-src-elem": ["https://cdn.nav.no"],
+        "font-src": ["https://cdn.nav.no"],
+        "connect-src": ["https://telemetry.nav.no/collect"],
       }
     : {
         "img-src": ["data:", "'self'"],
         "script-src-elem": ["http://localhost:*", "https://cdn.nav.no"],
-        "style-src-elem": ["http://localhost:*"],
+        "style-src-elem": ["http://localhost:*", "https://cdn.nav.no"],
+        "font-src": ["https://cdn.nav.no"],
         "connect-src": [
           "https://telemetry.ekstern.dev.nav.no/collect",
           "http://localhost:*",
           "https://reops-event-proxy.ekstern.dev.nav.no",
-          "https://sentry.gc.nav.no",
         ],
       },
   { env: config.app.env },

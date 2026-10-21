@@ -46,25 +46,20 @@ jobs:
         run: yarn workspaces focus app
 
       - name: Build webapp [K9]
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
-          SENTRY_RELEASE: ${{ github.sha }}
-          VITE_SENTRY_RELEASE: ${{ github.sha }}
         run: yarn workspace app build
+
+      - name: Last opp JS og source maps til CDN
+        uses: nais/deploy/actions/cdn-upload/v2@7ad7c2b833e1db74a80954e3ee6bb6ac060a8ae7 # ratchet:nais/deploy/actions/cdn-upload/v2@master
+        with:
+          team: k9saksbehandling
+          source: app/dist
+          destination: /k9-inntektsmelding-frontend/dist
 
       - name: Install dependencies server
         run: yarn workspaces focus server
 
       - name: Build server
         run: yarn workspace server build
-
-      - name: Copy server node_modules to server folder
-        run: cp -r ./node_modules ./server/node_modules
-
-      - name: Copy webapp into public directory of server
-        run: cp -r ./app/dist/ ./server/public
 
       - name: Generate build version
         id: generate-build-version
@@ -75,7 +70,7 @@ jobs:
         id: docker-push
         uses: navikt/sif-gha-workflows/.github/actions/maven/build-push-docker-image@main
         with:
-          docker_context: "./server"
+          docker_context: "."
           dockerfile: "./server/Dockerfile"
           build-version: ${{ steps.generate-build-version.outputs.build-version }}
           push-image: true
