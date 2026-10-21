@@ -53,7 +53,7 @@ jobs:
         with:
           team: k9saksbehandling
           source: app/dist
-          destination: /k9-inntektsmelding-frontend/dist
+          destination: /k9-inntektsmelding-frontend
 
       - name: Install dependencies server
         run: yarn workspaces focus server
@@ -118,5 +118,4 @@ jobs:
           VARS: .deploy/prod-gcp-k9saksbehandling.json
           NAMESPACE: k9saksbehandling
           IMAGE: ${{ needs.build-app-k9.outputs.IMAGE }}
-
 
