@@ -1,0 +1,8 @@
+# ignore everything
+*
+
+# except
+!server/package.json
+!server/dist
+!app/dist/index.html
+!node_modules
