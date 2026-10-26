@@ -3,6 +3,8 @@ import { describe, expect, test } from "vitest";
 import { InntektsmeldingResponseDtoUregistrertSchema } from "~/features/arbeidsgiverinitiert/unntattAAregister/api-schemas";
 import { InntektsmeldingResponseDtoSchema } from "~/features/inntektsmelding/api-schemas";
 import {
+  naturalytelsePerioderDtoSchema,
+  NaturalytelseTypeSchema,
   opplysningerSchema,
   SlåOppArbeidstakerResponseDtoSchema,
 } from "~/types/api-schemas";
@@ -21,6 +23,34 @@ import {
   utgåttOpplysningerResponse,
 } from "../../tests/mocks/inntektsmelding/opplysninger";
 import { enkelSendInntektsmeldingResponse } from "../../tests/mocks/inntektsmelding/send-inntektsmelding";
+
+describe("naturalytelsePerioderDtoSchema", () => {
+  test.each(NaturalytelseTypeSchema.options)(
+    "parser naturalytelsetype %s",
+    (naturalytelsetype) => {
+      const periode = {
+        fom: "2026-01-01",
+        beløp: 100,
+        naturalytelsetype,
+      };
+
+      expect(naturalytelsePerioderDtoSchema.parse([periode])).toEqual([
+        periode,
+      ]);
+    },
+  );
+
+  test.each(["ELEKTRISK_KOMMUNIKASJON", "UKJENT_TYPE", null, 123, undefined])(
+    "avviser ugyldig naturalytelsetype %s",
+    (naturalytelsetype) => {
+      expect(
+        naturalytelsePerioderDtoSchema.safeParse([
+          { fom: "2026-01-01", beløp: 100, naturalytelsetype },
+        ]).success,
+      ).toBe(false);
+    },
+  );
+});
 
 describe("opplysningerSchema parser alle mock-respons", () => {
   test.each([

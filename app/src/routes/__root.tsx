@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/react";
+import { captureException } from "@nais/apm";
 import { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
@@ -28,7 +28,7 @@ export const Route = createRootRouteWithContext<{
     context.queryClient.prefetchQuery(hentGrunnbeløpOptions());
   },
   errorComponent: ({ error }) => {
-    Sentry.captureException(error);
+    captureException(error);
 
     return <GenerellFeilside />;
   },
