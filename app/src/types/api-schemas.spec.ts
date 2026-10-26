@@ -6,6 +6,7 @@ import {
   naturalytelsePerioderDtoSchema,
   NaturalytelseTypeSchema,
   opplysningerSchema,
+  opplysningerUregistrertSchema,
   SlåOppArbeidstakerResponseDtoSchema,
 } from "~/types/api-schemas";
 
@@ -70,6 +71,69 @@ describe("opplysningerSchema parser alle mock-respons", () => {
       forespørselType: "UKJENT_TYPE",
     });
     expect(result.success).toBe(false);
+  });
+});
+
+describe("opplysninger uten navn for uregistrert AGI", () => {
+  test("v2-responsen inneholder bare personidentifikatorene", () => {
+    const opplysninger = opplysningerUregistrertSchema.parse(
+      agiOpplysningerResponseUregistrert,
+    );
+
+    expect(opplysninger.person).toEqual({
+      fødselsnummer: agiOpplysningerResponseUregistrert.person.fødselsnummer,
+      aktørId: agiOpplysningerResponseUregistrert.person.aktørId,
+    });
+    expect(opplysningerSchema.parse(opplysninger)).toEqual(opplysninger);
+  });
+
+  test("fjerner navn fra eldre responser og lagrede opplysninger", () => {
+    const opplysninger = opplysningerSchema.parse({
+      ...agiOpplysningerResponseUregistrert,
+      person: {
+        ...agiOpplysningerResponseNyAnsatt.person,
+        mellomnavn: "Test",
+      },
+    });
+
+    expect(opplysninger.person).toEqual(
+      agiOpplysningerResponseUregistrert.person,
+    );
+  });
+
+  test.each(["aktørId", "fødselsnummer"])(
+    "krever %s også når navn ikke returneres",
+    (felt) => {
+      expect(
+        opplysningerUregistrertSchema.safeParse({
+          ...agiOpplysningerResponseUregistrert,
+          person: {
+            ...agiOpplysningerResponseUregistrert.person,
+            [felt]: undefined,
+          },
+        }).success,
+      ).toBe(false);
+    },
+  );
+
+  test.each([
+    "BESTILT_AV_FAGSYSTEM",
+    "ARBEIDSGIVERINITIERT_NYANSATT",
+    "OMSORGSPENGER_REFUSJON",
+    "BESTILT_AV_SAKSBEHANDLER",
+  ])("krever fortsatt navn for %s", (forespørselType) => {
+    expect(
+      opplysningerSchema.safeParse({
+        ...agiOpplysningerResponseUregistrert,
+        forespørselType,
+      }).success,
+    ).toBe(false);
+    expect(
+      opplysningerUregistrertSchema.safeParse({
+        ...agiOpplysningerResponseNyAnsatt,
+        forespørselType,
+      }).success,
+    ).toBe(false);
   });
 });
 

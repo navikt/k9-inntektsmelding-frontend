@@ -12,6 +12,7 @@ import {
   OpplysningerDto,
   OpplysningerRequest,
   opplysningerSchema,
+  opplysningerUregistrertSchema,
   SlåOppArbeidstakerResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-schemas";
@@ -184,7 +185,7 @@ export async function hentOpplysningerUnntattAaregister(
   opplysningerRequest: OpplysningerRequest,
 ) {
   const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/uregistrert`,
+    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/uregistrert-v2`,
     {
       method: "POST",
       headers: {
@@ -204,7 +205,7 @@ export async function hentOpplysningerUnntattAaregister(
   }
 
   const json = await response.json();
-  const parsedJson = opplysningerSchema.safeParse(json);
+  const parsedJson = opplysningerUregistrertSchema.safeParse(json);
 
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);

@@ -75,7 +75,13 @@ const OmFraværetOmsorgspenger = () => {
           )}
         </div>
       ) : (
-        <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
+        <Fraværsdager
+          navn={
+            opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+              ? undefined
+              : lagFulltNavn(opplysninger.person)
+          }
+        />
       )}
       <RadioGroup
         className="mt-5"

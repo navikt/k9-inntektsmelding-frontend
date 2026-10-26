@@ -67,6 +67,10 @@ export function Inntekt({ opplysninger, children }: InntektProps) {
     (inntekt) => inntekt.status === MånedsinntektStatus.NEDETID_AINNTEKT,
   );
   const førsteDag = formatDatoKort(new Date(skjæringstidspunkt));
+  const ansattesNavnIGenitiv =
+    "fornavn" in person
+      ? capitalizeSetning(leggTilGenitiv(person.fornavn))
+      : "Den ansattes";
 
   const gjennomsnittAvMånederTekst = `Gjennomsnittet av lønn fra 
   ${formatOppramsing(
@@ -86,7 +90,7 @@ export function Inntekt({ opplysninger, children }: InntektProps) {
       </Heading>
       <Informasjonsseksjon
         kilde="Fra A-Ordningen"
-        tittel={`${capitalizeSetning(leggTilGenitiv(person.fornavn))} lønn før ${førsteDag}`}
+        tittel={`${ansattesNavnIGenitiv} lønn før ${førsteDag}`}
       >
         <HGrid columns={{ md: "max-content 1fr" }} gap="space-16">
           {inntektsopplysninger.månedsinntekter

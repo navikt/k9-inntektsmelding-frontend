@@ -150,8 +150,14 @@ export const mapSendInntektsmeldingTilSkjema = (
     organisasjonsnummer: inntektsmelding.arbeidsgiverIdent,
     ansattesAktørId: inntektsmelding.aktorId,
     ansattesFødselsnummer: opplysninger.person.fødselsnummer,
-    ansattesFornavn: opplysninger.person.fornavn,
-    ansattesEtternavn: opplysninger.person.etternavn,
+    ansattesFornavn:
+      opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+        ? undefined
+        : opplysninger.person.fornavn,
+    ansattesEtternavn:
+      opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+        ? undefined
+        : opplysninger.person.etternavn,
     årForRefusjon: new Date(inntektsmelding.startdato).getFullYear().toString(),
     harUtbetaltLønn: "ja",
   } satisfies RefusjonOmsorgspengerFormData;

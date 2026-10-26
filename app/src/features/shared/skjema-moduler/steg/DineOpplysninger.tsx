@@ -178,14 +178,41 @@ type IntroProps = {
 };
 const Intro = ({ opplysninger }: IntroProps) => {
   const { person, arbeidsgiver } = opplysninger;
-  const fulltNavnSøker = lagFulltNavn(person);
-  const fornavnSøker = person.fornavn;
 
   const { vis } = useHjelpetekst().visHjelpetekster;
 
   if (!vis) {
     return null;
   }
+
+  if (opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT") {
+    return (
+      <GuidePanel className="mb-4 col-span-2">
+        <div className="flex flex-col gap-4">
+          <Heading level="3" size="medium">
+            Hei {capitalizeSetning(opplysninger.innsender.fornavn)}!
+          </Heading>
+          <BodyLong>
+            Du fyller ut en inntektsmelding for den ansatte med fødselsnummer{" "}
+            <strong>{formatFødselsnummer(person.fødselsnummer)}</strong> hos{" "}
+            <strong>{arbeidsgiver.organisasjonNavn}</strong>. Kontroller at
+            fødselsnummeret er riktig.
+          </BodyLong>
+          <BodyLong>
+            Vi har forhåndsutfylt skjemaet med opplysninger fra A-ordningen. Du
+            må kontrollere opplysningene og gjøre endringer hvis noe er galt.
+          </BodyLong>
+          <BodyLong>
+            Den ansatte har rett til å se sin egen sak, og kan be om å se
+            informasjonen du sender til Nav.
+          </BodyLong>
+        </div>
+      </GuidePanel>
+    );
+  }
+
+  const fulltNavnSøker = lagFulltNavn(opplysninger.person);
+  const fornavnSøker = opplysninger.person.fornavn;
 
   const beskrivelseAvYtelse = () => {
     if (opplysninger.ytelse === "OMSORGSPENGER") {
@@ -228,15 +255,20 @@ type PersoninformasjonProps = {
 
 const Personinformasjon = ({ opplysninger }: PersoninformasjonProps) => {
   const { person } = opplysninger;
-  const fulltNavn = lagFulltNavn(person);
+  const erUregistrert =
+    opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT";
 
   return (
     <Informasjonsseksjon
-      kilde={`Fra søknaden til ${person.fornavn}`}
+      kilde={
+        erUregistrert
+          ? undefined
+          : `Fra søknaden til ${opplysninger.person.fornavn}`
+      }
       tittel="Den ansatte"
     >
       <div>
-        <span>{fulltNavn}</span>
+        {!erUregistrert && <span>{lagFulltNavn(opplysninger.person)}</span>}
         <div className="flex items-center gap-2">
           F.nr. {formatFødselsnummer(person.fødselsnummer)}{" "}
           <CopyButton copyText={person.fødselsnummer} size="small" />
