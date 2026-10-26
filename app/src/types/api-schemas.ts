@@ -81,6 +81,16 @@ export type SlåOppArbeidstakerResponseDto = z.infer<
   typeof SlåOppArbeidstakerResponseDtoSchema
 >;
 
+export const SlåOppArbeidstakerUregistrertResponseDtoSchema =
+  SlåOppArbeidstakerResponseDtoSchema.omit({
+    fornavn: true,
+    mellomnavn: true,
+    etternavn: true,
+  });
+export type SlåOppArbeidstakerUregistrertResponseDto = z.infer<
+  typeof SlåOppArbeidstakerUregistrertResponseDtoSchema
+>;
+
 export const kontaktpersonDtoSchema = z.object({
   telefonnummer: z.string(),
   navn: z.string(),

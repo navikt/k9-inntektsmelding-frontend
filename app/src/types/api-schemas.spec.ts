@@ -8,6 +8,7 @@ import {
   opplysningerSchema,
   opplysningerUregistrertSchema,
   SlåOppArbeidstakerResponseDtoSchema,
+  SlåOppArbeidstakerUregistrertResponseDtoSchema,
 } from "~/types/api-schemas";
 
 import {
@@ -138,11 +139,19 @@ describe("opplysninger uten navn for uregistrert AGI", () => {
 });
 
 describe("SlåOppArbeidstakerResponseDtoSchema parser arbeidsforhold-respons", () => {
-  test.each([
-    ["nyansatt-arbeidsforhold", arbeidsforholdResponse],
-    ["uregistrert-arbeidsforhold", arbeidsforholdUregistrertResponse],
-  ])("parser %s uten feil", (_, mock) => {
-    const result = SlåOppArbeidstakerResponseDtoSchema.safeParse(mock);
+  test("parser nyansatt-arbeidsforhold uten feil", () => {
+    const result = SlåOppArbeidstakerResponseDtoSchema.safeParse(
+      arbeidsforholdResponse,
+    );
+    expect(result.success).toBe(true);
+  });
+});
+
+describe("SlåOppArbeidstakerUregistrertResponseDtoSchema parser respons uten navn", () => {
+  test("parser uregistrert-arbeidsforhold uten feil", () => {
+    const result = SlåOppArbeidstakerUregistrertResponseDtoSchema.safeParse(
+      arbeidsforholdUregistrertResponse,
+    );
     expect(result.success).toBe(true);
   });
 });

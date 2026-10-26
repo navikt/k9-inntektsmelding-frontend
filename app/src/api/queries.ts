@@ -14,6 +14,7 @@ import {
   opplysningerSchema,
   opplysningerUregistrertSchema,
   SlåOppArbeidstakerResponseDtoSchema,
+  SlåOppArbeidstakerUregistrertResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-schemas";
 import { logDev } from "~/utils.ts";
@@ -172,7 +173,8 @@ export async function hentPersonFraFnrUnntattAareg(
   }
 
   const json = await response.json();
-  const parsedJson = SlåOppArbeidstakerResponseDtoSchema.safeParse(json);
+  const parsedJson =
+    SlåOppArbeidstakerUregistrertResponseDtoSchema.safeParse(json);
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
     throw new Error("Responsen fra serveren matchet ikke forventet format");

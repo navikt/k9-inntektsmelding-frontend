@@ -5,7 +5,7 @@ export function VelgArbeidsgiver({
   data,
   description = "Den ansatte har flere arbeidsforhold hos samme arbeidsgiver. Velg hvilken underenhet inntektsmeldingen gjelder for.",
 }: {
-  data?: SlåOppArbeidstakerResponseDto;
+  data?: Pick<SlåOppArbeidstakerResponseDto, "arbeidsforhold">;
   description?: string;
 }) {
   if (!data || data.arbeidsforhold.length <= 1) {
