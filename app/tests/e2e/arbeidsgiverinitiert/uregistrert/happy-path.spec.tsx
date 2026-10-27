@@ -32,17 +32,44 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
 
     await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
     await page.getByLabel("Første fraværsdag").fill("01.04.2024");
+    const opplysningerRequest = page.waitForRequest(
+      (request) =>
+        request.url().endsWith("/opplysninger/uregistrert-v2") &&
+        request.method() === "POST",
+    );
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
+    const opplysningerRespons = await opplysningerRequest;
+    expect(opplysningerRespons.postDataJSON()).toMatchObject({
+      fødselsnummer: FAKE_FNR,
+      ytelseType: "PLEIEPENGER_SYKT_BARN",
+    });
 
     // Steg 1 – Dine opplysninger
     await expect(
       page.getByRole("heading", { name: "Dine opplysninger" }),
     ).toBeVisible();
+    await expect(page.getByText("F.nr. 098101 98874")).toBeVisible();
+    await expect(page.getByText(/Momentan Trakt/i)).toHaveCount(0);
+    await expect(page.getByText(/undefined/)).toHaveCount(0);
+    await page.reload();
+    await expect(
+      page.getByRole("heading", { name: "Dine opplysninger" }),
+    ).toBeVisible();
+    await expect(page.getByText("F.nr. 098101 98874")).toBeVisible();
     await page.getByLabel("Navn").fill("Ola Nordmann");
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
 
     // Steg 2 – Inntekt og refusjon
+    await expect(
+      page.getByText("Den ansattes lønn før 01.04.2024", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Den ansattes første dag med pleiepenger sykt barn", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.getByText(/undefined/)).toHaveCount(0);
     await page
       .getByRole("radiogroup", {
         name: "Betaler dere lønn under fraværet og krever refusjon?",
@@ -63,17 +90,37 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
     await expect(
       page.getByRole("heading", { name: "Oppsummering" }),
     ).toBeVisible();
+    await expect(page.getByText("F.nr. 098101 98874")).toBeVisible();
+    await expect(page.getByText(/Momentan Trakt/i)).toHaveCount(0);
 
     await mockAGISendInntektsmeldingUregistrert({
       page,
       json: agiUregistrertSendInntektsmeldingResponse,
     });
 
+    const innsending = page.waitForRequest(
+      (request) =>
+        request
+          .url()
+          .endsWith("/send-inntektsmelding/arbeidsgiverinitiert-uregistrert") &&
+        request.method() === "POST",
+    );
     await page.getByRole("button", { name: "Send inn" }).click();
+    const innsendingsRequest = await innsending;
+    expect(innsendingsRequest.postDataJSON()).toMatchObject({
+      aktorId: agiOpplysningerResponseUregistrert.person.aktørId,
+    });
 
     await expect(
       page.getByText("Vi har mottatt inntektsmeldingen", { exact: false }),
     ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        name: "Inntektsmelding for den ansatte med fødselsnummer 098101 98874 er sendt",
+      }),
+    ).toBeVisible();
+    await expect(page.getByText(/Momentan Trakt/i)).toHaveCount(0);
+    await expect(page.getByText(/undefined/)).toHaveCount(0);
   });
 
   test("Flyt uten refusjon", async ({ page }) => {

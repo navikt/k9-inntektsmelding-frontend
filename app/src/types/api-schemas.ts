@@ -81,6 +81,16 @@ export type SlåOppArbeidstakerResponseDto = z.infer<
   typeof SlåOppArbeidstakerResponseDtoSchema
 >;
 
+export const SlåOppArbeidstakerUregistrertResponseDtoSchema =
+  SlåOppArbeidstakerResponseDtoSchema.omit({
+    fornavn: true,
+    mellomnavn: true,
+    etternavn: true,
+  });
+export type SlåOppArbeidstakerUregistrertResponseDto = z.infer<
+  typeof SlåOppArbeidstakerUregistrertResponseDtoSchema
+>;
+
 export const kontaktpersonDtoSchema = z.object({
   telefonnummer: z.string(),
   navn: z.string(),
@@ -129,7 +139,7 @@ export type OmsorgspengerRequestDto = z.infer<
   typeof OmsorgspengerRequestDtoSchema
 >;
 
-export const opplysningerSchema = z.object({
+const opplysningerMedNavnSchema = z.object({
   forespørselUuid: z.string().optional(),
   person: z.object({
     aktørId: z.string(),
@@ -166,7 +176,6 @@ export const opplysningerSchema = z.object({
   forespørselType: z.enum([
     "BESTILT_AV_FAGSYSTEM",
     "ARBEIDSGIVERINITIERT_NYANSATT",
-    "ARBEIDSGIVERINITIERT_UREGISTRERT",
     "OMSORGSPENGER_REFUSJON",
     "BESTILT_AV_SAKSBEHANDLER",
   ]),
@@ -187,6 +196,20 @@ export const opplysningerSchema = z.object({
     )
     .optional(),
 });
+
+export const opplysningerUregistrertSchema = opplysningerMedNavnSchema.extend({
+  forespørselType: z.literal("ARBEIDSGIVERINITIERT_UREGISTRERT"),
+  person: opplysningerMedNavnSchema.shape.person.omit({
+    fornavn: true,
+    mellomnavn: true,
+    etternavn: true,
+  }),
+});
+
+export const opplysningerSchema = z.discriminatedUnion("forespørselType", [
+  opplysningerMedNavnSchema,
+  opplysningerUregistrertSchema,
+]);
 
 export type OpplysningerDto = z.infer<typeof opplysningerSchema>;
 

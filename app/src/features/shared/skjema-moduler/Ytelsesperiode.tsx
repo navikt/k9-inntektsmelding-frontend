@@ -14,7 +14,12 @@ import { Informasjonsseksjon } from "../Informasjonsseksjon";
 
 export function Ytelsesperiode() {
   const opplysninger = useOpplysninger();
-  const { person, ytelse, førsteUttaksdato } = opplysninger;
+  const { ytelse, førsteUttaksdato } = opplysninger;
+  const erUregistrert =
+    opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT";
+  const ansattesNavnIGenitiv = erUregistrert
+    ? "Den ansattes"
+    : capitalizeSetning(leggTilGenitiv(opplysninger.person.fornavn));
 
   const førsteDag = capitalize(formatDatoLang(new Date(førsteUttaksdato)));
   if (ytelse === "OMSORGSPENGER") {
@@ -29,11 +34,11 @@ export function Ytelsesperiode() {
       </Heading>
       <Informasjonsseksjon
         kilde={
-          opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+          erUregistrert
             ? undefined
-            : `Fra søknaden til ${person.fornavn}`
+            : `Fra søknaden til ${opplysninger.person.fornavn}`
         }
-        tittel={`${capitalizeSetning(leggTilGenitiv(person.fornavn))} første dag med ${formatYtelsesnavn(ytelse)}`}
+        tittel={`${ansattesNavnIGenitiv} første dag med ${formatYtelsesnavn(ytelse)}`}
       >
         <BodyLong size="medium">{førsteDag}</BodyLong>
       </Informasjonsseksjon>

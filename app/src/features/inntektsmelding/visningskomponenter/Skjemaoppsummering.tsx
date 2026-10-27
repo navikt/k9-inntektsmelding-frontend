@@ -300,8 +300,9 @@ export const ArbeidsgiverOgAnsattOppsummering = ({
       <FormSummary.Answer>
         <FormSummary.Label>Den ansatte</FormSummary.Label>
         <FormSummary.Value>
-          {lagFulltNavn(opplysninger.person)}
-          {", f.nr. "}
+          {opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+            ? "F.nr. "
+            : `${lagFulltNavn(opplysninger.person)}, f.nr. `}
           {formatFødselsnummer(opplysninger.person.fødselsnummer)}
         </FormSummary.Value>
       </FormSummary.Answer>

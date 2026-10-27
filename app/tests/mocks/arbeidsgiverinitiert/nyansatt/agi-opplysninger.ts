@@ -47,6 +47,10 @@ export const agiOpplysningerResponseNyAnsatt = {
 
 export const agiOpplysningerResponseUregistrert = {
   ...agiOpplysningerResponseNyAnsatt,
+  person: {
+    fødselsnummer: agiOpplysningerResponseNyAnsatt.person.fødselsnummer,
+    aktørId: agiOpplysningerResponseNyAnsatt.person.aktørId,
+  },
   forespørselType: "ARBEIDSGIVERINITIERT_UREGISTRERT" as const,
 } satisfies OpplysningerDto;
 

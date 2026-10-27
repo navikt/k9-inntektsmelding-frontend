@@ -12,7 +12,9 @@ import {
   OpplysningerDto,
   OpplysningerRequest,
   opplysningerSchema,
+  opplysningerUregistrertSchema,
   SlåOppArbeidstakerResponseDtoSchema,
+  SlåOppArbeidstakerUregistrertResponseDtoSchema,
   Ytelsetype,
 } from "~/types/api-schemas";
 import { logDev } from "~/utils.ts";
@@ -171,7 +173,8 @@ export async function hentPersonFraFnrUnntattAareg(
   }
 
   const json = await response.json();
-  const parsedJson = SlåOppArbeidstakerResponseDtoSchema.safeParse(json);
+  const parsedJson =
+    SlåOppArbeidstakerUregistrertResponseDtoSchema.safeParse(json);
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
     throw new Error("Responsen fra serveren matchet ikke forventet format");
@@ -184,7 +187,7 @@ export async function hentOpplysningerUnntattAaregister(
   opplysningerRequest: OpplysningerRequest,
 ) {
   const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/uregistrert`,
+    `${SERVER_URL}/arbeidsgiverinitiert/opplysninger/uregistrert-v2`,
     {
       method: "POST",
       headers: {
@@ -204,7 +207,7 @@ export async function hentOpplysningerUnntattAaregister(
   }
 
   const json = await response.json();
-  const parsedJson = opplysningerSchema.safeParse(json);
+  const parsedJson = opplysningerUregistrertSchema.safeParse(json);
 
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);

@@ -6,7 +6,9 @@ import {
   naturalytelsePerioderDtoSchema,
   NaturalytelseTypeSchema,
   opplysningerSchema,
+  opplysningerUregistrertSchema,
   SlåOppArbeidstakerResponseDtoSchema,
+  SlåOppArbeidstakerUregistrertResponseDtoSchema,
 } from "~/types/api-schemas";
 
 import {
@@ -73,12 +75,83 @@ describe("opplysningerSchema parser alle mock-respons", () => {
   });
 });
 
-describe("SlåOppArbeidstakerResponseDtoSchema parser arbeidsforhold-respons", () => {
+describe("opplysninger uten navn for uregistrert AGI", () => {
+  test("v2-responsen inneholder bare personidentifikatorene", () => {
+    const opplysninger = opplysningerUregistrertSchema.parse(
+      agiOpplysningerResponseUregistrert,
+    );
+
+    expect(opplysninger.person).toEqual({
+      fødselsnummer: agiOpplysningerResponseUregistrert.person.fødselsnummer,
+      aktørId: agiOpplysningerResponseUregistrert.person.aktørId,
+    });
+    expect(opplysningerSchema.parse(opplysninger)).toEqual(opplysninger);
+  });
+
+  test("fjerner navn fra eldre responser og lagrede opplysninger", () => {
+    const opplysninger = opplysningerSchema.parse({
+      ...agiOpplysningerResponseUregistrert,
+      person: {
+        ...agiOpplysningerResponseNyAnsatt.person,
+        mellomnavn: "Test",
+      },
+    });
+
+    expect(opplysninger.person).toEqual(
+      agiOpplysningerResponseUregistrert.person,
+    );
+  });
+
+  test.each(["aktørId", "fødselsnummer"])(
+    "krever %s også når navn ikke returneres",
+    (felt) => {
+      expect(
+        opplysningerUregistrertSchema.safeParse({
+          ...agiOpplysningerResponseUregistrert,
+          person: {
+            ...agiOpplysningerResponseUregistrert.person,
+            [felt]: undefined,
+          },
+        }).success,
+      ).toBe(false);
+    },
+  );
+
   test.each([
-    ["nyansatt-arbeidsforhold", arbeidsforholdResponse],
-    ["uregistrert-arbeidsforhold", arbeidsforholdUregistrertResponse],
-  ])("parser %s uten feil", (_, mock) => {
-    const result = SlåOppArbeidstakerResponseDtoSchema.safeParse(mock);
+    "BESTILT_AV_FAGSYSTEM",
+    "ARBEIDSGIVERINITIERT_NYANSATT",
+    "OMSORGSPENGER_REFUSJON",
+    "BESTILT_AV_SAKSBEHANDLER",
+  ])("krever fortsatt navn for %s", (forespørselType) => {
+    expect(
+      opplysningerSchema.safeParse({
+        ...agiOpplysningerResponseUregistrert,
+        forespørselType,
+      }).success,
+    ).toBe(false);
+    expect(
+      opplysningerUregistrertSchema.safeParse({
+        ...agiOpplysningerResponseNyAnsatt,
+        forespørselType,
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("SlåOppArbeidstakerResponseDtoSchema parser arbeidsforhold-respons", () => {
+  test("parser nyansatt-arbeidsforhold uten feil", () => {
+    const result = SlåOppArbeidstakerResponseDtoSchema.safeParse(
+      arbeidsforholdResponse,
+    );
+    expect(result.success).toBe(true);
+  });
+});
+
+describe("SlåOppArbeidstakerUregistrertResponseDtoSchema parser respons uten navn", () => {
+  test("parser uregistrert-arbeidsforhold uten feil", () => {
+    const result = SlåOppArbeidstakerUregistrertResponseDtoSchema.safeParse(
+      arbeidsforholdUregistrertResponse,
+    );
     expect(result.success).toBe(true);
   });
 });

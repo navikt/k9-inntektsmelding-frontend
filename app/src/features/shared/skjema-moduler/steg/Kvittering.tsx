@@ -22,7 +22,12 @@ import { useEffect } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import type { OpplysningerDto } from "~/types/api-schemas";
-import { formatYtelsesnavn, lagFulltNavn, slugify } from "~/utils";
+import {
+  formatFødselsnummer,
+  formatYtelsesnavn,
+  lagFulltNavn,
+  slugify,
+} from "~/utils";
 
 import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
 
@@ -70,7 +75,11 @@ export const Kvittering = ({
         <CheckmarkIcon aria-hidden fontSize="2.5em" />
       </div>
       <Heading className="mt-6 mb-12 text-center" level="2" size="medium">
-        Inntektsmelding for {lagFulltNavn(opplysninger.person)} er sendt
+        Inntektsmelding for{" "}
+        {opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
+          ? `den ansatte med fødselsnummer ${formatFødselsnummer(opplysninger.person.fødselsnummer)}`
+          : lagFulltNavn(opplysninger.person)}{" "}
+        er sendt
       </Heading>
       <Alert className="mb-12" variant="success">
         <BodyLong>

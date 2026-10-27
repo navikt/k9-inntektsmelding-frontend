@@ -39,7 +39,7 @@ test.describe("AGI unntatt Aa-registeret – vis-rute", () => {
     await expect(page.getByText("98 76 54 32").first()).toBeVisible();
     await expect(
       page.getByText("Momentan Trakt", { exact: false }),
-    ).toBeVisible();
+    ).toHaveCount(0);
     await expect(
       page.getByText("098101 98874", { exact: false }),
     ).toBeVisible();

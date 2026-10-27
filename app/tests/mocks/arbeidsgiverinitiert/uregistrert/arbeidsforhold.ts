@@ -1,8 +1,6 @@
-import { SlåOppArbeidstakerResponseDto } from "~/types/api-schemas.ts";
+import { SlåOppArbeidstakerUregistrertResponseDto } from "~/types/api-schemas.ts";
 
 export const arbeidsforholdUregistrertResponse = {
-  fornavn: "MOMENTAN",
-  etternavn: "TRAKT",
   arbeidsforhold: [
     {
       organisasjonsnavn: "HELDIG SPRUDLENDE TIGER AS",
@@ -10,4 +8,4 @@ export const arbeidsforholdUregistrertResponse = {
     },
   ],
   kjønn: "MANN",
-} satisfies SlåOppArbeidstakerResponseDto;
+} satisfies SlåOppArbeidstakerUregistrertResponseDto;

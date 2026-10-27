@@ -1,12 +1,5 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import {
-  BodyShort,
-  Button,
-  HStack,
-  Label,
-  TextField,
-  VStack,
-} from "@navikt/ds-react";
+import { Button, TextField, VStack } from "@navikt/ds-react";
 import { fnr } from "@navikt/fnrvalidator";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
@@ -103,28 +96,18 @@ export function UnntattAaregRegistreringForm({
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
       <VStack gap="space-32">
-        <HStack gap="space-40">
-          <TextField
-            {...register("fødselsnummer", {
-              required: "Må oppgis",
-              validate: (value: string) =>
-                (value && fnr(value).status === "valid") ||
-                "Du må fylle ut et gyldig fødselsnummer",
-              onChange: nullstillFeilmeldinger,
-            })}
-            error={formState.errors.fødselsnummer?.message}
-            label="Ansattes fødselsnummer"
-          />
-          <VStack gap="space-16">
-            <Label>Navn</Label>
-            {hentPersonMutation.data && (
-              <BodyShort>
-                {hentPersonMutation.data.fornavn}{" "}
-                {hentPersonMutation.data.etternavn}
-              </BodyShort>
-            )}
-          </VStack>
-        </HStack>
+        <TextField
+          {...register("fødselsnummer", {
+            required: "Må oppgis",
+            validate: (value: string) =>
+              (value && fnr(value).status === "valid") ||
+              "Du må fylle ut et gyldig fødselsnummer",
+            onChange: nullstillFeilmeldinger,
+          })}
+          error={formState.errors.fødselsnummer?.message}
+          label="Ansattes fødselsnummer"
+          className="w-fit"
+        />
         <DatePickerWrapped
           label="Første fraværsdag"
           name="førsteFraværsdag"

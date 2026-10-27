@@ -171,7 +171,7 @@ export const mockAGIOpplysningerUregistrert = ({
   json,
 }: MockAGIOpplysningerUregistrertParams) => {
   return page.route(
-    `**/*/arbeidsgiverinitiert/opplysninger/uregistrert`,
+    `**/*/arbeidsgiverinitiert/opplysninger/uregistrert-v2`,
     async (route) => {
       await route.fulfill({ json });
     },
