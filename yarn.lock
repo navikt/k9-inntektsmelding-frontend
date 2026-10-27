@@ -968,9 +968,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:5.9.1":
-  version: 5.9.1
-  resolution: "@hookform/resolvers@npm:5.9.1"
+"@hookform/resolvers@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@hookform/resolvers@npm:6.0.0"
   dependencies:
     "@standard-schema/utils": "npm:^0.3.0"
   peerDependencies:
@@ -982,11 +982,11 @@ __metadata:
     ajv-errors: ^3.0.0
     ajv-formats: ^2.1.1
     arktype: ^2.0.0
-    ata-validator: ^1.2.0
+    ata-validator: ^1.23.0
     class-transformer: ">=0.4.0"
     class-validator: ">=0.12.0"
     computed-types: ^1.0.0
-    effect: ^3.10.3
+    effect: ^4.0.0
     fluentvalidation-ts: ^3.0.0
     fp-ts: ^2.7.0
     io-ts: ^2.0.0
@@ -1048,7 +1048,7 @@ __metadata:
       optional: true
     zod:
       optional: true
-  checksum: 10c0/08d4e1455a072bea182468d878527e2e99c6d079fe56ffc5297e03a8219fe7544db092afcdf7a950e5421390d4dae3a21398c8ccd0b2c8639d0e0ff9e21410c2
+  checksum: 10c0/97ca7f437ae6ab810f9fa5189de3291a1a9542e5be5d89731a95db0a26a98554857f892c450065cbc033ee0b9327da61a044343dad9f135c405dbbd6e50b6543
   languageName: node
   linkType: hard
 
@@ -1346,14 +1346,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/vite-mode@npm:0.14.0":
-  version: 0.14.0
-  resolution: "@navikt/vite-mode@npm:0.14.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fvite-mode%2F0.14.0%2F2f74c6b648b3a5b6f94760910f6d2bb62ce0beac"
+"@navikt/vite-mode@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@navikt/vite-mode@npm:1.0.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Fvite-mode%2F1.0.1%2F24022548c9cede38afa4d2dd43c5f3237e8dc1a3"
   dependencies:
     cookie-parser: "npm:1.4.7"
   peerDependencies:
     express: 5.x
-  checksum: 10c0/9395400eb38598c7058c3d749c81f94a1c1e62ce104e92fe1d34ab11d73b2c47a579bbcf8b533357ae9aee9ff88edacfde6080fc0e0c6f6af5559cee4d953ec2
+  checksum: 10c0/ed934e90c2352ba01889ae04de24dc0a0122d6f579d98dc016adeeb4cde108aa732110290f8fa4f7cf2499ab53d58b7ad24b72354a05b48580ee9e376c5cb7f0
   languageName: node
   linkType: hard
 
@@ -3189,7 +3189,7 @@ __metadata:
   dependencies:
     "@eslint/eslintrc": "npm:3.3.7"
     "@eslint/js": "npm:10.0.1"
-    "@hookform/resolvers": "npm:5.9.1"
+    "@hookform/resolvers": "npm:6.0.0"
     "@nais/apm": "npm:0.7.3"
     "@navikt/aksel-icons": "npm:8.16.2"
     "@navikt/ds-css": "npm:8.16.2"
@@ -6582,7 +6582,7 @@ __metadata:
     "@eslint/js": "npm:10.0.1"
     "@navikt/nav-dekoratoren-moduler": "npm:4.3.0"
     "@navikt/oasis": "npm:4.2.2"
-    "@navikt/vite-mode": "npm:0.14.0"
+    "@navikt/vite-mode": "npm:1.0.1"
     "@types/express": "npm:5.0.6"
     "@types/react": "npm:19.3.0"
     "@typescript-eslint/eslint-plugin": "npm:8.70.1"
