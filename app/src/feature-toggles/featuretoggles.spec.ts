@@ -15,8 +15,8 @@ describe("finnEnvironmentForHostname", () => {
     );
   });
 
-  it("gir test for localhost", () => {
-    expect(finnEnvironmentForHostname("localhost")).toBe("test");
+  it("gir dev-gcp for localhost", () => {
+    expect(finnEnvironmentForHostname("localhost")).toBe("dev-gcp");
   });
 
   it("gir prod-gcp for alt annet", () => {
