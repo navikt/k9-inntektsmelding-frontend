@@ -1995,15 +1995,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/router-vite-plugin@npm:1.167.40":
-  version: 1.167.40
-  resolution: "@tanstack/router-vite-plugin@npm:1.167.40"
-  dependencies:
-    "@tanstack/router-plugin": "npm:1.168.40"
-  checksum: 10c0/b0d0760e439c91d0fcc739c6787937fce42011ade55e36896a8d3247bcd9dcfda9c196b089bff16fc5237719b1ea85646a499b5fb28c50e2b2a6a322e3ec77f0
-  languageName: node
-  linkType: hard
-
 "@tanstack/store@npm:0.11.1":
   version: 0.11.1
   resolution: "@tanstack/store@npm:0.11.1"
@@ -2608,7 +2599,7 @@ __metadata:
     "@tanstack/react-query-devtools": "npm:5.103.2"
     "@tanstack/react-router": "npm:1.170.38"
     "@tanstack/router-devtools": "npm:1.167.2"
-    "@tanstack/router-vite-plugin": "npm:1.167.40"
+    "@tanstack/router-plugin": "npm:1.168.40"
     "@types/lodash": "npm:4.17.25"
     "@types/node": "npm:26.6.2"
     "@types/react": "npm:19.3.0"
