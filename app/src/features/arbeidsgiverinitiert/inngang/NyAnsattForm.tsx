@@ -1,15 +1,19 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
+  Alert,
+  BodyLong,
   BodyShort,
   Button,
   HStack,
   Label,
+  Link,
   TextField,
   VStack,
 } from "@navikt/ds-react";
 import { fnr } from "@navikt/fnrvalidator";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { hentOpplysninger } from "~/features/arbeidsgiverinitiert/nyansatt/api/queries";
@@ -32,6 +36,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
   } = useFormContext<FormType>();
   const navigate = useNavigate();
   const hentPersonMutation = usePersonOppslag();
+  const [visRefusjonsvarsel, setVisRefusjonsvarsel] = useState(false);
 
   const opprettOpplysningerMutation = useMutation({
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
@@ -52,14 +57,11 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
           `skjemadata-${ARBEIDSGIVERINITERT_NYANSATT_ID}`,
         );
 
-        return navigate({
-          to: "/agi/$id/dine-opplysninger",
-          params: {
-            id: ARBEIDSGIVERINITERT_NYANSATT_ID,
-          },
-        });
+        setVisRefusjonsvarsel(true);
+        return;
       }
 
+      setVisRefusjonsvarsel(false);
       return navigate({
         to: "/$id",
         params: { id: opplysninger.forespørselUuid },
@@ -95,6 +97,16 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
   const nullstillFeilmeldinger = () => {
     hentPersonMutation.reset();
     opprettOpplysningerMutation.reset();
+    setVisRefusjonsvarsel(false);
+  };
+
+  const handleFortsettUtenForespørsel = () => {
+    navigate({
+      to: "/agi/$id/dine-opplysninger",
+      params: {
+        id: ARBEIDSGIVERINITERT_NYANSATT_ID,
+      },
+    });
   };
 
   return (
@@ -136,6 +148,28 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         >
           Hent opplysninger
         </Button>
+        {visRefusjonsvarsel && (
+          <>
+            <Alert variant="warning">
+              <BodyLong>
+                Ikke bruk dette refusjonskravet til å stanse refusjon for en
+                løpende periode. Hvis du ikke har en oppgave om inntektsmelding
+                på Min side – arbeidsgiver, må du{" "}
+                <Link href="https://www.nav.no/arbeidsgiver/kontaktoss">
+                  kontakte Nav på telefon
+                </Link>
+                .
+              </BodyLong>
+            </Alert>
+            <Button
+              className="w-fit"
+              onClick={handleFortsettUtenForespørsel}
+              type="button"
+            >
+              Fortsett til inntektsmeldingen
+            </Button>
+          </>
+        )}
         <VelgArbeidsgiver data={hentPersonMutation.data} />
         <PersonOppslagError
           context="person_oppslag"

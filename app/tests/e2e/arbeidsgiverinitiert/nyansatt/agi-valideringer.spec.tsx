@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { velgFraCombobox } from "tests/e2e/utils";
+import {
+  fortsettHvisRefusjonsvarselVises,
+  velgFraCombobox,
+} from "tests/e2e/utils";
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import {
   expectError,
@@ -67,6 +70,7 @@ test.describe("AGI Valideringer", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Verifiser at vi er på dine-opplysninger siden
     await expect(
@@ -75,6 +79,41 @@ test.describe("AGI Valideringer", () => {
 
     // Telefonnummer-feltet finnes
     await expect(page.getByLabel("Telefon")).toBeVisible();
+  });
+
+  test("Viser refusjonsvarsel for opplæringspenger", async ({ page }) => {
+    await mockHentPersonOgArbeidsforhold({ page });
+
+    await page.goto("/k9-im-dialog/opprett?ytelseType=OPPLÆRINGSPENGER");
+
+    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
+    await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
+    await page.getByLabel("Første fraværsdag").fill("01.04.2024");
+    await mockAGIOpplysninger({
+      page,
+      json: {
+        ...agiOpplysningerResponseNyAnsatt,
+        ytelse: "OPPLÆRINGSPENGER",
+      },
+    });
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
+    await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+
+    await expect(
+      page.getByText(
+        "Ikke bruk dette refusjonskravet til å stanse refusjon for en løpende periode.",
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "kontakte Nav på telefon" }),
+    ).toHaveAttribute("href", "https://www.nav.no/arbeidsgiver/kontaktoss");
   });
 
   test("Kan ikke gå videre fra refusjon uten å velge refusjonstype", async ({
@@ -99,6 +138,7 @@ test.describe("AGI Valideringer", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
@@ -129,6 +169,7 @@ test.describe("AGI Valideringer", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
@@ -193,6 +234,7 @@ test.describe("AGI Valideringer", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
