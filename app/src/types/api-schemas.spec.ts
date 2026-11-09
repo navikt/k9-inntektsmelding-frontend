@@ -17,7 +17,6 @@ import {
 import { agiSendInntektsmeldingResponse } from "../../tests/mocks/arbeidsgiverinitiert/nyansatt/agi-send-inntektsmelding";
 import { arbeidsforholdResponse } from "../../tests/mocks/arbeidsgiverinitiert/nyansatt/arbeidsforhold";
 import { agiUregistrertSendInntektsmeldingResponse } from "../../tests/mocks/arbeidsgiverinitiert/uregistrert/agi-send-inntektsmelding";
-import { arbeidsforholdUregistrertResponse } from "../../tests/mocks/arbeidsgiverinitiert/uregistrert/arbeidsforhold";
 import {
   enkeltOpplysningerResponse,
   utgåttOpplysningerResponse,
@@ -74,13 +73,13 @@ describe("opplysningerSchema parser alle mock-respons", () => {
 });
 
 describe("SlåOppArbeidstakerResponseDtoSchema parser arbeidsforhold-respons", () => {
-  test.each([
-    ["nyansatt-arbeidsforhold", arbeidsforholdResponse],
-    ["uregistrert-arbeidsforhold", arbeidsforholdUregistrertResponse],
-  ])("parser %s uten feil", (_, mock) => {
-    const result = SlåOppArbeidstakerResponseDtoSchema.safeParse(mock);
-    expect(result.success).toBe(true);
-  });
+  test.each([["nyansatt-arbeidsforhold", arbeidsforholdResponse]])(
+    "parser %s uten feil",
+    (_, mock) => {
+      const result = SlåOppArbeidstakerResponseDtoSchema.safeParse(mock);
+      expect(result.success).toBe(true);
+    },
+  );
 });
 
 describe("InntektsmeldingResponseDtoSchema parser send-inntektsmelding-respons", () => {

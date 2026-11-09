@@ -3,7 +3,7 @@ import { expect, Locator, Page } from "@playwright/test";
 import type { OpplysningerDto } from "~/types/api-schemas.ts";
 
 import { arbeidsforholdResponse } from "../arbeidsgiverinitiert/nyansatt/arbeidsforhold.ts";
-import { arbeidsforholdUregistrertResponse } from "../arbeidsgiverinitiert/uregistrert/arbeidsforhold.ts";
+import { organisasjonerResponse } from "../arbeidsgiverinitiert/uregistrert/arbeidsforhold.ts";
 import { ingenEksisterendeInntektsmeldingerResponse } from "../inntektsmelding/eksisterende-inntektsmeldinger";
 import { enkeltOpplysningerResponse } from "../inntektsmelding/opplysninger.ts";
 import { grunnbeløpResponse } from "./grunnbeløp";
@@ -146,16 +146,16 @@ export const mockAGISendInntektsmelding = ({
   );
 };
 
-type MockHentPersonUregistrertParams = {
+type MockHentArbeidsgiversOrganisasjonerParams = {
   page: Page;
-  json?: typeof arbeidsforholdUregistrertResponse;
+  json?: typeof organisasjonerResponse;
 };
-export const mockHentPersonUregistrert = ({
+export const mockHentArbeidsgiversOrganisasjoner = ({
   page,
-  json = arbeidsforholdUregistrertResponse,
-}: MockHentPersonUregistrertParams) => {
+  json = organisasjonerResponse,
+}: MockHentArbeidsgiversOrganisasjonerParams) => {
   return page.route(
-    `**/*/arbeidsgiverinitiert/arbeidsgivere/uregistrert`,
+    `**/*/arbeidsgiverinitiert/arbeidsgiver/organisasjoner`,
     async (route) => {
       await route.fulfill({ json });
     },

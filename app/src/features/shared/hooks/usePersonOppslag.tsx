@@ -1,18 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 
-import {
-  hentPersonFraFnr,
-  hentPersonFraFnrUnntattAareg,
-} from "~/api/queries.ts";
+import { hentPersonFraFnr } from "~/api/queries.ts";
 import { Ytelsetype } from "~/types/api-schemas.ts";
 
 export interface PersonOppslagParams {
-  fødselsnummer: string;
-  ytelse: Ytelsetype;
-  førsteFraværsdag: string;
-}
-
-export interface PersonOppslagUnntattAaregParams {
   fødselsnummer: string;
   ytelse: Ytelsetype;
   førsteFraværsdag: string;
@@ -26,22 +17,6 @@ export function usePersonOppslag() {
       førsteFraværsdag,
     }: PersonOppslagParams) => {
       return await hentPersonFraFnr(fødselsnummer, ytelse, førsteFraværsdag);
-    },
-  });
-}
-
-export function usePersonOppslagUnntattAareg() {
-  return useMutation({
-    mutationFn: async ({
-      fødselsnummer,
-      ytelse,
-      førsteFraværsdag,
-    }: PersonOppslagUnntattAaregParams) => {
-      return await hentPersonFraFnrUnntattAareg(
-        fødselsnummer,
-        ytelse,
-        førsteFraværsdag,
-      );
     },
   });
 }

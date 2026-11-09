@@ -3,7 +3,7 @@ import { agiOpplysningerResponseUregistrert } from "tests/mocks/arbeidsgiverinit
 import {
   mockAGIOpplysningerUregistrert,
   mockGrunnbeløp,
-  mockHentPersonUregistrert,
+  mockHentArbeidsgiversOrganisasjoner,
 } from "tests/mocks/shared/utils";
 
 const FAKE_FNR = "09810198874";
@@ -11,7 +11,7 @@ const FAKE_FNR = "09810198874";
 const settUppOgGåTilDineOpplysninger = async (
   page: import("@playwright/test").Page,
 ) => {
-  await mockHentPersonUregistrert({ page });
+  await mockHentArbeidsgiversOrganisasjoner({ page });
   await mockGrunnbeløp({ page });
   await mockAGIOpplysningerUregistrert({
     page,
@@ -35,7 +35,7 @@ test.describe("AGI unntatt Aa-registeret – valideringer", () => {
   test("Inngang: validerer fødselsnummer og første fraværsdag", async ({
     page,
   }) => {
-    await mockHentPersonUregistrert({ page });
+    await mockHentArbeidsgiversOrganisasjoner({ page });
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
 
     await page
