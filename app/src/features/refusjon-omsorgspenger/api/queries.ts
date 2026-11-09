@@ -5,7 +5,6 @@ import { z } from "zod";
 import {
   hentArbeidsgiversOrganisasjoner,
   hentOpplysningerUnntattAaregister,
-  hentPersonFraFnrUnntattAareg,
 } from "~/api/queries.ts";
 import { MånedsinntektStatusSchema } from "~/types/api-schemas.ts";
 import { logDev } from "~/utils";
@@ -273,31 +272,6 @@ export type ArbeidsgiverDto = {
   organisasjonsnavn: string;
   organisasjonsnummer: string;
 };
-
-type HentArbeidsgiverArgs = {
-  fødselsnummer: string;
-  førsteFraværsdatoForÅret: string;
-};
-
-export const hentArbeidsgiverOptions = ({
-  fødselsnummer,
-  førsteFraværsdatoForÅret,
-}: HentArbeidsgiverArgs) =>
-  queryOptions({
-    queryKey: [
-      "arbeidsgiver",
-      { fødselsnummer, førsteFraværsdatoForÅret },
-    ] as const,
-    queryFn: () =>
-      hentPersonFraFnrUnntattAareg(
-        fødselsnummer,
-        "OMSORGSPENGER",
-        førsteFraværsdatoForÅret,
-      ),
-    enabled: fødselsnummer && førsteFraværsdatoForÅret ? true : false,
-    staleTime: Infinity,
-    retry: false,
-  });
 
 type OpplysningerUnntattAaregisterArgs = {
   fødselsnummer: string;

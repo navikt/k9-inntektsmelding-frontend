@@ -5,14 +5,14 @@ import {
   mockAGIOpplysningerUregistrert,
   mockAGISendInntektsmeldingUregistrert,
   mockGrunnbeløp,
-  mockHentPersonUregistrert,
+  mockHentArbeidsgiversOrganisasjoner,
 } from "tests/mocks/shared/utils";
 
 const FAKE_FNR = "09810198874";
 
 test.describe("AGI unntatt Aa-registeret – happy path", () => {
   test("Fullstendig flyt med refusjon", async ({ page }) => {
-    await mockHentPersonUregistrert({ page });
+    await mockHentArbeidsgiversOrganisasjoner({ page });
     await mockGrunnbeløp({ page });
 
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
@@ -77,7 +77,7 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
   });
 
   test("Flyt uten refusjon", async ({ page }) => {
-    await mockHentPersonUregistrert({ page });
+    await mockHentArbeidsgiversOrganisasjoner({ page });
     await mockGrunnbeløp({ page });
 
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
@@ -134,7 +134,7 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
   });
 
   test("Navigering tilbake mellom stegene fungerer", async ({ page }) => {
-    await mockHentPersonUregistrert({ page });
+    await mockHentArbeidsgiversOrganisasjoner({ page });
     await mockGrunnbeløp({ page });
 
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");

@@ -1,27 +1,21 @@
 import { ArrowRightIcon } from "@navikt/aksel-icons";
-import {
-  BodyShort,
-  Button,
-  HStack,
-  Label,
-  TextField,
-  VStack,
-} from "@navikt/ds-react";
+import { Alert, Button, TextField, VStack } from "@navikt/ds-react";
 import { fnr } from "@navikt/fnrvalidator";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useFormContext } from "react-hook-form";
 
-import { hentOpplysningerUnntattAaregister } from "~/api/queries.ts";
-import { PersonOppslagError } from "~/features/shared/components/PersonOppslagFeil";
-import { usePersonOppslagUnntattAareg } from "~/features/shared/hooks/usePersonOppslag";
+import {
+  hentArbeidsgiversOrganisasjoner,
+  hentOpplysningerUnntattAaregister,
+} from "~/api/queries.ts";
+import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/ComboboxWrapped";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
 import { ARBEIDSGIVERINITIERT_UNNTATT_AAREGISTER_ID } from "~/routes/opprett";
 import { OpplysningerRequest, Ytelsetype } from "~/types/api-schemas.ts";
 
 import { HentOpplysningerError } from "./HentOpplysningerError";
 import { FormType } from "./types";
-import { VelgArbeidsgiver } from "./VelgArbeidsgiver";
 
 export function UnntattAaregRegistreringForm({
   ytelseType,
@@ -32,10 +26,20 @@ export function UnntattAaregRegistreringForm({
     register,
     handleSubmit: rhfHandleSubmit,
     formState,
-    watch,
+    setValue,
   } = useFormContext<FormType>();
   const navigate = useNavigate();
-  const hentPersonMutation = usePersonOppslagUnntattAareg();
+  const hentOrganisasjonerMutation = useMutation({
+    mutationFn: async () => {
+      const data = await hentArbeidsgiversOrganisasjoner();
+      if (data.organisasjoner.length === 0) {
+        throw new Error(
+          "Fant ingen organisasjoner knyttet til innlogget bruker",
+        );
+      }
+      return data;
+    },
+  });
 
   const opprettOpplysningerMutation = useMutation({
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
@@ -72,98 +76,104 @@ export function UnntattAaregRegistreringForm({
   });
 
   const isPending =
-    hentPersonMutation.isPending || opprettOpplysningerMutation.isPending;
+    hentOrganisasjonerMutation.isPending ||
+    opprettOpplysningerMutation.isPending;
 
   const handleSubmit = (values: FormType) => {
-    hentPersonMutation.mutate(
-      {
+    if (hentOrganisasjonerMutation.data) {
+      opprettOpplysningerMutation.mutate({
         fødselsnummer: values.fødselsnummer,
-        ytelse: ytelseType,
         førsteFraværsdag: values.førsteFraværsdag,
+        ytelseType,
+        organisasjonsnummer: values.organisasjonsnummer,
+      });
+      return;
+    }
+
+    hentOrganisasjonerMutation.mutate(undefined, {
+      onSuccess: (data) => {
+        if (data?.organisasjoner.length === 1) {
+          setValue(
+            "organisasjonsnummer",
+            data.organisasjoner[0].organisasjonsnummer,
+          );
+          return opprettOpplysningerMutation.mutate({
+            fødselsnummer: values.fødselsnummer,
+            førsteFraværsdag: values.førsteFraværsdag,
+            ytelseType,
+            organisasjonsnummer: data.organisasjoner[0].organisasjonsnummer,
+          });
+        }
       },
-      {
-        onSuccess: (data) => {
-          if (data.arbeidsforhold.length === 1) {
-            return opprettOpplysningerMutation.mutate({
-              fødselsnummer: values.fødselsnummer,
-              førsteFraværsdag: values.førsteFraværsdag,
-              ytelseType,
-              organisasjonsnummer: data.arbeidsforhold[0].organisasjonsnummer,
-            });
-          }
-        },
-      },
-    );
+    });
   };
 
   const nullstillFeilmeldinger = () => {
-    hentPersonMutation.reset();
     opprettOpplysningerMutation.reset();
   };
+  const organisasjoner = hentOrganisasjonerMutation.data?.organisasjoner ?? [];
+  const options = organisasjoner
+    .toSorted((første, andre) =>
+      første.organisasjonsnavn.localeCompare(andre.organisasjonsnavn, "nb"),
+    )
+    .map((organisasjon) => ({
+      value: organisasjon.organisasjonsnummer,
+      label: `${organisasjon.organisasjonsnavn} (${organisasjon.organisasjonsnummer})`,
+    }));
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
       <VStack gap="space-32">
-        <HStack gap="space-40">
-          <TextField
-            {...register("fødselsnummer", {
-              required: "Må oppgis",
-              validate: (value: string) =>
-                (value && fnr(value).status === "valid") ||
-                "Du må fylle ut et gyldig fødselsnummer",
-              onChange: nullstillFeilmeldinger,
-            })}
-            error={formState.errors.fødselsnummer?.message}
-            label="Ansattes fødselsnummer"
-          />
-          <VStack gap="space-16">
-            <Label>Navn</Label>
-            {hentPersonMutation.data && (
-              <BodyShort>
-                {hentPersonMutation.data.fornavn}{" "}
-                {hentPersonMutation.data.etternavn}
-              </BodyShort>
-            )}
-          </VStack>
-        </HStack>
+        <TextField
+          {...register("fødselsnummer", {
+            required: "Må oppgis",
+            validate: (value: string) =>
+              (value && fnr(value).status === "valid") ||
+              "Du må fylle ut et gyldig fødselsnummer",
+            onChange: nullstillFeilmeldinger,
+          })}
+          error={formState.errors.fødselsnummer?.message}
+          label="Ansattes fødselsnummer"
+        />
         <DatePickerWrapped
           label="Første fraværsdag"
           name="førsteFraværsdag"
           callback={nullstillFeilmeldinger}
           rules={{ required: "Må oppgis" }}
         />
-        <Button
-          className="w-fit"
-          loading={isPending}
-          type="submit"
-          variant="secondary"
-        >
-          Hent opplysninger
-        </Button>
-        <VelgArbeidsgiver
-          data={hentPersonMutation.data}
-          description="Velg hvilken underenhet den ansatte jobber for."
-        />
-        <PersonOppslagError
-          context="person_oppslag"
-          error={hentPersonMutation.error}
-          ytelse={ytelseType}
-        />
+        {organisasjoner.length === 0 && (
+          <Button
+            className="w-fit"
+            loading={isPending}
+            type="submit"
+            variant="secondary"
+          >
+            Hent opplysninger
+          </Button>
+        )}
+        {organisasjoner.length > 1 && (
+          <ComboboxWrapped
+            data-testid="steg-0-combobox-arbeidsgiver"
+            description="Velg hvilken underenhet den ansatte jobber for."
+            label="Arbeidsgiver"
+            name="organisasjonsnummer"
+            options={options}
+            rules={{ required: "Må oppgis" }}
+          />
+        )}
+        {hentOrganisasjonerMutation.error && (
+          <Alert role="alert" variant="error">
+            Kunne ikke hente virksomheter knyttet til innlogget bruker. Prøv
+            igjen.
+          </Alert>
+        )}
         <HentOpplysningerError error={opprettOpplysningerMutation.error} />
-        {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
+        {organisasjoner.length > 0 && (
           <Button
             className="w-fit"
             icon={<ArrowRightIcon />}
             iconPosition="right"
             loading={opprettOpplysningerMutation.isPending}
-            onClick={() =>
-              opprettOpplysningerMutation.mutate({
-                fødselsnummer: watch("fødselsnummer"),
-                førsteFraværsdag: watch("førsteFraværsdag"),
-                organisasjonsnummer: watch("organisasjonsnummer"),
-                ytelseType,
-              })
-            }
-            type="button"
+            type="submit"
           >
             Opprett inntektsmelding
           </Button>
