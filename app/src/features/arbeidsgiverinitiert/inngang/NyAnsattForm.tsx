@@ -152,9 +152,12 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
           <>
             <Alert variant="warning">
               <BodyLong>
-                Ikke bruk dette refusjonskravet til å stanse refusjon for en
-                løpende periode. Hvis du ikke har en oppgave om inntektsmelding
-                på Min side – arbeidsgiver, må du{" "}
+                Ikke bruk dette refusjonskravet til å stanse en refusjon for en
+                periode som allerede er i gang (løpende periode).
+              </BodyLong>
+              <BodyLong>
+                Hvis du mangler en oppgave om inntektsmelding på Min side -
+                arbeidsgiver, må du{" "}
                 <Link href="https://www.nav.no/arbeidsgiver/kontaktoss">
                   kontakte Nav på telefon
                 </Link>
