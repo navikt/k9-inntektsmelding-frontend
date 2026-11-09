@@ -63,11 +63,13 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   const fraværHeleDager = watch("fraværHeleDager");
   const fraværDelerAvDagen = watch("fraværDelerAvDagen");
   const dagerSomSkalTrekkes = watch("dagerSomSkalTrekkes");
+  const organisasjonsnummer = watch("organisasjonsnummer");
+  const aktørId = watch("ansattesAktørId");
   const navigate = useNavigate();
 
   const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
-    aktørId: watch("ansattesAktørId") as string,
-    arbeidsgiverIdent: watch("organisasjonsnummer") as string,
+    aktørId: aktørId ?? "",
+    arbeidsgiverIdent: organisasjonsnummer ?? "",
     år: Number(årForRefusjon),
   });
 

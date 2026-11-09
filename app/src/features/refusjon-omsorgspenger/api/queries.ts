@@ -2,10 +2,7 @@ import { idnr } from "@navikt/fnrvalidator";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
-import {
-  hentArbeidsgiversOrganisasjoner,
-  hentOpplysningerUnntattAaregister,
-} from "~/api/queries.ts";
+import { hentArbeidsgiversOrganisasjoner } from "~/api/queries.ts";
 import { MånedsinntektStatusSchema } from "~/types/api-schemas.ts";
 import { logDev } from "~/utils";
 
@@ -69,6 +66,7 @@ export const useHentInntektsmeldingForÅr = (
   >({
     queryKey: ["inntektsmeldinger-for-aar", payload],
     queryFn: hentInntektsmeldinger,
+    enabled: !!payload.aktørId && !!payload.arbeidsgiverIdent,
   });
 };
 
@@ -273,29 +271,6 @@ export type ArbeidsgiverDto = {
   organisasjonsnummer: string;
 };
 
-type OpplysningerUnntattAaregisterArgs = {
-  fødselsnummer: string;
-  førsteFraværsdatoForÅret: string;
-  organisasjonsnummer: string;
-};
-
-export const hentPersonUnntattAaregisterOptions = (
-  args: OpplysningerUnntattAaregisterArgs | null,
-) =>
-  queryOptions({
-    queryKey: ["person-unntatt-aaregister", args] as const,
-    queryFn: () =>
-      hentOpplysningerUnntattAaregister({
-        fødselsnummer: args!.fødselsnummer,
-        ytelseType: "OMSORGSPENGER",
-        førsteFraværsdag: args!.førsteFraværsdatoForÅret,
-        organisasjonsnummer: args!.organisasjonsnummer,
-      }),
-    enabled: args !== null,
-    staleTime: Infinity,
-    retry: false,
-  });
-
 export const hentArbeidsgiversOrganisasjonerOptions = () => {
   return queryOptions({
     queryKey: ["arbeidsgivers-organisasjoner"],
@@ -303,3 +278,49 @@ export const hentArbeidsgiversOrganisasjonerOptions = () => {
     retry: false,
   });
 };
+
+const AnsattDtoSchema = z.object({
+  fornavn: z.string(),
+  mellomnavn: z.string().optional(),
+  etternavn: z.string(),
+  aktørId: z.string().min(1),
+});
+
+const hentAnsatt = async (fødselsnummer: string) => {
+  const response = await fetch(
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidstaker`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ fødselsnummer }),
+    },
+  );
+  if (!response.ok) {
+    throw new Error("Kunne ikke hente opplysninger om den ansatte");
+  }
+  const parsedResponse = AnsattDtoSchema.safeParse(await response.json());
+  if (!parsedResponse.success) {
+    logDev(
+      "error",
+      "Mottok en uventet respons fra serveren",
+      parsedResponse.error,
+    );
+    throw new Error("Responsen fra serveren matchet ikke forventet format");
+  }
+  return parsedResponse.data;
+};
+
+export const hentAnsattOptions = (fødselsnummer: string, enabled: boolean) =>
+  queryOptions({
+    queryKey: ["ansatt", fødselsnummer],
+    queryFn: () => hentAnsatt(fødselsnummer),
+    enabled: enabled && idnr(fødselsnummer).status === "valid",
+    staleTime: Infinity,
+    retry: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+  });

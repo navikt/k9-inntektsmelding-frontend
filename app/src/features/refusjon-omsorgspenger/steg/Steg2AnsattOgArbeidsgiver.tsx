@@ -1,6 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@navikt/aksel-icons";
 import {
+  Alert,
   BodyLong,
+  BodyShort,
   Box,
   Button,
   Checkbox,
@@ -15,12 +17,12 @@ import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
-import { formatFodselsnummer } from "~/utils.ts";
+import { formatFodselsnummer, lagFulltNavn } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
-import { hentArbeidstakerOptions } from "../api/queries.ts";
+import { hentAnsattOptions, hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 import { ArbeidsgiverSeksjon } from "./ArbeidsgiverSeksjon.tsx";
@@ -55,6 +57,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   const fantIngenPersoner =
     error && "feilkode" in error && error.feilkode === "fant ingen personer";
   const visUnntattLøype = erUnntattAaregisteret ?? false;
+  const {
+    data: ansatt,
+    error: ansattFeil,
+    isFetching: henterAnsatt,
+    refetch: hentAnsattPåNytt,
+  } = useQuery(hentAnsattOptions(fødselsnummer ?? "", visUnntattLøype));
 
   useEffect(() => {
     if (!år) {
@@ -75,6 +83,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   }, []);
 
   const onSubmit = handleSubmit(() => {
+    if (visUnntattLøype) {
+      if (!ansatt) return;
+      setValue("ansattesAktørId", ansatt.aktørId);
+      setValue("ansattesFornavn", ansatt.fornavn);
+      setValue("ansattesEtternavn", ansatt.etternavn);
+    }
     navigate({
       from: "/refusjon-omsorgspenger/$organisasjonsnummer/2-ansatt-og-arbeidsgiver",
       to: "../3-omsorgsdager",
@@ -102,6 +116,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                     const nyVerdi = e.target.value.replaceAll(/\s/g, "");
                     if (nyVerdi !== field.value) {
                       setValue("erUnntattAaregisteret", false);
+                      setValue("ansattesAktørId", undefined);
+                      setValue("ansattesFornavn", undefined);
+                      setValue("ansattesEtternavn", undefined);
                       setValue("organisasjonsnummer", undefined);
                       setValue("meta.organisasjonsnavn", undefined);
                     }
@@ -113,7 +130,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             />
             <div className="flex-1 flex flex-col">
               <Label>Navn</Label>
-              <NavnVisning />
+              {/* For ansatte unntatt Aa-registeret returnerer oppslaget bare "ukjent navn". */}
+              {visUnntattLøype ? (
+                ansatt && <BodyShort>{lagFulltNavn(ansatt)}</BodyShort>
+              ) : (
+                <NavnVisning />
+              )}
             </div>
           </div>
           {fantIngenPersoner && (
@@ -191,6 +213,23 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
           </HjelpetekstAlert>
         </Informasjonsseksjon>
 
+        {visUnntattLøype && ansattFeil && (
+          <>
+            <Alert role="alert" variant="error">
+              Kunne ikke hente opplysninger om den ansatte. Prøv igjen.
+            </Alert>
+            <Button
+              loading={henterAnsatt}
+              onClick={() => {
+                void hentAnsattPåNytt();
+              }}
+              type="button"
+              variant="secondary"
+            >
+              Prøv igjen
+            </Button>
+          </>
+        )}
         <div className="flex gap-4">
           <Button
             as={Link}
@@ -201,8 +240,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             Forrige steg
           </Button>
           <Button
+            disabled={visUnntattLøype && !ansatt}
             icon={<ArrowRightIcon />}
             iconPosition="right"
+            loading={visUnntattLøype && henterAnsatt}
             type="submit"
             variant="primary"
           >
