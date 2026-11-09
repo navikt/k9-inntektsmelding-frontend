@@ -108,7 +108,7 @@ test.describe("AGI Valideringer", () => {
 
     await expect(
       page.getByText(
-        "Ikke bruk dette refusjonskravet til å stanse refusjon for en løpende periode.",
+        "Ikke bruk dette refusjonskravet til å stanse en refusjon for en periode som allerede er i gang (løpende periode).",
       ),
     ).toBeVisible();
     await expect(
