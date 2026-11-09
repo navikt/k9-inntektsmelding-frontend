@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { velgFraCombobox } from "tests/e2e/utils";
+import {
+  fortsettHvisRefusjonsvarselVises,
+  velgFraCombobox,
+} from "tests/e2e/utils";
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import {
   mockAGIOpplysninger,
@@ -38,6 +41,7 @@ test.describe("AGI Første fraværsdag validering", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Gå gjennom dine opplysninger
     await page.getByLabel("Telefon").fill("98765432");
@@ -110,6 +114,7 @@ test.describe("AGI Første fraværsdag validering", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Gå gjennom dine opplysninger
     await page.getByLabel("Telefon").fill("98765432");
@@ -178,6 +183,7 @@ test.describe("AGI Første fraværsdag validering", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Gå gjennom dine opplysninger
     await page.getByLabel("Telefon").fill("98765432");
@@ -237,6 +243,7 @@ test.describe("AGI Første fraværsdag validering", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     // Gå gjennom dine opplysninger
     await page.getByLabel("Telefon").fill("98765432");

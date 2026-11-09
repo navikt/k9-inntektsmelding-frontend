@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 
 /**
  * Velger et alternativ fra en Combobox (UNSAFE_Combobox) ved å søke og klikke
@@ -23,4 +23,13 @@ export async function velgFraCombobox({
     .getByRole("listbox")
     .getByRole("option", { name: alternativNavn })
     .click();
+}
+
+export async function fortsettHvisRefusjonsvarselVises(page: Page) {
+  const fortsettKnapp = page.getByRole("button", {
+    name: "Fortsett til inntektsmeldingen",
+  });
+
+  await expect(fortsettKnapp).toBeVisible();
+  await fortsettKnapp.click();
 }
