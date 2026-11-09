@@ -53,6 +53,12 @@ test.describe("Refusjon Omsorgspenger – steg 2 unntatt Aa-registeret", () => {
   test("Viser informasjonsboks når person ikke har registrerte arbeidsforhold, og kan bekrefte unntatt-løype", async ({
     page,
   }) => {
+    const navneoppslag: string[] = [];
+    page.on("request", (forespørsel) => {
+      if (forespørsel.url().endsWith("/arbeidsgiverinitiert/arbeidstaker")) {
+        navneoppslag.push(forespørsel.url());
+      }
+    });
     await page.goto(
       `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
     );
@@ -98,6 +104,7 @@ test.describe("Refusjon Omsorgspenger – steg 2 unntatt Aa-registeret", () => {
         name: "Omsorgsdager dere søker refusjon for",
       }),
     ).toBeVisible({ timeout: 10_000 });
+    expect(navneoppslag).toEqual([]);
   });
 
   test("Endring av fødselsnummer nullstiller unntatt-valg", async ({

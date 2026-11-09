@@ -3,17 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { lagFulltNavn } from "~/utils.ts";
 
-import {
-  hentAnsattNavnOptions,
-  hentArbeidstakerOptions,
-} from "../api/queries.ts";
+import { hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const NavnVisning = () => {
-  const { register, watch, getValues } = useSkjemaState();
-
-  const fødselsnummer = watch("ansattesFødselsnummer");
-  const erUnntattAaregisteret = watch("erUnntattAaregisteret");
+  const { register, getValues } = useSkjemaState();
 
   const { data, error, isLoading } = useQuery(
     hentArbeidstakerOptions(
@@ -22,11 +16,7 @@ export const NavnVisning = () => {
     ),
   );
 
-  const { data: ansattNavnData, isLoading: isLoadingNavn } = useQuery(
-    hentAnsattNavnOptions(fødselsnummer ?? "", erUnntattAaregisteret === true),
-  );
-
-  if (isLoading || isLoadingNavn) {
+  if (isLoading) {
     return <Loader className="block mt-5" title="Henter informasjon" />;
   }
 
@@ -50,32 +40,6 @@ export const NavnVisning = () => {
           type="hidden"
           {...register("ansattesAktørId", {
             value: data.personinformasjon.aktørId,
-          })}
-        />
-      </BodyShort>
-    );
-  }
-
-  if (ansattNavnData && erUnntattAaregisteret) {
-    return (
-      <BodyShort className="flex-1 flex flex-col justify-center">
-        {lagFulltNavn(ansattNavnData)}
-        <input
-          type="hidden"
-          {...register("ansattesFornavn", {
-            value: ansattNavnData.fornavn,
-          })}
-        />
-        <input
-          type="hidden"
-          {...register("ansattesEtternavn", {
-            value: ansattNavnData.etternavn,
-          })}
-        />
-        <input
-          type="hidden"
-          {...register("ansattesAktørId", {
-            value: ansattNavnData.aktørId,
           })}
         />
       </BodyShort>
