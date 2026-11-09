@@ -100,6 +100,12 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
     setVisRefusjonsvarsel(false);
   };
 
+  const handleArbeidsgiverValgt = () => {
+    if (visRefusjonsvarsel) {
+      nullstillFeilmeldinger();
+    }
+  };
+
   const handleFortsettUtenForespørsel = () => {
     navigate({
       to: "/agi/$id/dine-opplysninger",
@@ -173,7 +179,10 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
             </Button>
           </>
         )}
-        <VelgArbeidsgiver data={hentPersonMutation.data} />
+        <VelgArbeidsgiver
+          data={hentPersonMutation.data}
+          onOptionSelected={handleArbeidsgiverValgt}
+        />
         <PersonOppslagError
           context="person_oppslag"
           error={hentPersonMutation.error}

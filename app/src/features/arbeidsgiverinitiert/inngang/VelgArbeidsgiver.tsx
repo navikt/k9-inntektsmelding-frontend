@@ -3,9 +3,11 @@ import { SlåOppArbeidstakerResponseDto } from "~/types/api-schemas.ts";
 
 export function VelgArbeidsgiver({
   data,
+  onOptionSelected,
   description = "Den ansatte har flere arbeidsforhold hos samme arbeidsgiver. Velg hvilken underenhet inntektsmeldingen gjelder for.",
 }: {
   data?: SlåOppArbeidstakerResponseDto;
+  onOptionSelected?: () => void;
   description?: string;
 }) {
   if (!data || data.arbeidsforhold.length <= 1) {
@@ -27,6 +29,7 @@ export function VelgArbeidsgiver({
       description={description}
       label="Arbeidsgiver"
       name="organisasjonsnummer"
+      onOptionSelected={onOptionSelected}
       options={options}
       rules={{ required: "Må oppgis" }}
     />
