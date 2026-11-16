@@ -29,9 +29,9 @@ type RotLayoutProps = {
 };
 
 /**
- * Layout som deles på tvers av alle views.
- * Dette burde være den ytterste komponenten på alle sider.
- */
+Layout som deles på tvers av alle views.
+Dette burde være den ytterste komponenten på alle sider.
+*/
 export const RotLayout = ({
   tittel,
   undertittel,

@@ -71,7 +71,7 @@ export default tseslint.config(
     },
   },
   ...pluginQuery.configs["flat/recommended"],
-  eslintPluginUnicorn.configs["flat/recommended"],
+  eslintPluginUnicorn.configs.recommended,
   {
     rules: {
       eqeqeq: ["error", "always"],

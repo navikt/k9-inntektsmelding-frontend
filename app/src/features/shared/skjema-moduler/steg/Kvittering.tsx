@@ -58,10 +58,9 @@ export const Kvittering = ({
 
   const erRefusjon = skalRefunderes !== "NEI";
   const ofteStilteSpørsmål = () => {
-    if (erRefusjon && opplysninger.ytelse !== "OMSORGSPENGER") {
-      return ofteStilteSpørsmålRefusjon;
-    }
-    return ofteStilteSpørsmålIkkeRefusjon;
+    return erRefusjon && opplysninger.ytelse !== "OMSORGSPENGER"
+      ? ofteStilteSpørsmålRefusjon
+      : ofteStilteSpørsmålIkkeRefusjon;
   };
 
   return (

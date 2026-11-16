@@ -137,7 +137,7 @@ export const opplysningerSchema = z.object({
     fornavn: z.string().transform((v) => formatNavn(v) ?? v),
     mellomnavn: z
       .string()
-      .transform((mellomnavn) => formatNavn(mellomnavn || "") ?? "")
+      .transform((mellomnavn = "") => formatNavn(mellomnavn) ?? "")
       .optional(),
     etternavn: z.string().transform((v) => formatNavn(v) ?? v),
   }),

@@ -11,8 +11,8 @@ import {
 import { beløpSchema } from "~/utils.ts";
 
 /**
- * Minst streng skjema-state. Denne brukes underveis der mange av feltene er optional fordi de ikke er utfylt enda.
- */
+Minst streng skjema-state. Denne brukes underveis der mange av feltene er optional fordi de ikke er utfylt enda.
+*/
 export const InntektsmeldingSkjemaStateSchema = z.object({
   kontaktperson: z
     .object({
@@ -59,8 +59,8 @@ export const InntektsmeldingSkjemaStateSchema = z.object({
 });
 
 /**
- * En strengere skjema state. Her er alle verdiene validert mot skjema-logikken.
- */
+En strengere skjema state. Her er alle verdiene validert mot skjema-logikken.
+*/
 export const InntektsmeldingSkjemaStateSchemaValidated = z.object({
   kontaktperson: z.object({
     navn: z.string(),

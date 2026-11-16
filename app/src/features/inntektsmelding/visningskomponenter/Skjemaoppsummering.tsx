@@ -211,7 +211,11 @@ function InntektOppsummering({
                     ({ årsak, fom, tom, bleKjentFom, ignorerTom }) => {
                       const periodeStreng = formaterPeriodeStreng({
                         fom,
-                        tom: ignorerTom ? undefined : bleKjentFom || tom,
+                        tom: ignorerTom
+                          ? undefined
+                          : bleKjentFom?.length
+                            ? bleKjentFom
+                            : tom,
                       });
                       return (
                         <FormSummary.Answer key={[årsak, fom, tom].join("-")}>
@@ -486,8 +490,8 @@ const NaturalytelserOppsummering = ({
 );
 
 /**
- * Gir en streng på formatet "fra og med DATO, til og med DATO" hvis begge datoene er satt. Ellers kun den ene.
- */
+Gir en streng på formatet "fra og med DATO, til og med DATO" hvis begge datoene er satt. Ellers kun den ene.
+*/
 function formaterPeriodeStreng({
   fom,
   tom,
@@ -506,8 +510,7 @@ const formatterKontaktperson = (
     | InntektsmeldingSkjemaStateValid["kontaktperson"]
     | InntektsmeldingSkjemaStateValidAGIUnntattAaregister["kontaktperson"],
 ) => {
-  if (!kontaktperson) {
-    return "";
-  }
-  return `${formatNavn(kontaktperson.navn)}, tlf. ${formatTelefonnummer(kontaktperson.telefonnummer)}`;
+  return kontaktperson
+    ? `${formatNavn(kontaktperson.navn)}, tlf. ${formatTelefonnummer(kontaktperson.telefonnummer)}`
+    : "";
 };

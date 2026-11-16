@@ -47,9 +47,9 @@ export const FormattertTallTextField = ({
 };
 
 /** Formatterer en inputverdi til et tall med tusenvise mellomrom.
- *
- * Om det ikke er et tall, returneres inputverdien.
- */
+
+Om det ikke er et tall, returneres inputverdien.
+*/
 const formatTall = (value: string | undefined) => {
   if (value === "" || value === undefined) {
     return "";

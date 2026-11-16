@@ -45,10 +45,9 @@ export const DateRangePickerWrapped = forwardRef<
       toField.onBlur();
     },
     onValidate: (dateRange) => {
-      if (dateRange?.from && dateRange?.to) {
-        return dateRange.from <= dateRange.to;
-      }
-      return true;
+      return (
+        !dateRange?.from || !dateRange?.to || dateRange.from <= dateRange.to
+      );
     },
     defaultSelected: {
       from: fromField.value ? new Date(fromField.value) : undefined,

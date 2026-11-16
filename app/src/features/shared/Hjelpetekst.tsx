@@ -101,9 +101,5 @@ export function HjelpetekstReadMore({
 export function HjelpetekstAlert({ children }: Pick<AlertProps, "children">) {
   const { vis } = useHjelpetekst().visHjelpetekster;
 
-  if (!vis) {
-    return null;
-  }
-
-  return <Alert variant="info">{children}</Alert>;
+  return vis ? <Alert variant="info">{children}</Alert> : null;
 }

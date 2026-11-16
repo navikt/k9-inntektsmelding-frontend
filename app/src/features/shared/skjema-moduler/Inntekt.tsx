@@ -626,13 +626,10 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
             rules={{
               required: ignorerTom ? false : "Må oppgis",
               validate: (date: string) => {
-                if (ignorerTom) {
-                  return true;
-                }
-                return (
-                  isAfter(skjæringstidspunkt, date) ||
-                  "Lønnsendring må være før første dag med fravær"
-                );
+                return ignorerTom
+                  ? true
+                  : isAfter(skjæringstidspunkt, date) ||
+                      "Lønnsendring må være før første dag med fravær";
               },
             }}
           />

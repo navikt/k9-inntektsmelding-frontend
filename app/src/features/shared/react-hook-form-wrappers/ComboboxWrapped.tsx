@@ -32,14 +32,14 @@ type ComboboxWrappedProps = {
 >;
 
 /**
- * Wrapper rundt Aksel sin `UNSAFE_Combobox` som lar brukeren søke i en liste med
- * `{ label, value }`-alternativer (f.eks. navn og org.nr.), integrert med react-hook-form.
- * Kun single-select er støttet.
- *
- * Vi lar Combobox styre sin egen søketekst internt (uncontrolled `value`), og lar den
- * innebygde visningen av valgt alternativ (via `selectedOptions`) vise navnet/label etter
- * at et valg er gjort – i tråd med hvordan Aksel sin single-select-variant er designet.
- */
+Wrapper rundt Aksel sin `UNSAFE_Combobox` som lar brukeren søke i en liste med
+`{ label, value }`-alternativer (f.eks. navn og org.nr.), integrert med react-hook-form.
+Kun single-select er støttet.
+
+Vi lar Combobox styre sin egen søketekst internt (uncontrolled `value`), og lar den
+innebygde visningen av valgt alternativ (via `selectedOptions`) vise navnet/label etter
+at et valg er gjort – i tråd med hvordan Aksel sin single-select-variant er designet.
+*/
 export function ComboboxWrapped({
   name,
   label,
@@ -79,7 +79,6 @@ export function ComboboxWrapped({
           field.onChange(nyttValgtAlternativ?.value ?? verdi);
           onOptionSelected?.(nyttValgtAlternativ);
         } else {
-          // eslint-disable-next-line unicorn/no-useless-undefined
           field.onChange(undefined);
           onOptionSelected?.();
         }

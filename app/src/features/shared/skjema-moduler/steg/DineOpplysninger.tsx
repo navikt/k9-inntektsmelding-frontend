@@ -29,11 +29,6 @@ import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
 import { Informasjonsseksjon } from "../../Informasjonsseksjon";
 import { Fremgangsindikator } from "../Fremgangsindikator";
 
-type PersonOgSelskapsInformasjonForm = {
-  navn: string;
-  telefonnummer: string;
-};
-
 // Minimal type that works with both InntektsmeldingSkjemaState and InntektsmeldingSkjemaStateAGI
 type MinimalSkjemaState = {
   kontaktperson?: {
@@ -61,6 +56,11 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
   );
 
   const innsenderNavn = lagFulltNavn(opplysninger.innsender);
+
+  type PersonOgSelskapsInformasjonForm = {
+    navn: string;
+    telefonnummer: string;
+  };
 
   const { register, handleSubmit, formState } =
     useForm<PersonOgSelskapsInformasjonForm>({
@@ -188,10 +188,9 @@ const Intro = ({ opplysninger }: IntroProps) => {
   }
 
   const beskrivelseAvYtelse = () => {
-    if (opplysninger.ytelse === "OMSORGSPENGER") {
-      return "utbetaling av omsorgspenger (hjemme med sykt barn)";
-    }
-    return formatYtelsesnavn(opplysninger.ytelse);
+    return opplysninger.ytelse === "OMSORGSPENGER"
+      ? "utbetaling av omsorgspenger (hjemme med sykt barn)"
+      : formatYtelsesnavn(opplysninger.ytelse);
   };
 
   return (

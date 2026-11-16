@@ -181,10 +181,9 @@ export function beregnGyldigDatoIntervall(årForRefusjon: number) {
 
 export function utledDefaultMonthDatepicker(årForRefusjon: number) {
   const iDag = new Date();
-  if (årForRefusjon === iDag.getFullYear()) {
-    return iDag;
-  }
-  return new Date(Number(årForRefusjon), 11, 31);
+  return årForRefusjon === iDag.getFullYear()
+    ? iDag
+    : new Date(Number(årForRefusjon), 11, 31);
 }
 
 export function datoErInnenforGyldigDatoIntervall(dato: string, år: number) {

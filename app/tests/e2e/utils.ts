@@ -1,9 +1,9 @@
 import { expect, Page } from "@playwright/test";
 
 /**
- * Velger et alternativ fra en Combobox (UNSAFE_Combobox) ved å søke og klikke
- * på riktig alternativ i nedtrekkslisten.
- */
+Velger et alternativ fra en Combobox (UNSAFE_Combobox) ved å søke og klikke
+på riktig alternativ i nedtrekkslisten.
+*/
 export async function velgFraCombobox({
   page,
   testId,

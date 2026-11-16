@@ -14,10 +14,7 @@ type Props = {
 
 function utledDefaultMonth(år: number) {
   const iDag = new Date();
-  if (år === iDag.getFullYear()) {
-    return iDag;
-  }
-  return new Date(år, 11, 31);
+  return år === iDag.getFullYear() ? iDag : new Date(år, 11, 31);
 }
 
 export const FraværHeleDagerListeInput = ({ overskrift, år }: Props) => {

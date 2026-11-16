@@ -13,11 +13,11 @@ type ArbeidsgiverSeksjonProps = {
 };
 
 export const ArbeidsgiverSeksjon = ({
-  fødselsnummer,
+  fødselsnummer = "",
 }: ArbeidsgiverSeksjonProps) => {
   const { setValue, getValues } = useSkjemaState();
   const { data } = useQuery(
-    hentArbeidstakerOptions(fødselsnummer ?? "", getValues("årForRefusjon")),
+    hentArbeidstakerOptions(fødselsnummer, getValues("årForRefusjon")),
   );
 
   useEffect(() => {

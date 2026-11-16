@@ -40,10 +40,7 @@ async function hentGrunnbeløp() {
     const json = await response.json();
     const parsedJson = grunnbeløpSchema.safeParse(json);
 
-    if (!parsedJson.success) {
-      return Infinity;
-    }
-    return parsedJson.data.grunnbeløp;
+    return parsedJson.success ? parsedJson.data.grunnbeløp : Infinity;
   } catch {
     return Infinity;
   }

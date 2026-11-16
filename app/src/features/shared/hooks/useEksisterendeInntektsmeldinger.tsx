@@ -20,15 +20,12 @@ type LoaderDataMedEksisterendeInntektsmeldinger = {
 const harEksisterendeInntektsmeldinger = (
   loaderData: unknown,
 ): loaderData is LoaderDataMedEksisterendeInntektsmeldinger => {
-  if (typeof loaderData !== "object" || loaderData === null) {
-    return false;
-  }
-
-  if (!("eksisterendeInntektsmeldinger" in loaderData)) {
-    return false;
-  }
-
-  return Array.isArray(loaderData.eksisterendeInntektsmeldinger);
+  return (
+    typeof loaderData === "object" &&
+    loaderData !== null &&
+    "eksisterendeInntektsmeldinger" in loaderData &&
+    Array.isArray(loaderData.eksisterendeInntektsmeldinger)
+  );
 };
 
 const inntektsmeldingRouteIder = new Set([

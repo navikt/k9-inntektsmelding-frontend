@@ -26,29 +26,26 @@ export function lagFulltNavn({
 }
 
 export function formatNavn(navn?: string) {
-  if (!navn) {
-    return navn;
-  }
   return navn
-    .toLowerCase()
-    .split(" ")
-    .map((del) =>
-      del
-        .split("-")
-        .map((delnavn) => capitalize(delnavn))
-        .join("-"),
-    )
-    .join(" ");
+    ? navn
+        .toLowerCase()
+        .split(" ")
+        .map((del) =>
+          del
+            .split("-")
+            .map((delnavn) => capitalize(delnavn))
+            .join("-"),
+        )
+        .join(" ")
+    : navn;
 }
 
 export function formatTelefonnummer(telefonnummer: string): string {
   const tegn = telefonnummer.replaceAll(/\D/g, "");
 
-  if (tegn.length !== 8) {
-    return telefonnummer;
-  }
-
-  return `${tegn.slice(0, 2)} ${tegn.slice(2, 4)} ${tegn.slice(4, 6)} ${tegn.slice(6)}`;
+  return tegn.length === 8
+    ? `${tegn.slice(0, 2)} ${tegn.slice(2, 4)} ${tegn.slice(4, 6)} ${tegn.slice(6)}`
+    : telefonnummer;
 }
 
 export function formatFodselsnummer(value: string | undefined) {
@@ -121,18 +118,14 @@ export function formatIsoDatostempel(dato: Date) {
 }
 
 export function formatFødselsnummer(fødselsnummer: string) {
-  if (!/^\d{11}$/.test(fødselsnummer)) {
-    return fødselsnummer;
-  }
-  return `${fødselsnummer.slice(0, 6)} ${fødselsnummer.slice(6)}`;
+  return /^\d{11}$/.test(fødselsnummer)
+    ? `${fødselsnummer.slice(0, 6)} ${fødselsnummer.slice(6)}`
+    : fødselsnummer;
 }
 
 export function formatYtelsesnavn(ytelsesnavn: string, storForbokstav = false) {
   const formattert = ytelsesnavn.toLowerCase().replaceAll("_", " ");
-  if (storForbokstav) {
-    return capitalize(formattert);
-  }
-  return formattert;
+  return storForbokstav ? capitalize(formattert) : formattert;
 }
 
 type FormatStønadsnavnArgs = {
