@@ -102,20 +102,15 @@ export type ArbeidstakerOppslagFeil =
   | { feilkode: "uventet respons" } // Zod-validering feilet
   | Error; // Programmeringsfeil
 
-export const hentArbeidstakerOptions = (
-  fødselsnummer: string,
-  år: string,
-  organisasjonsnummer: string,
-) => {
+export const hentArbeidstakerOptions = (fødselsnummer: string, år: string) => {
   return queryOptions<
     ArbeidstakerOppslagDto,
     ArbeidstakerOppslagFeil,
     ArbeidstakerOppslagDto,
-    ["arbeidstaker-oppslag", string, string, string]
+    ["arbeidstaker-oppslag", string, string]
   >({
-    queryKey: ["arbeidstaker-oppslag", fødselsnummer, år, organisasjonsnummer],
-    queryFn: ({ queryKey }) =>
-      hentArbeidstaker(queryKey[1], queryKey[2], queryKey[3]),
+    queryKey: ["arbeidstaker-oppslag", fødselsnummer, år],
+    queryFn: ({ queryKey }) => hentArbeidstaker(queryKey[1], queryKey[2]),
     enabled: idnr(fødselsnummer).status === "valid",
     staleTime: Infinity,
     retry: false,
@@ -125,20 +120,15 @@ export const hentArbeidstakerOptions = (
   });
 };
 
-const hentArbeidstaker = async (
-  fødselsnummer: string,
-  år: string,
-  organisasjonsnummer: string,
-) => {
+const hentArbeidstaker = async (fødselsnummer: string, år: string) => {
   const response = await fetch(
-    `${SERVER_URL}/refusjon-omsorgsdager/arbeidstaker/v2`,
+    `${SERVER_URL}/refusjon-omsorgsdager/arbeidstaker`,
     {
       method: "POST",
       body: JSON.stringify({
         fødselsnummer,
         ytelseType: "OMSORGSPENGER",
         årstall: Number(år),
-        organisasjonsnummer,
       }),
       headers: {
         "Content-Type": "application/json",

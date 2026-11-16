@@ -27,35 +27,16 @@ export const mockOpplysninger = ({
   );
 };
 
-export const mockArbeidsgiversOrganisasjoner = ({ page }: { page: Page }) => {
-  return page.route(
-    `**/*/arbeidsgiverinitiert/arbeidsgiver/organisasjoner`,
-    async (route) => {
-      await route.fulfill({
-        json: {
-          organisasjoner: [
-            {
-              organisasjonsnavn: "TEST ORGANISASJON AS",
-              organisasjonsnummer: "974652293",
-            },
-          ],
-        },
-      });
-    },
-  );
-};
-
 type MockHentPersonOgArbeidsforholdParams = {
   page: Page;
   json?: typeof arbeidsforholdResponse;
 };
-export const mockHentPersonOgArbeidsforhold = async ({
+export const mockHentPersonOgArbeidsforhold = ({
   page,
   json = arbeidsforholdResponse,
 }: MockHentPersonOgArbeidsforholdParams) => {
-  await mockArbeidsgiversOrganisasjoner({ page });
   return page.route(
-    `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2`,
+    `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
     async (route) => {
       await route.fulfill({ json });
     },

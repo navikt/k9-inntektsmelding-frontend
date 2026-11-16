@@ -13,7 +13,7 @@ const FJORÅRET = 2025;
 
 const mockArbeidstakerOppslagFantIngen = (page: Page) =>
   page.route(
-    "**/*/server/api/refusjon-omsorgsdager/arbeidstaker/v2",
+    "**/*/server/api/refusjon-omsorgsdager/arbeidstaker",
     async (route) => {
       await route.fulfill({
         status: 404,

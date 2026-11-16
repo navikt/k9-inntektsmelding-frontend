@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
@@ -26,8 +26,6 @@ import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/Omsorgsp
 import { ArbeidsgiverSeksjon } from "./ArbeidsgiverSeksjon.tsx";
 import { ArbeidsgiverUnntattSeksjon } from "./ArbeidsgiverUnntattSeksjon.tsx";
 import { NavnVisning } from "./NavnVisning.tsx";
-
-const route = getRouteApi("/refusjon-omsorgspenger/$organisasjonsnummer");
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   useScrollToTopOnMount();
@@ -49,14 +47,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   const fødselsnummer = watch("ansattesFødselsnummer");
   const erUnntattAaregisteret = watch("erUnntattAaregisteret");
   const år = getValues("årForRefusjon");
-  const { organisasjonsnummer } = route.useParams();
 
   const { data, error } = useQuery(
-    hentArbeidstakerOptions(
-      getValues("ansattesFødselsnummer") ?? "",
-      år,
-      organisasjonsnummer,
-    ),
+    hentArbeidstakerOptions(getValues("ansattesFødselsnummer") ?? "", år),
   );
 
   const fantIngenPersoner =

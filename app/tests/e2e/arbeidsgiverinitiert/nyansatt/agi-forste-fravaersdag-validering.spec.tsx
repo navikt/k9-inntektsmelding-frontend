@@ -6,7 +6,6 @@ import {
 import { agiOpplysningerResponseNyAnsatt } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import {
   mockAGIOpplysninger,
-  mockArbeidsgiversOrganisasjoner,
   mockGrunnbeløp,
   mockHentPersonOgArbeidsforhold,
   mockInntektsmeldinger,
@@ -18,7 +17,6 @@ const FAKE_FNR = "09810198874";
 test.describe("AGI Første fraværsdag validering", () => {
   test.beforeEach(async ({ page }) => {
     await mockGrunnbeløp({ page });
-    await mockArbeidsgiversOrganisasjoner({ page });
   });
 
   test("Skal validere første fraværsdag før navigering til oppsummering", async ({
@@ -61,7 +59,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock successful validation for the date
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         const request = route.request();
         const postData = JSON.parse(request.postData() || "{}");
@@ -129,7 +127,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock failed validation - person not found
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         await route.fulfill({
           status: 404,
@@ -198,7 +196,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock failed validation - invalid date
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         await route.fulfill({
           status: 403,
@@ -354,7 +352,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock successful validation for the date (selv om vi ikke skal kunne gå videre)
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         await route.fulfill({
           json: {
@@ -399,7 +397,7 @@ test.describe("AGI Første fraværsdag validering", () => {
 
     // Mock successful validation for the date
     await page.route(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2",
+      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt",
       async (route) => {
         const request = route.request();
         const postData = JSON.parse(request.postData() || "{}");

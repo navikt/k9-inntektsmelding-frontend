@@ -11,7 +11,6 @@ import { agiSendInntektsmeldingResponse } from "tests/mocks/arbeidsgiverinitiert
 import {
   mockAGIOpplysninger,
   mockAGISendInntektsmelding,
-  mockArbeidsgiversOrganisasjoner,
   mockGrunnbeløp,
   mockHentPersonOgArbeidsforhold,
 } from "tests/mocks/shared/utils";
@@ -19,10 +18,6 @@ import {
 const FAKE_FNR = "09810198874";
 
 test.describe("AGI Ulike scenarier", () => {
-  test.beforeEach(async ({ page }) => {
-    await mockArbeidsgiversOrganisasjoner({ page });
-  });
-
   test("AGI med alternativ ytelsetype", async ({ page }) => {
     await mockHentPersonOgArbeidsforhold({ page });
     await mockGrunnbeløp({ page });
@@ -198,7 +193,7 @@ test.describe("AGI Ulike scenarier", () => {
   test("Feilhåndtering ved henting av person", async ({ page }) => {
     // Mock en feil ved henting av person
     await page.route(
-      `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2`,
+      `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
       async (route) => {
         await route.fulfill({
           status: 404,
@@ -332,7 +327,7 @@ test.describe("AGI Ulike scenarier", () => {
   }) => {
     // Mock med kun ett arbeidsforhold
     await page.route(
-      `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2`,
+      `**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
       async (route) => {
         await route.fulfill({
           json: {
@@ -366,29 +361,5 @@ test.describe("AGI Ulike scenarier", () => {
     await expect(
       page.getByRole("heading", { name: "Dine opplysninger" }),
     ).toBeVisible();
-  });
-
-  test("Sender organisasjonsnummer til personoppslaget slik at backend kan sjekke Altinn-tilgang", async ({
-    page,
-  }) => {
-    await mockHentPersonOgArbeidsforhold({ page });
-    await mockGrunnbeløp({ page });
-
-    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-
-    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
-    await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
-    await page.getByLabel("Første fraværsdag").fill("01.04.2024");
-
-    const oppslag = page.waitForRequest(
-      "**/*/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2",
-    );
-    await page.getByRole("button", { name: "Hent opplysninger" }).click();
-
-    const request = await oppslag;
-    expect(request.postDataJSON()).toMatchObject({
-      fødselsnummer: FAKE_FNR,
-      organisasjonsnummer: "974652293",
-    });
   });
 });

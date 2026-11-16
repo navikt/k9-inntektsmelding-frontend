@@ -1,6 +1,5 @@
 import { BodyShort, Detail, Label, VStack } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { getRouteApi } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 
@@ -8,8 +7,6 @@ import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/Comb
 
 import { hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
-
-const route = getRouteApi("/refusjon-omsorgspenger/$organisasjonsnummer");
 
 type ArbeidsgiverSeksjonProps = {
   fødselsnummer?: string;
@@ -19,13 +16,8 @@ export const ArbeidsgiverSeksjon = ({
   fødselsnummer,
 }: ArbeidsgiverSeksjonProps) => {
   const { setValue, getValues } = useSkjemaState();
-  const { organisasjonsnummer } = route.useParams();
   const { data } = useQuery(
-    hentArbeidstakerOptions(
-      fødselsnummer ?? "",
-      getValues("årForRefusjon"),
-      organisasjonsnummer,
-    ),
+    hentArbeidstakerOptions(fødselsnummer ?? "", getValues("årForRefusjon")),
   );
 
   useEffect(() => {

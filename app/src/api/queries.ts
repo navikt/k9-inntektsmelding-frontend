@@ -104,15 +104,8 @@ export async function hentPersonFraFnr(
   ytelsetype: Ytelsetype,
   førsteFraværsdag: string,
 ) {
-  const organisasjoner = await hentArbeidsgiversOrganisasjoner();
-  const organisasjonsnummer =
-    organisasjoner?.organisasjoner[0]?.organisasjonsnummer;
-  if (!organisasjonsnummer) {
-    throw new Error("INGEN_ARBEIDSFORHOLD");
-  }
-
   const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsforhold/nyansatt-v2`,
+    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsforhold/nyansatt`,
     {
       method: "POST",
       headers: {
@@ -122,7 +115,6 @@ export async function hentPersonFraFnr(
         fødselsnummer: fnr,
         ytelseType: ytelsetype,
         førsteFraværsdag,
-        organisasjonsnummer,
       }),
     },
   );
