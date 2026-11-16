@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
-import { velgFraCombobox } from "tests/e2e/utils";
+import {
+  fortsettHvisRefusjonsvarselVises,
+  velgFraCombobox,
+} from "tests/e2e/utils";
 import {
   agiOpplysningerAlternativYtelse,
   agiOpplysningerResponseNyAnsatt,
@@ -43,6 +46,7 @@ test.describe("AGI Ulike scenarier", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
@@ -90,6 +94,7 @@ test.describe("AGI Ulike scenarier", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     const testNavn = "Ola Nordmann";
     const testTelefon = "98765432";
@@ -145,6 +150,7 @@ test.describe("AGI Ulike scenarier", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     await page.getByLabel("Navn").fill("Ola Nordmann");
     await page.getByLabel("Telefon").fill("98765432");
@@ -236,6 +242,7 @@ test.describe("AGI Ulike scenarier", () => {
       alternativNavn: /974652293/,
     });
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+    await fortsettHvisRefusjonsvarselVises(page);
 
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
@@ -260,6 +267,59 @@ test.describe("AGI Ulike scenarier", () => {
 
     // Skal vise feilmelding
     await expect(page.getByText("Noe gikk galt.")).toBeVisible();
+  });
+
+  test("Arbeidsgivervalg nullstiller refusjonsvarsel og krever nytt oppslag", async ({
+    page,
+  }) => {
+    await mockHentPersonOgArbeidsforhold({ page });
+    await mockGrunnbeløp({ page });
+
+    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
+
+    await page.locator('input[name="årsak"][value="ny_ansatt"]').click();
+    await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
+    await page.getByLabel("Første fraværsdag").fill("01.04.2024");
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+
+    await mockAGIOpplysninger({ page, json: agiOpplysningerResponseNyAnsatt });
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "974652293",
+      alternativNavn: /974652293/,
+    });
+    await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
+
+    await expect(
+      page.getByRole("button", { name: "Fortsett til inntektsmeldingen" }),
+    ).toBeVisible();
+
+    await velgFraCombobox({
+      page,
+      testId: "steg-0-combobox-arbeidsgiver",
+      søketekst: "315786940",
+      alternativNavn: /315786940/,
+    });
+
+    await expect(
+      page.getByRole("button", { name: "Fortsett til inntektsmeldingen" }),
+    ).toBeHidden();
+    await expect(
+      page.getByRole("button", { name: "Opprett inntektsmelding" }),
+    ).toBeHidden();
+
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+
+    await expect(
+      page.getByTestId("steg-0-combobox-arbeidsgiver"),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Opprett inntektsmelding" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Fortsett til inntektsmeldingen" }),
+    ).toBeHidden();
   });
 
   test("Skal kunne velge første arbeidsforhold automatisk hvis kun ett arbeidsforhold", async ({
@@ -296,8 +356,8 @@ test.describe("AGI Ulike scenarier", () => {
 
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
 
-    // Når det kun er ett arbeidsforhold, skal man automatisk gå til dine-opplysninger
-    // Sjekk at vi er på dine-opplysninger siden
+    await fortsettHvisRefusjonsvarselVises(page);
+
     await expect(
       page.getByRole("heading", { name: "Dine opplysninger" }),
     ).toBeVisible();
