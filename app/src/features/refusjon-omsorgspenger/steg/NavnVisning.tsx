@@ -1,5 +1,6 @@
 import { BodyShort, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
 
 import { lagFulltNavn } from "~/utils.ts";
 
@@ -9,16 +10,21 @@ import {
 } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
+const route = getRouteApi("/refusjon-omsorgspenger/$organisasjonsnummer");
+
 export const NavnVisning = () => {
   const { register, watch, getValues } = useSkjemaState();
 
   const fødselsnummer = watch("ansattesFødselsnummer");
   const erUnntattAaregisteret = watch("erUnntattAaregisteret");
 
+  const { organisasjonsnummer } = route.useParams();
+
   const { data, error, isLoading } = useQuery(
     hentArbeidstakerOptions(
       getValues("ansattesFødselsnummer") ?? "",
       getValues("årForRefusjon"),
+      organisasjonsnummer,
     ),
   );
 
