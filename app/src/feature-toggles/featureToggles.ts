@@ -12,9 +12,6 @@ const togglesPerEnvironment: Record<Environment, FeatureTogglesType> = {
 };
 
 export const finnEnvironmentForHostname = (hostname: string) => {
-  if (hostname.includes("localhost")) {
-    return DEV;
-  }
   if (
     hostname.includes(".intern.dev.nav.no") ||
     hostname.includes(".dev.nav.no")
