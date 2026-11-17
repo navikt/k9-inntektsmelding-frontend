@@ -188,10 +188,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
           error={hentPersonMutation.error}
           ytelse={ytelseType}
         />
-        <HentOpplysningerError
-          error={opprettOpplysningerMutation.error}
-          ytelse={ytelseType}
-        />
+        <HentOpplysningerError error={opprettOpplysningerMutation.error} />
         {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
           <Button
             className="w-fit"

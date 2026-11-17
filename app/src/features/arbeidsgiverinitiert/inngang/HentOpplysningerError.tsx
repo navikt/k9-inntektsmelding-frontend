@@ -1,15 +1,6 @@
 import { Alert } from "@navikt/ds-react";
 
-import { Ytelsetype } from "~/types/api-schemas";
-import { formatYtelsesnavn } from "~/utils";
-
-export const HentOpplysningerError = ({
-  error,
-  ytelse,
-}: {
-  error: Error | null;
-  ytelse: Ytelsetype;
-}) => {
+export const HentOpplysningerError = ({ error }: { error: Error | null }) => {
   if (!error) {
     return null;
   }
@@ -28,13 +19,15 @@ export const HentOpplysningerError = ({
     FINNES_IKKE_I_AAREG:
       "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     INGEN_INNTEKT:
-      "Vi finner ingen inntekt over 0 kroner rapportert for den ansatte i den valgte virksomheten. Sjekk fødselsnummer og virksomhet.",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     A_INNTEKT_NEDE:
       "Vi kan ikke hente inntekt fra A-inntekt nå. Prøv igjen senere.",
-    INGEN_SAK_FUNNET: `Du kan ikke sende inn inntektsmelding for ${formatYtelsesnavn(ytelse)}.`,
-    SENDT_FOR_TIDLIG: `Du kan ikke sende inn inntektsmelding mer enn fire uker før personen starter med ${formatYtelsesnavn(ytelse)}.`,
+    INGEN_SAK_FUNNET:
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    SENDT_FOR_TIDLIG:
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     PERSON_IKKE_FUNNET:
-      "Vi finner ikke personen. Sjekk at fødselsnummeret er riktig.",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     MANGLER_TILGANG_FEIL:
       "Du har ikke tilgang til den valgte virksomheten. Sjekk tilgangene dine i Altinn.",
   };
