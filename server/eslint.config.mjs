@@ -12,6 +12,7 @@ const IGNORED_UNICORN_RULES = {
   "unicorn/name-replacements": "off",
   "unicorn/no-top-level-side-effects": "off",
   "unicorn/no-useless-else": "off",
+  "unicorn/consistent-boolean-name": "off",
 };
 
 export default tseslint.config(

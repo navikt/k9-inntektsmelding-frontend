@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   verify:
-    name: Verify there are no lint or typescript errors
+    name: Verify there are no lint, typescript or test errors
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -40,3 +40,6 @@ jobs:
 
       - name: Check for typescript errors
         run: yarn check:types
+
+      - name: Run tests
+        run: yarn test
