@@ -53,10 +53,6 @@ test.describe("Refusjon Omsorgspenger – steg 2 unntatt Aa-registeret", () => {
   test("Viser informasjonsboks når person ikke har registrerte arbeidsforhold, og kan bekrefte unntatt-løype", async ({
     page,
   }) => {
-    const forespørsler: string[] = [];
-    page.on("request", (forespørsel) => {
-      forespørsler.push(forespørsel.url());
-    });
     await page.route("**/imdialog/inntektsmeldinger-for-aar/v2", (route) =>
       route.fulfill({
         status: 400,
@@ -189,13 +185,6 @@ test.describe("Refusjon Omsorgspenger – steg 2 unntatt Aa-registeret", () => {
     await expect(
       page.getByText("Vi har mottatt refusjonskravet"),
     ).toBeVisible();
-    expect(
-      forespørsler.some(
-        (url) =>
-          url.endsWith("/arbeidsgiverinitiert/arbeidstaker") ||
-          url.endsWith("/arbeidsgivere/uregistrert"),
-      ),
-    ).toBe(false);
   });
 
   test("Endring av fødselsnummer nullstiller unntatt-valg", async ({

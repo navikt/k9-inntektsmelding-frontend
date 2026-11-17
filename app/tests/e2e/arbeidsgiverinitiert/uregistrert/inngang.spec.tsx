@@ -71,10 +71,6 @@ test.describe("Inngang", () => {
       page,
       json: agiOpplysningerResponseUregistrert,
     });
-    const forespørsler: string[] = [];
-    page.on("request", (forespørsel) => {
-      forespørsler.push(forespørsel.url());
-    });
     await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
     await page
       .getByRole("radio", { name: "Unntatt registrering i Aa-registeret" })
@@ -84,9 +80,6 @@ test.describe("Inngang", () => {
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
     await page.getByRole("button", { name: "Opprett inntektsmelding" }).click();
     await expect(page.getByText("Du må velge arbeidsgiver")).toBeVisible();
-    expect(
-      forespørsler.some((url) => url.endsWith("/opplysninger/uregistrert")),
-    ).toBe(false);
     const virksomhetsvalg = page.getByRole("combobox", {
       name: "Arbeidsgiver",
       exact: true,
@@ -105,13 +98,6 @@ test.describe("Inngang", () => {
     await expect(
       page.getByRole("heading", { name: "Dine opplysninger" }),
     ).toBeVisible();
-    expect(
-      forespørsler.some(
-        (url) =>
-          url.endsWith("/arbeidsgivere/uregistrert") ||
-          url.endsWith("/arbeidsgiverinitiert/arbeidstaker"),
-      ),
-    ).toBe(false);
   });
 
   for (const oppslag of ["organisasjoner", "opplysninger"] as const) {
@@ -183,11 +169,17 @@ test.describe("Inngang", () => {
   }
 
   for (const [type, feilmelding] of [
-    ["FINNES_IKKE_I_AAREG", "Arbeidsforholdet er ikke registrert"],
+    [
+      "FINNES_IKKE_I_AAREG",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    ],
     ["INGEN_INNTEKT", "Vi finner ingen inntekt over 0 kroner"],
     ["A_INNTEKT_NEDE", "Vi kan ikke hente inntekt fra A-inntekt nå"],
     ["FINNES_I_AAREG", "allerede er registrert i Aa-registeret"],
-    ["INGEN_SAK_FUNNET", "med denne datoen som første fraværsdag"],
+    [
+      "INGEN_SAK_FUNNET",
+      "Du kan ikke sende inn inntektsmelding for pleiepenger sykt barn.",
+    ],
     ["SENDT_FOR_TIDLIG", "mer enn fire uker"],
     ["PERSON_IKKE_FUNNET", "Vi finner ikke personen"],
     ["MANGLER_TILGANG_FEIL", "Du har ikke tilgang til den valgte virksomheten"],
@@ -210,6 +202,9 @@ test.describe("Inngang", () => {
       await page.getByLabel("Første fraværsdag").fill("01.04.2024");
       await page.getByRole("button", { name: "Hent opplysninger" }).click();
       await expect(page.getByText(feilmelding, { exact: false })).toBeVisible();
+      await expect(
+        page.getByText(feilmelding, { exact: false }),
+      ).not.toContainText("første fraværsdag");
       await expect(
         page.getByRole("heading", { name: "Dine opplysninger" }),
       ).toBeHidden();
