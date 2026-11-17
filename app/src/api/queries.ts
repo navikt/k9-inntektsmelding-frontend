@@ -200,3 +200,11 @@ export async function hentArbeidsgiversOrganisasjoner() {
 
   return parsedJson.data;
 }
+
+export const hentArbeidsgiversOrganisasjonerOptions = () => {
+  return queryOptions({
+    queryKey: ["arbeidsgivers-organisasjoner"],
+    queryFn: hentArbeidsgiversOrganisasjoner,
+    retry: false,
+  });
+};

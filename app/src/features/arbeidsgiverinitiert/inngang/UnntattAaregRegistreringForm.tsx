@@ -1,12 +1,12 @@
 import { Alert, Button, TextField, VStack } from "@navikt/ds-react";
 import { fnr } from "@navikt/fnrvalidator";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import {
-  hentArbeidsgiversOrganisasjoner,
+  hentArbeidsgiversOrganisasjonerOptions,
   hentOpplysningerUnntattAaregister,
 } from "~/api/queries.ts";
 import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/ComboboxWrapped";
@@ -31,6 +31,10 @@ export function UnntattAaregRegistreringForm({
   } = useFormContext<FormType>();
   const navigate = useNavigate();
   const [erOppslagetUtdatert, setErOppslagetUtdatert] = useState(false);
+  const organisasjonerQuery = useQuery(
+    hentArbeidsgiversOrganisasjonerOptions(),
+  );
+  const organisasjoner = organisasjonerQuery.data?.organisasjoner;
 
   const opprettOpplysningerMutation = useMutation({
     mutationFn: async (opplysningerRequest: OpplysningerRequest) => {
@@ -88,43 +92,22 @@ export function UnntattAaregRegistreringForm({
     });
   };
 
-  const organisasjonerMutation = useMutation({
-    mutationFn: hentArbeidsgiversOrganisasjoner,
-  });
-  const organisasjoner = organisasjonerMutation.data?.organisasjoner;
   const isPending =
-    organisasjonerMutation.isPending || opprettOpplysningerMutation.isPending;
+    organisasjonerQuery.isPending || opprettOpplysningerMutation.isPending;
 
   const handleSubmit = (verdier: FormType) => {
     setErOppslagetUtdatert(false);
-    if (organisasjoner && organisasjoner.length > 1) {
-      opprettOpplysninger(verdier);
+    if (!organisasjoner?.length || organisasjonerQuery.isError) {
       return;
     }
-
-    organisasjonerMutation.mutate(undefined, {
-      onSuccess: ({ organisasjoner }) => {
-        if (organisasjoner.length !== 1) {
-          setValue("organisasjonsnummer", "");
-          return;
-        }
-        const gjeldendeVerdier = getValues();
-        if (gjeldendeVerdier.årsak !== "unntatt_aaregister") {
-          return;
-        }
-        if (
-          gjeldendeVerdier.fødselsnummer !== verdier.fødselsnummer ||
-          gjeldendeVerdier.førsteFraværsdag !== verdier.førsteFraværsdag
-        ) {
-          setErOppslagetUtdatert(true);
-          return;
-        }
-        setValue("organisasjonsnummer", organisasjoner[0].organisasjonsnummer);
-        opprettOpplysninger({
-          ...verdier,
-          organisasjonsnummer: organisasjoner[0].organisasjonsnummer,
-        });
-      },
+    const organisasjonsnummer =
+      organisasjoner.length === 1
+        ? organisasjoner[0].organisasjonsnummer
+        : verdier.organisasjonsnummer;
+    setValue("organisasjonsnummer", organisasjonsnummer);
+    opprettOpplysninger({
+      ...verdier,
+      organisasjonsnummer,
     });
   };
 
@@ -145,6 +128,7 @@ export function UnntattAaregRegistreringForm({
           })}
           error={formState.errors.fødselsnummer?.message}
           label="Ansattes fødselsnummer"
+          className="max-w-xs"
         />
         <DatePickerWrapped
           label="Første fraværsdag"
@@ -173,6 +157,7 @@ export function UnntattAaregRegistreringForm({
         )}
         <Button
           className="w-fit"
+          disabled={!organisasjoner?.length || organisasjonerQuery.isError}
           loading={isPending}
           type="submit"
           variant="secondary"
@@ -181,9 +166,18 @@ export function UnntattAaregRegistreringForm({
             ? "Opprett inntektsmelding"
             : "Hent opplysninger"}
         </Button>
-        {organisasjonerMutation.isError && (
+        {organisasjonerQuery.isError && (
           <Alert variant="error">
             Kunne ikke hente virksomhetene dine. Prøv igjen.
+            <Button
+              className="mt-4"
+              type="button"
+              variant="secondary"
+              loading={organisasjonerQuery.isFetching}
+              onClick={() => organisasjonerQuery.refetch()}
+            >
+              Prøv igjen
+            </Button>
           </Alert>
         )}
         {organisasjoner?.length === 0 && (
