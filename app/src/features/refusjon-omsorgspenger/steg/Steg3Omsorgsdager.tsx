@@ -65,9 +65,13 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   const dagerSomSkalTrekkes = watch("dagerSomSkalTrekkes");
   const navigate = useNavigate();
 
-  const { data: inntektsmeldingerForÅr } = useHentInntektsmeldingForÅr({
-    aktørId: watch("ansattesAktørId") as string,
-    arbeidsgiverIdent: watch("organisasjonsnummer") as string,
+  const {
+    data: inntektsmeldingerForÅr,
+    isError: historikkFeilet,
+    refetch: hentHistorikkPåNytt,
+  } = useHentInntektsmeldingForÅr({
+    fødselsnummer: watch("ansattesFødselsnummer") ?? "",
+    arbeidsgiverIdent: watch("organisasjonsnummer") ?? "",
     år: Number(årForRefusjon),
   });
 
@@ -153,6 +157,18 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
           </RadioGroup>
           <TiFørsteOmsorgsdagerInfo />
           <VStack gap="space-32">
+            {historikkFeilet && (
+              <Alert variant="error">
+                <BodyLong>Kunne ikke hente tidligere innsendinger.</BodyLong>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => hentHistorikkPåNytt()}
+                >
+                  Prøv igjen
+                </Button>
+              </Alert>
+            )}
             <TidligereInnsendinger
               inntektsmeldinger={inntektsmeldingerForÅr}
               årForRefusjon={årForRefusjon}

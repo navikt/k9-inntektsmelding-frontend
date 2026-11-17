@@ -115,10 +115,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
             <Inntekt
               opplysninger={{
                 person: {
-                  aktørId: getValues("ansattesAktørId")!,
-                  fødselsnummer: getValues("ansattesFødselsnummer")!,
-                  fornavn: getValues("ansattesFornavn")!,
-                  etternavn: getValues("ansattesEtternavn")!,
+                  fornavn: getValues("ansattesFornavn") ?? "",
                 },
                 inntektsopplysninger,
                 skjæringstidspunkt: førsteFraværsdato,

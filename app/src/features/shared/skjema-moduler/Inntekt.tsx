@@ -53,8 +53,10 @@ import { FormattertTallTextField } from "../react-hook-form-wrappers/FormattertT
 type InntektProps = {
   opplysninger: Pick<
     OpplysningerDto,
-    "skjæringstidspunkt" | "person" | "inntektsopplysninger"
-  >;
+    "skjæringstidspunkt" | "inntektsopplysninger"
+  > & {
+    person?: Pick<OpplysningerDto["person"], "fornavn">;
+  };
   children?: React.ReactNode;
 };
 export function Inntekt({ opplysninger, children }: InntektProps) {
@@ -86,7 +88,11 @@ export function Inntekt({ opplysninger, children }: InntektProps) {
       </Heading>
       <Informasjonsseksjon
         kilde="Fra A-Ordningen"
-        tittel={`${capitalizeSetning(leggTilGenitiv(person.fornavn))} lønn før ${førsteDag}`}
+        tittel={
+          person?.fornavn
+            ? `${capitalizeSetning(leggTilGenitiv(person.fornavn))} lønn før ${førsteDag}`
+            : `Lønn før ${førsteDag}`
+        }
       >
         <HGrid columns={{ md: "max-content 1fr" }} gap="space-16">
           {inntektsopplysninger.månedsinntekter
