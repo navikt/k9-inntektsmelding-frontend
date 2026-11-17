@@ -1,11 +1,68 @@
 import { describe, expect, test } from "vitest";
 
+import { RefusjonOmsorgspengerRequestDtoSchema } from "./api/mutations";
+import { RefusjonOmsorgspengerFormData } from "./frontendSchemas";
 import {
   beregnGyldigDatoIntervall,
   datoErInnenforGyldigDatoIntervall,
+  mapSkjemaTilSendInntektsmeldingRequest,
   refusjonForOmsorgspenger,
   utledFørsteFraværsdag,
 } from "./utils";
+
+describe("mapSkjemaTilSendInntektsmeldingRequest", () => {
+  const skjemadata: RefusjonOmsorgspengerFormData = {
+    meta: { step: 5, skalKorrigereInntekt: false },
+    ansattesFødselsnummer: "16878397960",
+    organisasjonsnummer: "123456789",
+    kontaktperson: { navn: "Test", telefonnummer: "12345678" },
+    harUtbetaltLønn: "ja",
+    årForRefusjon: "2025",
+    harDekket10FørsteOmsorgsdager: "ja",
+    fraværHeleDager: [{ fom: "2025-06-15", tom: "2025-06-20" }],
+    fraværDelerAvDagen: [],
+    dagerSomSkalTrekkes: [],
+    inntekt: "50000",
+  };
+
+  test("lager V2-request uten navn og aktør-ID", () => {
+    const forespørsel = mapSkjemaTilSendInntektsmeldingRequest(skjemadata);
+    expect(RefusjonOmsorgspengerRequestDtoSchema.parse(forespørsel)).toEqual({
+      fødselsnummer: "16878397960",
+      arbeidsgiverIdent: "123456789",
+      kontaktperson: skjemadata.kontaktperson,
+      startdato: "2025-06-15",
+      inntekt: 50000,
+      refusjon: [{ fom: "2025-06-15", beløp: 50000 }],
+      omsorgspenger: {
+        harUtbetaltPliktigeDager: true,
+        fraværHeleDager: skjemadata.fraværHeleDager,
+        fraværDelerAvDagen: [],
+      },
+      endringAvInntektÅrsaker: [],
+      bortfaltNaturalytelsePerioder: [],
+    });
+    expect(forespørsel).not.toHaveProperty("aktorId");
+    expect(forespørsel).not.toHaveProperty("ytelse");
+  });
+
+  test("beholder fravær og trekk ved korrigert inntekt", () => {
+    const forespørsel = mapSkjemaTilSendInntektsmeldingRequest({
+      ...skjemadata,
+      korrigertInntekt: "48000",
+      endringAvInntektÅrsaker: [{ årsak: "BONUS" }],
+      fraværDelerAvDagen: [{ dato: "2025-06-10", timer: "3.5" }],
+      dagerSomSkalTrekkes: [{ fom: "2025-06-01", tom: "2025-06-01" }],
+    });
+    expect(forespørsel.startdato).toBe("2025-06-01");
+    expect(forespørsel.inntekt).toBe(48000);
+    expect(forespørsel.endringAvInntektÅrsaker).toEqual([{ årsak: "BONUS" }]);
+    expect(forespørsel.omsorgspenger.fraværDelerAvDagen).toEqual([
+      { dato: "2025-06-10", timer: 3.5 },
+      { dato: "2025-06-01", timer: 0 },
+    ]);
+  });
+});
 
 describe("refusjonForOmsorgspenger", () => {
   test("returnerer én periode med beløp som tall", () => {
