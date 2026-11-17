@@ -1,15 +1,6 @@
 import { Alert } from "@navikt/ds-react";
 
-import { Ytelsetype } from "~/types/api-schemas";
-import { formatYtelsesnavn } from "~/utils";
-
-export const HentOpplysningerError = ({
-  error,
-  ytelse,
-}: {
-  error: Error | null;
-  ytelse: Ytelsetype;
-}) => {
+export const HentOpplysningerError = ({ error }: { error: Error | null }) => {
   if (!error) {
     return null;
   }
@@ -31,8 +22,10 @@ export const HentOpplysningerError = ({
       "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     A_INNTEKT_NEDE:
       "Vi kan ikke hente inntekt fra A-inntekt nå. Prøv igjen senere.",
-    INGEN_SAK_FUNNET: `Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.`,
-    SENDT_FOR_TIDLIG: `Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.`,
+    INGEN_SAK_FUNNET:
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    SENDT_FOR_TIDLIG:
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     PERSON_IKKE_FUNNET:
       "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     MANGLER_TILGANG_FEIL:

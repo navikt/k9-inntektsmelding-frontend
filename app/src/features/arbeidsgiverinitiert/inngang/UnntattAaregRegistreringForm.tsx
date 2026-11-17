@@ -192,10 +192,7 @@ export function UnntattAaregRegistreringForm({
             opplysningene.
           </Alert>
         )}
-        <HentOpplysningerError
-          error={opprettOpplysningerMutation.error}
-          ytelse={ytelseType}
-        />
+        <HentOpplysningerError error={opprettOpplysningerMutation.error} />
       </VStack>
     </form>
   );

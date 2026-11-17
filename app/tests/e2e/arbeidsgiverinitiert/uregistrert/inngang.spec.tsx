@@ -163,15 +163,24 @@ test.describe("Inngang", () => {
       "FINNES_IKKE_I_AAREG",
       "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     ],
-    ["INGEN_INNTEKT", "Vi finner ingen inntekt over 0 kroner"],
+    [
+      "INGEN_INNTEKT",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    ],
     ["A_INNTEKT_NEDE", "Vi kan ikke hente inntekt fra A-inntekt nå"],
     ["FINNES_I_AAREG", "allerede er registrert i Aa-registeret"],
     [
       "INGEN_SAK_FUNNET",
-      "Du kan ikke sende inn inntektsmelding for pleiepenger sykt barn.",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
     ],
-    ["SENDT_FOR_TIDLIG", "mer enn fire uker"],
-    ["PERSON_IKKE_FUNNET", "Vi finner ikke personen"],
+    [
+      "SENDT_FOR_TIDLIG",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    ],
+    [
+      "PERSON_IKKE_FUNNET",
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    ],
     ["MANGLER_TILGANG_FEIL", "Du har ikke tilgang til den valgte virksomheten"],
   ]) {
     test(`Viser ${type} fra opplysningshentingen og nullstiller ved endring`, async ({
