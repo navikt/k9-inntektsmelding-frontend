@@ -53,6 +53,11 @@ export const utledFørsteFraværsdag = (
 export const mapSkjemaTilSendInntektsmeldingRequest = (
   skjemaState: RefusjonOmsorgspengerFormData,
 ): RefusjonOmsorgspengerDto => {
+  const fødselsnummer = skjemaState.ansattesFødselsnummer;
+  if (!fødselsnummer) {
+    throw new Error("Fødselsnummer mangler ved innsending av refusjonskrav.");
+  }
+
   const validatedSkjemaState = skjemaState as RefusjonOmsorgspengerFormData & {
     endringAvInntektÅrsaker: RefusjonOmsorgspengerDto["endringAvInntektÅrsaker"];
   };
@@ -88,7 +93,7 @@ export const mapSkjemaTilSendInntektsmeldingRequest = (
     },
     inntekt: Number(String(inntekt).replaceAll(",", ".")),
     startdato: førsteFraværsdag,
-    fødselsnummer: validatedSkjemaState.ansattesFødselsnummer!,
+    fødselsnummer,
     arbeidsgiverIdent: validatedSkjemaState.organisasjonsnummer as string,
     refusjon: refusjonForOmsorgspenger(førsteFraværsdag, inntekt),
     omsorgspenger: {

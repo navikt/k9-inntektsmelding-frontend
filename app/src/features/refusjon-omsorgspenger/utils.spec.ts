@@ -46,6 +46,18 @@ describe("mapSkjemaTilSendInntektsmeldingRequest", () => {
     expect(forespørsel).not.toHaveProperty("ytelse");
   });
 
+  test.each([undefined, ""])(
+    "stopper mapping når fødselsnummer mangler (%s)",
+    (ansattesFødselsnummer) => {
+      expect(() =>
+        mapSkjemaTilSendInntektsmeldingRequest({
+          ...skjemadata,
+          ansattesFødselsnummer,
+        }),
+      ).toThrow("Fødselsnummer mangler ved innsending av refusjonskrav.");
+    },
+  );
+
   test("beholder fravær og trekk ved korrigert inntekt", () => {
     const forespørsel = mapSkjemaTilSendInntektsmeldingRequest({
       ...skjemadata,
