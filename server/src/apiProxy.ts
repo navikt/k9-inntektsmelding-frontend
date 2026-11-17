@@ -3,6 +3,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
 import config from "./config.js";
+import { erTillattProxySti } from "./proxySti.js";
 
 type ProxyOptions = {
   ingoingUrl: string;
@@ -12,8 +13,8 @@ type ProxyOptions = {
 
 export const setupApiProxy = (router: Router) =>
   addProxyHandler(router, {
-    ingoingUrl: "/server",
-    outgoingUrl: config.proxy.apiUrl,
+    ingoingUrl: "/server/api",
+    outgoingUrl: `${config.proxy.apiUrl}/api`,
     scope: config.proxy.apiScope,
   });
 
@@ -23,6 +24,13 @@ export function addProxyHandler(
 ) {
   router.use(
     ingoingUrl,
+    (request: Request, response: Response, next: NextFunction) => {
+      if (!erTillattProxySti(request.url)) {
+        console.log("Avviste proxy-kall med ugyldig sti", request.method);
+        return response.status(404).send();
+      }
+      return next();
+    },
     async (request: Request, response: Response, next: NextFunction) => {
       const token = getToken(request);
       if (!token) {
