@@ -87,7 +87,7 @@ export const mockInntektsmeldingForÅr = ({
   json?: unknown[];
 }) => {
   return page.route(
-    "**/*/imdialog/inntektsmeldinger-for-aar",
+    "**/*/imdialog/inntektsmeldinger-for-aar/v2",
     async (route) => {
       await route.fulfill({ json });
     },
