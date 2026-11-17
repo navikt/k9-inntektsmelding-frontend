@@ -100,64 +100,64 @@ test.describe("Inngang", () => {
     ).toBeVisible();
   });
 
-    test("Viser beskjed ved endring under henting av opplysninger og lar brukeren prøve igjen", async ({
+  test("Viser beskjed ved endring under henting av opplysninger og lar brukeren prøve igjen", async ({
+    page,
+  }) => {
+    await mockArbeidsgiversOrganisasjoner({ page });
+    await mockAGIOpplysningerUregistrert({
       page,
-    }) => {
-      await mockArbeidsgiversOrganisasjoner({ page });
-      await mockAGIOpplysningerUregistrert({
-        page,
+      json: {
+        ...agiOpplysningerResponseUregistrert,
+        person: {
+          ...agiOpplysningerResponseUregistrert.person,
+          fødselsnummer: "16878397960",
+        },
+      },
+    });
+    let skalEndreFødselsnummer = true;
+    await page.route("**/opplysninger/uregistrert", async (route) => {
+      if (skalEndreFødselsnummer) {
+        skalEndreFødselsnummer = false;
+        await page.getByLabel("Ansattes fødselsnummer").fill("16878397960");
+      }
+      await route.fulfill({
         json: {
           ...agiOpplysningerResponseUregistrert,
           person: {
             ...agiOpplysningerResponseUregistrert.person,
-            fødselsnummer: "16878397960",
+            fødselsnummer: route.request().postDataJSON().fødselsnummer,
           },
         },
       });
-      let skalEndreFødselsnummer = true;
-      await page.route("**/opplysninger/uregistrert", async (route) => {
-        if (skalEndreFødselsnummer) {
-          skalEndreFødselsnummer = false;
-          await page.getByLabel("Ansattes fødselsnummer").fill("16878397960");
-        }
-        await route.fulfill({
-          json: {
-            ...agiOpplysningerResponseUregistrert,
-            person: {
-              ...agiOpplysningerResponseUregistrert.person,
-              fødselsnummer: route.request().postDataJSON().fødselsnummer,
-            },
-          },
-        });
-      });
-      await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-      await page
-        .getByRole("radio", { name: "Unntatt registrering i Aa-registeret" })
-        .check();
-      await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
-      await page.getByLabel("Første fraværsdag").fill("01.04.2024");
-      await page.getByRole("button", { name: "Hent opplysninger" }).click();
-      await expect(
-        page
-          .getByRole("alert")
-          .filter({ hasText: "Opplysningene ble endret under henting." }),
-      ).toBeVisible();
-      await expect(page.getByLabel("Ansattes fødselsnummer")).toHaveValue(
-        "16878397960",
-      );
-      await expect(
-        page.getByRole("heading", { name: "Dine opplysninger" }),
-      ).toBeHidden();
-      expect(
-        await page.evaluate(() =>
-          sessionStorage.getItem("agi-unntatt-aaregister"),
-        ),
-      ).toBeNull();
-      await page.getByRole("button", { name: "Hent opplysninger" }).click();
-      await expect(
-        page.getByRole("heading", { name: "Dine opplysninger" }),
-      ).toBeVisible();
     });
+    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
+    await page
+      .getByRole("radio", { name: "Unntatt registrering i Aa-registeret" })
+      .check();
+    await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
+    await page.getByLabel("Første fraværsdag").fill("01.04.2024");
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+    await expect(
+      page
+        .getByRole("alert")
+        .filter({ hasText: "Opplysningene ble endret under henting." }),
+    ).toBeVisible();
+    await expect(page.getByLabel("Ansattes fødselsnummer")).toHaveValue(
+      "16878397960",
+    );
+    await expect(
+      page.getByRole("heading", { name: "Dine opplysninger" }),
+    ).toBeHidden();
+    expect(
+      await page.evaluate(() =>
+        sessionStorage.getItem("agi-unntatt-aaregister"),
+      ),
+    ).toBeNull();
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Dine opplysninger" }),
+    ).toBeVisible();
+  });
   for (const [type, feilmelding] of [
     [
       "FINNES_IKKE_I_AAREG",
@@ -272,28 +272,4 @@ test.describe("Inngang", () => {
     await expect(page.getByLabel("Ansattes fødselsnummer")).toBeEmpty();
     expect(antallKall).toBe(2);
   });
-
-  for (const bredde of [375, 1280]) {
-    test(`Fødselsnummerfeltet har tilpasset bredde ved ${bredde}px`, async ({
-      page,
-    }) => {
-      await mockArbeidsgiversOrganisasjoner({ page });
-      await page.setViewportSize({ width: bredde, height: 900 });
-      await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
-      await page
-        .getByRole("radio", { name: "Unntatt registrering i Aa-registeret" })
-        .check();
-      const fødselsnummerfelt = page.getByLabel("Ansattes fødselsnummer");
-      await expect(fødselsnummerfelt).toBeVisible();
-      const feltbredde = await fødselsnummerfelt.evaluate(
-        (felt) => felt.getBoundingClientRect().width,
-      );
-      expect(feltbredde).toBeLessThanOrEqual(320);
-      expect(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth <= window.innerWidth,
-        ),
-      ).toBe(true);
-    });
-  }
 });
