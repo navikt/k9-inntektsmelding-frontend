@@ -140,46 +140,6 @@ export async function hentPersonFraFnr(
   return parsedJson.data;
 }
 
-export async function hentPersonFraFnrUnntattAareg(
-  fnr: string,
-  ytelsetype: Ytelsetype,
-  førsteFraværsdag: string,
-) {
-  const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/arbeidsgivere/uregistrert`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fødselsnummer: fnr,
-        ytelseType: ytelsetype,
-        førsteFraværsdag,
-      }),
-    },
-  );
-
-  if (!response.ok) {
-    const json = await response.json();
-    const parsedFeil = feilmeldingSchema.safeParse(json);
-    if (!parsedFeil.success) {
-      logDev("error", parsedFeil.error);
-      throw new Error("Kunne ikke hente opplysninger");
-    }
-    throw new Error(parsedFeil.data.type);
-  }
-
-  const json = await response.json();
-  const parsedJson = SlåOppArbeidstakerResponseDtoSchema.safeParse(json);
-  if (!parsedJson.success) {
-    logDev("error", parsedJson.error);
-    throw new Error("Responsen fra serveren matchet ikke forventet format");
-  }
-
-  return parsedJson.data;
-}
-
 export async function hentOpplysningerUnntattAaregister(
   opplysningerRequest: OpplysningerRequest,
 ) {
@@ -235,6 +195,7 @@ export async function hentArbeidsgiversOrganisasjoner() {
 
   if (!parsedJson.success) {
     logDev("error", parsedJson.error);
+    throw new Error("Responsen fra serveren matchet ikke forventet format");
   }
 
   return parsedJson.data;

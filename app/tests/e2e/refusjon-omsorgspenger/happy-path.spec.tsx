@@ -91,8 +91,16 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
     ).toBeVisible({ timeout: 10_000 });
 
     await page.route(
-      "**/*/imdialog/send-inntektsmelding/omsorgspenger-refusjon",
+      "**/*/imdialog/send-inntektsmelding/omsorgspenger-refusjon/v2",
       async (route) => {
+        expect(route.request().method()).toBe("POST");
+        const forespørsel = route.request().postDataJSON();
+        expect(forespørsel).toMatchObject({
+          fødselsnummer: VALID_FNR,
+          arbeidsgiverIdent: ORGANISASJONSNUMMER,
+        });
+        expect(forespørsel).not.toHaveProperty("aktorId");
+        expect(forespørsel).not.toHaveProperty("ytelse");
         await route.fulfill({ json: sendRefusjonResponse });
       },
     );

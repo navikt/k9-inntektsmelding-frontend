@@ -11,15 +11,14 @@ import {
 } from "~/types/api-schemas.ts";
 
 export const RefusjonOmsorgspengerRequestDtoSchema = z.object({
-  aktorId: z.string(),
-  ytelse: YtelsetypeSchema,
+  fødselsnummer: z.string(),
   arbeidsgiverIdent: z.string(),
   kontaktperson: kontaktpersonDtoSchema,
   refusjon: refusjonDtoSchema,
   startdato: z.string(),
   inntekt: z.number(),
-  endringAvInntektÅrsaker: endringAvInntektDtoSchema,
-  bortfaltNaturalytelsePerioder: naturalytelsePerioderDtoSchema,
+  endringAvInntektÅrsaker: endringAvInntektDtoSchema.nonoptional(),
+  bortfaltNaturalytelsePerioder: naturalytelsePerioderDtoSchema.nonoptional(),
   omsorgspenger: z.object({
     fraværHeleDager: z
       .array(z.object({ fom: z.string(), tom: z.string() }))
@@ -78,19 +77,23 @@ export const sendInntektsmeldingOmsorgspengerRefusjonMutation = (
   >({
     mutationFn: async (request: RefusjonOmsorgspengerDto) => {
       const response = await fetch(
-        `${SERVER_URL}/imdialog/send-inntektsmelding/omsorgspenger-refusjon`,
+        `${SERVER_URL}/imdialog/send-inntektsmelding/omsorgspenger-refusjon/v2`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(request),
+          body: JSON.stringify(
+            RefusjonOmsorgspengerRequestDtoSchema.parse(request),
+          ),
         },
       );
       if (!response.ok) {
         throw new Error("Noe gikk galt.");
       }
-      return response.json() as Promise<RefusjonOmsorgspengerResponseDto>;
+      return RefusjonOmsorgspengerResponseDtoSchema.parse(
+        await response.json(),
+      );
     },
     ...options,
   });

@@ -2,11 +2,7 @@ import { idnr } from "@navikt/fnrvalidator";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
-import {
-  hentArbeidsgiversOrganisasjoner,
-  hentOpplysningerUnntattAaregister,
-  hentPersonFraFnrUnntattAareg,
-} from "~/api/queries.ts";
+import { hentArbeidsgiversOrganisasjoner } from "~/api/queries.ts";
 import { MånedsinntektStatusSchema } from "~/types/api-schemas.ts";
 import { logDev } from "~/utils";
 
@@ -18,7 +14,7 @@ import {
 const SERVER_URL = `${import.meta.env.BASE_URL}/server/api`;
 
 interface InntektsmeldingForÅrPayload {
-  aktørId: string;
+  fødselsnummer: string;
   arbeidsgiverIdent: string;
   år: number;
 }
@@ -29,14 +25,14 @@ export const useHentInntektsmeldingForÅr = (
   const hentInntektsmeldinger = async () => {
     try {
       const response = await fetch(
-        `${SERVER_URL}/imdialog/inntektsmeldinger-for-aar`,
+        `${SERVER_URL}/imdialog/inntektsmeldinger-for-aar/v2`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            aktørId: payload.aktørId,
+            fødselsnummer: payload.fødselsnummer,
             arbeidsgiverIdent: payload.arbeidsgiverIdent,
             år: payload.år,
           }),
@@ -44,9 +40,7 @@ export const useHentInntektsmeldingForÅr = (
       );
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to fetch inntektsmeldinger: ${response.statusText}`,
-        );
+        throw new Error("Kunne ikke hente tidligere innsendinger. Prøv igjen.");
       }
       const parsedJson = z
         .array(RefusjonOmsorgspengerResponseDtoSchema)
@@ -70,6 +64,13 @@ export const useHentInntektsmeldingForÅr = (
   >({
     queryKey: ["inntektsmeldinger-for-aar", payload],
     queryFn: hentInntektsmeldinger,
+    retry: false,
+    enabled:
+      idnr(payload.fødselsnummer).status === "valid" &&
+      /^\d{9}$/.test(payload.arbeidsgiverIdent) &&
+      Number.isInteger(payload.år) &&
+      payload.år >= 2020 &&
+      payload.år <= new Date().getFullYear(),
   });
 };
 
@@ -274,54 +275,6 @@ export type ArbeidsgiverDto = {
   organisasjonsnummer: string;
 };
 
-type HentArbeidsgiverArgs = {
-  fødselsnummer: string;
-  førsteFraværsdatoForÅret: string;
-};
-
-export const hentArbeidsgiverOptions = ({
-  fødselsnummer,
-  førsteFraværsdatoForÅret,
-}: HentArbeidsgiverArgs) =>
-  queryOptions({
-    queryKey: [
-      "arbeidsgiver",
-      { fødselsnummer, førsteFraværsdatoForÅret },
-    ] as const,
-    queryFn: () =>
-      hentPersonFraFnrUnntattAareg(
-        fødselsnummer,
-        "OMSORGSPENGER",
-        førsteFraværsdatoForÅret,
-      ),
-    enabled: fødselsnummer && førsteFraværsdatoForÅret ? true : false,
-    staleTime: Infinity,
-    retry: false,
-  });
-
-type OpplysningerUnntattAaregisterArgs = {
-  fødselsnummer: string;
-  førsteFraværsdatoForÅret: string;
-  organisasjonsnummer: string;
-};
-
-export const hentPersonUnntattAaregisterOptions = (
-  args: OpplysningerUnntattAaregisterArgs | null,
-) =>
-  queryOptions({
-    queryKey: ["person-unntatt-aaregister", args] as const,
-    queryFn: () =>
-      hentOpplysningerUnntattAaregister({
-        fødselsnummer: args!.fødselsnummer,
-        ytelseType: "OMSORGSPENGER",
-        førsteFraværsdag: args!.førsteFraværsdatoForÅret,
-        organisasjonsnummer: args!.organisasjonsnummer,
-      }),
-    enabled: args !== null,
-    staleTime: Infinity,
-    retry: false,
-  });
-
 export const hentArbeidsgiversOrganisasjonerOptions = () => {
   return queryOptions({
     queryKey: ["arbeidsgivers-organisasjoner"],
@@ -329,72 +282,3 @@ export const hentArbeidsgiversOrganisasjonerOptions = () => {
     retry: false,
   });
 };
-
-const AnsattNavnDtoSchema = z.object({
-  fornavn: z.string(),
-  mellomnavn: z.string().optional(),
-  etternavn: z.string(),
-  kjønn: z.enum(["MANN", "KVINNE", "UKJENT"]),
-  aktørId: z.string(),
-});
-export type AnsattNavnDto = z.infer<typeof AnsattNavnDtoSchema>;
-
-type AnsattNavnFeil =
-  | { feilkode: "fant ingen personer" }
-  | { feilkode: "generell feil" }
-  | { feilkode: "uventet respons" };
-
-const hentAnsattNavn = async (fødselsnummer: string) => {
-  const response = await fetch(
-    `${SERVER_URL}/arbeidsgiverinitiert/arbeidstaker`,
-    {
-      method: "POST",
-      body: JSON.stringify({ fødselsnummer }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    },
-  );
-
-  const json = await response.json();
-
-  if (!response.ok) {
-    if (response.status === 404) {
-      throw { feilkode: "fant ingen personer" } satisfies AnsattNavnFeil;
-    }
-    logDev("error", "Henting av ansatt-navn feilet", json);
-    throw { feilkode: "generell feil" } satisfies AnsattNavnFeil;
-  }
-
-  const parsedResponse = AnsattNavnDtoSchema.safeParse(json);
-  if (!parsedResponse.success) {
-    logDev(
-      "error",
-      "Mottok en uventet respons fra serveren",
-      parsedResponse.error,
-    );
-    throw { feilkode: "uventet respons" } satisfies AnsattNavnFeil;
-  }
-  return parsedResponse.data;
-};
-
-export const hentAnsattNavnOptions = (
-  fødselsnummer: string,
-  enabled: boolean,
-) =>
-  queryOptions<
-    AnsattNavnDto,
-    AnsattNavnFeil,
-    AnsattNavnDto,
-    ["ansatt-navn", string]
-  >({
-    queryKey: ["ansatt-navn", fødselsnummer],
-    queryFn: ({ queryKey }) => hentAnsattNavn(queryKey[1]),
-    enabled: enabled && idnr(fødselsnummer).status === "valid",
-    staleTime: Infinity,
-    retry: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-  });

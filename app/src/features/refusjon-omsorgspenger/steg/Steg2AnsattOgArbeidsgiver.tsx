@@ -104,6 +104,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                       setValue("erUnntattAaregisteret", false);
                       setValue("organisasjonsnummer", undefined);
                       setValue("meta.organisasjonsnavn", undefined);
+                      setValue("ansattesFornavn", undefined);
+                      setValue("ansattesEtternavn", undefined);
+                      setValue("ansattesAktørId", undefined);
                     }
                     field.onChange(nyVerdi);
                   }}
@@ -111,10 +114,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                 />
               )}
             />
-            <div className="flex-1 flex flex-col">
-              <Label>Navn</Label>
-              <NavnVisning />
-            </div>
+            {!visUnntattLøype && (
+              <div className="flex-1 flex flex-col">
+                <Label>Navn</Label>
+                <NavnVisning />
+              </div>
+            )}
           </div>
           {fantIngenPersoner && (
             <Box

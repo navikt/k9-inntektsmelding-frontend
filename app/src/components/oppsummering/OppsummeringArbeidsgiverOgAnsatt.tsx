@@ -26,6 +26,10 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
   redigerbar: boolean;
 }) => {
   const { getValues, formState } = useSkjemaState();
+  const navn = lagFulltNavn({
+    fornavn: getValues("ansattesFornavn") ?? "",
+    etternavn: getValues("ansattesEtternavn") ?? "",
+  });
   return (
     <FormSummary>
       <FormSummaryHeader>
@@ -67,11 +71,8 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
         <FormSummaryAnswer>
           <FormSummaryLabel>Den ansatte</FormSummaryLabel>
           <FormSummaryValue>
-            {lagFulltNavn({
-              fornavn: getValues("ansattesFornavn")!,
-              etternavn: getValues("ansattesEtternavn")!,
-            })}
-            , f.nr. {formatFodselsnummer(getValues("ansattesFødselsnummer"))}
+            {navn ? `${navn}, f.nr. ` : "F.nr. "}
+            {formatFodselsnummer(getValues("ansattesFødselsnummer"))}
             <ErrorMessage
               message={formState.errors.ansattesFødselsnummer?.message}
             />

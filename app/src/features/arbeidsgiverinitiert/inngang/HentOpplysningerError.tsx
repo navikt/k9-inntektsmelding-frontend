@@ -1,6 +1,15 @@
 import { Alert } from "@navikt/ds-react";
 
-export function HentOpplysningerError({ error }: { error: Error | null }) {
+import { Ytelsetype } from "~/types/api-schemas";
+import { formatYtelsesnavn } from "~/utils";
+
+export const HentOpplysningerError = ({
+  error,
+  ytelse,
+}: {
+  error: Error | null;
+  ytelse: Ytelsetype;
+}) => {
   if (!error) {
     return null;
   }
@@ -15,5 +24,29 @@ export function HentOpplysningerError({ error }: { error: Error | null }) {
     );
   }
 
-  return <Alert variant="error">Kunne ikke hente personopplysninger</Alert>;
-}
+  const feilmeldinger: Record<string, string> = {
+    FINNES_IKKE_I_AAREG:
+      "Kunne ikke hente opplysninger. Sjekk at opplysningene er riktige, og prøv igjen.",
+    INGEN_INNTEKT:
+      "Vi finner ingen inntekt over 0 kroner rapportert for den ansatte i den valgte virksomheten. Sjekk fødselsnummer og virksomhet.",
+    A_INNTEKT_NEDE:
+      "Vi kan ikke hente inntekt fra A-inntekt nå. Prøv igjen senere.",
+    INGEN_SAK_FUNNET: `Du kan ikke sende inn inntektsmelding for ${formatYtelsesnavn(ytelse)}.`,
+    SENDT_FOR_TIDLIG: `Du kan ikke sende inn inntektsmelding mer enn fire uker før personen starter med ${formatYtelsesnavn(ytelse)}.`,
+    PERSON_IKKE_FUNNET:
+      "Vi finner ikke personen. Sjekk at fødselsnummeret er riktig.",
+    MANGLER_TILGANG_FEIL:
+      "Du har ikke tilgang til den valgte virksomheten. Sjekk tilgangene dine i Altinn.",
+  };
+  const feilmelding = feilmeldinger[error.message];
+
+  return (
+    <Alert
+      variant={
+        feilmelding && error.message !== "A_INNTEKT_NEDE" ? "warning" : "error"
+      }
+    >
+      {feilmelding ?? "Kunne ikke hente personopplysninger. Prøv igjen senere."}
+    </Alert>
+  );
+};
