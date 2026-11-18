@@ -13,5 +13,4 @@ export const arbeidsforholdResponse = {
       organisasjonsnummer: "974652293",
     },
   ],
-  kjønn: "MANN",
 } satisfies SlåOppArbeidstakerResponseDto;

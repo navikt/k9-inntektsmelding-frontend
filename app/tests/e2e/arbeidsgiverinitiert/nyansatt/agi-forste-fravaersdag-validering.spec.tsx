@@ -79,7 +79,6 @@ test.describe("AGI Første fraværsdag validering", () => {
                 organisasjonsnummer: "974652293",
               },
             ],
-            kjønn: "MANN",
           },
         });
       },
@@ -364,7 +363,6 @@ test.describe("AGI Første fraværsdag validering", () => {
                 organisasjonsnummer: "974652293",
               },
             ],
-            kjønn: "MANN",
           },
         });
       },
@@ -417,7 +415,6 @@ test.describe("AGI Første fraværsdag validering", () => {
                 organisasjonsnummer: "974652293",
               },
             ],
-            kjønn: "MANN",
           },
         });
       },
