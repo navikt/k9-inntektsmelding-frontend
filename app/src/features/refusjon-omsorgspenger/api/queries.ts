@@ -2,7 +2,6 @@ import { idnr } from "@navikt/fnrvalidator";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
-import { hentArbeidsgiversOrganisasjoner } from "~/api/queries.ts";
 import { MånedsinntektStatusSchema } from "~/types/api-schemas.ts";
 import { logDev } from "~/utils";
 
@@ -273,12 +272,4 @@ export const hentInntektsopplysningerOptions = (
 export type ArbeidsgiverDto = {
   organisasjonsnavn: string;
   organisasjonsnummer: string;
-};
-
-export const hentArbeidsgiversOrganisasjonerOptions = () => {
-  return queryOptions({
-    queryKey: ["arbeidsgivers-organisasjoner"],
-    queryFn: async () => hentArbeidsgiversOrganisasjoner(),
-    retry: false,
-  });
 };

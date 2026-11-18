@@ -2,9 +2,9 @@ import { BodyShort, Label, Loader } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
+import { hentArbeidsgiversOrganisasjonerOptions } from "~/api/queries.ts";
 import { ComboboxWrapped } from "~/features/shared/react-hook-form-wrappers/ComboboxWrapped";
 
-import { hentArbeidsgiversOrganisasjonerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 
 export const ArbeidsgiverUnntattSeksjon = () => {
