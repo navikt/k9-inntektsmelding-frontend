@@ -17,8 +17,8 @@ describe("finnEnvironmentForHostname", () => {
 
   it("gir prod-gcp for alt annet", () => {
     expect(finnEnvironmentForHostname("arbeidsgiver.nav.no")).toBe("prod-gcp");
-    expect(finnEnvironmentForHostname("ukjent.nav.no")).toBe("prod-gcp");
     expect(finnEnvironmentForHostname("localhost")).toBe("prod-gcp");
+    expect(finnEnvironmentForHostname("ukjent.nav.no")).toBe("prod-gcp");
     expect(finnEnvironmentForHostname("127.0.0.1")).toBe("prod-gcp");
     expect(finnEnvironmentForHostname("::1")).toBe("prod-gcp");
     expect(finnEnvironmentForHostname("")).toBe("prod-gcp");
