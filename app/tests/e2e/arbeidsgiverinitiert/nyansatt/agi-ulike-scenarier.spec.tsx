@@ -339,7 +339,6 @@ test.describe("AGI Ulike scenarier", () => {
                 organisasjonsnummer: "974652293",
               },
             ],
-            kjønn: "MANN",
           },
         });
       },

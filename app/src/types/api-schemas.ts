@@ -75,7 +75,6 @@ export const SlåOppArbeidstakerResponseDtoSchema = z.object({
       organisasjonsnummer: z.string(),
     }),
   ),
-  kjønn: z.enum(["MANN", "KVINNE", "UKJENT"]),
 });
 export type SlåOppArbeidstakerResponseDto = z.infer<
   typeof SlåOppArbeidstakerResponseDtoSchema
