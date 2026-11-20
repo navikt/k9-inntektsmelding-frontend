@@ -39,21 +39,19 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
       </FormSummaryHeader>
       <FormSummaryAnswers>
         <FormSummaryAnswer>
-          <FormSummaryAnswer>
-            <FormSummaryLabel>Virksomhetsnavn</FormSummaryLabel>
-            <FormSummaryValue>
-              {getValues("meta.organisasjonsnavn")}
-            </FormSummaryValue>
-          </FormSummaryAnswer>
-          <FormSummaryAnswer>
-            <FormSummaryLabel>Org.nr. for underenhet</FormSummaryLabel>
-            <FormSummaryValue>
-              {getValues("organisasjonsnummer")}
-              <ErrorMessage
-                message={formState.errors?.organisasjonsnummer?.message}
-              />
-            </FormSummaryValue>
-          </FormSummaryAnswer>
+          <FormSummaryLabel>Virksomhetsnavn</FormSummaryLabel>
+          <FormSummaryValue>
+            {getValues("meta.organisasjonsnavn")}
+          </FormSummaryValue>
+        </FormSummaryAnswer>
+        <FormSummaryAnswer>
+          <FormSummaryLabel>Org.nr. for underenhet</FormSummaryLabel>
+          <FormSummaryValue>
+            {getValues("organisasjonsnummer")}
+            <ErrorMessage
+              message={formState.errors?.organisasjonsnummer?.message}
+            />
+          </FormSummaryValue>
         </FormSummaryAnswer>
         <FormSummaryAnswer>
           <FormSummaryLabel>Kontaktperson og innsender</FormSummaryLabel>

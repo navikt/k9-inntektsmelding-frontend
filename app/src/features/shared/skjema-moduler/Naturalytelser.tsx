@@ -218,7 +218,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
                 <Button
                   aria-label="Slett naturalytelse"
                   className="absolute top-8 right-1"
-                  icon={<TrashIcon />}
+                  icon={<TrashIcon aria-hidden />}
                   onClick={() => remove(index)}
                   type="button"
                   variant="tertiary"
@@ -272,7 +272,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
       })}
       <Button
         className="w-fit"
-        icon={<PlusIcon />}
+        icon={<PlusIcon aria-hidden />}
         iconPosition="left"
         onClick={() => append(NATURALYTELSE_SOM_MISTES_TEMPLATE)}
         size="medium"

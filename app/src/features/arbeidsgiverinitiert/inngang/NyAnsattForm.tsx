@@ -192,7 +192,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
           <Button
             className="w-fit"
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             loading={opprettOpplysningerMutation.isPending}
             onClick={() =>

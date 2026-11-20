@@ -199,14 +199,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
         <div className="flex gap-4">
           <Button
             as={Link}
-            icon={<ArrowLeftIcon />}
+            icon={<ArrowLeftIcon aria-hidden />}
             to={"../1-intro"}
             variant="secondary"
           >
             Forrige steg
           </Button>
           <Button
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             type="submit"
             variant="primary"

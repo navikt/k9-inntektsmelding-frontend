@@ -7,6 +7,8 @@ import {
 
 import type { OpplysningerDto } from "~/types/api-schemas";
 
+import { sjekkUniversellUtforming } from "../uu";
+
 const ORGANISASJONSNUMMER = "974652293";
 const FORESPORSEL_UUID = "refusjon-vis-test-uuid";
 
@@ -51,7 +53,7 @@ const refusjonResponse = {
 };
 
 test.describe("Refusjon Omsorgspenger – vis-rute", () => {
-  test("Viser innsendt refusjonskrav fra loader", async ({ page }) => {
+  test("Viser innsendt refusjonskrav fra loader @uu", async ({ page }) => {
     await mockInnloggetBruker({ page });
     await mockOpplysninger({
       page,
@@ -122,5 +124,6 @@ test.describe("Refusjon Omsorgspenger – vis-rute", () => {
 
     // Last ned PDF
     await expect(page.getByText("Last ned PDF")).toBeVisible();
+    await sjekkUniversellUtforming(page, "refusjon-omsorgspenger-vis");
   });
 });

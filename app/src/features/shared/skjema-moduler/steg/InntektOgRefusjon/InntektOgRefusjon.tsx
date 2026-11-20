@@ -119,14 +119,14 @@ export function InntektOgRefusjon({
           <div className="flex gap-4 justify-center">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to="../dine-opplysninger"
               variant="secondary"
             >
               Forrige steg
             </Button>
             <Button
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"

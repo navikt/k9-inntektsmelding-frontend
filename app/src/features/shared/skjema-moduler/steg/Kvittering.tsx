@@ -113,7 +113,7 @@ export const Kvittering = ({
             as="a"
             download={`inntektsmelding-${inntektsmeldingsId}.pdf`}
             href={hentInntektsmeldingPdfUrl(inntektsmeldingsId)}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             iconPosition="left"
             variant="secondary"
           >

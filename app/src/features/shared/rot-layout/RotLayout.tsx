@@ -77,7 +77,7 @@ export const RotLayout = ({
             <Button
               as="a"
               href="/min-side-arbeidsgiver"
-              icon={<XMarkIcon />}
+              icon={<XMarkIcon aria-hidden />}
               variant="tertiary"
             >
               Avbryt

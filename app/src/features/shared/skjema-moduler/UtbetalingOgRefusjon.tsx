@@ -190,7 +190,7 @@ function LikRefusjon() {
             </BodyLong>
             <Button
               className="w-fit"
-              icon={<PencilIcon />}
+              icon={<PencilIcon aria-hidden />}
               iconPosition="left"
               onClick={() => {
                 setSkalEndreBeløp(true);
@@ -323,7 +323,7 @@ function Refusjonsperioder() {
             <div className="flex items-end">
               <Button
                 aria-label="Fjern refusjonsendring"
-                icon={<TrashIcon />}
+                icon={<TrashIcon aria-hidden />}
                 onClick={() => remove(index)}
                 type="button"
                 variant="tertiary"
@@ -336,7 +336,7 @@ function Refusjonsperioder() {
       ))}
       <Button
         className="w-fit col-span-2"
-        icon={<PlusIcon />}
+        icon={<PlusIcon aria-hidden />}
         iconPosition="left"
         onClick={() => append(ENDRING_I_REFUSJON_TEMPLATE)}
         size="medium"

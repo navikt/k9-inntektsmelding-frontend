@@ -102,7 +102,7 @@ const OmFraværetOmsorgspenger = () => {
           </div>
           <ButtonLink
             className="mt-4"
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             params={{
               organisasjonsnummer: opplysninger.arbeidsgiver.organisasjonNummer,

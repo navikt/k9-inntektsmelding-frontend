@@ -208,7 +208,7 @@ export function Steg2Refusjon() {
           <div className="flex gap-4 justify-center">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to="../dine-opplysninger"
               variant="secondary"
             >
@@ -219,7 +219,7 @@ export function Steg2Refusjon() {
                 watch("skalRefunderes") === "NEI" ||
                 validerFørsteFraværsdagMutation.isPending
               }
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               loading={validerFørsteFraværsdagMutation.isPending}
               type="submit"

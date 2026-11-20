@@ -134,7 +134,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
               </Alert>
               <div>
                 <Button
-                  icon={<ArrowCirclepathIcon />}
+                  icon={<ArrowCirclepathIcon aria-hidden />}
                   onClick={() => refetch()}
                   variant="secondary"
                 >
@@ -147,7 +147,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
           <div className="flex gap-4">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to="../3-omsorgsdager"
               variant="secondary"
             >
@@ -155,7 +155,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
             </Button>
             <Button
               disabled={!inntektsopplysninger}
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"

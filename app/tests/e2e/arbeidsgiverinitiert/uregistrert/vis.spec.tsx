@@ -6,10 +6,12 @@ import {
   mockOpplysninger,
 } from "tests/mocks/shared/utils";
 
+import { sjekkUniversellUtforming } from "../../uu";
+
 const FORESPORSEL_UUID = "agi-vis-test-uuid";
 
 test.describe("AGI unntatt Aa-registeret – vis-rute", () => {
-  test("Viser innsendt inntektsmelding fra loader", async ({ page }) => {
+  test("Viser innsendt inntektsmelding fra loader @uu", async ({ page }) => {
     await mockOpplysninger({
       page,
       json: agiOpplysningerResponseUregistrert,
@@ -65,6 +67,7 @@ test.describe("AGI unntatt Aa-registeret – vis-rute", () => {
     await expect(page.getByText("Nei").first()).toBeVisible();
 
     await expect(page.getByText("Last ned inntektsmeldingen")).toBeVisible();
+    await sjekkUniversellUtforming(page, "agi-unntatt-aaregister-vis");
   });
 
   test("Skjuler endre-knapp når forespørsel er UTGÅTT", async ({ page }) => {

@@ -44,7 +44,7 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
-          path: playwright-report/
+          path: app/playwright-report/
           retention-days: 30
   verify:
     name: Verify there are no lint or typescript errors

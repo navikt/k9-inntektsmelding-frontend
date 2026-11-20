@@ -147,7 +147,7 @@ export function Inntekt({ opplysninger, children }: InntektProps) {
       ) : (
         <Button
           className="w-max"
-          icon={<PencilIcon />}
+          icon={<PencilIcon aria-hidden />}
           onClick={() => {
             onOpen();
             setValue("meta.skalKorrigereInntekt", true);
@@ -527,7 +527,7 @@ function Endringsårsaker({ skjæringstidspunkt }: EndringsårsakerProps) {
               <Button
                 aria-label="Slett endringsårsak"
                 className="w-fit ax-md:absolute top-8 right-0"
-                icon={<TrashIcon />}
+                icon={<TrashIcon aria-hidden />}
                 onClick={() => remove(index)}
                 type="button"
                 variant="tertiary"
@@ -542,7 +542,7 @@ function Endringsårsaker({ skjæringstidspunkt }: EndringsårsakerProps) {
       })}
       <Button
         className="w-fit"
-        icon={<PlusIcon />}
+        icon={<PlusIcon aria-hidden />}
         iconPosition="left"
         onClick={() => append(ENDRINGSÅRSAK_TEMPLATE)}
         size="medium"

@@ -92,7 +92,7 @@ export const FraværHeleDagerListeInput = ({ overskrift, år }: Props) => {
           <Button
             aria-label="Slett periode"
             className="absolute top-9 right-20"
-            icon={<TrashIcon />}
+            icon={<TrashIcon aria-hidden />}
             onClick={() => remove(index)}
             size="small"
             type="button"
@@ -104,7 +104,7 @@ export const FraværHeleDagerListeInput = ({ overskrift, år }: Props) => {
       ))}
       <div>
         <Button
-          icon={<PlusIcon />}
+          icon={<PlusIcon aria-hidden />}
           onClick={() => append({ fom: "", tom: "" }, { shouldFocus: false })}
           size="small"
           type="button"

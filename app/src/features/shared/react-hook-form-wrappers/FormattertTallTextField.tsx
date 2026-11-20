@@ -30,7 +30,6 @@ export const FormattertTallTextField = ({
   return (
     <TextField
       {...rest}
-      aria-label={field.value}
       autoComplete="off"
       error={fieldState.error?.message}
       onChange={(e) => {

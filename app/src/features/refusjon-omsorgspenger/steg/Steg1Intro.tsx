@@ -114,7 +114,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
           <div>
             <Button
               disabled={harUtbetaltLønn === "nei"}
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"

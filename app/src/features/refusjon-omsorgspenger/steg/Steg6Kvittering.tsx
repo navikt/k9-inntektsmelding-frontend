@@ -61,7 +61,7 @@ export const Steg6Kvittering = () => {
         </Heading>
         <VStack className="mb-12" gap="space-8">
           <FaqItem
-            icon={<ClockIcon />}
+            icon={<ClockIcon aria-hidden />}
             question="Hvor lang er saksbehandlingstiden?"
           >
             <BodyLong>
@@ -73,7 +73,7 @@ export const Steg6Kvittering = () => {
             </BodyLong>
           </FaqItem>
           <FaqItem
-            icon={<SackKronerIcon />}
+            icon={<SackKronerIcon aria-hidden />}
             question="Når blir refusjon utbetalt?"
           >
             <BodyLong>
@@ -88,7 +88,7 @@ export const Steg6Kvittering = () => {
             </BodyLong>
           </FaqItem>
           <FaqItem
-            icon={<DocPencilIcon />}
+            icon={<DocPencilIcon aria-hidden />}
             question="Hvordan korrigere hvis noe er feil?"
           >
             <BodyLong>
@@ -123,7 +123,7 @@ export const Steg6Kvittering = () => {
             href={hentInntektsmeldingPdfUrl(
               getValues("meta.innsendtSøknadId") as number,
             )}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             iconPosition="left"
             variant="secondary"
           >

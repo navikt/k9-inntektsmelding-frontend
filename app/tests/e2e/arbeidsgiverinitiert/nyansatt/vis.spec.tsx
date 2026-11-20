@@ -5,6 +5,8 @@ import {
   mockOpplysninger,
 } from "tests/mocks/shared/utils";
 
+import { sjekkUniversellUtforming } from "../../uu";
+
 const FORESPORSEL_UUID = "agi-nyansatt-vis-test-uuid";
 
 const innsendtInntektsmelding = {
@@ -23,7 +25,7 @@ const innsendtInntektsmelding = {
 };
 
 test.describe("AGI nyansatt – vis-rute", () => {
-  test("Viser innsendt inntektsmelding fra loader", async ({ page }) => {
+  test("Viser innsendt inntektsmelding fra loader @uu", async ({ page }) => {
     await mockOpplysninger({
       page,
       json: agiOpplysningerResponseNyAnsatt,
@@ -60,7 +62,12 @@ test.describe("AGI nyansatt – vis-rute", () => {
     await expect(page.getByText(/1. april 2024/)).toBeVisible();
 
     // Utbetaling og refusjon
-    await expect(page.getByText("Utbetaling og refusjon")).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        name: "Utbetaling og refusjon",
+        exact: true,
+      }),
+    ).toBeVisible();
     await expect(
       page.getByText("Ja, likt beløp i hele perioden"),
     ).toBeVisible();
@@ -70,6 +77,7 @@ test.describe("AGI nyansatt – vis-rute", () => {
     await expect(page.getByText("45 000 kr", { exact: false })).toBeVisible();
 
     await expect(page.getByText("Last ned inntektsmeldingen")).toBeVisible();
+    await sjekkUniversellUtforming(page, "agi-nyansatt-vis");
   });
 
   test("Viser advarsel når forespørsel er UTGÅTT", async ({ page }) => {

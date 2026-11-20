@@ -117,14 +117,14 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
       <div className="flex gap-4 justify-center">
         <Button
           as={Link}
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowLeftIcon aria-hidden />}
           to="../refusjon"
           variant="secondary"
         >
           Forrige steg
         </Button>
         <Button
-          icon={<PaperplaneIcon />}
+          icon={<PaperplaneIcon aria-hidden />}
           iconPosition="right"
           loading={isPending}
           onClick={() => mutate(gyldigInntektsmeldingSkjemaState)}

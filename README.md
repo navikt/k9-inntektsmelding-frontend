@@ -83,6 +83,10 @@ PS: Vet ikke om denne brukeren har noe use case lenger. Ser ut som den mangler t
 
 Det er også egne readmes for [appen](./app/README.md), [ende-til-ende-testing](./app/tests/README.md) og for [serveren](./server/README.md).
 
+## Universell utforming
+
+[Sjekklisten for universell utforming](./UNIVERSELL_UTFORMING.md) beskriver kravene, kjente funn, testomfang og hva teamet må dokumentere for å vurdere etterlevelse.
+
 ## Kode generert av GitHub Copilot
 
 Dette repoet bruker GitHub Copilot til å generere kode.

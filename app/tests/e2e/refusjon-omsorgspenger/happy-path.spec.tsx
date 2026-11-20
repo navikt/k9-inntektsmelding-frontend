@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { sjekkUniversellUtforming } from "tests/e2e/uu";
 import {
   mockArbeidstakerOppslag,
   mockInnloggetBruker,
@@ -42,74 +43,89 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
     await mockArbeidstakerOppslag({ page });
   });
 
-  test("Fullstendig flyt fra intro til kvittering", async ({ page }) => {
-    await page.goto(
-      `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
-    );
+  test(
+    "Fullstendig flyt fra intro til kvittering",
+    { tag: "@uu" },
+    async ({ page }) => {
+      await page.goto(
+        `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
+      );
 
-    // Steg 1: Intro
-    await expect(
-      page.getByRole("heading", { name: "Om refusjon", exact: true }),
-    ).toBeVisible();
-    await page.getByRole("radio", { name: "Ja" }).click();
-    await page.getByRole("radio", { name: String(FJORÅRET) }).click();
-    await page.getByRole("button", { name: "Neste steg" }).click();
+      // Steg 1: Intro
+      await expect(
+        page.getByRole("heading", { name: "Om refusjon", exact: true }),
+      ).toBeVisible();
+      await sjekkUniversellUtforming(page, "Om refusjon for omsorgspenger");
+      await page.getByRole("radio", { name: "Ja" }).click();
+      await page.getByRole("radio", { name: String(FJORÅRET) }).click();
+      await page.getByRole("button", { name: "Neste steg" }).click();
 
-    // Steg 2: Ansatt og arbeidsgiver
-    await expect(
-      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
-    ).toBeVisible();
-    await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
-    await page.waitForLoadState("networkidle");
-    await page.getByRole("button", { name: "Neste steg" }).click();
+      // Steg 2: Ansatt og arbeidsgiver
+      await expect(
+        page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+      ).toBeVisible();
+      await sjekkUniversellUtforming(page, "Den ansatte og arbeidsgiver");
+      await page
+        .getByLabel("Ansattes fødselsnummer (11 siffer)")
+        .fill(VALID_FNR);
+      await page.waitForLoadState("networkidle");
+      await page.getByRole("button", { name: "Neste steg" }).click();
 
-    // Steg 3: Omsorgsdager
-    await expect(
-      page.getByRole("heading", {
-        name: "Omsorgsdager dere søker refusjon for",
-      }),
-    ).toBeVisible({ timeout: 10_000 });
-    await page.getByRole("radio", { name: "Ja" }).click();
-    await page
-      .getByRole("button", { name: "Legg til periode" })
-      .first()
-      .click();
-    await page.waitForTimeout(500);
-    await page.getByLabel("Fra og med").first().fill(`15.06.${FJORÅRET}`);
-    await page.getByLabel("Til og med").first().fill(`20.06.${FJORÅRET}`);
-    await page.getByRole("button", { name: "Neste steg" }).click();
+      // Steg 3: Omsorgsdager
+      await expect(
+        page.getByRole("heading", {
+          name: "Omsorgsdager dere søker refusjon for",
+        }),
+      ).toBeVisible({ timeout: 10_000 });
+      await sjekkUniversellUtforming(page, "Omsorgsdager");
+      await page.getByRole("radio", { name: "Ja" }).click();
+      await page
+        .getByRole("button", { name: "Legg til periode" })
+        .first()
+        .click();
+      await expect(page.getByLabel("Fra og med").first()).toBeVisible();
+      await page.getByLabel("Fra og med").first().fill(`15.06.${FJORÅRET}`);
+      await page.getByLabel("Til og med").first().fill(`20.06.${FJORÅRET}`);
+      await sjekkUniversellUtforming(page, "Utfylt fraværsperiode");
+      await page.getByRole("button", { name: "Neste steg" }).click();
 
-    // Steg 4: Refusjon (Beregnet månedslønn)
-    await expect(
-      page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
-    ).toBeVisible({ timeout: 10_000 });
-    await page.getByRole("button", { name: "Neste steg" }).click();
+      // Steg 4: Refusjon (Beregnet månedslønn)
+      await expect(
+        page.getByRole("heading", { name: "Beregnet månedslønn for refusjon" }),
+      ).toBeVisible({ timeout: 10_000 });
+      await sjekkUniversellUtforming(page, "Beregnet månedslønn for refusjon");
+      await page.getByRole("button", { name: "Neste steg" }).click();
 
-    // Steg 5: Oppsummering
-    await expect(
-      page.getByRole("heading", { name: "Oppsummering" }),
-    ).toBeVisible({ timeout: 10_000 });
+      // Steg 5: Oppsummering
+      await expect(
+        page.getByRole("heading", { name: "Oppsummering" }),
+      ).toBeVisible({ timeout: 10_000 });
+      await sjekkUniversellUtforming(page, "Oppsummering for omsorgspenger");
 
-    await page.route(
-      "**/*/imdialog/send-inntektsmelding/omsorgspenger-refusjon/v2",
-      async (route) => {
-        expect(route.request().method()).toBe("POST");
-        const forespørsel = route.request().postDataJSON();
-        expect(forespørsel).toMatchObject({
-          fødselsnummer: VALID_FNR,
-          arbeidsgiverIdent: ORGANISASJONSNUMMER,
-        });
-        expect(forespørsel).not.toHaveProperty("aktorId");
-        expect(forespørsel).not.toHaveProperty("ytelse");
-        await route.fulfill({ json: sendRefusjonResponse });
-      },
-    );
+      await page.route(
+        "**/*/imdialog/send-inntektsmelding/omsorgspenger-refusjon/v2",
+        async (route) => {
+          expect(route.request().method()).toBe("POST");
+          const forespørsel = route.request().postDataJSON();
+          expect(forespørsel).toMatchObject({
+            fødselsnummer: VALID_FNR,
+            arbeidsgiverIdent: ORGANISASJONSNUMMER,
+          });
+          expect(forespørsel).not.toHaveProperty("aktorId");
+          expect(forespørsel).not.toHaveProperty("ytelse");
+          await route.fulfill({ json: sendRefusjonResponse });
+        },
+      );
 
-    await page.getByRole("button", { name: "Send inn" }).click();
+      await page.getByRole("button", { name: "Send inn" }).click();
 
-    // Steg 6: Kvittering
-    await expect(page.getByText("Vi har mottatt refusjonskravet")).toBeVisible({
-      timeout: 10_000,
-    });
-  });
+      // Steg 6: Kvittering
+      await expect(
+        page.getByText("Vi har mottatt refusjonskravet"),
+      ).toBeVisible({
+        timeout: 10_000,
+      });
+      await sjekkUniversellUtforming(page, "Kvittering for omsorgspenger");
+    },
+  );
 });

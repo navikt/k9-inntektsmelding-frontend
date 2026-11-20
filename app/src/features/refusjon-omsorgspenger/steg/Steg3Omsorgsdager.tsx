@@ -194,14 +194,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
           <div className="flex gap-4 mt-8">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to={"../2-ansatt-og-arbeidsgiver"}
               variant="secondary"
             >
               Forrige steg
             </Button>
             <Button
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"
@@ -242,7 +242,7 @@ const DagerSomSkalTrekkes = () => {
           <Button
             aria-label="Slett periode"
             className="absolute top-9 right-20"
-            icon={<TrashIcon />}
+            icon={<TrashIcon aria-hidden />}
             onClick={() => {
               remove(index);
             }}
@@ -266,7 +266,7 @@ const DagerSomSkalTrekkes = () => {
       )}
       <div>
         <Button
-          icon={<PlusIcon />}
+          icon={<PlusIcon aria-hidden />}
           onClick={() => {
             append({ fom: "", tom: "" }, { shouldFocus: false });
           }}
@@ -472,7 +472,7 @@ const TidligereInnsendinger = ({
       {harFlereInnsendingerEnnAntallSomVises && (
         <Button
           className="mt-2"
-          icon={<ArrowDownIcon />}
+          icon={<ArrowDownIcon aria-hidden />}
           onClick={visFlereInnsendinger}
           size="small"
           type="button"

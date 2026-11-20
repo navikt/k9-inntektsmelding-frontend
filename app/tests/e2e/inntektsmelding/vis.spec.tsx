@@ -6,10 +6,12 @@ import {
   mockOpplysninger,
 } from "tests/mocks/shared/utils";
 
+import { sjekkUniversellUtforming } from "../uu";
+
 const FORESPORSEL_UUID = "im-vis-test-uuid";
 
 test.describe("Inntektsmelding – vis-rute", () => {
-  test("Viser innsendt inntektsmelding fra loader", async ({ page }) => {
+  test("Viser innsendt inntektsmelding fra loader @uu", async ({ page }) => {
     await mockOpplysninger({
       page,
       json: enkeltOpplysningerResponse,
@@ -73,6 +75,7 @@ test.describe("Inntektsmelding – vis-rute", () => {
     await expect(page.getByText(/12\.09\.2024/)).toBeVisible();
 
     await expect(page.getByText("Last ned inntektsmeldingen")).toBeVisible();
+    await sjekkUniversellUtforming(page, "inntektsmelding-vis");
   });
 
   test("Viser advarsel når forespørsel er UTGÅTT", async ({ page }) => {

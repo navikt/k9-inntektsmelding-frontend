@@ -78,14 +78,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
       <div className="flex gap-4 mt-4">
         <Button
           as={Link}
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowLeftIcon aria-hidden />}
           to={"../4-refusjon"}
           variant="secondary"
         >
           Forrige steg
         </Button>
         <Button
-          icon={<PaperplaneIcon />}
+          icon={<PaperplaneIcon aria-hidden />}
           iconPosition="right"
           loading={isPending}
           onClick={handleSubmit((values) => {

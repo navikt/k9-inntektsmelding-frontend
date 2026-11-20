@@ -160,7 +160,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
 
           <Button
             className="w-fit self-center"
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             type="submit"
             variant="primary"

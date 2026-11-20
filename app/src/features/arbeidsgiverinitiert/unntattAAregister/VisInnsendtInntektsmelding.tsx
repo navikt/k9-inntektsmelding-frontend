@@ -45,7 +45,7 @@ export const VisInnsendtInntektsmelding = () => {
       as={Link}
       className="w-fit"
       disabled={opplysninger.forespørselStatus === "UTGÅTT"}
-      icon={<PencilIcon />}
+      icon={<PencilIcon aria-hidden />}
       to="../dine-opplysninger"
       variant="secondary"
     >
@@ -94,7 +94,7 @@ export const VisInnsendtInntektsmelding = () => {
             as="a"
             download={`inntektsmelding-${id}.pdf`}
             href={hentInntektsmeldingPdfUrl(sisteInntektsmelding.id)}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             variant="tertiary"
           >
             Last ned inntektsmeldingen
