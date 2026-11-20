@@ -85,7 +85,13 @@ Det er også egne readmes for [appen](./app/README.md), [ende-til-ende-testing](
 
 ## Universell utforming
 
-[Sjekklisten for universell utforming](./UNIVERSELL_UTFORMING.md) beskriver kravene, kjente funn, testomfang og hva teamet må dokumentere for å vurdere etterlevelse.
+- Kontrollene dekker appens eget innhold (ikke dekoratøren) i fire skjemaflyter og visning av innsendte skjemaer.
+- Åpne avvik: datoperioder krever vannrett rulling ved 320 CSS-piksler og 400 % zoom (1.4.10), og virksomhetslisten i Aksel mangler tilgjengelig navn (4.1.2). Aksel-avviket må følges opp manuelt.
+- Full skjermleserkontroll og kontroll i produksjon gjenstår.
+
+Kjør den egne UU-suiten med `cd app && yarn test:uu`. Den kjører også i en egen CI-jobb, parallelt med funksjonstestene. Kjente avvik har kjørende tester med forventet feil. Se [testdokumentasjonen](./app/tests/README.md) for dekning og [UU-sjekklisten](./UNIVERSELL_UTFORMING.md) for Uu-tilsynets «Kort fortalt»-tekst, kilde, kravstatus og dokumenterte funn.
+
+Copilot-skillen [wcag-testing](./.github/skills/wcag-testing/SKILL.md) hjelper med å velge automatiserte tester og skille dem fra manuelle WCAG-vurderinger.
 
 ## Kode generert av GitHub Copilot
 

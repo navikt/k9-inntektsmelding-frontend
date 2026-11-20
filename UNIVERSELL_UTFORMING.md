@@ -2,7 +2,7 @@
 
 Dette dokumentet viser hva teamet må undersøke og dokumentere før vi kan konkludere om etterlevelse for inntektsmelding og refusjon for omsorgspenger.
 
-Status 20. november 2026: De ti faste axe-testene består. En tilleggskontroll fant et avvik i virksomhetsvalget (4.1.2). Flere forhold må fortsatt undersøkes. Vi har ikke gjennomført en full kontroll eller kontrollert produksjon. Dokumentet er en arbeidsliste, ikke en tilgjengelighetserklæring eller godkjenning.
+Status 20. november 2026: UU-suiten kjører automatisk i CI ved normal bredde, 320 CSS-piksler og ekte nettleserzoom. To tester gjengir kjente avvik i datoperioder (1.4.10) og virksomhetsvalg (4.1.2) med forventet feil. Flere forhold må fortsatt undersøkes. Vi har ikke gjennomført en full kontroll eller kontrollert produksjon. Dokumentet er en arbeidsliste, ikke en tilgjengelighetserklæring eller godkjenning.
 
 Teamet legger til grunn at dekoratørens eget innhold oppfyller UU-kravene. Dette er en forutsetning, ikke et verifisert testresultat. Integrasjonen med appen må fortsatt kontrolleres.
 
@@ -132,9 +132,9 @@ yarn check:types
 yarn lint
 ```
 
-Testene merket `@uu` kjører også i den ordinære E2E-jobben i CI. De dekker vanlig inntektsmelding, arbeidsgiverinitiert inntektsmelding for nyansatte og unntatt Aa-registeret, samt refusjon for omsorgspenger. Visning av innsendte inntektsmeldinger og refusjonskrav inngår i alle fire flyter. Kontrollene bruker WCAG 2.1 A/AA-tagger uten deaktiverte regler. JSON-rapporter med funn og forhold som krever manuell vurdering lagres per steg. Se [testdokumentasjonen](./app/tests/README.md) for dekning og rapporter.
+Testene merket `@uu` kjører i en egen suite og CI-jobb, parallelt med funksjonstestene. De dekker alle fire skjemaflyter og visning av innsendte skjemaer ved normal og smal bredde. Vanlig inntektsmelding testes også ved ekte 200 % og 400 % nettleserzoom. Kontrollene bruker WCAG 2.1 A/AA-tagger uten deaktiverte regler. To isolerte tester har forventet feil for de kjente avvikene; nye axe-avvik skal fortsatt feile ordinært. JSON-rapporter med funn og forhold som krever manuell vurdering lagres per steg. Se [testdokumentasjonen](./app/tests/README.md) for dekning og rapporter.
 
-Skanningene er avgrenset til `main`. De dekker ikke hele dokumentet, dekoratøren, innloggingen, alle varianter eller mobilvisning. Beståtte axe-tester, funksjonstester, typekontroll og lint er ikke en UU-godkjenning.
+Skanningene er avgrenset til `main`. De dekker ikke hele dokumentet, dekoratøren, innloggingen, alle varianter eller faktiske mobilnettlesere. Beståtte axe-tester, funksjonstester, typekontroll og lint er ikke en UU-godkjenning.
 
 ### Tekstkontrast (1.4.3)
 
@@ -163,75 +163,85 @@ Ingen egne HTML-tabeller ble funnet i app-koden eller de undersøkte tilstandene
 
 ## 6. Vurder alle 48 WCAG-krav
 
-Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer krav der vi bare har gjort stikkprøver. For hvert krav må resultatene kobles til testomfanget og bevisene fra seksjon 2.
+Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer krav der vi bare har gjort stikkprøver. Kolonnen «Kort fortalt» gjengir Uu-tilsynets oppsummering. Lenken i kravkolonnen går til den enkelte kilden.
 
 ### Mulig å oppfatte
 
-| Krav | Hva vi skal kontrollere og hvordan | Status |
+| Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [1.1.1](https://www.uutilsynet.no/wcag-standarden/111-ikke-tekstlig-innhold-niva/87) Ikke-tekstlig innhold (A) | Appens egne bilder og ikoner er gjennomgått i kildekoden. Dekorasjonen har tomt tekstalternativ eller er skjult for hjelpemidler, og handlinger har tekst. Axe-testene dekker de fire skjemaflytene og visning av innsendte skjemaer uten avvik. Vurderingen gjelder appens eget innhold, med forutsetningen om dekoratøren over. PDF-innhold er ikke vurdert. | Oppfylt (appens eget innhold) |
-| [1.2.1](https://www.uutilsynet.no/wcag-standarden/121-bare-lyd-og-bare-video-forhandsinnspilt-niva/88) Bare lyd og bare video, forhåndsinnspilt (A) | Kartlegg eventuelle lydklipp og videoer uten lyd, også i innebygd innhold. Kontroller nødvendige alternativer. Begrunn «Ikke relevant» hvis innholdet ikke finnes. | Oppfylt  |
-| [1.2.2](https://www.uutilsynet.no/wcag-standarden/122-teksting-forhandsinnspilt-niva/89) Teksting, forhåndsinnspilt (A) | Spill av eventuell forhåndsinnspilt video med lyd. Kontroller at tekstingen dekker tale og nødvendig lydinformasjon og følger innholdet. | Oppfylt  |
-| [1.2.5](https://www.uutilsynet.no/wcag-standarden/125-synstolking-forhandsinnspilt-niva-aa/842) Synstolking, forhåndsinnspilt (AA) | Kartlegg relevant video og publiseringsdato. Kontroller at nødvendig visuell informasjon formidles gjennom lyd etter tilsynets krav og unntak. | Oppfylt  |
-| [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90) Informasjon og relasjoner (A) | Overskrifter, seksjoner, gjentakende feltgrupper, feltnavn, lister og feilkoblinger er kontrollert i kildekode og utvalgte rendrede tilstander. Automatiske strukturkontroller består. Full skjermleserkontroll og øvrig testomfang gjenstår, se seksjon 5. | Ikke vurdert |
-| [1.3.2](https://www.uutilsynet.no/wcag-standarden/132-meningsfylt-rekkefolge-niva/91) Meningsfylt rekkefølge (A) | Les siden med skjermleser og undersøk DOM-rekkefølgen. Kontroller særlig kolonner, inntektsoversikter og dato- og beløpspar når layouten endres. | Ikke vurdert |
-| [1.3.3](https://www.uutilsynet.no/wcag-standarden/133-sensoriske-egenskaper-niva/92) Sensoriske egenskaper (A) | Les instruksjoner og feilmeldinger. De skal ikke bare vise til plassering, form, farge, størrelse eller lyd for å forklare en handling. | Ikke vurdert |
-| [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Roter mobil og nettbrett. Innhold og betjening skal fungere i begge retninger uten unødvendig låsing. | Ikke vurdert |
-| [1.3.5](https://www.uutilsynet.no/wcag-standarden/135-identifiser-formal-med-inndata-niva-aa/142) Identifiser formål med inndata (AA) | Kontaktpersonens navn og telefon har `autocomplete="name"` og `"tel"` i alle fire flyter. Opplysninger om den ansatte omfattes ikke av dette kravet. | Oppfylt  |
-| [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Kontrollert i kildekode og gråtonevisning av alle fire skjemaflyter. Feil og varsler har tekst og ikoner, aktivt steg har stegnummer, og endringer vises med feltnavn, beløp og gjennomstreking av tidligere inntekt. Ingen avvik funnet. | Oppfylt (appens eget innhold) |
-| [1.4.2](https://www.uutilsynet.no/wcag-standarden/142-styring-av-lyd-niva/94) Styring av lyd (A) | Undersøk om lyd starter automatisk og varer mer enn tre sekunder. Kontroller nødvendig stopp, pause eller uavhengig volumkontroll hvis det forekommer. | Oppfylt |
-| [1.4.3](https://www.uutilsynet.no/wcag-standarden/143-kontrast-minimum-niva-aa/95) Kontrast, minimum (AA) | Tekst, lenker, hjelpetekst og feil er målt i alle fire flyter, inkludert åpne kontroller og lenker ved hover og tastaturfokus. Ingen kontrastavvik funnet. Målinger og terskler står i seksjon 5. | Oppfylt (appens eget innhold) |
-| [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96) Endring av tekststørrelse (AA) | Kontrollert i Chromium med 200 % nettleserzoom fra et 1920 piksler bredt vindu (960 CSS-piksler). Tolv testforløp besto i alle fire flyter, inkludert innsendte skjemaer, valideringsfeil, serverfeil og åpne kontroller. Ingen tap av innhold eller funksjon funnet i målinger og visuell kontroll. | Oppfylt (appens eget innhold) |
-| [1.4.5](https://www.uutilsynet.no/wcag-standarden/145-bilder-av-tekst-niva-aa/97) Bilder av tekst (AA) | Kartlegg tekst i bilder og SVG-er. Kontroller at vanlig tekst brukes der det er mulig, og vurder eventuelle unntak. | Ikke vurdert |
-| [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) Dynamisk tilpasning, reflow (AA) | Test 320 CSS-piksler og 400 % zoom fra 1280 piksler. Kontroller tap av informasjon og behov for rulling i to retninger. Vurder unntak for innhold som faktisk krever todimensjonal layout. | Ikke vurdert |
-| [1.4.11](https://www.uutilsynet.no/wcag-standarden/1411-kontrast-ikke-tekstlig-innhold-niva-aa/145) Kontrast for ikke-tekstlig innhold (AA) | Mål nødvendig visuell informasjon i kontroller og grafikk mot tilstøtende farger, minst 3:1 der kravet gjelder. Ta med avkrysning, feltgrenser og fokusmarkering. | Ikke vurdert |
-| [1.4.12](https://www.uutilsynet.no/wcag-standarden/1412-tekstavstand-niva-aa/146) Tekstavstand (AA) | Bruk tekstinnstillingene i seksjon 5 samtidig. Kontroller at tekst, ledetekster og kontroller ikke klippes eller overlapper. | Ikke vurdert |
-| [1.4.13](https://www.uutilsynet.no/wcag-standarden/1413-pekerfolsomt-innhold-eller-innhold-ved-tastaturfokus-niva-aa/147) Pekerfølsomt innhold eller innhold ved tastaturfokus (AA) | Utløs eventuelle verktøytips og annet ekstra innhold ved hover og fokus. Kontroller at det kan avvises, pekes på og forblir tilgjengelig etter kravets vilkår og unntak. | Ikke vurdert |
+| [1.1.1](https://www.uutilsynet.no/wcag-standarden/111-ikke-tekstlig-innhold-niva/87) Ikke-tekstlig innhold (A) | Gi brukeren et tekstalternativ for innhold som ikke er tekst. | Oppfylt (appens eget innhold) |
+| [1.2.1](https://www.uutilsynet.no/wcag-standarden/121-bare-lyd-og-bare-video-forhandsinnspilt-niva/88) Bare lyd og bare video, forhåndsinnspilt (A) | Gi brukeren et alternativ når innholdet presenteres kun som lydklipp, eller kun video (uten lyd). | Oppfylt |
+| [1.2.2](https://www.uutilsynet.no/wcag-standarden/122-teksting-forhandsinnspilt-niva/89) Teksting, forhåndsinnspilt (A) | Tilby teksting for forhåndsinnspilt video med lyd. | Oppfylt |
+| [1.2.5](https://www.uutilsynet.no/wcag-standarden/125-synstolking-forhandsinnspilt-niva-aa/842) Synstolking, forhåndsinnspilt (AA) | Tilby synstolking av forhåndsinnspilte videoer, publisert 1. februar 2024 eller senere. Synstolking er at viktig visuell informasjon i video blir beskrevet via lyd. Kravet gjelder bare for offentlige virksomheter. | Oppfylt |
+| [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90) Informasjon og relasjoner (A) | Ting skal være kodet som det ser ut som. For eksempel skal en overskrift være kodet som en overskrift. | Ikke vurdert |
+| [1.3.2](https://www.uutilsynet.no/wcag-standarden/132-meningsfylt-rekkefolge-niva/91) Meningsfylt rekkefølge (A) | Presenter innhold i en meningsfull rekkefølge. | Ikke vurdert |
+| [1.3.3](https://www.uutilsynet.no/wcag-standarden/133-sensoriske-egenskaper-niva/92) Sensoriske egenskaper (A) | Instruksjoner må ikke utelukkende være avhengige av form, størrelse, visuell plassering, orientering, eller lyd for å kunne bli forstått. | Ikke vurdert |
+| [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Brukeren må få velge om innholdet skal vises i liggende eller stående retning. | Ikke vurdert |
+| [1.3.5](https://www.uutilsynet.no/wcag-standarden/135-identifiser-formal-med-inndata-niva-aa/142) Identifiser formål med inndata (AA) | Skjemaelementer er kodet med inndataformål. | Oppfylt |
+| [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Ikke bruk presentasjon som bygger utelukkende på farge. | Oppfylt (appens eget innhold) |
+| [1.4.2](https://www.uutilsynet.no/wcag-standarden/142-styring-av-lyd-niva/94) Styring av lyd (A) | Gi brukeren mulighet til å stoppe eller pause lyd som starter automatisk. | Oppfylt |
+| [1.4.3](https://www.uutilsynet.no/wcag-standarden/143-kontrast-minimum-niva-aa/95) Kontrast, minimum (AA) | Kontrastforholdet mellom teksten og bakgrunnen er minst 4,5:1. | Oppfylt (appens eget innhold) |
+| [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96) Endring av tekststørrelse (AA) | Tekst kan bli endret til 200 % størrelse uten tap av innhold eller funksjon. | Oppfylt (appens eget innhold) |
+| [1.4.5](https://www.uutilsynet.no/wcag-standarden/145-bilder-av-tekst-niva-aa/97) Bilder av tekst (AA) | Bruk tekst i stedet for bilder av tekst. | Oppfylt (appens eget innhold) |
+| [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) Dynamisk tilpasning, reflow (AA) | Innhold skal kunne endres til 400 % størrelse ved 1280 piksler bredde, uten tap av informasjon eller funksjonalitet. | Avvik |
+| [1.4.11](https://www.uutilsynet.no/wcag-standarden/1411-kontrast-ikke-tekstlig-innhold-niva-aa/145) Kontrast for ikke-tekstlig innhold (AA) | Ikke-tekstlig innhold skal ha et kontrastforhold på minst 3:1 mot farge(r) som ligger ved siden av. | Ikke vurdert |
+| [1.4.12](https://www.uutilsynet.no/wcag-standarden/1412-tekstavstand-niva-aa/146) Tekstavstand (AA) | Tekstavstanden skal kunne overstyres for å gjøre teksten lettere å lese. | Ikke vurdert |
+| [1.4.13](https://www.uutilsynet.no/wcag-standarden/1413-pekerfolsomt-innhold-eller-innhold-ved-tastaturfokus-niva-aa/147) Pekerfølsomt innhold eller innhold ved tastaturfokus (AA) | Brukeren skal ha mer kontroll over innholdet på nettsiden som får fokus med musepeker eller tastatur. | Ikke vurdert |
 
 ### Mulig å betjene
 
-| Krav | Hva vi skal kontrollere og hvordan | Status |
+| Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [2.1.1](https://www.uutilsynet.no/wcag-standarden/211-tastatur-niva/98) Tastatur (A) | Fullfør flytene uten mus. Ta med datovelger, virksomhetsvalg, gjentakende felt, hjelpetekster, innsending og håndtering av feil. | Ikke vurdert |
-| [2.1.2](https://www.uutilsynet.no/wcag-standarden/212-ingen-tastaturfelle-niva/99) Ingen tastaturfelle (A) | Gå inn og ut av alle interaktive komponenter med tastatur. Kontroller særlig kalender, nedtrekk og eventuelle dialoger. | Ikke vurdert |
-| [2.1.4](https://www.uutilsynet.no/wcag-standarden/214-hurtigtaster-som-bestar-av-ett-tegn-niva/782) Hurtigtaster som består av ett tegn (A) | Kartlegg hurtigtaster. Hvis de finnes, kontroller at de kan slås av, endres eller bare virker når relevant komponent har fokus, slik kravet tillater. | Ikke vurdert |
-| [2.2.1](https://www.uutilsynet.no/wcag-standarden/221-justerbar-hastighet-niva/100) Justerbar hastighet (A) | Test tidsgrenser og utlogging med innloggingsløsningen og dekoratøren. Kontroller mulighet til å slå av, justere eller forlenge tidsfristen etter kravets vilkår. Begrunn eventuelle unntak. | Ikke vurdert |
-| [2.2.2](https://www.uutilsynet.no/wcag-standarden/222-pause-stopp-skjul-niva/101) Pause, stopp, skjul (A) | Kartlegg automatisk bevegelse og oppdateringer. Kontroller mulighet til å pause, stoppe, skjule eller styre oppdateringen der kravet gjelder. | Ikke vurdert |
-| [2.3.1](https://www.uutilsynet.no/wcag-standarden/231-terskelverdi-pa-maksimalt-tre-glimt-niva/102) Terskelverdi på maksimalt tre glimt (A) | Undersøk animasjoner og blinkende innhold. Unngå blink; dersom det finnes, kontroller frekvens og terskelverdier etter testreglene. | Ikke vurdert |
-| [2.4.1](https://www.uutilsynet.no/wcag-standarden/241-hoppe-over-blokker-niva/103) Hoppe over blokker (A) | Test at gjentatt navigasjon kan hoppes over. Kontroller hoppelenke og målet i hovedinnholdet på sider med dekoratør. | Ikke vurdert |
-| [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) Sidetitler (A) | Kontroller nettleserens tittel ved direkte inngang, stegbytte, visning, feil og kvittering. Tittelen skal beskrive sidens tema eller formål. | Ikke vurdert |
-| [2.4.3](https://www.uutilsynet.no/wcag-standarden/243-fokusrekkefolge-niva/105) Fokusrekkefølge (A) | Følg fokus gjennom stegbytter, feil, dynamiske felt og sletting. Rekkefølgen skal bevare mening og betjening. Følg opp F03 med faktisk tastatur- og skjermlesertest. | Ikke vurdert |
-| [2.4.4](https://www.uutilsynet.no/wcag-standarden/244-formal-med-lenke-i-kontekst-niva/106) Formål med lenke, i kontekst (A) | Undersøk lenketekst og programmatisk bestemt kontekst. Kontroller særlig gjentatte endringslenker, avbryt og lenker til veiledning. | Ikke vurdert |
-| [2.4.5](https://www.uutilsynet.no/wcag-standarden/245-flere-mater-niva-aa/107) Flere måter (AA) | Kontroller flere måter å finne sider i et sett av nettsider. Vurder unntaket for sider som er resultat av eller steg i en prosess; ikke bruk unntaket automatisk på hele tjenesten. | Ikke vurdert |
-| [2.4.6](https://www.uutilsynet.no/wcag-standarden/246-overskrifter-og-ledetekster-niva-aa/108) Overskrifter og ledetekster (AA) | Les overskrifter og feltnavn samlet. Kontroller at de beskriver tema eller formål og skiller like felt og gjentatte grupper fra hverandre. | Ikke vurdert |
-| [2.4.7](https://www.uutilsynet.no/wcag-standarden/247-synlig-fokus-niva-aa/109) Synlig fokus (AA) | Gå gjennom alle kontroller med tastatur. Kontroller synlig fokus på ulike bakgrunner og i åpne komponenter og feilsituasjoner. | Ikke vurdert |
-| [2.5.1](https://www.uutilsynet.no/wcag-standarden/251-pekerbevegelser-niva/148) Pekerbevegelser (A) | Kontroller at funksjoner kan brukes med enkel pekerinput uten flerpunkts- eller banebaserte bevegelser, med mindre bevegelsen er nødvendig. | Ikke vurdert |
-| [2.5.2](https://www.uutilsynet.no/wcag-standarden/252-pekeravbrytelse-niva/149) Pekeravbrytelse (A) | Test trykk, hold, flytt pekeren bort og slipp på relevante kontroller. Kontroller at handlinger følger kravets alternativer for avbrytelse eller angring. | Ikke vurdert |
-| [2.5.3](https://www.uutilsynet.no/wcag-standarden/253-ledetekst-i-navn-niva/150) Ledetekst i navn (A) | Sammenlign synlig ledetekst med tilgjengelig navn ved tom, forhåndsutfylt, endret og ugyldig verdi. Navnet skal inneholde den synlige teksten i riktig rekkefølge. Kontroller inntekt, refusjonsbeløp og naturalytelser med skjermleser og stemmestyring. | Ikke vurdert |
-| [2.5.4](https://www.uutilsynet.no/wcag-standarden/254-bevegelsesaktivering-niva/151) Bevegelsesaktivering (A) | Undersøk eventuell betjening gjennom bevegelse av enheten eller brukeren. Kontroller alternativ betjening og mulighet til å slå av bevegelsesaktivering etter kravets vilkår. | Ikke vurdert |
+| [2.1.1](https://www.uutilsynet.no/wcag-standarden/211-tastatur-niva/98) Tastatur (A) | All funksjonalitet skal kunne brukes kun ved hjelp av tastatur. | Ikke vurdert |
+| [2.1.2](https://www.uutilsynet.no/wcag-standarden/212-ingen-tastaturfelle-niva/99) Ingen tastaturfelle (A) | Unngå tastaturfeller. | Ikke vurdert |
+| [2.1.4](https://www.uutilsynet.no/wcag-standarden/214-hurtigtaster-som-bestar-av-ett-tegn-niva/782) Hurtigtaster som består av ett tegn (A) | Brukeren skal enkelt kunne slå av hurtigtaster som består av ett tegn. | Ikke vurdert |
+| [2.2.1](https://www.uutilsynet.no/wcag-standarden/221-justerbar-hastighet-niva/100) Justerbar hastighet (A) | Tidsbegrensninger skal kunne justeres av brukeren. | Ikke vurdert |
+| [2.2.2](https://www.uutilsynet.no/wcag-standarden/222-pause-stopp-skjul-niva/101) Pause, stopp, skjul (A) | Gi brukeren mulighet til å stoppe, pause eller skjule innhold som automatisk endrer seg. | Ikke vurdert |
+| [2.3.1](https://www.uutilsynet.no/wcag-standarden/231-terskelverdi-pa-maksimalt-tre-glimt-niva/102) Terskelverdi på maksimalt tre glimt (A) | Innhold skal ikke blinke mer enn tre ganger per sekund. | Ikke vurdert |
+| [2.4.1](https://www.uutilsynet.no/wcag-standarden/241-hoppe-over-blokker-niva/103) Hoppe over blokker (A) | Gi brukeren mulighet til å hoppe direkte til hovedinnholdet. | Ikke vurdert |
+| [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) Sidetitler (A) | Bruk nyttige og tydelige sidetitler. | Ikke vurdert |
+| [2.4.3](https://www.uutilsynet.no/wcag-standarden/243-fokusrekkefolge-niva/105) Fokusrekkefølge (A) | Presenter innholdet i en logisk rekkefølge. | Ikke vurdert |
+| [2.4.4](https://www.uutilsynet.no/wcag-standarden/244-formal-med-lenke-i-kontekst-niva/106) Formål med lenke, i kontekst (A) | Alle lenkers mål og funksjon fremgår tydelig av lenketeksten. | Ikke vurdert |
+| [2.4.5](https://www.uutilsynet.no/wcag-standarden/245-flere-mater-niva-aa/107) Flere måter (AA) | Tilby brukeren flere måter å navigere på. | Ikke vurdert |
+| [2.4.6](https://www.uutilsynet.no/wcag-standarden/246-overskrifter-og-ledetekster-niva-aa/108) Overskrifter og ledetekster (AA) | Sørg for at ledetekster og overskrifter er beskrivende. | Ikke vurdert |
+| [2.4.7](https://www.uutilsynet.no/wcag-standarden/247-synlig-fokus-niva-aa/109) Synlig fokus (AA) | Sørg for at alt innhold får synlig fokus når du navigerer med tastatur. | Ikke vurdert |
+| [2.5.1](https://www.uutilsynet.no/wcag-standarden/251-pekerbevegelser-niva/148) Pekerbevegelser (A) | Innhold på nettsiden skal kunne brukes med enkel pekerinput. | Ikke vurdert |
+| [2.5.2](https://www.uutilsynet.no/wcag-standarden/252-pekeravbrytelse-niva/149) Pekeravbrytelse (A) | Uheldige og feilaktige input via mus eller berøringsskjerm skal lettere kunne forhindres. | Ikke vurdert |
+| [2.5.3](https://www.uutilsynet.no/wcag-standarden/253-ledetekst-i-navn-niva/150) Ledetekst i navn (A) | Brukere som bruker visuelle ledetekster skal også kunne bruke kodede ledetekster. | Ikke vurdert |
+| [2.5.4](https://www.uutilsynet.no/wcag-standarden/254-bevegelsesaktivering-niva/151) Bevegelsesaktivering (A) | Funksjonalitet som kan betjenes med å bevege enheten eller ved brukerbevegelse, skal også kunne betjenes med brukergrensesnittkomponenter. | Ikke vurdert |
 
 ### Forståelig
 
-| Krav | Hva vi skal kontrollere og hvordan | Status |
+| Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [3.1.1](https://www.uutilsynet.no/wcag-standarden/311-sprak-pa-siden-niva/110) Språk på siden (A) | Kontroller gyldig og riktig `lang` på dokumentet, også når serveren legger til dekoratør og viser feilsider. | Ikke vurdert |
-| [3.1.2](https://www.uutilsynet.no/wcag-standarden/312-sprak-pa-deler-av-innhold-niva-aa/111) Språk på deler av innhold (AA) | Finn fremmedspråklige avsnitt og fraser og kontroller språkmerking der kravet gjelder. Vurder unntak for blant annet egennavn og faguttrykk. | Ikke vurdert |
-| [3.2.1](https://www.uutilsynet.no/wcag-standarden/321-fokus-niva/112) Fokus (A) | Flytt fokus til alle typer kontroller. Fokus alene skal ikke utløse uventet navigasjon, innsending eller annen kontekstendring. | Ikke vurdert |
-| [3.2.2](https://www.uutilsynet.no/wcag-standarden/322-inndata-niva/114) Inndata (A) | Endre valg, beløp og datoer. Kontroller at endring av verdi ikke automatisk utløser kontekstendring uten at brukeren er varslet på forhånd. Vurder betinget innhold konkret. | Ikke vurdert |
-| [3.2.3](https://www.uutilsynet.no/wcag-standarden/323-konsekvent-navigering-niva-aa/113) Konsekvent navigering (AA) | Sammenlign gjentatt navigasjon på tvers av sider, inkludert dekoratør og stegnavigasjon. Kontroller konsekvent innbyrdes rekkefølge. | Ikke vurdert |
-| [3.2.4](https://www.uutilsynet.no/wcag-standarden/324-konsekvent-identifikasjon-niva-aa/115) Konsekvent identifikasjon (AA) | Sammenlign kontroller med samme funksjon på tvers av flytene. Kontroller konsekvente navn, ikoner og tekstalternativer. | Ikke vurdert |
-| [3.3.1](https://www.uutilsynet.no/wcag-standarden/331-identifikasjon-av-feil-niva/116) Identifikasjon av feil (A) | Utløs hver type inndatafeil. Kontroller at feltet identifiseres og feilen beskrives med tekst, også for dynamiske felt og asynkron validering. | Ikke vurdert |
-| [3.3.2](https://www.uutilsynet.no/wcag-standarden/332-ledetekster-eller-instruksjoner-niva/117) Ledetekster eller instruksjoner (A) | Kontroller synlige ledetekster, obligatoriske opplysninger, enheter og nødvendige formatinstruksjoner før brukeren fyller ut. | Ikke vurdert |
-| [3.3.3](https://www.uutilsynet.no/wcag-standarden/333-forslag-ved-feil-niva-aa/118) Forslag ved feil (AA) | Utløs kjente valideringsfeil. Kontroller at meldingene forklarer hvordan de kan rettes når rettingen er kjent, uten å røpe opplysninger som ikke skal vises. | Ikke vurdert |
-| [3.3.4](https://www.uutilsynet.no/wcag-standarden/334-forhindring-av-feil-juridiske-feil-okonomiske-feil-datafeil-niva-aa/119) Forhindring av juridiske feil, økonomiske feil og datafeil (AA) | Kontroller at brukeren kan gjennomgå og rette relevante opplysninger før bindende innsending, eller at et annet tillatt alternativ oppfyller kravet. Test at oppsummeringen faktisk samsvarer med det som sendes. | Ikke vurdert |
+| [3.1.1](https://www.uutilsynet.no/wcag-standarden/311-sprak-pa-siden-niva/110) Språk på siden (A) | Sørg for at språket til innholdet på alle nettsider er angitt i koden. | Ikke vurdert |
+| [3.1.2](https://www.uutilsynet.no/wcag-standarden/312-sprak-pa-deler-av-innhold-niva-aa/111) Språk på deler av innhold (AA) | Sørg for at alle deler av innholdet som er på et annet språk enn resten av siden er markert i koden. | Ikke vurdert |
+| [3.2.1](https://www.uutilsynet.no/wcag-standarden/321-fokus-niva/112) Fokus (A) | Når en komponent kommer i fokus medfører dette ikke automatisk betydelige endringer i siden. | Ikke vurdert |
+| [3.2.2](https://www.uutilsynet.no/wcag-standarden/322-inndata-niva/114) Inndata (A) | Endring av verdien til et skjemafelt medfører ikke automatisk betydelige endringer i siden. | Ikke vurdert |
+| [3.2.3](https://www.uutilsynet.no/wcag-standarden/323-konsekvent-navigering-niva-aa/113) Konsekvent navigering (AA) | Navigasjonslenker som gjentas på flere sider skal ha en konsekvent rekkefølge. | Ikke vurdert |
+| [3.2.4](https://www.uutilsynet.no/wcag-standarden/324-konsekvent-identifikasjon-niva-aa/115) Konsekvent identifikasjon (AA) | Elementer som har samme funksjonalitet på tvers av flere sider er utformet likt. | Ikke vurdert |
+| [3.3.1](https://www.uutilsynet.no/wcag-standarden/331-identifikasjon-av-feil-niva/116) Identifikasjon av feil (A) | For feil som oppdages automatisk må du vise hvor feilen har oppstått og gi en tekstbeskrivelse av feilen. | Ikke vurdert |
+| [3.3.2](https://www.uutilsynet.no/wcag-standarden/332-ledetekster-eller-instruksjoner-niva/117) Ledetekster eller instruksjoner (A) | Det vises ledetekster eller instruksjoner når du har skjemaelementer som må fylles ut. | Ikke vurdert |
+| [3.3.3](https://www.uutilsynet.no/wcag-standarden/333-forslag-ved-feil-niva-aa/118) Forslag ved feil (AA) | Dersom feil blir oppdaget automatisk, gi brukeren et forslag til hvordan feilen kan rettes. | Ikke vurdert |
+| [3.3.4](https://www.uutilsynet.no/wcag-standarden/334-forhindring-av-feil-juridiske-feil-okonomiske-feil-datafeil-niva-aa/119) Forhindring av juridiske feil, økonomiske feil og datafeil (AA) | For sider som medfører juridiske forpliktelser må det være mulig å kunne angre, kontrollere eller bekrefte dataene som sendes inn. | Ikke vurdert |
 
 ### Robust
 
-| Krav | Hva vi skal kontrollere og hvordan | Status |
+| Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [4.1.1](https://www.uutilsynet.no/wcag-standarden/411-parsing-oppdeling-niva/120) Parsing, oppdeling (A) | Undersøk ferdig rendret HTML for feil nesting, dupliserte attributter og ID-er etter tilsynets gjeldende testregler. Ikke anta at React eller bestått lint sikrer samsvar. | Ikke vurdert |
-| [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) Navn, rolle, verdi (A) | Den åpne listen i Aksels `UNSAFE_Combobox` (8.16.2) mangler tilgjengelig navn (`role="listbox"`), bekreftet av axe (`aria-input-field-name`). Følg opp manuelt med Aksel. Øvrig kontroll gjenstår. | Avvik |
-| [4.1.3](https://www.uutilsynet.no/wcag-standarden/413-statusbeskjeder-niva-aa/152) Statusbeskjeder (AA) | Utløs oppslag, lasting, feil, nye perioder og andre oppdateringer uten kontekstendring. Kontroller at relevante beskjeder kunngjøres uten unødvendig fokusflytting eller gjentakelser. | Ikke vurdert |
+| [4.1.1](https://www.uutilsynet.no/wcag-standarden/411-parsing-oppdeling-niva/120) Parsing, oppdeling (A) | Alle sider skal være uten store kodefeil. | Ikke vurdert |
+| [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) Navn, rolle, verdi (A) | Alle komponenter har navn og rolle bestemt i koden. | Avvik |
+| [4.1.3](https://www.uutilsynet.no/wcag-standarden/413-statusbeskjeder-niva-aa/152) Statusbeskjeder (AA) | Brukeren skal få statusbeskjeder om viktige endringer på nettsiden uten at det gir kontekstendring. | Ikke vurdert |
+
+### Dokumenterte bevis og avvik
+
+- 1.1.1, 1.4.1, 1.4.3 og 1.4.5 er vurdert for appens eget innhold. Dekoratøren er forutsatt uten avvik. PDF-innhold er ikke vurdert.
+- 1.3.5: Kontaktfeltet har `autocomplete="name"` eller `"tel"` i alle fire flyter. Opplysninger om den ansatte omfattes ikke.
+- 1.4.3: Tekst, lenker, hjelpetekst og feil er målt i alle fire flyter. Ingen kontrastavvik ble funnet. Se seksjon 5.
+- 1.4.4: Automatisk test med ekte 200 % zoom besto i alle fire flyter. Reflow ved 400 % er vurdert under 1.4.10.
+- 1.4.10: Ved 320 CSS-piksler og 400 % zoom gir datoperioder i «Omsorgsdager» 64 piksler vannrett overløp. [DateRangePickerWrapped](./app/src/features/shared/react-hook-form-wrappers/DateRangePickerWrapped.tsx) tvinger feltene ved siden av hverandre, selv om layouten ikke krever to dimensjoner.
+- 4.1.2: Åpen `UNSAFE_Combobox` fra Aksel 8.16.2 mangler tilgjengelig navn på `role="listbox"`. Axe rapporterer `aria-input-field-name`. Feilen skal følges opp med Aksel.
+- 1.3.1: Automatiske strukturkontroller består, men skjermleserkontroll og øvrig testomfang gjenstår. Se seksjon 5.
 
 ## 7. Kontroller tilgjengelighetserklæring og tilbakemelding
 

@@ -44,6 +44,14 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
       page,
       "Dine opplysninger unntatt Aa-registeret",
     );
+    await expect(page.getByLabel("Navn", { exact: true })).toHaveAttribute(
+      "autocomplete",
+      "name",
+    );
+    await expect(page.getByLabel("Telefon", { exact: true })).toHaveAttribute(
+      "autocomplete",
+      "tel",
+    );
     await page.getByLabel("Navn").fill("Ola Nordmann");
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();

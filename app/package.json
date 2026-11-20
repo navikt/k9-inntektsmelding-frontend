@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite --base=/k9-im-dialog",
     "build": "tsc && vite build --base=/k9-im-dialog",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --project=chromium",
     "test:e2e:ui": "playwright test --ui",
-    "test:uu": "playwright test --grep @uu",
+    "test:uu": "playwright test --project=uu --project=uu-smal --project=uu-zoom",
     "check:types": "tsc --noemit",
     "lint": "eslint",
     "lint:fix": "eslint --fix",

@@ -77,6 +77,14 @@ test.describe("AGI Happy Path", () => {
         page.getByRole("heading", { name: "Dine opplysninger" }),
       ).toBeVisible();
       await sjekkUniversellUtforming(page, "Dine opplysninger for nyansatt");
+      await expect(page.getByLabel("Navn", { exact: true })).toHaveAttribute(
+        "autocomplete",
+        "name",
+      );
+      await expect(page.getByLabel("Telefon", { exact: true })).toHaveAttribute(
+        "autocomplete",
+        "tel",
+      );
 
       // Fyll ut telefonnummer (navn skal være forhåndsutfylt)
       await page.getByLabel("Telefon").fill("98765432");

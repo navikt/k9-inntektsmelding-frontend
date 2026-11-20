@@ -14,6 +14,27 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
+      grepInvert: /@uu/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "uu",
+      grep: /@uu/,
+      grepInvert: /@nettleserzoom/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "uu-smal",
+      grep: /@uu/,
+      grepInvert: /@kjent-avvik|@nettleserzoom/,
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 320, height: 256 },
+      },
+    },
+    {
+      name: "uu-zoom",
+      grep: /@nettleserzoom/,
       use: { ...devices["Desktop Chrome"] },
     },
   ],
