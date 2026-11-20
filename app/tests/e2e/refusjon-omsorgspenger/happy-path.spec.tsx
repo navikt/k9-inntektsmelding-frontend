@@ -65,6 +65,16 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
         page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
       ).toBeVisible();
       await sjekkUniversellUtforming(page, "Den ansatte og arbeidsgiver");
+      const kontaktinformasjon = page.getByRole("region", {
+        name: "Kontaktinformasjon",
+        exact: true,
+      });
+      await expect(
+        kontaktinformasjon.getByLabel("Navn", { exact: true }),
+      ).toHaveAttribute("autocomplete", "name");
+      await expect(
+        kontaktinformasjon.getByLabel("Telefonnummer"),
+      ).toHaveAttribute("autocomplete", "tel");
       await page
         .getByLabel("Ansattes fødselsnummer (11 siffer)")
         .fill(VALID_FNR);

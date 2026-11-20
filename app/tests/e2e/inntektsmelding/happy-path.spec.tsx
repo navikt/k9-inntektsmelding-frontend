@@ -8,6 +8,48 @@ import {
 } from "tests/mocks/shared/utils";
 
 test.describe("Happy path", () => {
+  test("Skjemaet krever ikke vannrett rulling i smale vinduer", async ({
+    page,
+  }) => {
+    await mockOpplysninger({ page });
+    await mockGrunnbeløp({ page });
+    await mockInntektsmeldinger({ page });
+    await page.goto("/k9-im-dialog/1/dine-opplysninger");
+    await expect(
+      page.getByRole("heading", { name: "Dine opplysninger", exact: true }),
+    ).toBeVisible();
+
+    const kontrollerVannrettRulling = async (steg: string) => {
+      for (const bredde of [320, 768, 800]) {
+        await page.setViewportSize({ width: bredde, height: 900 });
+        await expect
+          .poll(
+            () =>
+              page.evaluate(
+                () =>
+                  document.documentElement.scrollWidth -
+                  document.documentElement.clientWidth,
+              ),
+            { message: `${steg} ved ${bredde} CSS-piksler` },
+          )
+          .toBeLessThanOrEqual(0);
+      }
+    };
+
+    await kontrollerVannrettRulling("Dine opplysninger");
+    await page.getByLabel("Navn", { exact: true }).fill("Test Brukersen");
+    await page.getByLabel("Telefon", { exact: true }).fill("13371337");
+    await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Inntekt og refusjon", exact: true }),
+    ).toBeVisible();
+    await kontrollerVannrettRulling("Inntekt og refusjon");
+    await page
+      .getByRole("button", { name: "Endre månedslønn", exact: true })
+      .click();
+    await kontrollerVannrettRulling("Åpen inntektsendring");
+  });
+
   test("Enklest mulige utfylling", { tag: "@uu" }, async ({ page }) => {
     await mockOpplysninger({ page });
     await mockGrunnbeløp({ page });

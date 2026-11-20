@@ -169,6 +169,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
           <div className="flex gap-4 flex-col ax-md:flex-row">
             <div className="flex-1">
               <TextField
+                autoComplete="name"
                 label="Navn"
                 {...register("kontaktperson.navn")}
                 error={formState.errors.kontaktperson?.navn?.message}
@@ -176,6 +177,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             </div>
             <div className="flex-1">
               <TextField
+                autoComplete="tel"
                 label="Telefonnummer"
                 type="tel"
                 {...register("kontaktperson.telefonnummer")}

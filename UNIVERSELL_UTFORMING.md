@@ -2,7 +2,7 @@
 
 Dette dokumentet viser hva teamet må undersøke og dokumentere før vi kan konkludere om etterlevelse for inntektsmelding og refusjon for omsorgspenger.
 
-Status 20. november 2026: Axe-testene består. Flere forhold må fortsatt undersøkes. Vi har ikke gjennomført en full kontroll eller kontrollert produksjon. Dokumentet er en arbeidsliste, ikke en tilgjengelighetserklæring eller godkjenning.
+Status 20. november 2026: De ti faste axe-testene består. En tilleggskontroll fant et avvik i virksomhetsvalget (4.1.2). Flere forhold må fortsatt undersøkes. Vi har ikke gjennomført en full kontroll eller kontrollert produksjon. Dokumentet er en arbeidsliste, ikke en tilgjengelighetserklæring eller godkjenning.
 
 Teamet legger til grunn at dekoratørens eget innhold oppfyller UU-kravene. Dette er en forutsetning, ikke et verifisert testresultat. Integrasjonen med appen må fortsatt kontrolleres.
 
@@ -51,17 +51,6 @@ Ikke lagre reelle fødselsnumre, innloggingsopplysninger eller andre personopply
 
 Observasjonene under stammer fra den avgrensede lokale kontrollen 18. november 2026. Vi brukte Chromium, mockede API-svar og visningsbredder på 1280 og 320 CSS-piksler. Testen dekket de to første stegene i vanlig inntektsmelding, inkludert endring av månedsinntekt. Dekoratøren fra Express-serveren var ikke med.
 
-### F02: Hovedinnholdet er bredere enn visningsområdet
-
-**Må undersøkes mot 1.4.10 Dynamisk tilpasning.**
-
-Ved 320 CSS-piksler målte vi hovedinnholdets bredde til 340 piksler. Hjelpetekstområdet og, etter åpning av inntektsfeltet, tilbakestillingsknappen hadde elementgrenser utenfor visningsområdet. Målingen alene avgjør ikke om brukeren mister innhold eller må rulle vannrett for å bruke det.
-
-- [ ] Gjenta testen i produksjonslikt miljø uten utviklerverktøyknapper i siden.
-- [ ] Kontroller 320 CSS-piksler og 400 % zoom med utgangspunkt i et 1280 piksler bredt nettleservindu.
-- [ ] Undersøk [HjelpetekstToggle](./app/src/features/shared/Hjelpetekst.tsx) og raden med inntektsfelt og tilbakestillingsknapp i [Inntekt](./app/src/features/shared/skjema-moduler/Inntekt.tsx).
-- [ ] Registrer om tekst eller kontroller blir skjult, overlapper eller krever vannrett rulling.
-
 ### F03: Fokus havner på dokumentets body ved stegbytte
 
 **Må undersøkes mot 2.4.3 Fokusrekkefølge.**
@@ -82,13 +71,6 @@ Det undersøkte testoppsettet dokumenterer ikke en full UU-kontroll. Det finnes 
 - [ ] Finn tidligere UU-rapporter, testresultater og åpne saker hos teamet.
 - [ ] Finn gjeldende tilgjengelighetserklæring og kontroller innhold, omfang og dato.
 - [ ] Avklar hvem som følger opp feil i dekoratøren, innloggingen og andre fellesløsninger.
-
-### F05: Kontrastfunn fra axe krever manuell vurdering
-
-De 35 axe-skanningene har åtte `incomplete`-funn om kontrast. Disse er verken bekreftede avvik eller beståtte kontroller.
-
-- [ ] Kontroller øvrige brukssteder og varianter som ikke inngår i axe-testene.
-- [ ] Mål kontrasten manuelt der axe rapporterer `incomplete`.
 
 ## 4. Dekk alle flyter og relevante tilstander
 
@@ -154,6 +136,21 @@ Testene merket `@uu` kjører også i den ordinære E2E-jobben i CI. De dekker va
 
 Skanningene er avgrenset til `main`. De dekker ikke hele dokumentet, dekoratøren, innloggingen, alle varianter eller mobilvisning. Beståtte axe-tester, funksjonstester, typekontroll og lint er ikke en UU-godkjenning.
 
+### Tekstkontrast (1.4.3)
+
+Målt lokalt 20. november 2026 i Chromium ved 1280 × 720, med mockede API-svar. Kontrollen dekker alle fire flyter, visning av innsendte skjemaer, valideringsfeil, serverfeil, åpne hjelpetekster, kalender og virksomhetsvalg, samt lenker ved hover og tastaturfokus. Ti faste UU-tester og to målrettede kontrasttester besto.
+
+| Tekst | Tekstfarge / bakgrunn | Kontrast |
+| --- | --- | --- |
+| Knappetekst, laveste målte verdi | `#ffffff` / `#2176d4` | 4,56:1 |
+| Lenker, laveste målte verdi | `#005bb6` / `#ffffff` | 6,62:1 |
+| Dempet hjelpetekst | `#49515e` / `#ffffff` | 8,01:1 |
+| Knapp for hjelpetekst under musepekeren | `#005bb6` / `#e1e3e7` | 5,15:1 |
+| Feilmelding på grå flate | `#bc002a` / `#f5f6f7` | 6,12:1 |
+| Overskriftene som krevde manuell kontroll | `#202733` / `#ffffff` | 15,01:1 |
+
+Fargene er hentet fra rendret CSS, med gjennomskinnelige bakgrunner lagt sammen før beregning av WCAG-kontrast. Tersklene er brukt på uavrundede verdier: 4,5:1 for vanlig tekst og 3:1 for tekst på minst 18 pt (24 CSS-piksler), eller 14 pt i fet skrift. Dempet og gjennomstreket tekst er ikke unntatt. Ingen kontrastunntak var nødvendige for teksten som ble målt. Bakgrunnene axe ikke kunne avgjøre, er kontrollert visuelt og målt, også med kalenderen lukket.
+
 ### Testgrunnlag og gjenstående kontroll for 1.3.1
 
 Ti UU-tester med 35 axe-skanninger og 27 målrettede valideringstester besto 20. november 2026. UU-testene kontrollerer også overskriftshierarki, navngitte seksjoner, gjentakende feltgrupper og kobling mellom kontaktfelt og feilmeldinger. Skjermbilder fra de berørte sidene er kontrollert ved 1280 × 720 CSS-piksler.
@@ -180,13 +177,13 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | [1.3.2](https://www.uutilsynet.no/wcag-standarden/132-meningsfylt-rekkefolge-niva/91) Meningsfylt rekkefølge (A) | Les siden med skjermleser og undersøk DOM-rekkefølgen. Kontroller særlig kolonner, inntektsoversikter og dato- og beløpspar når layouten endres. | Ikke vurdert |
 | [1.3.3](https://www.uutilsynet.no/wcag-standarden/133-sensoriske-egenskaper-niva/92) Sensoriske egenskaper (A) | Les instruksjoner og feilmeldinger. De skal ikke bare vise til plassering, form, farge, størrelse eller lyd for å forklare en handling. | Ikke vurdert |
 | [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Roter mobil og nettbrett. Innhold og betjening skal fungere i begge retninger uten unødvendig låsing. | Ikke vurdert |
-| [1.3.5](https://www.uutilsynet.no/wcag-standarden/135-identifiser-formal-med-inndata-niva-aa/142) Identifiser formål med inndata (AA) | Kontroller riktig programmatisk formål, blant annet `autocomplete` for kontaktpersonens navn og telefon når opplysningene gjelder den som fyller ut. Skill dette fra opplysninger om den ansatte. | Ikke vurdert |
-| [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Kontroller feil, valgte steg, varsler og endrede verdier uten å støtte deg på farge. Informasjon skal også fremgå på andre måter. | Ikke vurdert |
-| [1.4.2](https://www.uutilsynet.no/wcag-standarden/142-styring-av-lyd-niva/94) Styring av lyd (A) | Undersøk om lyd starter automatisk og varer mer enn tre sekunder. Kontroller nødvendig stopp, pause eller uavhengig volumkontroll hvis det forekommer. | Ikke vurdert |
-| [1.4.3](https://www.uutilsynet.no/wcag-standarden/143-kontrast-minimum-niva-aa/95) Kontrast, minimum (AA) | Mål tekstkontrast, også for lenker, hjelpetekst og feil: minst 4,5:1 for vanlig tekst og 3:1 for stor tekst. Bruk WCAGs definisjon av stor tekst og vurder dokumenterte unntak. | Ikke vurdert |
-| [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96) Endring av tekststørrelse (AA) | Forstørr tekst til 200 %. Kontroller at felt, knapper, varsler og oppsummering ikke mister innhold eller funksjon. | Ikke vurdert |
+| [1.3.5](https://www.uutilsynet.no/wcag-standarden/135-identifiser-formal-med-inndata-niva-aa/142) Identifiser formål med inndata (AA) | Kontaktpersonens navn og telefon har `autocomplete="name"` og `"tel"` i alle fire flyter. Opplysninger om den ansatte omfattes ikke av dette kravet. | Oppfylt  |
+| [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Kontrollert i kildekode og gråtonevisning av alle fire skjemaflyter. Feil og varsler har tekst og ikoner, aktivt steg har stegnummer, og endringer vises med feltnavn, beløp og gjennomstreking av tidligere inntekt. Ingen avvik funnet. | Oppfylt (appens eget innhold) |
+| [1.4.2](https://www.uutilsynet.no/wcag-standarden/142-styring-av-lyd-niva/94) Styring av lyd (A) | Undersøk om lyd starter automatisk og varer mer enn tre sekunder. Kontroller nødvendig stopp, pause eller uavhengig volumkontroll hvis det forekommer. | Oppfylt |
+| [1.4.3](https://www.uutilsynet.no/wcag-standarden/143-kontrast-minimum-niva-aa/95) Kontrast, minimum (AA) | Tekst, lenker, hjelpetekst og feil er målt i alle fire flyter, inkludert åpne kontroller og lenker ved hover og tastaturfokus. Ingen kontrastavvik funnet. Målinger og terskler står i seksjon 5. | Oppfylt (appens eget innhold) |
+| [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96) Endring av tekststørrelse (AA) | Kontrollert i Chromium med 200 % nettleserzoom fra et 1920 piksler bredt vindu (960 CSS-piksler). Tolv testforløp besto i alle fire flyter, inkludert innsendte skjemaer, valideringsfeil, serverfeil og åpne kontroller. Ingen tap av innhold eller funksjon funnet i målinger og visuell kontroll. | Oppfylt (appens eget innhold) |
 | [1.4.5](https://www.uutilsynet.no/wcag-standarden/145-bilder-av-tekst-niva-aa/97) Bilder av tekst (AA) | Kartlegg tekst i bilder og SVG-er. Kontroller at vanlig tekst brukes der det er mulig, og vurder eventuelle unntak. | Ikke vurdert |
-| [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) Dynamisk tilpasning, reflow (AA) | Test 320 CSS-piksler og 400 % zoom fra 1280 piksler. Kontroller tap av informasjon og behov for rulling i to retninger. Vurder unntak for innhold som faktisk krever todimensjonal layout. Følg opp F02. | Ikke vurdert |
+| [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) Dynamisk tilpasning, reflow (AA) | Test 320 CSS-piksler og 400 % zoom fra 1280 piksler. Kontroller tap av informasjon og behov for rulling i to retninger. Vurder unntak for innhold som faktisk krever todimensjonal layout. | Ikke vurdert |
 | [1.4.11](https://www.uutilsynet.no/wcag-standarden/1411-kontrast-ikke-tekstlig-innhold-niva-aa/145) Kontrast for ikke-tekstlig innhold (AA) | Mål nødvendig visuell informasjon i kontroller og grafikk mot tilstøtende farger, minst 3:1 der kravet gjelder. Ta med avkrysning, feltgrenser og fokusmarkering. | Ikke vurdert |
 | [1.4.12](https://www.uutilsynet.no/wcag-standarden/1412-tekstavstand-niva-aa/146) Tekstavstand (AA) | Bruk tekstinnstillingene i seksjon 5 samtidig. Kontroller at tekst, ledetekster og kontroller ikke klippes eller overlapper. | Ikke vurdert |
 | [1.4.13](https://www.uutilsynet.no/wcag-standarden/1413-pekerfolsomt-innhold-eller-innhold-ved-tastaturfokus-niva-aa/147) Pekerfølsomt innhold eller innhold ved tastaturfokus (AA) | Utløs eventuelle verktøytips og annet ekstra innhold ved hover og fokus. Kontroller at det kan avvises, pekes på og forblir tilgjengelig etter kravets vilkår og unntak. | Ikke vurdert |
@@ -233,7 +230,7 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | Krav | Hva vi skal kontrollere og hvordan | Status |
 | --- | --- | --- |
 | [4.1.1](https://www.uutilsynet.no/wcag-standarden/411-parsing-oppdeling-niva/120) Parsing, oppdeling (A) | Undersøk ferdig rendret HTML for feil nesting, dupliserte attributter og ID-er etter tilsynets gjeldende testregler. Ikke anta at React eller bestått lint sikrer samsvar. | Ikke vurdert |
-| [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) Navn, rolle, verdi (A) | Undersøk tilgjengelighetstreet og test med skjermleser. Kontroller navn, roller, verdier og tilstander for felt, grupper, kalendere, ekspanderbart innhold og ikonknapper. | Ikke vurdert |
+| [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) Navn, rolle, verdi (A) | Den åpne listen i Aksels `UNSAFE_Combobox` (8.16.2) mangler tilgjengelig navn (`role="listbox"`), bekreftet av axe (`aria-input-field-name`). Følg opp manuelt med Aksel. Øvrig kontroll gjenstår. | Avvik |
 | [4.1.3](https://www.uutilsynet.no/wcag-standarden/413-statusbeskjeder-niva-aa/152) Statusbeskjeder (AA) | Utløs oppslag, lasting, feil, nye perioder og andre oppdateringer uten kontekstendring. Kontroller at relevante beskjeder kunngjøres uten unødvendig fokusflytting eller gjentakelser. | Ikke vurdert |
 
 ## 7. Kontroller tilgjengelighetserklæring og tilbakemelding
