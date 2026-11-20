@@ -82,7 +82,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
     <section className="mt-2">
       {erTidligereSendInnFraAltinn && (
         <Alert className="mb-4" variant="warning">
-          <Heading level="3" size="xsmall" spacing>
+          <Heading level="2" size="xsmall" spacing>
             Inntektsmelding er sendt inn via Altinn eller lønns- og
             personalsystem
           </Heading>
@@ -100,7 +100,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
         })}
       >
         <div className="bg-ax-bg-default px-5 py-6 rounded-md flex flex-col gap-6">
-          <Heading level="3" size="large">
+          <Heading level="2" size="large">
             Dine opplysninger
           </Heading>
           <Fremgangsindikator aktivtSteg={1} />
@@ -144,7 +144,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
             </HGrid>
             {vis && (
               <Alert variant="info">
-                <Heading level="3" size="xsmall" spacing>
+                <Heading level="4" size="xsmall" spacing>
                   Er kontaktinformasjonen riktig?
                 </Heading>
                 <BodyLong>

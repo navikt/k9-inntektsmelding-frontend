@@ -83,7 +83,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Den ansatte og arbeidsgiver
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={2} />
@@ -184,7 +184,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             </div>
           </div>
           <HjelpetekstAlert>
-            <Heading level="3" size="xsmall" spacing>
+            <Heading level="4" size="xsmall" spacing>
               Er kontaktinformasjonen riktig?
             </Heading>
             <BodyLong>

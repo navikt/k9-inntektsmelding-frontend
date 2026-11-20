@@ -80,7 +80,9 @@ export const Kvittering = ({
         </BodyLong>
       </Alert>
       <VStack className="mb-12" gap="space-16">
-        <Heading size="medium">Ofte stilte spørsmål</Heading>
+        <Heading level="2" size="medium">
+          Ofte stilte spørsmål
+        </Heading>
         {ofteStilteSpørsmål().map((spørsmål) => (
           <ExpansionCard
             aria-labelledby={slugify(spørsmål.spørsmål)}

@@ -86,6 +86,58 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
       await expect(page.getByLabel("Fra og med").first()).toBeVisible();
       await page.getByLabel("Fra og med").first().fill(`15.06.${FJORÅRET}`);
       await page.getByLabel("Til og med").first().fill(`20.06.${FJORÅRET}`);
+      const førstePeriode = page.getByRole("group", {
+        name: "Fraværsperiode 1",
+        exact: true,
+      });
+      await expect(førstePeriode.getByLabel("Fra og med")).toHaveValue(
+        `15.06.${FJORÅRET}`,
+      );
+      await page
+        .getByRole("button", { name: "Legg til periode" })
+        .first()
+        .click();
+      const andrePeriode = page.getByRole("group", {
+        name: "Fraværsperiode 2",
+        exact: true,
+      });
+      await andrePeriode.getByLabel("Fra og med").fill(`23.06.${FJORÅRET}`);
+      await andrePeriode.getByLabel("Til og med").fill(`24.06.${FJORÅRET}`);
+      await andrePeriode.getByRole("button", { name: "Slett periode" }).click();
+      await expect(andrePeriode).toHaveCount(0);
+      await expect(førstePeriode.getByLabel("Til og med")).toHaveValue(
+        `20.06.${FJORÅRET}`,
+      );
+      await page
+        .getByRole("button", { name: "Legg til dag", exact: true })
+        .click();
+      const delvisDag = page.getByRole("group", {
+        name: "Delvis fraværsdag 1",
+        exact: true,
+      });
+      await expect(delvisDag.getByLabel("Dato")).toBeVisible();
+      await expect(delvisDag.getByLabel("Timer fravær")).toBeVisible();
+      await page
+        .getByRole("button", {
+          name: "Eksempler på hvordan du oppgir og omregner arbeidstid",
+        })
+        .click();
+      await sjekkUniversellUtforming(
+        page,
+        "Delvis fraværsdag med åpen hjelpetekst",
+      );
+      await delvisDag.getByRole("button", { name: "Slett dag" }).click();
+      await page
+        .getByRole("button", { name: "Legg til periode" })
+        .last()
+        .click();
+      const trekkperiode = page.getByRole("group", {
+        name: "Trekkperiode 1",
+        exact: true,
+      });
+      await expect(trekkperiode.getByLabel("Fra og med")).toBeVisible();
+      await expect(trekkperiode.getByLabel("Til og med")).toBeVisible();
+      await trekkperiode.getByRole("button", { name: "Slett periode" }).click();
       await sjekkUniversellUtforming(page, "Utfylt fraværsperiode");
       await page.getByRole("button", { name: "Neste steg" }).click();
 

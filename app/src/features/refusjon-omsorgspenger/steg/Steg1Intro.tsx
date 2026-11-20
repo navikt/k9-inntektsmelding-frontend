@@ -57,13 +57,13 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
     : "";
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Om refusjon
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={1} />
       <GuidePanel className="mb-4">
         <VStack gap="space-16">
-          <Heading level="2" size="medium">
+          <Heading level="3" size="medium">
             Hei {capitalizeSetning(innloggetBruker.fornavn)}!
           </Heading>
           <BodyLong>

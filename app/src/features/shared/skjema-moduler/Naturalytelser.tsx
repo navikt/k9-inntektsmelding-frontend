@@ -3,6 +3,7 @@ import {
   Alert,
   BodyLong,
   Button,
+  Fieldset,
   Heading,
   Radio,
   RadioGroup,
@@ -47,7 +48,7 @@ export function Naturalytelser({ opplysninger }: NaturalytelserProps) {
   return (
     <VStack data-testid="naturalytelser-blokk" gap="space-16">
       <hr />
-      <Heading id="naturalytelser" level="4" size="medium">
+      <Heading id="naturalytelser" level="3" size="medium">
         Naturalytelser
       </Heading>
       <HjelpetekstReadMore header="Hva er naturalytelser?">
@@ -167,107 +168,112 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
         const fom = watch(`bortfaltNaturalytelsePerioder.${index}.fom`);
 
         return (
-          <div
-            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft p-4"
+          <Fieldset
             key={field.id}
+            legend={`Naturalytelse ${index + 1}`}
+            hideLegend
           >
-            <div className="flex gap-4 flex-col items-start relative">
-              <Select
-                label="Naturalytelse som faller bort"
-                {...register(
-                  `bortfaltNaturalytelsePerioder.${index}.navn` as const,
-                  {
-                    required: "Må oppgis",
-                  },
-                )}
-                className="max-w-[60%]"
-                error={
-                  formState.errors?.bortfaltNaturalytelsePerioder?.[index]?.navn
-                    ?.message
-                }
-              >
-                <option value="">Velg naturalytelse</option>
-                {Object.entries(naturalytelser).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
-              <DatePickerWrapped
-                label="Fra og med"
-                name={`bortfaltNaturalytelsePerioder.${index}.fom` as const}
-                rules={{
-                  required: "Må oppgis",
-                  validate: (date: string) => {
-                    return (
-                      !isBefore(date, opplysninger.førsteUttaksdato) ||
-                      "Må være etter første uttaksdag"
-                    );
-                  },
-                }}
-              />
-
-              <FormattertTallTextField
-                inputMode="numeric"
-                label="Verdi pr. måned"
-                min={1}
-                name={`bortfaltNaturalytelsePerioder.${index}.beløp` as const}
-                size="medium"
-              />
-              {index > 0 && (
-                <Button
-                  aria-label="Slett naturalytelse"
-                  className="absolute top-8 right-1"
-                  icon={<TrashIcon aria-hidden />}
-                  onClick={() => remove(index)}
-                  type="button"
-                  variant="tertiary"
+            <div className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft p-4">
+              <div className="flex gap-4 flex-col items-start relative">
+                <Select
+                  label="Naturalytelse som faller bort"
+                  {...register(
+                    `bortfaltNaturalytelsePerioder.${index}.navn` as const,
+                    {
+                      required: "Må oppgis",
+                    },
+                  )}
+                  className="max-w-[60%]"
+                  error={
+                    formState.errors?.bortfaltNaturalytelsePerioder?.[index]
+                      ?.navn?.message
+                  }
                 >
-                  Slett
-                </Button>
-              )}
-              <RadioGroup
-                className="md:col-span-4"
-                error={
-                  formState.errors.bortfaltNaturalytelsePerioder?.[index]
-                    ?.inkluderTom?.message
-                }
-                legend="Vil naturalytelsen komme tilbake i løpet av fraværet?"
-                name={name}
-              >
-                <Radio value="ja" {...radioGroupProps}>
-                  Ja
-                </Radio>
-                <Radio value="nei" {...radioGroupProps}>
-                  Nei
-                </Radio>
-              </RadioGroup>
-              <div className="col-span-4">
-                {skalInkludereTom && (
-                  <DatePickerWrapped
-                    label="Til og med"
-                    name={`bortfaltNaturalytelsePerioder.${index}.tom` as const}
-                    rules={{
-                      validate: (tom: Date | undefined) => {
-                        if (!fom) {
-                          return true;
-                        }
-                        if (!tom) {
-                          return "Må oppgis";
-                        }
+                  <option value="">Velg naturalytelse</option>
+                  {Object.entries(naturalytelser).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+                <DatePickerWrapped
+                  label="Fra og med"
+                  name={`bortfaltNaturalytelsePerioder.${index}.fom` as const}
+                  rules={{
+                    required: "Må oppgis",
+                    validate: (date: string) => {
+                      return (
+                        !isBefore(date, opplysninger.førsteUttaksdato) ||
+                        "Må være etter første uttaksdag"
+                      );
+                    },
+                  }}
+                />
 
-                        return (
-                          new Date(tom) >= new Date(fom) ||
-                          "Kan ikke være før fra dato"
-                        );
-                      },
-                    }}
-                    shouldUnregister
-                  />
+                <FormattertTallTextField
+                  inputMode="numeric"
+                  label="Verdi pr. måned"
+                  min={1}
+                  name={`bortfaltNaturalytelsePerioder.${index}.beløp` as const}
+                  size="medium"
+                />
+                {index > 0 && (
+                  <Button
+                    aria-label="Slett naturalytelse"
+                    className="absolute top-8 right-1"
+                    icon={<TrashIcon aria-hidden />}
+                    onClick={() => remove(index)}
+                    type="button"
+                    variant="tertiary"
+                  >
+                    Slett
+                  </Button>
                 )}
+                <RadioGroup
+                  className="md:col-span-4"
+                  error={
+                    formState.errors.bortfaltNaturalytelsePerioder?.[index]
+                      ?.inkluderTom?.message
+                  }
+                  legend="Vil naturalytelsen komme tilbake i løpet av fraværet?"
+                  name={name}
+                >
+                  <Radio value="ja" {...radioGroupProps}>
+                    Ja
+                  </Radio>
+                  <Radio value="nei" {...radioGroupProps}>
+                    Nei
+                  </Radio>
+                </RadioGroup>
+                <div className="col-span-4">
+                  {skalInkludereTom && (
+                    <DatePickerWrapped
+                      label="Til og med"
+                      name={
+                        `bortfaltNaturalytelsePerioder.${index}.tom` as const
+                      }
+                      rules={{
+                        validate: (tom: Date | undefined) => {
+                          if (!fom) {
+                            return true;
+                          }
+                          if (!tom) {
+                            return "Må oppgis";
+                          }
+
+                          return (
+                            new Date(tom) >= new Date(fom) ||
+                            "Kan ikke være før fra dato"
+                          );
+                        },
+                      }}
+                      shouldUnregister
+                    />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          </Fieldset>
         );
       })}
       <Button

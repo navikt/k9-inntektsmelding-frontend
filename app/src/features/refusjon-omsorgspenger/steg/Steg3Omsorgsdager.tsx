@@ -14,6 +14,7 @@ import {
   Button,
   Detail,
   Dropdown,
+  Fieldset,
   GuidePanel,
   Heading,
   HelpText,
@@ -123,7 +124,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Omsorgsdager dere søker refusjon for
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={3} />
@@ -228,31 +229,36 @@ const DagerSomSkalTrekkes = () => {
         Dager dere ønsker å trekke
       </Heading>
       {fields.map((periode, index) => (
-        <HStack
-          className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
-          gap="space-16"
+        <Fieldset
           key={periode.id}
+          legend={`Trekkperiode ${index + 1}`}
+          hideLegend
         >
-          <DateRangePickerWrapped
-            datepickerProps={{
-              defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
-            }}
-            name={`dagerSomSkalTrekkes.${index}`}
-          />
-          <Button
-            aria-label="Slett periode"
-            className="absolute top-9 right-20"
-            icon={<TrashIcon aria-hidden />}
-            onClick={() => {
-              remove(index);
-            }}
-            size="small"
-            type="button"
-            variant="tertiary"
+          <HStack
+            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
+            gap="space-16"
           >
-            Slett
-          </Button>
-        </HStack>
+            <DateRangePickerWrapped
+              datepickerProps={{
+                defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
+              }}
+              name={`dagerSomSkalTrekkes.${index}`}
+            />
+            <Button
+              aria-label="Slett periode"
+              className="absolute top-9 right-20"
+              icon={<TrashIcon aria-hidden />}
+              onClick={() => {
+                remove(index);
+              }}
+              size="small"
+              type="button"
+              variant="tertiary"
+            >
+              Slett
+            </Button>
+          </HStack>
+        </Fieldset>
       ))}
       {fields.length > 0 && (
         <>

@@ -15,6 +15,18 @@ test.describe("Happy path", () => {
 
     await page.goto("/k9-im-dialog/1/dine-opplysninger");
 
+    const kontaktinformasjon = page.getByRole("region", {
+      name: "Kontaktinformasjon for arbeidsgiver",
+      exact: true,
+    });
+    await expect(
+      kontaktinformasjon.getByRole("heading", {
+        name: "Kontaktinformasjon for arbeidsgiver",
+        level: 3,
+      }),
+    ).toBeVisible();
+    await expect(kontaktinformasjon.getByLabel("Telefon")).toBeVisible();
+
     // Vi starter på "dine-opplysninger" steget
     await expect(
       page.getByRole("heading", { name: "Dine opplysninger" }),
@@ -75,6 +87,10 @@ test.describe("Happy path", () => {
       await mockInntektsmeldinger({ page });
       await page.goto("/k9-im-dialog/1/dine-opplysninger");
 
+      const kontaktinformasjon = page.getByRole("region", {
+        name: "Kontaktinformasjon for arbeidsgiver",
+        exact: true,
+      });
       await page.getByLabel("Navn", { exact: true }).clear();
       await page.getByLabel("Telefon", { exact: true }).clear();
       await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
@@ -84,6 +100,12 @@ test.describe("Happy path", () => {
       await expect(
         page.getByText("Telefonnummer er påkrevd", { exact: true }),
       ).toBeVisible();
+      await expect(
+        kontaktinformasjon.getByLabel("Navn"),
+      ).toHaveAccessibleDescription("Navn er påkrevd");
+      await expect(
+        kontaktinformasjon.getByLabel("Telefon"),
+      ).toHaveAccessibleDescription("Telefonnummer er påkrevd");
       await sjekkUniversellUtforming(
         page,
         "Kontaktopplysninger med valideringsfeil",
@@ -124,6 +146,85 @@ test.describe("Happy path", () => {
         page,
         "Inntekt og refusjon med valideringsfeil",
       );
+    },
+  );
+
+  test(
+    "Gjentakende refusjon og naturalytelser har navngitte feltgrupper",
+    { tag: "@uu" },
+    async ({ page }) => {
+      await mockOpplysninger({ page });
+      await mockGrunnbeløp({ page });
+      await mockInntektsmeldinger({ page });
+      await page.goto("/k9-im-dialog/1/dine-opplysninger");
+      await page.getByLabel("Navn", { exact: true }).fill("Test Brukersen");
+      await page.getByLabel("Telefon", { exact: true }).fill("13371337");
+      await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
+      await page
+        .getByRole("radio", {
+          name: "Ja, men kun deler av perioden eller varierende beløp",
+        })
+        .click();
+
+      const førsteRefusjonsperiode = page.getByRole("group", {
+        name: "Refusjonsperiode 1",
+        exact: true,
+      });
+      const andreRefusjonsperiode = page.getByRole("group", {
+        name: "Refusjonsperiode 2",
+        exact: true,
+      });
+      await expect(førsteRefusjonsperiode.getByLabel("Fra og med")).toHaveValue(
+        "31.05.2024",
+      );
+      await expect(andreRefusjonsperiode.getByLabel("Fra og med")).toHaveValue(
+        "",
+      );
+      await andreRefusjonsperiode.getByLabel("Fra og med").fill("01.07.2024");
+      await andreRefusjonsperiode
+        .getByLabel("Refusjonsbeløp per måned")
+        .fill("10000");
+
+      await page
+        .getByRole("radiogroup", {
+          name: "Har den ansatte naturalytelser som faller bort ved fraværet?",
+        })
+        .getByRole("radio", { name: "Ja", exact: true })
+        .click();
+      await page
+        .getByRole("button", { name: "Legg til naturalytelse" })
+        .click();
+      const førsteNaturalytelse = page.getByRole("group", {
+        name: "Naturalytelse 1",
+        exact: true,
+      });
+      const andreNaturalytelse = page.getByRole("group", {
+        name: "Naturalytelse 2",
+        exact: true,
+      });
+      await førsteNaturalytelse
+        .getByLabel("Naturalytelse som faller bort")
+        .selectOption("Bil");
+      await andreNaturalytelse
+        .getByLabel("Naturalytelse som faller bort")
+        .selectOption("Losji");
+      await expect(
+        førsteNaturalytelse.getByLabel("Naturalytelse som faller bort"),
+      ).toHaveValue("BIL");
+      await expect(
+        andreNaturalytelse.getByLabel("Naturalytelse som faller bort"),
+      ).toHaveValue("LOSJI");
+      await sjekkUniversellUtforming(
+        page,
+        "Gjentakende refusjonsperioder og naturalytelser",
+      );
+      await andreNaturalytelse
+        .getByRole("button", { name: "Slett naturalytelse" })
+        .click();
+      await expect(andreNaturalytelse).toHaveCount(0);
+      await expect(
+        førsteNaturalytelse.getByLabel("Naturalytelse som faller bort"),
+      ).toHaveValue("BIL");
     },
   );
 });

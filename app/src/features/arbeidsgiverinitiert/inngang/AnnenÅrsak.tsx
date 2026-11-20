@@ -3,7 +3,7 @@ import { Alert, BodyShort, Heading } from "@navikt/ds-react";
 export function AnnenÅrsak() {
   return (
     <Alert variant="warning">
-      <Heading level="2" size="small" spacing>
+      <Heading level="3" size="small" spacing>
         Det er ikke mulig å opprette inntektsmelding for andre årsaker
       </Heading>
       <BodyShort>

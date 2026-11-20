@@ -58,7 +58,7 @@ export const VisInnsendtInntektsmelding = () => {
       <VStack className="bg-ax-bg-default px-5 py-6 rounded-md" gap="space-24">
         <HStack gap="space-8" justify="space-between">
           <VStack>
-            <Heading level="1" size="medium">
+            <Heading level="2" size="medium">
               Innsendt inntektsmelding
             </Heading>
             <Detail uppercase>

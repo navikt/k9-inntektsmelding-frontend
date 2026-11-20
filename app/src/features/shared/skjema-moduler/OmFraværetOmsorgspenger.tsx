@@ -61,13 +61,19 @@ const OmFraværetOmsorgspenger = () => {
   const ButtonLink = createLink(Button);
   return (
     <div className="flex gap-4 flex-col">
-      <Heading id="om-fraværet-omsorgspenger" level="4" size="medium">
+      <Heading id="om-fraværet-omsorgspenger" level="3" size="medium">
         Om fraværet
       </Heading>
       {erAGIUnntattAaregister ? (
         <div className="flex flex-col gap-6">
-          <FraværHeleDagerListeInput overskrift="Dager med fravær" />
-          <FraværDelerAvDagenListeInput overskrift="Delvise dager" />
+          <FraværHeleDagerListeInput
+            overskrift="Dager med fravær"
+            overskriftsnivå="4"
+          />
+          <FraværDelerAvDagenListeInput
+            overskrift="Delvise dager"
+            overskriftsnivå="4"
+          />
           {formState.errors.fraværHeleDager?.message && (
             <Alert variant="error">
               {formState.errors.fraværHeleDager.message}

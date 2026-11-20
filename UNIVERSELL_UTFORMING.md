@@ -85,7 +85,7 @@ Det undersøkte testoppsettet dokumenterer ikke en full UU-kontroll. Det finnes 
 
 ### F05: Kontrastfunn fra axe krever manuell vurdering
 
-De 33 axe-skanningene har sju `incomplete`-funn om kontrast. Disse er verken bekreftede avvik eller beståtte kontroller.
+De 35 axe-skanningene har åtte `incomplete`-funn om kontrast. Disse er verken bekreftede avvik eller beståtte kontroller.
 
 - [ ] Kontroller øvrige brukssteder og varianter som ikke inngår i axe-testene.
 - [ ] Mål kontrasten manuelt der axe rapporterer `incomplete`.
@@ -154,6 +154,16 @@ Testene merket `@uu` kjører også i den ordinære E2E-jobben i CI. De dekker va
 
 Skanningene er avgrenset til `main`. De dekker ikke hele dokumentet, dekoratøren, innloggingen, alle varianter eller mobilvisning. Beståtte axe-tester, funksjonstester, typekontroll og lint er ikke en UU-godkjenning.
 
+### Testgrunnlag og gjenstående kontroll for 1.3.1
+
+Ti UU-tester med 35 axe-skanninger og 27 målrettede valideringstester besto 20. november 2026. UU-testene kontrollerer også overskriftshierarki, navngitte seksjoner, gjentakende feltgrupper og kobling mellom kontaktfelt og feilmeldinger. Skjermbilder fra de berørte sidene er kontrollert ved 1280 × 720 CSS-piksler.
+
+Ingen egne HTML-tabeller ble funnet i app-koden eller de undersøkte tilstandene. Månedsinntektene vises som fortløpende måned–beløp-par i et CSS-grid.
+
+- [ ] Bekreft overskriftsnavigasjon og navngitte feltgrupper med skjermleser, inkludert flere rader og sletting.
+- [ ] Kontroller leserekkefølgen for månedsinntekter og sammenhengen mellom måned og beløp med skjermleser.
+- [ ] Dekk øvrige ytelsesvarianter, serverfeil og mobilvisning. PDF-innhold er ikke vurdert.
+
 ## 6. Vurder alle 48 WCAG-krav
 
 Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer krav der vi bare har gjort stikkprøver. For hvert krav må resultatene kobles til testomfanget og bevisene fra seksjon 2.
@@ -166,7 +176,7 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | [1.2.1](https://www.uutilsynet.no/wcag-standarden/121-bare-lyd-og-bare-video-forhandsinnspilt-niva/88) Bare lyd og bare video, forhåndsinnspilt (A) | Kartlegg eventuelle lydklipp og videoer uten lyd, også i innebygd innhold. Kontroller nødvendige alternativer. Begrunn «Ikke relevant» hvis innholdet ikke finnes. | Oppfylt  |
 | [1.2.2](https://www.uutilsynet.no/wcag-standarden/122-teksting-forhandsinnspilt-niva/89) Teksting, forhåndsinnspilt (A) | Spill av eventuell forhåndsinnspilt video med lyd. Kontroller at tekstingen dekker tale og nødvendig lydinformasjon og følger innholdet. | Oppfylt  |
 | [1.2.5](https://www.uutilsynet.no/wcag-standarden/125-synstolking-forhandsinnspilt-niva-aa/842) Synstolking, forhåndsinnspilt (AA) | Kartlegg relevant video og publiseringsdato. Kontroller at nødvendig visuell informasjon formidles gjennom lyd etter tilsynets krav og unntak. | Oppfylt  |
-| [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90) Informasjon og relasjoner (A) | Undersøk overskriftshierarki, lister, tabeller, feltnavn, feltgrupper og kobling mellom feil og felt. Kontroller at visuelle relasjoner også fremgår programmatisk. | Ikke vurdert |
+| [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90) Informasjon og relasjoner (A) | Overskrifter, seksjoner, gjentakende feltgrupper, feltnavn, lister og feilkoblinger er kontrollert i kildekode og utvalgte rendrede tilstander. Automatiske strukturkontroller består. Full skjermleserkontroll og øvrig testomfang gjenstår, se seksjon 5. | Ikke vurdert |
 | [1.3.2](https://www.uutilsynet.no/wcag-standarden/132-meningsfylt-rekkefolge-niva/91) Meningsfylt rekkefølge (A) | Les siden med skjermleser og undersøk DOM-rekkefølgen. Kontroller særlig kolonner, inntektsoversikter og dato- og beløpspar når layouten endres. | Ikke vurdert |
 | [1.3.3](https://www.uutilsynet.no/wcag-standarden/133-sensoriske-egenskaper-niva/92) Sensoriske egenskaper (A) | Les instruksjoner og feilmeldinger. De skal ikke bare vise til plassering, form, farge, størrelse eller lyd for å forklare en handling. | Ikke vurdert |
 | [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Roter mobil og nettbrett. Innhold og betjening skal fungere i begge retninger uten unødvendig låsing. | Ikke vurdert |

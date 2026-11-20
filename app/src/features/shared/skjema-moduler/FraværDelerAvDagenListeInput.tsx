@@ -3,6 +3,7 @@ import {
   BodyLong,
   Box,
   Button,
+  Fieldset,
   Heading,
   HStack,
   Label,
@@ -22,6 +23,7 @@ import { OmsorgspengerFravær } from "./omsorgspengerFraværSchema";
 type Props = {
   overskrift: string;
   år?: number;
+  overskriftsnivå?: "3" | "4";
 };
 
 function utledDefaultMonth(år: number) {
@@ -32,7 +34,11 @@ function utledDefaultMonth(år: number) {
   return new Date(år, 11, 31);
 }
 
-export const FraværDelerAvDagenListeInput = ({ overskrift, år }: Props) => {
+export const FraværDelerAvDagenListeInput = ({
+  overskrift,
+  år,
+  overskriftsnivå = "3",
+}: Props) => {
   const { control, register, formState, setValue, getValues } =
     useFormContext<
       Pick<OmsorgspengerFravær, "fraværDelerAvDagen" | "fraværHeleDager">
@@ -50,81 +56,86 @@ export const FraværDelerAvDagenListeInput = ({ overskrift, år }: Props) => {
 
   return (
     <VStack gap="space-16">
-      <Heading level="3" size="small">
+      <Heading level={overskriftsnivå} size="small">
         {overskrift}
       </Heading>
       {fields.map((felt, index) => (
-        <HStack
-          align="start"
-          className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2"
-          gap="space-16"
+        <Fieldset
           key={felt.id}
+          legend={`Delvis fraværsdag ${index + 1}`}
+          hideLegend
         >
-          <DatePickerWrapped
-            datepickerProps={{ defaultMonth }}
-            label="Dato"
-            name={`fraværDelerAvDagen.${index}.dato`}
-            rules={{
-              required: "Dato er påkrevd",
-              validate: (dato: string) => {
-                if (!dato) return true;
-                const alleDager = getValues("fraværDelerAvDagen") as {
-                  dato: string;
-                  timer: string;
-                }[];
-                const duplikat = alleDager.some(
-                  (d, i) => i !== index && d.dato === dato,
-                );
-                if (duplikat) return "Datoen er allerede oppgitt";
-                if (!erAGIUnntattAaregister) return true;
-                const fraværHeleDager = getValues("fraværHeleDager");
-                const overlap = fraværHeleDager.some(
-                  (periode) =>
-                    periode.fom &&
-                    periode.tom &&
-                    dato >= periode.fom &&
-                    dato <= periode.tom,
-                );
-                return overlap
-                  ? "Fravær deler av dag må ikke overlappe med fravær hele dager"
-                  : true;
-              },
-            }}
-          />
-          <TextField
-            label="Timer fravær"
-            {...register(`fraværDelerAvDagen.${index}.timer`, {
-              validate: validateTimer,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = e.target.value;
-                const valueWithoutCommas = value.replaceAll(",", ".");
-                setValue(
-                  `fraværDelerAvDagen.${index}.timer`,
-                  valueWithoutCommas,
-                );
-              },
-            })}
-            error={
-              formState.touchedFields?.fraværDelerAvDagen?.[index]?.timer &&
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generisk komponent
-              (formState.errors?.fraværDelerAvDagen as any)?.[index]?.timer
-                ?.message
-            }
-          />
-          <div>
-            <Button
-              aria-label="Slett dag"
-              className="md:mt-10"
-              icon={<TrashIcon aria-hidden />}
-              onClick={() => remove(index)}
-              size="small"
-              type="button"
-              variant="tertiary"
-            >
-              Slett
-            </Button>
-          </div>
-        </HStack>
+          <HStack
+            align="start"
+            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2"
+            gap="space-16"
+          >
+            <DatePickerWrapped
+              datepickerProps={{ defaultMonth }}
+              label="Dato"
+              name={`fraværDelerAvDagen.${index}.dato`}
+              rules={{
+                required: "Dato er påkrevd",
+                validate: (dato: string) => {
+                  if (!dato) return true;
+                  const alleDager = getValues("fraværDelerAvDagen") as {
+                    dato: string;
+                    timer: string;
+                  }[];
+                  const duplikat = alleDager.some(
+                    (d, i) => i !== index && d.dato === dato,
+                  );
+                  if (duplikat) return "Datoen er allerede oppgitt";
+                  if (!erAGIUnntattAaregister) return true;
+                  const fraværHeleDager = getValues("fraværHeleDager");
+                  const overlap = fraværHeleDager.some(
+                    (periode) =>
+                      periode.fom &&
+                      periode.tom &&
+                      dato >= periode.fom &&
+                      dato <= periode.tom,
+                  );
+                  return overlap
+                    ? "Fravær deler av dag må ikke overlappe med fravær hele dager"
+                    : true;
+                },
+              }}
+            />
+            <TextField
+              label="Timer fravær"
+              {...register(`fraværDelerAvDagen.${index}.timer`, {
+                validate: validateTimer,
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  const valueWithoutCommas = value.replaceAll(",", ".");
+                  setValue(
+                    `fraværDelerAvDagen.${index}.timer`,
+                    valueWithoutCommas,
+                  );
+                },
+              })}
+              error={
+                formState.touchedFields?.fraværDelerAvDagen?.[index]?.timer &&
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generisk komponent
+                (formState.errors?.fraværDelerAvDagen as any)?.[index]?.timer
+                  ?.message
+              }
+            />
+            <div>
+              <Button
+                aria-label="Slett dag"
+                className="md:mt-10"
+                icon={<TrashIcon aria-hidden />}
+                onClick={() => remove(index)}
+                size="small"
+                type="button"
+                variant="tertiary"
+              >
+                Slett
+              </Button>
+            </div>
+          </HStack>
+        </Fieldset>
       ))}
       {fields.length > 0 && (
         <>
@@ -147,22 +158,26 @@ export const FraværDelerAvDagenListeInput = ({ overskrift, år }: Props) => {
                   refusjonskravet. Ved flere halve dager kan det oppgis som 3,5
                   og 4 timer annenhver dag.
                 </List.Item>
-                <Label>Eksempel 2:</Label>
-                <BodyLong>
-                  Arbeidstaker jobber vanligvis 9 timer per dag og er borte i 4
-                  av disse. Du deler da antall timer fravær på antall timer
-                  arbeidstakeren skulle jobbet. Tallet du får ganger du med 7,5.
-                </BodyLong>
+              </List>
+            </Box>
+            <Label as="p">Eksempel 2:</Label>
+            <BodyLong>
+              Arbeidstaker jobber vanligvis 9 timer per dag og er borte i 4 av
+              disse. Du deler da antall timer fravær på antall timer
+              arbeidstakeren skulle jobbet. Tallet du får ganger du med 7,5.
+            </BodyLong>
+            <Box marginBlock="space-16" asChild>
+              <List data-aksel-migrated-v8>
                 <List.Item className="my-8">
                   4 timer fravær / 9 timer arbeidstid = 0,44 × 7,5 = 3,33 timer,
                   som avrundes til 3,5 timer i refusjonskravet.
                 </List.Item>
-                <BodyLong>
-                  Du kan regne på samme måte om ordinær arbeidstid er over eller
-                  under 7,5 time.
-                </BodyLong>
               </List>
             </Box>
+            <BodyLong>
+              Du kan regne på samme måte om ordinær arbeidstid er over eller
+              under 7,5 time.
+            </BodyLong>
           </HjelpetekstReadMore>
         </>
       )}

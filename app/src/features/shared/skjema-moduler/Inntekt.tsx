@@ -83,10 +83,11 @@ export function Inntekt({ opplysninger, children }: InntektProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <Heading id="beregnet-manedslonn" level="4" size="medium">
+      <Heading id="beregnet-manedslonn" level="3" size="medium">
         Beregnet månedslønn
       </Heading>
       <Informasjonsseksjon
+        overskriftsnivå="4"
         kilde="Fra A-Ordningen"
         tittel={
           person?.fornavn

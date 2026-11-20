@@ -159,7 +159,7 @@ export function Steg2Refusjon() {
           className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col"
           onSubmit={onSubmit}
         >
-          <Heading level="3" size="large">
+          <Heading level="2" size="large">
             Refusjon
           </Heading>
           <Fremgangsindikator aktivtSteg={2} />

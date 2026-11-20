@@ -8,6 +8,7 @@ import {
   Alert,
   BodyLong,
   Button,
+  Fieldset,
   Heading,
   HGrid,
   HStack,
@@ -60,7 +61,7 @@ export function UtbetalingOgRefusjon() {
   return (
     <VStack gap="space-16">
       <hr />
-      <Heading id="refusjon" level="4" size="medium">
+      <Heading id="refusjon" level="3" size="medium">
         Utbetaling og refusjon
       </Heading>
       <HjelpetekstReadMore header="Hva vil det si å ha refusjon?">
@@ -110,7 +111,7 @@ export function UtbetalingOgRefusjon() {
       {skalRefunderes === "NEI" &&
         opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_NYANSATT" && (
           <Alert variant="warning">
-            <Heading level="2" size="small">
+            <Heading level="4" size="small">
               Inntektsmelding kan ikke sendes inn
             </Heading>
             Det er ikke nødvendig å sende inn inntektsmelding dersom du ikke
@@ -217,7 +218,7 @@ function VarierendeRefusjon() {
   return (
     <>
       <VStack data-testid="varierende-refusjon">
-        <Heading className="mb-4" level="2" size="small">
+        <Heading className="mb-4" level="4" size="small">
           Refusjonsbeløp dere krever per periode
         </Heading>
         <Alert className="mb-4" variant="info">
@@ -284,55 +285,61 @@ function Refusjonsperioder() {
   return (
     <VStack className="py-4" gap={{ xs: "space-20", md: "space-12" }}>
       {fields.map((field, index) => (
-        <HGrid
-          className="px-4 border-l-4 border-ax-bg-neutral-soft"
-          columns={{ xs: "1fr", md: "min-content 1fr 1fr" }}
-          gap="space-24"
+        <Fieldset
           key={field.id}
+          legend={`Refusjonsperiode ${index + 1}`}
+          hideLegend
         >
-          <DatePickerWrapped
-            label="Fra og med"
-            name={`refusjon.${index}.fom` as const}
-            readOnly={index === 0}
-            rules={{
-              required: "Må oppgis",
-              validate: (date: string) => {
-                if (index === 0) {
-                  return true;
-                }
-                if (!tidligsteDato) {
-                  return "Fant ikke starttidspunkt";
-                }
-                return (
-                  isAfter(date, tidligsteDato) || "Kan ikke være før startdato"
-                );
-              },
-            }}
-          />
-          <div>
-            <FormattertTallTextField
-              inputMode="numeric"
-              label="Refusjonsbeløp per måned"
-              min={0}
-              name={`refusjon.${index}.beløp` as const}
-              required
-              size="medium"
+          <HGrid
+            className="px-4 border-l-4 border-ax-bg-neutral-soft"
+            columns={{ xs: "1fr", md: "min-content 1fr 1fr" }}
+            gap="space-24"
+          >
+            <DatePickerWrapped
+              label="Fra og med"
+              name={`refusjon.${index}.fom` as const}
+              readOnly={index === 0}
+              rules={{
+                required: "Må oppgis",
+                validate: (date: string) => {
+                  if (index === 0) {
+                    return true;
+                  }
+                  if (!tidligsteDato) {
+                    return "Fant ikke starttidspunkt";
+                  }
+                  return (
+                    isAfter(date, tidligsteDato) ||
+                    "Kan ikke være før startdato"
+                  );
+                },
+              }}
             />
-          </div>
-          {index >= 2 && (
-            <div className="flex items-end">
-              <Button
-                aria-label="Fjern refusjonsendring"
-                icon={<TrashIcon aria-hidden />}
-                onClick={() => remove(index)}
-                type="button"
-                variant="tertiary"
-              >
-                Slett
-              </Button>
+            <div>
+              <FormattertTallTextField
+                inputMode="numeric"
+                label="Refusjonsbeløp per måned"
+                min={0}
+                name={`refusjon.${index}.beløp` as const}
+                required
+                size="medium"
+              />
             </div>
-          )}
-        </HGrid>
+            {index >= 2 && (
+              <div className="flex items-end">
+                <Button
+                  aria-label="Fjern refusjonsendring"
+                  icon={<TrashIcon aria-hidden />}
+                  onClick={() => remove(index)}
+                  type="button"
+                  variant="tertiary"
+                >
+                  Slett
+                </Button>
+              </div>
+            )}
+          </HGrid>
+        </Fieldset>
       ))}
       <Button
         className="w-fit col-span-2"
