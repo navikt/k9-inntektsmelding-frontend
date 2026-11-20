@@ -37,7 +37,7 @@ export function Steg2Refusjon() {
     getRouteApi("/agi/$id").useLoaderData();
 
   useDocumentTitle(
-    `Refusjon - inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
+    `Refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
 
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =

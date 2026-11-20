@@ -199,7 +199,7 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | [2.2.2](https://www.uutilsynet.no/wcag-standarden/222-pause-stopp-skjul-niva/101) Pause, stopp, skjul (A) | Gi brukeren mulighet til å stoppe, pause eller skjule innhold som automatisk endrer seg. | Ikke vurdert |
 | [2.3.1](https://www.uutilsynet.no/wcag-standarden/231-terskelverdi-pa-maksimalt-tre-glimt-niva/102) Terskelverdi på maksimalt tre glimt (A) | Innhold skal ikke blinke mer enn tre ganger per sekund. | Ikke vurdert |
 | [2.4.1](https://www.uutilsynet.no/wcag-standarden/241-hoppe-over-blokker-niva/103) Hoppe over blokker (A) | Gi brukeren mulighet til å hoppe direkte til hovedinnholdet. | Ikke vurdert |
-| [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) Sidetitler (A) | Bruk nyttige og tydelige sidetitler. | Ikke vurdert |
+| [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) Sidetitler (A) | Bruk nyttige og tydelige sidetitler. | Oppfylt (appens eget innhold) |
 | [2.4.3](https://www.uutilsynet.no/wcag-standarden/243-fokusrekkefolge-niva/105) Fokusrekkefølge (A) | Presenter innholdet i en logisk rekkefølge. | Ikke vurdert |
 | [2.4.4](https://www.uutilsynet.no/wcag-standarden/244-formal-med-lenke-i-kontekst-niva/106) Formål med lenke, i kontekst (A) | Alle lenkers mål og funksjon fremgår tydelig av lenketeksten. | Ikke vurdert |
 | [2.4.5](https://www.uutilsynet.no/wcag-standarden/245-flere-mater-niva-aa/107) Flere måter (AA) | Tilby brukeren flere måter å navigere på. | Ikke vurdert |
@@ -238,8 +238,9 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 - 1.1.1, 1.4.1, 1.4.3 og 1.4.5 er vurdert for appens eget innhold. Dekoratøren er forutsatt uten avvik. PDF-innhold er ikke vurdert.
 - 1.3.5: Kontaktfeltet har `autocomplete="name"` eller `"tel"` i alle fire flyter. Opplysninger om den ansatte omfattes ikke.
 - 1.4.3: Tekst, lenker, hjelpetekst og feil er målt i alle fire flyter. Ingen kontrastavvik ble funnet. Se seksjon 5.
-- 1.4.4: Automatisk test med ekte 200 % zoom besto i alle fire flyter. Reflow ved 400 % er vurdert under 1.4.10.
+- 1.4.4: Alle fire flyter er kontrollert med 200 % nettleserzoom fra 1920 piksler bredde. Den permanente zoomtesten dekker vanlig inntektsmelding.
 - 1.4.10: Ved 320 CSS-piksler og 400 % zoom gir datoperioder i «Omsorgsdager» 64 piksler vannrett overløp. [DateRangePickerWrapped](./app/src/features/shared/react-hook-form-wrappers/DateRangePickerWrapped.tsx) tvinger feltene ved siden av hverandre, selv om layouten ikke krever to dimensjoner.
+- 2.4.2: Alle steg, innsendte skjemaer og feilsider har en tittel som sier hva siden gjelder, og hvilken ytelse eller søknad den hører til. UU-testene kontrollerer forventet tittel ved hvert sjekkpunkt. Det fanger også en gammel tittel som blir stående etter navigering. Under lasting står tittelen fra forrige side eller «Inntektsmelding».
 - 4.1.2: Åpen `UNSAFE_Combobox` fra Aksel 8.16.2 mangler tilgjengelig navn på `role="listbox"`. Axe rapporterer `aria-input-field-name`. Feilen skal følges opp med Aksel.
 - 1.3.1: Automatiske strukturkontroller består, men skjermleserkontroll og øvrig testomfang gjenstår. Se seksjon 5.
 

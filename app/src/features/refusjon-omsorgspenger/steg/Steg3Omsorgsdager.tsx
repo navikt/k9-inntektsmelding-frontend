@@ -46,7 +46,7 @@ import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/Omsorgsp
 export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
   useScrollToTopOnMount();
   useDocumentTitle(
-    "Omsorgsdager - søknad om refusjon av omsorgspenger for arbeidsgiver",
+    "Omsorgsdager – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
 
   const {

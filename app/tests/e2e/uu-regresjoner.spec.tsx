@@ -4,6 +4,7 @@ import {
   sjekkIngenVannrettRulling,
   sjekkUniversellUtforming,
 } from "tests/e2e/uu";
+import { utgåttOpplysningerResponse } from "tests/mocks/inntektsmelding/opplysninger";
 import {
   mockArbeidstakerOppslag,
   mockInnloggetBruker,
@@ -99,6 +100,42 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
     ).toBeVisible();
     await sjekkUniversellUtforming(page, "Serverfeil ved innsending");
     await sjekkIngenVannrettRulling(page, "Serverfeil ved innsending");
+  });
+
+  test("Feilsider har beskrivende tittel, én hovedoverskrift og riktig språk", async ({
+    page,
+  }) => {
+    await mockGrunnbeløp({ page });
+    await mockInntektsmeldinger({ page });
+    await mockOpplysninger({ page, json: utgåttOpplysningerResponse });
+    await page.goto("/k9-im-dialog/1");
+    await expect(
+      page.getByRole("heading", { name: "Oppgaven er utgått" }),
+    ).toBeVisible();
+    await expect(page).toHaveTitle("Oppgaven er utgått");
+
+    await page.route("**/*/imdialog/opplysninger?foresporselUuid=2", (rute) =>
+      rute.fulfill({ status: 500, json: { message: "Testfeil" } }),
+    );
+    await page.goto("/k9-im-dialog/2");
+    await expect(
+      page.getByRole("heading", { name: "Beklager, noe gikk galt." }),
+    ).toBeVisible();
+    await expect(page).toHaveTitle("Beklager, noe gikk galt");
+    await sjekkUniversellUtforming(page, "Generell feilside");
+    expect(
+      await page
+        .getByRole("heading", { name: "Something went wrong" })
+        .evaluate((element) => element.closest("[lang]")?.getAttribute("lang")),
+    ).toBe("en");
+
+    await mockOpplysninger({ page, uuid: "3" });
+    await mockInntektsmeldinger({ page, uuid: "3" });
+    await page.goto("/k9-im-dialog/3/finnes-ikke");
+    await expect(
+      page.getByRole("heading", { name: "Beklager, vi fant ikke siden" }),
+    ).toBeVisible();
+    await expect(page).toHaveTitle("Beklager, vi fant ikke siden");
   });
 
   test(

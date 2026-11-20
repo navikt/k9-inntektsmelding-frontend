@@ -51,9 +51,78 @@ export const sjekkIngenVannrettRulling = async (page: Page, steg: string) => {
     .toEqual({ dokument: 0, rulleområder: [] });
 };
 
+const STANDARDTITTEL = "Inntektsmelding";
+const OMSORGSPENGER = "søknad om refusjon av omsorgspenger for arbeidsgiver";
+
+const forventedeSidetitler: { rute: RegExp; tittel: RegExp }[] = [
+  { rute: /\/opprett\/?$/, tittel: /^Opprett inntektsmelding for \S/ },
+  {
+    rute: /\/1-intro$/,
+    tittel: /^Søknad om refusjon av omsorgspenger for arbeidsgiver$/,
+  },
+  {
+    rute: /\/2-ansatt-og-arbeidsgiver$/,
+    tittel: new RegExp(`^Ansatt og arbeidsgiver – ${OMSORGSPENGER}$`),
+  },
+  {
+    rute: /\/3-omsorgsdager$/,
+    tittel: new RegExp(`^Omsorgsdager – ${OMSORGSPENGER}$`),
+  },
+  {
+    rute: /\/4-refusjon$/,
+    tittel: new RegExp(`^Refusjon – ${OMSORGSPENGER}$`),
+  },
+  {
+    rute: /\/5-oppsummering$/,
+    tittel: new RegExp(`^Oppsummering – ${OMSORGSPENGER}$`),
+  },
+  {
+    rute: /\/6-kvittering$/,
+    tittel: new RegExp(`^Kvittering – ${OMSORGSPENGER}$`),
+  },
+  {
+    rute: /\/refusjon-omsorgspenger\/\d+\/[^/]+$/,
+    tittel: new RegExp(`^Innsendt refusjonskrav – ${OMSORGSPENGER}$`),
+  },
+  {
+    rute: /\/dine-opplysninger$/,
+    tittel: /^Dine opplysninger – inntektsmelding for \S/,
+  },
+  {
+    rute: /\/inntekt-og-refusjon$/,
+    tittel: /^Inntekt og refusjon – inntektsmelding for \S/,
+  },
+  { rute: /\/refusjon$/, tittel: /^Refusjon – inntektsmelding for \S/ },
+  { rute: /\/oppsummering$/, tittel: /^Oppsummering – inntektsmelding for \S/ },
+  { rute: /\/kvittering$/, tittel: /^Kvittering – inntektsmelding for \S/ },
+  { rute: /\/vis$/, tittel: /^Innsendt inntektsmelding for \S/ },
+];
+
+export const sjekkSidetittel = async (page: Page, steg: string) => {
+  await expect
+    .soft(page.locator("head > title"), `Én sidetittel i ${steg}`)
+    .toHaveCount(1);
+  const { pathname } = new URL(page.url());
+  const forventet = forventedeSidetitler.find(({ rute }) =>
+    rute.test(pathname),
+  );
+  if (forventet) {
+    await expect
+      .soft(page, `Sidetittel i ${steg}`)
+      .toHaveTitle(forventet.tittel);
+    return;
+  }
+  const tittel = await page.title();
+  expect.soft(tittel.trim(), `Sidetittel i ${steg}`).not.toBe("");
+  expect
+    .soft(tittel, `Beskrivende sidetittel i ${steg}`)
+    .not.toBe(STANDARDTITTEL);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
+    await sjekkSidetittel(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

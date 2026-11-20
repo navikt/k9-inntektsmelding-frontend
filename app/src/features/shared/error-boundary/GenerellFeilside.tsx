@@ -11,7 +11,11 @@ import {
 } from "@navikt/ds-react";
 import { PageBlock } from "@navikt/ds-react/Page";
 
+import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
+
 export const GenerellFeilside = () => {
+  useDocumentTitle("Beklager, noe gikk galt");
+
   return (
     <Page>
       <PageBlock as="main" gutters width="xl">
@@ -59,8 +63,8 @@ export const GenerellFeilside = () => {
                 </Button>
               </VStack>
 
-              <div>
-                <Heading level="1" size="large" spacing>
+              <div lang="en">
+                <Heading level="2" size="large" spacing>
                   Something went wrong
                 </Heading>
                 <BodyShort spacing>

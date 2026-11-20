@@ -13,7 +13,12 @@ import { useEffect } from "react";
 
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { useInntektsmeldingSkjema } from "~/features/inntektsmelding/SkjemaStateContext";
-import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
+import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
+import {
+  finnSenesteInntektsmelding,
+  formatDatoTidKort,
+  formatYtelsesnavn,
+} from "~/utils.ts";
 
 import { Skjemaoppsummering } from "./Skjemaoppsummering";
 
@@ -23,6 +28,9 @@ export const VisInntektsmelding = () => {
   const { opplysninger, eksisterendeInntektsmeldinger } = route.useLoaderData();
   const { id } = route.useParams();
   const { setInntektsmeldingSkjemaState } = useInntektsmeldingSkjema();
+  useDocumentTitle(
+    `Innsendt inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
+  );
 
   const sisteInntektsmelding = finnSenesteInntektsmelding(
     eksisterendeInntektsmeldinger,

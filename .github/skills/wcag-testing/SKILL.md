@@ -31,6 +31,7 @@ Tabellen viser eksempler på delkontroller, ikke en uttømmende kravliste.
 | 1.4.12 Tekstavstand | Overstyr alle fire avstandsverdier samtidig og mål overløp eller klipping. | Om informasjon eller funksjon faktisk går tapt. |
 | 1.4.13 Ekstra innhold | Åpne med hover og fokus, lukk med Escape der det gjelder, og kontroller at innhold kan nås. | Om innholdet kan avvises, pekes på og forblir tilgjengelig i den konkrete situasjonen. |
 | 2.1.1, 2.1.2 og 2.4.3 Tastatur og fokus | Tastaturhandlinger, fokusmål, fokusretur og kjente navigasjonssekvenser. | Hele prosesser, logisk fokusrekkefølge og fravær av feller med faktiske hjelpemidler. `.fill()` eller `.focus()` beviser ikke Tab-tilgang. |
+| 2.4.2 Sidetitler | Én `<title>` og forventet tittel per rute ved hvert UU-sjekkpunkt, også etter navigering. Legg nye ruter inn i oversikten i felleskontrollene. Feilsider kontrolleres for seg. | Om tittelen beskriver sidens tema eller formål. Vurder ordlyden én gang før den legges inn som forventet tittel. |
 | 2.5.3, 3.3.1, 3.3.2, 4.1.2 og 4.1.3 Navn, feil og status | Synlig ledetekst i tilgjengelig navn, feilbeskrivelser, ARIA-tilstand og semantikk for statusmeldinger. | Om navn og rettingsråd er forståelige, og hva skjermleseren faktisk kunngjør. |
 
 For krav uten relevant automatisk kontroll: beskriv en konkret manuell test. Fravær av en automatisk test er ikke «Ikke relevant».

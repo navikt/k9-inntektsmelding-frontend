@@ -17,6 +17,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import React from "react";
 import { createRoot } from "react-dom/client";
 
+import { useDocumentTitle } from "./features/shared/hooks/useDocumentTitle";
 import { routeTree } from "./routeTree.gen";
 
 export const queryClient = new QueryClient();
@@ -54,6 +55,8 @@ createRoot(document.querySelector("#root")!).render(
 );
 
 function NotFoundComponent() {
+  useDocumentTitle("Beklager, vi fant ikke siden");
+
   return (
     <Page>
       <Page.Block as="main" gutters width="xl">

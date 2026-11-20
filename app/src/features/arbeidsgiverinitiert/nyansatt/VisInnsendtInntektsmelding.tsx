@@ -12,7 +12,12 @@ import { getRouteApi, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
-import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
+import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
+import {
+  finnSenesteInntektsmelding,
+  formatDatoTidKort,
+  formatYtelsesnavn,
+} from "~/utils.ts";
 
 import { Skjemaoppsummering } from "./Skjemaoppsummering";
 import { useInntektsmeldingSkjemaAGINyansatt } from "./SkjemaStateContext";
@@ -24,6 +29,9 @@ export const VisInntektsmelding = () => {
   const { id } = route.useParams();
   const { setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGINyansatt();
+  useDocumentTitle(
+    `Innsendt inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
+  );
 
   const sisteInntektsmelding = finnSenesteInntektsmelding(
     eksisterendeInntektsmeldinger,

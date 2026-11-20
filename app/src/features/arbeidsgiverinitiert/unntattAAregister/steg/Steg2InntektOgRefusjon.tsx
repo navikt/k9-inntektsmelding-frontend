@@ -52,7 +52,7 @@ export const Steg2InntektOgRefusjon = () => {
   useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
-    `Inntekt og refusjon - inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
+    `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
   const navigate = useNavigate();
 

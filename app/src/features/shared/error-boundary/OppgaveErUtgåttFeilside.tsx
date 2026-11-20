@@ -9,7 +9,11 @@ import {
 } from "@navikt/ds-react";
 import { PageBlock } from "@navikt/ds-react/Page";
 
+import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
+
 export const OppgaveErUtgåttFeilside = () => {
+  useDocumentTitle("Oppgaven er utgått");
+
   return (
     <Page>
       <PageBlock as="main" gutters width="xl">
