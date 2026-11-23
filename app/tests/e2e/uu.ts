@@ -546,6 +546,256 @@ export const sjekkIkkeTekstligKontrast = async (page: Page, steg: string) => {
     .toEqual([]);
 };
 
+type Fokusstopp = {
+  nøkkel: string;
+  navn: string;
+  x: number;
+  y: number;
+  iVisning: boolean;
+  fokusSynlig: boolean;
+};
+
+/* eslint-disable unicorn/consistent-function-scoping -- Funksjonene kjøres i nettleseren via page.evaluate og må inneholde hjelperne sine selv. */
+const kartleggFokusstopp = () => {
+  const fokuserbar =
+    "a[href], button, input:not([type=hidden]), select, textarea, summary, [tabindex], [contenteditable=true]";
+  const nøkkel = (element: Element) =>
+    element.matches("input[type=radio]")
+      ? `radio:${(element as HTMLInputElement).name}`
+      : `element:${[...document.querySelectorAll("main *")].indexOf(element)}`;
+  const forventet = [
+    ...new Set(
+      [...document.querySelectorAll<HTMLElement>(`main :is(${fokuserbar})`)]
+        .filter(
+          (element) =>
+            element.checkVisibility({ visibilityProperty: true }) &&
+            element.tabIndex >= 0 &&
+            !(element as HTMLButtonElement).disabled &&
+            !element.closest("[inert]"),
+        )
+        .map((element) => nøkkel(element)),
+    ),
+  ];
+  const fokuserbareOgEtiketter = `:is(${fokuserbar}, label)`;
+  // Pilen i Aksels Combobox er bare for mus. Listen åpnes med piltast fra feltet, se egen test.
+  const harTastaturalternativ = ".aksel-combobox__button-toggle-list";
+  const bareMus = [...document.querySelectorAll("main *")]
+    .filter(
+      (element) =>
+        element.checkVisibility({ visibilityProperty: true }) &&
+        getComputedStyle(element).cursor === "pointer" &&
+        !element.closest(fokuserbareOgEtiketter) &&
+        !element.closest(harTastaturalternativ) &&
+        !element.querySelector(fokuserbar),
+    )
+    .map(
+      (element) =>
+        `${element.tagName.toLowerCase()} «${(element.textContent ?? "").trim().slice(0, 40)}»`,
+    );
+  const positiv = [...document.querySelectorAll<HTMLElement>("main [tabindex]")]
+    .filter((element) => element.tabIndex > 0)
+    .map((element) => element.outerHTML.slice(0, 80));
+  return { forventet, bareMus, positivTabindex: positiv };
+};
+
+const lesFokus = (): Fokusstopp | null => {
+  const element = document.activeElement;
+  if (!element || !element.closest("main")) {
+    return null;
+  }
+  const { left, top, right, bottom } = element.getBoundingClientRect();
+  return {
+    nøkkel: element.matches("input[type=radio]")
+      ? `radio:${(element as HTMLInputElement).name}`
+      : `element:${[...document.querySelectorAll("main *")].indexOf(element)}`,
+    navn: `${element.tagName.toLowerCase()} «${(element.getAttribute("aria-label") ?? element.closest("label, button, a, .aksel-form-field, fieldset")?.textContent ?? element.textContent ?? "").trim().slice(0, 50)}»`,
+    x: left + scrollX,
+    y: top + scrollY,
+    iVisning: right > 0 && bottom > 0 && left < innerWidth && top < innerHeight,
+    fokusSynlig: element.matches(":focus-visible"),
+  };
+};
+/* eslint-enable unicorn/consistent-function-scoping */
+
+const tabGjennomMain = async (page: Page, bakover: boolean) => {
+  const tast = bakover ? "Shift+Tab" : "Tab";
+  await page.evaluate((tilSlutt) => {
+    const vakt = document.createElement("button");
+    vakt.dataset.uuTastaturvakt = "";
+    vakt.textContent = "Tastaturvakt";
+    if (tilSlutt) {
+      document.body.append(vakt);
+    } else {
+      document.body.prepend(vakt);
+    }
+    vakt.focus({ preventScroll: true });
+  }, bakover);
+
+  const stopp: Fokusstopp[] = [];
+  let fastlåst = false;
+  for (let steg = 0; steg < 400; steg++) {
+    await page.keyboard.press(tast);
+    const fokus = await page.evaluate(lesFokus);
+    if (!fokus) {
+      if (stopp.length > 0) {
+        break;
+      }
+      continue;
+    }
+    if (stopp.at(-1)?.nøkkel === fokus.nøkkel) {
+      fastlåst = true;
+      break;
+    }
+    stopp.push(fokus);
+  }
+  await page.evaluate(() =>
+    document.querySelector("[data-uu-tastaturvakt]")?.remove(),
+  );
+  return { stopp, fastlåst };
+};
+
+export const sjekkTastatur = async (page: Page, steg: string) => {
+  const åpenDialog = page
+    .locator("main :is(dialog[open], [role=dialog])")
+    .filter({ visible: true });
+  if ((await åpenDialog.count()) > 0) {
+    return;
+  }
+  const før = await page.evaluate(() => ({
+    url: location.href,
+    h1: [...document.querySelectorAll("h1")].map(({ textContent }) =>
+      textContent?.trim(),
+    ),
+    rulling: [scrollX, scrollY],
+  }));
+  const fokusFør = await page.evaluateHandle(() => document.activeElement);
+  const { forventet, bareMus, positivTabindex } =
+    await page.evaluate(kartleggFokusstopp);
+
+  const forover = await tabGjennomMain(page, false);
+  const bakover = await tabGjennomMain(page, true);
+  const nøklerForover = forover.stopp.map(({ nøkkel }) => nøkkel);
+  const navn = new Map(forover.stopp.map((s) => [s.nøkkel, s.navn]));
+
+  const resultat = {
+    ikkeNåddMedTab: forventet.filter((n) => !nøklerForover.includes(n)),
+    bareMus,
+    positivTabindex,
+    tastaturfelle: forover.fastlåst || bakover.fastlåst,
+    rekkefølgeAvvikerFraDom: nøklerForover.join(",") !== forventet.join(","),
+    bakoverAvvikerFraForover:
+      bakover.stopp
+        .map(({ nøkkel }) => nøkkel)
+        .toReversed()
+        .join(",") !== nøklerForover.join(","),
+    hopperOppover: forover.stopp
+      .slice(1)
+      .filter(
+        (stopp, indeks) =>
+          stopp.y < forover.stopp[indeks].y - 40 &&
+          stopp.x <= forover.stopp[indeks].x,
+      )
+      .map(({ navn: n }) => n),
+    usynligFokus: forover.stopp
+      .filter(({ iVisning, fokusSynlig }) => !iVisning || !fokusSynlig)
+      .map(({ navn: n }) => n),
+  };
+
+  const etter = await page.evaluate(() => ({
+    url: location.href,
+    h1: [...document.querySelectorAll("h1")].map(({ textContent }) =>
+      textContent?.trim(),
+    ),
+  }));
+  await fokusFør.evaluate((element, [x, y]) => {
+    (element as HTMLElement | null)?.focus?.({ preventScroll: true });
+    scrollTo(x, y);
+  }, før.rulling);
+
+  await test.info().attach(`tastatur-${steg}`, {
+    body: JSON.stringify(
+      {
+        ...resultat,
+        fokusrekkefølge: forover.stopp.map(({ navn: n }) => n),
+        ikkeNåddMedTabNavn: resultat.ikkeNåddMedTab.map(
+          (n) => navn.get(n) ?? n,
+        ),
+      },
+      null,
+      2,
+    ),
+    contentType: "application/json",
+  });
+  expect
+    .soft(
+      {
+        ...resultat,
+        kontekstEndret:
+          etter.url !== før.url || etter.h1.join(",") !== før.h1.join(","),
+      },
+      `Tastatur og fokus i ${steg}`,
+    )
+    .toEqual({
+      ikkeNåddMedTab: [],
+      bareMus: [],
+      positivTabindex: [],
+      tastaturfelle: false,
+      rekkefølgeAvvikerFraDom: false,
+      bakoverAvvikerFraForover: false,
+      hopperOppover: [],
+      usynligFokus: [],
+      kontekstEndret: false,
+    });
+};
+
+const KONTROLLER =
+  "button, a[href], [role=button], [role=link], [role=switch], [role=tab], input:not([type=hidden]), select, textarea";
+
+const normaliser = (tekst: string) =>
+  tekst
+    .toLocaleLowerCase("nb")
+    .replaceAll(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+
+export const sjekkLedetekstINavn = async (page: Page, steg: string) => {
+  const kontroller = page.getByRole("main").locator(KONTROLLER);
+  // innerText gir bare synlig tekst, i motsetning til textContent.
+  /* eslint-disable unicorn/prefer-dom-node-text-content */
+  const synligeTekster = await kontroller.evaluateAll((elementer) =>
+    elementer.map((element) => {
+      if (!element.checkVisibility({ visibilityProperty: true })) {
+        return null;
+      }
+      const etiketter =
+        "labels" in element
+          ? [...((element as HTMLInputElement).labels ?? [])]
+          : [];
+      const tekst =
+        etiketter.length > 0
+          ? etiketter.map((etikett) => etikett.innerText).join(" ")
+          : element.matches("input, select, textarea")
+            ? ""
+            : (element as HTMLElement).innerText;
+      return tekst.trim() === "" ? null : tekst;
+    }),
+  );
+  /* eslint-enable unicorn/prefer-dom-node-text-content */
+
+  const avvik: { synlig: string; navn: string }[] = [];
+  for (const [indeks, synlig] of synligeTekster.entries()) {
+    if (synlig === null) {
+      continue;
+    }
+    const øyeblikksbilde = await kontroller.nth(indeks).ariaSnapshot();
+    const [førsteLinje] = øyeblikksbilde.split("\n");
+    const navn = /^- [\w-]+ "((?:[^"\\]|\\.)*)"/.exec(førsteLinje)?.[1] ?? "";
+    if (!normaliser(navn).includes(normaliser(synlig))) {
+      avvik.push({ synlig: synlig.trim(), navn });
+    }
+  }
+  expect.soft(avvik, `Ledetekst i navn i ${steg}`).toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -553,6 +803,8 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkSpråk(page, steg);
     await sjekkTekstavstand(page, steg);
     await sjekkIkkeTekstligKontrast(page, steg);
+    await sjekkTastatur(page, steg);
+    await sjekkLedetekstINavn(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

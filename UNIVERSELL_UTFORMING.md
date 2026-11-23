@@ -29,7 +29,8 @@ Bruk disse statusene per krav og testet flyt:
 | Status | Betydning |
 | --- | --- |
 | Ikke vurdert | Vi mangler en ferdig vurdering. Enkelte observasjoner er ikke nok til å godkjenne kravet. |
-| Oppfylt | Dokumenterte tester støtter at kravet er oppfylt i det angitte omfanget. |
+| Automatisk testet | Automatiske tester består, men kravet krever også manuell kontroll, for eksempel med tastatur, skjermleser eller visuell vurdering. Kravet er ikke godkjent før den manuelle kontrollen er gjort. |
+| Oppfylt | Dokumenterte tester støtter at kravet er oppfylt i det angitte omfanget. Krav som må kontrolleres manuelt, settes ikke til «Oppfylt» før den manuelle kontrollen er gjort. |
 | Avvik | Minst ett dokumentert brudd er funnet. |
 | Ikke relevant | Kravet har ikke noe relevant innhold eller funksjonalitet i det undersøkte omfanget. Begrunnelse er registrert. |
 
@@ -163,13 +164,13 @@ Ingen egne HTML-tabeller ble funnet i app-koden eller de undersøkte tilstandene
 
 ## 6. Vurder alle 48 WCAG-krav
 
-Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer krav der vi bare har gjort stikkprøver. Kolonnen «Kort fortalt» gjengir Uu-tilsynets oppsummering. Lenken i kravkolonnen går til den enkelte kilden.
+Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer krav der vi bare har gjort stikkprøver. «Automatisk testet» betyr at manuell kontroll gjenstår, se listen under tabellene. Kolonnen «Kort fortalt» gjengir Uu-tilsynets oppsummering. Lenken i kravkolonnen går til den enkelte kilden.
 
 ### Mulig å oppfatte
 
 | Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [1.1.1](https://www.uutilsynet.no/wcag-standarden/111-ikke-tekstlig-innhold-niva/87) Ikke-tekstlig innhold (A) | Gi brukeren et tekstalternativ for innhold som ikke er tekst. | Oppfylt (appens eget innhold) |
+| [1.1.1](https://www.uutilsynet.no/wcag-standarden/111-ikke-tekstlig-innhold-niva/87) Ikke-tekstlig innhold (A) | Gi brukeren et tekstalternativ for innhold som ikke er tekst. | Automatisk testet |
 | [1.2.1](https://www.uutilsynet.no/wcag-standarden/121-bare-lyd-og-bare-video-forhandsinnspilt-niva/88) Bare lyd og bare video, forhåndsinnspilt (A) | Gi brukeren et alternativ når innholdet presenteres kun som lydklipp, eller kun video (uten lyd). | Oppfylt |
 | [1.2.2](https://www.uutilsynet.no/wcag-standarden/122-teksting-forhandsinnspilt-niva/89) Teksting, forhåndsinnspilt (A) | Tilby teksting for forhåndsinnspilt video med lyd. | Oppfylt |
 | [1.2.5](https://www.uutilsynet.no/wcag-standarden/125-synstolking-forhandsinnspilt-niva-aa/842) Synstolking, forhåndsinnspilt (AA) | Tilby synstolking av forhåndsinnspilte videoer, publisert 1. februar 2024 eller senere. Synstolking er at viktig visuell informasjon i video blir beskrevet via lyd. Kravet gjelder bare for offentlige virksomheter. | Oppfylt |
@@ -178,36 +179,36 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | [1.3.3](https://www.uutilsynet.no/wcag-standarden/133-sensoriske-egenskaper-niva/92) Sensoriske egenskaper (A) | Instruksjoner må ikke utelukkende være avhengige av form, størrelse, visuell plassering, orientering, eller lyd for å kunne bli forstått. | Ikke vurdert |
 | [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Brukeren må få velge om innholdet skal vises i liggende eller stående retning. | Ikke vurdert |
 | [1.3.5](https://www.uutilsynet.no/wcag-standarden/135-identifiser-formal-med-inndata-niva-aa/142) Identifiser formål med inndata (AA) | Skjemaelementer er kodet med inndataformål. | Oppfylt |
-| [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Ikke bruk presentasjon som bygger utelukkende på farge. | Oppfylt (appens eget innhold) |
+| [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Ikke bruk presentasjon som bygger utelukkende på farge. | Automatisk testet |
 | [1.4.2](https://www.uutilsynet.no/wcag-standarden/142-styring-av-lyd-niva/94) Styring av lyd (A) | Gi brukeren mulighet til å stoppe eller pause lyd som starter automatisk. | Oppfylt |
 | [1.4.3](https://www.uutilsynet.no/wcag-standarden/143-kontrast-minimum-niva-aa/95) Kontrast, minimum (AA) | Kontrastforholdet mellom teksten og bakgrunnen er minst 4,5:1. | Oppfylt (appens eget innhold) |
-| [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96) Endring av tekststørrelse (AA) | Tekst kan bli endret til 200 % størrelse uten tap av innhold eller funksjon. | Oppfylt (appens eget innhold) |
-| [1.4.5](https://www.uutilsynet.no/wcag-standarden/145-bilder-av-tekst-niva-aa/97) Bilder av tekst (AA) | Bruk tekst i stedet for bilder av tekst. | Oppfylt (appens eget innhold) |
+| [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96) Endring av tekststørrelse (AA) | Tekst kan bli endret til 200 % størrelse uten tap av innhold eller funksjon. | Automatisk testet |
+| [1.4.5](https://www.uutilsynet.no/wcag-standarden/145-bilder-av-tekst-niva-aa/97) Bilder av tekst (AA) | Bruk tekst i stedet for bilder av tekst. | Automatisk testet |
 | [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) Dynamisk tilpasning, reflow (AA) | Innhold skal kunne endres til 400 % størrelse ved 1280 piksler bredde, uten tap av informasjon eller funksjonalitet. | Avvik |
-| [1.4.11](https://www.uutilsynet.no/wcag-standarden/1411-kontrast-ikke-tekstlig-innhold-niva-aa/145) Kontrast for ikke-tekstlig innhold (AA) | Ikke-tekstlig innhold skal ha et kontrastforhold på minst 3:1 mot farge(r) som ligger ved siden av. | Oppfylt (appens eget innhold) |
-| [1.4.12](https://www.uutilsynet.no/wcag-standarden/1412-tekstavstand-niva-aa/146) Tekstavstand (AA) | Tekstavstanden skal kunne overstyres for å gjøre teksten lettere å lese. | Oppfylt (appens eget innhold) |
+| [1.4.11](https://www.uutilsynet.no/wcag-standarden/1411-kontrast-ikke-tekstlig-innhold-niva-aa/145) Kontrast for ikke-tekstlig innhold (AA) | Ikke-tekstlig innhold skal ha et kontrastforhold på minst 3:1 mot farge(r) som ligger ved siden av. | Automatisk testet |
+| [1.4.12](https://www.uutilsynet.no/wcag-standarden/1412-tekstavstand-niva-aa/146) Tekstavstand (AA) | Tekstavstanden skal kunne overstyres for å gjøre teksten lettere å lese. | Automatisk testet |
 | [1.4.13](https://www.uutilsynet.no/wcag-standarden/1413-pekerfolsomt-innhold-eller-innhold-ved-tastaturfokus-niva-aa/147) Pekerfølsomt innhold eller innhold ved tastaturfokus (AA) | Brukeren skal ha mer kontroll over innholdet på nettsiden som får fokus med musepeker eller tastatur. | Ikke vurdert |
 
 ### Mulig å betjene
 
 | Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [2.1.1](https://www.uutilsynet.no/wcag-standarden/211-tastatur-niva/98) Tastatur (A) | All funksjonalitet skal kunne brukes kun ved hjelp av tastatur. | Ikke vurdert |
-| [2.1.2](https://www.uutilsynet.no/wcag-standarden/212-ingen-tastaturfelle-niva/99) Ingen tastaturfelle (A) | Unngå tastaturfeller. | Ikke vurdert |
+| [2.1.1](https://www.uutilsynet.no/wcag-standarden/211-tastatur-niva/98) Tastatur (A) | All funksjonalitet skal kunne brukes kun ved hjelp av tastatur. | Automatisk testet |
+| [2.1.2](https://www.uutilsynet.no/wcag-standarden/212-ingen-tastaturfelle-niva/99) Ingen tastaturfelle (A) | Unngå tastaturfeller. | Automatisk testet |
 | [2.1.4](https://www.uutilsynet.no/wcag-standarden/214-hurtigtaster-som-bestar-av-ett-tegn-niva/782) Hurtigtaster som består av ett tegn (A) | Brukeren skal enkelt kunne slå av hurtigtaster som består av ett tegn. | Ikke vurdert |
 | [2.2.1](https://www.uutilsynet.no/wcag-standarden/221-justerbar-hastighet-niva/100) Justerbar hastighet (A) | Tidsbegrensninger skal kunne justeres av brukeren. | Ikke vurdert |
 | [2.2.2](https://www.uutilsynet.no/wcag-standarden/222-pause-stopp-skjul-niva/101) Pause, stopp, skjul (A) | Gi brukeren mulighet til å stoppe, pause eller skjule innhold som automatisk endrer seg. | Ikke vurdert |
 | [2.3.1](https://www.uutilsynet.no/wcag-standarden/231-terskelverdi-pa-maksimalt-tre-glimt-niva/102) Terskelverdi på maksimalt tre glimt (A) | Innhold skal ikke blinke mer enn tre ganger per sekund. | Ikke vurdert |
 | [2.4.1](https://www.uutilsynet.no/wcag-standarden/241-hoppe-over-blokker-niva/103) Hoppe over blokker (A) | Gi brukeren mulighet til å hoppe direkte til hovedinnholdet. | Ikke vurdert |
-| [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) Sidetitler (A) | Bruk nyttige og tydelige sidetitler. | Oppfylt (appens eget innhold) |
+| [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) Sidetitler (A) | Bruk nyttige og tydelige sidetitler. | Automatisk testet |
 | [2.4.3](https://www.uutilsynet.no/wcag-standarden/243-fokusrekkefolge-niva/105) Fokusrekkefølge (A) | Presenter innholdet i en logisk rekkefølge. | Ikke vurdert |
 | [2.4.4](https://www.uutilsynet.no/wcag-standarden/244-formal-med-lenke-i-kontekst-niva/106) Formål med lenke, i kontekst (A) | Alle lenkers mål og funksjon fremgår tydelig av lenketeksten. | Ikke vurdert |
 | [2.4.5](https://www.uutilsynet.no/wcag-standarden/245-flere-mater-niva-aa/107) Flere måter (AA) | Tilby brukeren flere måter å navigere på. | Ikke vurdert |
 | [2.4.6](https://www.uutilsynet.no/wcag-standarden/246-overskrifter-og-ledetekster-niva-aa/108) Overskrifter og ledetekster (AA) | Sørg for at ledetekster og overskrifter er beskrivende. | Ikke vurdert |
-| [2.4.7](https://www.uutilsynet.no/wcag-standarden/247-synlig-fokus-niva-aa/109) Synlig fokus (AA) | Sørg for at alt innhold får synlig fokus når du navigerer med tastatur. | Ikke vurdert |
+| [2.4.7](https://www.uutilsynet.no/wcag-standarden/247-synlig-fokus-niva-aa/109) Synlig fokus (AA) | Sørg for at alt innhold får synlig fokus når du navigerer med tastatur. | Automatisk testet |
 | [2.5.1](https://www.uutilsynet.no/wcag-standarden/251-pekerbevegelser-niva/148) Pekerbevegelser (A) | Innhold på nettsiden skal kunne brukes med enkel pekerinput. | Ikke vurdert |
 | [2.5.2](https://www.uutilsynet.no/wcag-standarden/252-pekeravbrytelse-niva/149) Pekeravbrytelse (A) | Uheldige og feilaktige input via mus eller berøringsskjerm skal lettere kunne forhindres. | Ikke vurdert |
-| [2.5.3](https://www.uutilsynet.no/wcag-standarden/253-ledetekst-i-navn-niva/150) Ledetekst i navn (A) | Brukere som bruker visuelle ledetekster skal også kunne bruke kodede ledetekster. | Ikke vurdert |
+| [2.5.3](https://www.uutilsynet.no/wcag-standarden/253-ledetekst-i-navn-niva/150) Ledetekst i navn (A) | Brukere som bruker visuelle ledetekster skal også kunne bruke kodede ledetekster. | Automatisk testet |
 | [2.5.4](https://www.uutilsynet.no/wcag-standarden/254-bevegelsesaktivering-niva/151) Bevegelsesaktivering (A) | Funksjonalitet som kan betjenes med å bevege enheten eller ved brukerbevegelse, skal også kunne betjenes med brukergrensesnittkomponenter. | Ikke vurdert |
 
 ### Forståelig
@@ -216,7 +217,7 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | --- | --- | --- |
 | [3.1.1](https://www.uutilsynet.no/wcag-standarden/311-sprak-pa-siden-niva/110) Språk på siden (A) | Sørg for at språket til innholdet på alle nettsider er angitt i koden. | Oppfylt (appens eget innhold) |
 | [3.1.2](https://www.uutilsynet.no/wcag-standarden/312-sprak-pa-deler-av-innhold-niva-aa/111) Språk på deler av innhold (AA) | Sørg for at alle deler av innholdet som er på et annet språk enn resten av siden er markert i koden. | Ikke vurdert |
-| [3.2.1](https://www.uutilsynet.no/wcag-standarden/321-fokus-niva/112) Fokus (A) | Når en komponent kommer i fokus medfører dette ikke automatisk betydelige endringer i siden. | Ikke vurdert |
+| [3.2.1](https://www.uutilsynet.no/wcag-standarden/321-fokus-niva/112) Fokus (A) | Når en komponent kommer i fokus medfører dette ikke automatisk betydelige endringer i siden. | Automatisk testet |
 | [3.2.2](https://www.uutilsynet.no/wcag-standarden/322-inndata-niva/114) Inndata (A) | Endring av verdien til et skjemafelt medfører ikke automatisk betydelige endringer i siden. | Ikke vurdert |
 | [3.2.3](https://www.uutilsynet.no/wcag-standarden/323-konsekvent-navigering-niva-aa/113) Konsekvent navigering (AA) | Navigasjonslenker som gjentas på flere sider skal ha en konsekvent rekkefølge. | Ikke vurdert |
 | [3.2.4](https://www.uutilsynet.no/wcag-standarden/324-konsekvent-identifikasjon-niva-aa/115) Konsekvent identifikasjon (AA) | Elementer som har samme funksjonalitet på tvers av flere sider er utformet likt. | Ikke vurdert |
@@ -233,6 +234,21 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) Navn, rolle, verdi (A) | Alle komponenter har navn og rolle bestemt i koden. | Avvik |
 | [4.1.3](https://www.uutilsynet.no/wcag-standarden/413-statusbeskjeder-niva-aa/152) Statusbeskjeder (AA) | Brukeren skal få statusbeskjeder om viktige endringer på nettsiden uten at det gir kontekstendring. | Ikke vurdert |
 
+### Manuell kontroll som gjenstår for «Automatisk testet»
+
+- [ ] 1.1.1: skjermleser: om tekstalternativene formidler riktig informasjon.
+- [ ] 1.4.1: visuell vurdering av om informasjon kan forstås uten farge.
+- [ ] 1.4.4: visuell kontroll av klipping og overlapp ved 200 %.
+- [ ] 1.4.5: vurdering av om bilder formidler tekst.
+- [ ] 1.4.11: visuell kontroll av tilstander og grafikk som testene ikke dekker.
+- [ ] 1.4.12: visuell vurdering av om informasjon går tapt.
+- [ ] 2.1.1: gjennomføring av alle flyter med tastatur.
+- [ ] 2.1.2: manuell tastaturnavigering i alle flyter.
+- [ ] 2.4.2: vurdering av om titlene er beskrivende.
+- [ ] 2.4.7: manuell tastaturnavigering med visuell kontroll av fokus.
+- [ ] 3.2.1: manuell tastaturnavigering.
+- [ ] 2.5.3: kontroll med stemmestyring av at kontrollene kan aktiveres med den synlige teksten.
+
 ### Dokumenterte bevis og avvik
 
 - 1.1.1, 1.4.1, 1.4.3 og 1.4.5 er vurdert for appens eget innhold. Dekoratøren er forutsatt uten avvik. PDF-innhold er ikke vurdert.
@@ -243,6 +259,8 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 - 1.4.12: Ved hvert UU-sjekkpunkt legger testene på linjehøyde 1,5, avsnittsavstand 2, bokstavavstand 0,12 og ordavstand 0,16 samtidig. Testene ser etter tekst som klippes, og tekstlinjer som overlapper. Det gjelder alle fire flyter, innsendte skjemaer, feilsider, åpne kontroller, 320 piksler og ekte zoom. Ingen tap ble funnet. Kvitteringen og den åpne datovelgeren er også kontrollert visuelt.
 - 1.4.10: Ved 320 CSS-piksler og 400 % zoom gir datoperioder i «Omsorgsdager» 64 piksler vannrett overløp. [DateRangePickerWrapped](./app/src/features/shared/react-hook-form-wrappers/DateRangePickerWrapped.tsx) tvinger feltene ved siden av hverandre, selv om layouten ikke krever to dimensjoner.
 - 2.4.2: Alle steg, innsendte skjemaer og feilsider har en tittel som sier hva siden gjelder, og hvilken ytelse eller søknad den hører til. UU-testene kontrollerer forventet tittel ved hvert sjekkpunkt. Det fanger også en gammel tittel som blir stående etter navigering. Under lasting står tittelen fra forrige side eller «Inntektsmelding».
+- 2.5.3: Ved hvert UU-sjekkpunkt sammenligner testene synlig tekst eller ledetekst med det tilgjengelige navnet for alle knapper, lenker og skjemafelt. Axe-regelen `label-content-name-mismatch` kjører også. Slette-knappen for refusjonsperiode 3 og senere viste «Slett», men het «Fjern refusjonsendring». Den heter nå «Slett refusjonsperiode». Testene dekker nå tre refusjonsperioder.
+- 2.1.1, 2.1.2, 2.4.3, 2.4.7 og 3.2.1: Ved hvert UU-sjekkpunkt tabber testene gjennom hele `main` med ekte tastatur, forover og bakover. Alle elementer som kan få fokus, blir nådd, og ingen elementer har positiv `tabindex`. Fokusrekkefølgen følger DOM-rekkefølgen og hopper ikke oppover, og bakover gir samme rekkefølge snudd. Fokus blir ikke fanget, er synlig (`:focus-visible`) og ligger innenfor skjermen. Fokus endrer verken adresse eller hovedoverskrift. Ingen elementer kan bare brukes med mus. Unntaket er pilen i Aksels nedtrekksliste, der listen kan åpnes og brukes med piltaster. Egne tester viser at kalenderen kan brukes med tastatur og lukkes med Escape, og at fokus da går tilbake til knappen. Ved 320 px går Tab fra «Lukk» via nettleseren tilbake til den modale kalenderen. Det er vanlig oppførsel og ingen felle. 2.4.3 står som «Ikke vurdert» fordi F03, fokus ved stegbytte, må kontrolleres med skjermleser.
 - 3.1.1: Alle sider kommer fra [index.html](./app/index.html) med `lang="nb-no"`. Serveren legger dekoratøren inn i `<head>` og `<body>` uten å endre `<html>`, og produksjonsbygget beholder attributtet. UU-testene kontrollerer sidespråket og axe-reglene for språk på hele dokumentet ved hvert sjekkpunkt. Den engelske teksten på den generelle feilsiden er merket med `lang="en"`.
 - 4.1.2: Åpen `UNSAFE_Combobox` fra Aksel 8.16.2 mangler tilgjengelig navn på `role="listbox"`. Axe rapporterer `aria-input-field-name`. Feilen skal følges opp med Aksel.
 - 1.3.1: Automatiske strukturkontroller består, men skjermleserkontroll og øvrig testomfang gjenstår. Se seksjon 5.

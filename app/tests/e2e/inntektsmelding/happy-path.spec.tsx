@@ -232,6 +232,10 @@ test.describe("Happy path", () => {
       await andreRefusjonsperiode
         .getByLabel("Refusjonsbeløp per måned")
         .fill("10000");
+      await page.getByRole("button", { name: "Legg til ny periode" }).click();
+      await expect(
+        page.getByRole("group", { name: "Refusjonsperiode 3", exact: true }),
+      ).toBeVisible();
 
       await page
         .getByRole("radiogroup", {

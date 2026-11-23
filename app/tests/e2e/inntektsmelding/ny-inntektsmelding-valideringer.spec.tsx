@@ -265,12 +265,12 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     .click();
   await expect(variabelRefusjonBlock.getByText("Fra og med")).toHaveCount(3);
   await variabelRefusjonBlock
-    .getByRole("button", { name: "Fjern refusjonsendring" })
+    .getByRole("button", { name: "Slett refusjonsperiode" })
     .click();
   await expect(variabelRefusjonBlock.getByText("Fra og med")).toHaveCount(2);
   await expect(
     variabelRefusjonBlock.getByRole("button", {
-      name: "Fjern refusjonsendring",
+      name: "Slett refusjonsperiode",
     }),
   ).toHaveCount(0);
 

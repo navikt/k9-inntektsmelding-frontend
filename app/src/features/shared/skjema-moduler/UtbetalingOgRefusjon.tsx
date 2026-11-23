@@ -328,7 +328,7 @@ function Refusjonsperioder() {
             {index >= 2 && (
               <div className="flex items-end">
                 <Button
-                  aria-label="Fjern refusjonsendring"
+                  aria-label="Slett refusjonsperiode"
                   icon={<TrashIcon aria-hidden />}
                   onClick={() => remove(index)}
                   type="button"
