@@ -906,6 +906,48 @@ export const sjekkHurtigtaster = async (page: Page, steg: string) => {
   );
 };
 
+export const sjekkBevegelse = async (page: Page, steg: string) => {
+  const funn = await page.evaluate(() => {
+    // eslint-disable-next-line unicorn/consistent-function-scoping -- Kjøres i nettleseren via page.evaluate.
+    const beskriv = (element: Element | null) =>
+      element
+        ? `${element.tagName.toLowerCase()}.${String(element.className).split(" ")[0]} «${(element.textContent ?? "").trim().slice(0, 30)}»`
+        : "ukjent";
+    const animasjoner = document
+      .getAnimations()
+      .filter((animasjon) => animasjon.playState === "running")
+      .map((animasjon) => {
+        const { iterations, duration } =
+          animasjon.effect?.getComputedTiming() ?? {};
+        const mål = (animasjon.effect as KeyframeEffect | null)?.target ?? null;
+        return {
+          element: beskriv(mål),
+          iMain: Boolean(mål?.closest("main")),
+          uendelig: iterations === Infinity,
+          varighetMs: Number(duration) * Number(iterations),
+          rundeMs: Number(duration),
+        };
+      })
+      .filter(({ iMain }) => iMain);
+    return {
+      varerOver5Sekunder: animasjoner
+        .filter(({ uendelig, varighetMs }) => uendelig || varighetMs > 5000)
+        .map(({ element }) => element),
+      merEnnTreGlimtPerSekund: animasjoner
+        .filter(({ rundeMs }) => rundeMs > 0 && rundeMs < 1000 / 3)
+        .map(({ element }) => element),
+      medier: [
+        ...document.querySelectorAll("main :is(video, audio, marquee, blink)"),
+      ].map((element) => beskriv(element)),
+    };
+  });
+  expect.soft(funn, `Bevegelse og glimt i ${steg}`).toEqual({
+    varerOver5Sekunder: [],
+    merEnnTreGlimtPerSekund: [],
+    medier: [],
+  });
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -917,6 +959,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkLedetekstINavn(page, steg);
     await sjekkKodesyntaks(page, steg);
     await sjekkHurtigtaster(page, steg);
+    await sjekkBevegelse(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
