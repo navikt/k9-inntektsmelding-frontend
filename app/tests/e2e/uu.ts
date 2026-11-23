@@ -143,11 +143,136 @@ export const sjekkSpråk = async (page: Page, steg: string) => {
     .toEqual([]);
 };
 
+const TEKSTAVSTAND_CSS = `
+  * {
+    line-height: 1.5 !important;
+    letter-spacing: 0.12em !important;
+    word-spacing: 0.16em !important;
+  }
+  p { margin-bottom: 2em !important; }
+`;
+
+export const sjekkTekstavstand = async (page: Page, steg: string) => {
+  const stil = await page.addStyleTag({ content: TEKSTAVSTAND_CSS });
+  const tap = await page.evaluate(() => {
+    const elementer = [...document.querySelectorAll("main *")].filter(
+      (element) =>
+        element.checkVisibility() &&
+        element.clientWidth > 1 &&
+        element.clientHeight > 1 &&
+        !["INPUT", "TEXTAREA", "SELECT"].includes(element.tagName) &&
+        (element.textContent ?? "").trim() !== "",
+    );
+    const navn = new Map(
+      elementer.map((element) => [
+        element,
+        `${element.tagName.toLowerCase()} «${(element.textContent ?? "").trim().slice(0, 60)}»`,
+      ]),
+    );
+
+    const klippet = elementer
+      .filter((element) => {
+        const { overflowX, overflowY } = getComputedStyle(element);
+        return (
+          (["hidden", "clip"].includes(overflowX) &&
+            element.scrollWidth > element.clientWidth + 1) ||
+          (["hidden", "clip"].includes(overflowY) &&
+            element.scrollHeight > element.clientHeight + 1)
+        );
+      })
+      .map((element) => navn.get(element));
+
+    const linjer = elementer.flatMap((element) => {
+      const forfedre: Element[] = [];
+      for (
+        let forelder = element.parentElement;
+        forelder;
+        forelder = forelder.parentElement
+      ) {
+        forfedre.push(forelder);
+      }
+      const rammer = forfedre
+        .filter((forelder) => getComputedStyle(forelder).overflow !== "visible")
+        .map((forelder) => forelder.getBoundingClientRect());
+      const lag =
+        [element, ...forfedre].find((kandidat) => {
+          const { position, zIndex } = getComputedStyle(kandidat);
+          return (
+            kandidat.matches("dialog, [popover]") ||
+            (["absolute", "fixed"].includes(position) && zIndex !== "auto")
+          );
+        }) ?? null;
+
+      return [...element.childNodes]
+        .filter(
+          (node) =>
+            node.nodeType === Node.TEXT_NODE &&
+            (node.textContent ?? "").trim() !== "",
+        )
+        .flatMap((node) => {
+          const område = document.createRange();
+          område.selectNodeContents(node);
+          return [...område.getClientRects()];
+        })
+        .map((linje) => ({
+          element,
+          lag,
+          rektangel: {
+            left: Math.max(linje.left, ...rammer.map(({ left }) => left)),
+            top: Math.max(linje.top, ...rammer.map(({ top }) => top)),
+            right: Math.min(linje.right, ...rammer.map(({ right }) => right)),
+            bottom: Math.min(
+              linje.bottom,
+              ...rammer.map(({ bottom }) => bottom),
+            ),
+          },
+        }))
+        .filter(
+          ({ rektangel }) =>
+            rektangel.right > rektangel.left &&
+            rektangel.bottom > rektangel.top,
+        );
+    });
+    const overlapp = linjer.flatMap((a, indeks) =>
+      linjer
+        .slice(indeks + 1)
+        .filter(
+          (b) =>
+            a.lag === b.lag &&
+            a.element !== b.element &&
+            !a.element.contains(b.element) &&
+            !b.element.contains(a.element) &&
+            Math.min(a.rektangel.right, b.rektangel.right) -
+              Math.max(a.rektangel.left, b.rektangel.left) >
+              2 &&
+            Math.min(a.rektangel.bottom, b.rektangel.bottom) -
+              Math.max(a.rektangel.top, b.rektangel.top) >
+              2,
+        )
+        .map((b) => `${navn.get(a.element)} / ${navn.get(b.element)}`),
+    );
+    return { klippet, overlapp: [...new Set(overlapp)] };
+  });
+
+  if (tap.klippet.length > 0 || tap.overlapp.length > 0) {
+    await test.info().attach(`tekstavstand-${steg}`, {
+      body: await page.screenshot({ fullPage: true }),
+      contentType: "image/png",
+    });
+  }
+  expect.soft(tap, `Tekstavstand i ${steg}`).toEqual({
+    klippet: [],
+    overlapp: [],
+  });
+  await stil.evaluate((element) => (element as Element).remove());
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
     await sjekkSidetittel(page, steg);
     await sjekkSpråk(page, steg);
+    await sjekkTekstavstand(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
