@@ -113,6 +113,7 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
       page.getByRole("heading", { name: "Oppgaven er utgått" }),
     ).toBeVisible();
     await expect(page).toHaveTitle("Oppgaven er utgått");
+    await sjekkUniversellUtforming(page, "Utgått oppgave");
 
     await page.route("**/*/imdialog/opplysninger?foresporselUuid=2", (rute) =>
       rute.fulfill({ status: 500, json: { message: "Testfeil" } }),
@@ -133,9 +134,29 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
     await mockInntektsmeldinger({ page, uuid: "3" });
     await page.goto("/k9-im-dialog/3/finnes-ikke");
     await expect(
-      page.getByRole("heading", { name: "Beklager, vi fant ikke siden" }),
+      page.getByRole("heading", {
+        level: 1,
+        name: "Inntektsmelding pleiepenger sykt barn",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", {
+        level: 2,
+        name: "Beklager, vi fant ikke siden",
+      }),
     ).toBeVisible();
     await expect(page).toHaveTitle("Beklager, vi fant ikke siden");
+    await sjekkUniversellUtforming(page, "Fant ikke siden i skjemaet");
+
+    await page.goto("/k9-im-dialog/");
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Beklager, vi fant ikke siden",
+      }),
+    ).toBeVisible();
+    await expect(page).toHaveTitle("Beklager, vi fant ikke siden");
+    await sjekkUniversellUtforming(page, "Fant ikke siden");
   });
 
   test(

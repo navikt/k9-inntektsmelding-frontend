@@ -119,10 +119,35 @@ export const sjekkSidetittel = async (page: Page, steg: string) => {
     .not.toBe(STANDARDTITTEL);
 };
 
+export const sjekkSpråk = async (page: Page, steg: string) => {
+  await expect
+    .soft(page.locator("html"), `Bokmål som sidespråk i ${steg}`)
+    .toHaveAttribute("lang", /^nb(-no)?$/i);
+
+  const { violations } = await new AxeBuilder({ page })
+    .withRules([
+      "html-has-lang",
+      "html-lang-valid",
+      "html-xml-lang-mismatch",
+      "valid-lang",
+    ])
+    .analyze();
+  expect
+    .soft(
+      violations.map(({ id, nodes }) => ({
+        regel: id,
+        elementer: nodes.map(({ target }) => target),
+      })),
+      `Språkmerking i ${steg}`,
+    )
+    .toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
     await sjekkSidetittel(page, steg);
+    await sjekkSpråk(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
