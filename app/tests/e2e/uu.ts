@@ -876,6 +876,36 @@ export const sjekkKodesyntaks = async (page: Page, steg: string) => {
     .toEqual({ dupliserteIder: [], feilNøsting: [] });
 };
 
+const ENKELTTEGN = [..."abcdefghijklmnopqrstuvwxyz0123456789?/.,-+"];
+
+export const sjekkHurtigtaster = async (page: Page, steg: string) => {
+  const fokusFør = await page.evaluateHandle(() => document.activeElement);
+  const tilstand = () =>
+    page.evaluate(() => ({
+      url: location.href,
+      innhold: document.querySelector("main")!.getHTML(),
+      fokus: (document.activeElement ?? document.body).tagName,
+      dialoger: document.querySelectorAll(
+        "dialog[open], [role=dialog], [role=listbox], [popover]:popover-open",
+      ).length,
+      rulling: [scrollX, scrollY],
+    }));
+  await page.evaluate(() => {
+    const aktivt = document.activeElement as HTMLElement | null;
+    aktivt?.blur();
+  });
+  const før = await tilstand();
+  for (const tegn of ENKELTTEGN) {
+    await page.keyboard.press(tegn);
+  }
+  expect
+    .soft(await tilstand(), `Hurtigtaster med ett tegn i ${steg}`)
+    .toEqual(før);
+  await fokusFør.evaluate((element) =>
+    (element as HTMLElement | null)?.focus?.({ preventScroll: true }),
+  );
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -886,6 +916,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkTastatur(page, steg);
     await sjekkLedetekstINavn(page, steg);
     await sjekkKodesyntaks(page, steg);
+    await sjekkHurtigtaster(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
