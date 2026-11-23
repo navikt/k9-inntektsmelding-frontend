@@ -29,7 +29,7 @@ yarn exec playwright show-report
 
 Kjør `yarn test:uu`. Suiten gjenbruker flyter og mocker fra E2E-testene, men kjører i egne Playwright-prosjekter og en egen CI-jobb, parallelt med funksjonstestene:
 
-- `uu`: axe, overskrifter, sidetitler, sidespråk, tekstavstand, kontrast for felt, ikoner og fokusmarkering, tastaturnavigering og fokusrekkefølge, synlig tekst i tilgjengelig navn, navngitte feltgrupper, kontaktpersonens `autocomplete`, feil, feilsider, åpne kontroller og kontrast ved hover og tastaturfokus.
+- `uu`: axe, overskrifter, sidetitler, sidespråk, tekstavstand, kontrast for felt, ikoner og fokusmarkering, tastaturnavigering og fokusrekkefølge, synlig tekst i tilgjengelig navn, like ID-er og feil nøsting, navngitte feltgrupper, kontaktpersonens `autocomplete`, feil, feilsider, åpne kontroller og kontrast ved hover og tastaturfokus.
 - `uu-smal`: de samme flytene ved 320 × 256 CSS-piksler. Egen regresjonstest kontrollerer vannrett rulling ved 320, 768 og 800 piksler.
 - `uu-zoom`: full innsending av vanlig inntektsmelding ved ekte 200 % og 400 % nettleserzoom. En lokal testutvidelse styrer Chromium i en isolert profil. Testene sammenligner synlig tekst med 100 %, kontrollerer vannrett rulling og verifiserer faktisk zoom.
 

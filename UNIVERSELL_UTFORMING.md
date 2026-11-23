@@ -177,7 +177,7 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 | [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90) Informasjon og relasjoner (A) | Ting skal være kodet som det ser ut som. For eksempel skal en overskrift være kodet som en overskrift. | Ikke vurdert |
 | [1.3.2](https://www.uutilsynet.no/wcag-standarden/132-meningsfylt-rekkefolge-niva/91) Meningsfylt rekkefølge (A) | Presenter innhold i en meningsfull rekkefølge. | Ikke vurdert |
 | [1.3.3](https://www.uutilsynet.no/wcag-standarden/133-sensoriske-egenskaper-niva/92) Sensoriske egenskaper (A) | Instruksjoner må ikke utelukkende være avhengige av form, størrelse, visuell plassering, orientering, eller lyd for å kunne bli forstått. | Ikke vurdert |
-| [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Brukeren må få velge om innholdet skal vises i liggende eller stående retning. | Ikke vurdert |
+| [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) Visningsretning (AA) | Brukeren må få velge om innholdet skal vises i liggende eller stående retning. | Automatisk testet |
 | [1.3.5](https://www.uutilsynet.no/wcag-standarden/135-identifiser-formal-med-inndata-niva-aa/142) Identifiser formål med inndata (AA) | Skjemaelementer er kodet med inndataformål. | Oppfylt |
 | [1.4.1](https://www.uutilsynet.no/wcag-standarden/141-bruk-av-farge-niva/93) Bruk av farge (A) | Ikke bruk presentasjon som bygger utelukkende på farge. | Automatisk testet |
 | [1.4.2](https://www.uutilsynet.no/wcag-standarden/142-styring-av-lyd-niva/94) Styring av lyd (A) | Gi brukeren mulighet til å stoppe eller pause lyd som starter automatisk. | Oppfylt |
@@ -230,13 +230,14 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 
 | Krav | Kort fortalt | Status |
 | --- | --- | --- |
-| [4.1.1](https://www.uutilsynet.no/wcag-standarden/411-parsing-oppdeling-niva/120) Parsing, oppdeling (A) | Alle sider skal være uten store kodefeil. | Ikke vurdert |
+| [4.1.1](https://www.uutilsynet.no/wcag-standarden/411-parsing-oppdeling-niva/120) Parsing, oppdeling (A) | Alle sider skal være uten store kodefeil. | Automatisk testet |
 | [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) Navn, rolle, verdi (A) | Alle komponenter har navn og rolle bestemt i koden. | Avvik |
 | [4.1.3](https://www.uutilsynet.no/wcag-standarden/413-statusbeskjeder-niva-aa/152) Statusbeskjeder (AA) | Brukeren skal få statusbeskjeder om viktige endringer på nettsiden uten at det gir kontekstendring. | Ikke vurdert |
 
 ### Manuell kontroll som gjenstår for «Automatisk testet»
 
 - [ ] 1.1.1: skjermleser: om tekstalternativene formidler riktig informasjon.
+- [ ] 1.3.4: rotasjon på ekte mobil og nettbrett.
 - [ ] 1.4.1: visuell vurdering av om informasjon kan forstås uten farge.
 - [ ] 1.4.4: visuell kontroll av klipping og overlapp ved 200 %.
 - [ ] 1.4.5: vurdering av om bilder formidler tekst.
@@ -248,18 +249,21 @@ Status gjelder vurderingen av tjenesten som helhet. «Ikke vurdert» inkluderer 
 - [ ] 2.4.7: manuell tastaturnavigering med visuell kontroll av fokus.
 - [ ] 3.2.1: manuell tastaturnavigering.
 - [ ] 2.5.3: kontroll med stemmestyring av at kontrollene kan aktiveres med den synlige teksten.
+- [ ] 4.1.1: validering av ferdig rendrede sider med W3C-validatoren, slik Uu-tilsynet gjør. Det gjelder også siden med dekoratøren fra serveren.
 
 ### Dokumenterte bevis og avvik
 
 - 1.1.1, 1.4.1, 1.4.3 og 1.4.5 er vurdert for appens eget innhold. Dekoratøren er forutsatt uten avvik. PDF-innhold er ikke vurdert.
 - 1.3.5: Kontaktfeltet har `autocomplete="name"` eller `"tel"` i alle fire flyter. Opplysninger om den ansatte omfattes ikke.
 - 1.4.3: Tekst, lenker, hjelpetekst og feil er målt i alle fire flyter. Ingen kontrastavvik ble funnet. Se seksjon 5.
+- 1.3.4: Hverken appen eller Aksel har CSS som avhenger av retningen, og ingen kode låser retningen. En egen test viser Dine opplysninger, Inntekt og refusjon, Opprett inntektsmelding og Refusjon av omsorgspenger ved 360 × 640 og 640 × 360. Innholdet er det samme i begge retninger, og det blir ikke vannrett rulling.
 - 1.4.4: Alle fire flyter er kontrollert med 200 % nettleserzoom fra 1920 piksler bredde. Den permanente zoomtesten dekker vanlig inntektsmelding.
 - 1.4.11: Ved hvert UU-sjekkpunkt måler testene avgrensningen til felt, radioknapper og avkrysningsbokser, valgt radioknapp, bryteren for hjelpetekster og ikoner i knapper, lenker og nedtrekkslister. De måler også fokusmarkeringen for alle elementer i `main` som kan få fokus. Alt er minst 3:1. Valgt dag i kalenderen (omtrent 6:1) og avkrysset boks i unntatt-Aa-flyten (omtrent 5,5:1) er målt for seg. Lesefelt med lås, for eksempel første «Fra og med», har svak kant (1,5:1). De er ikke regnet som aktive felt, fordi verdien ikke kan endres. Dette er en vurdering. Hover og grafikk uten tekst er ikke målt. Grafikken i appen har tekst ved siden av.
 - 1.4.12: Ved hvert UU-sjekkpunkt legger testene på linjehøyde 1,5, avsnittsavstand 2, bokstavavstand 0,12 og ordavstand 0,16 samtidig. Testene ser etter tekst som klippes, og tekstlinjer som overlapper. Det gjelder alle fire flyter, innsendte skjemaer, feilsider, åpne kontroller, 320 piksler og ekte zoom. Ingen tap ble funnet. Kvitteringen og den åpne datovelgeren er også kontrollert visuelt.
 - 1.4.10: Ved 320 CSS-piksler og 400 % zoom gir datoperioder i «Omsorgsdager» 64 piksler vannrett overløp. [DateRangePickerWrapped](./app/src/features/shared/react-hook-form-wrappers/DateRangePickerWrapped.tsx) tvinger feltene ved siden av hverandre, selv om layouten ikke krever to dimensjoner.
 - 2.4.2: Alle steg, innsendte skjemaer og feilsider har en tittel som sier hva siden gjelder, og hvilken ytelse eller søknad den hører til. UU-testene kontrollerer forventet tittel ved hvert sjekkpunkt. Det fanger også en gammel tittel som blir stående etter navigering. Under lasting står tittelen fra forrige side eller «Inntektsmelding».
 - 2.5.3: Ved hvert UU-sjekkpunkt sammenligner testene synlig tekst eller ledetekst med det tilgjengelige navnet for alle knapper, lenker og skjemafelt. Axe-regelen `label-content-name-mismatch` kjører også. Slette-knappen for refusjonsperiode 3 og senere viste «Slett», men het «Fjern refusjonsendring». Den heter nå «Slett refusjonsperiode». Testene dekker nå tre refusjonsperioder.
+- 4.1.1: Ved hvert UU-sjekkpunkt ser testene etter like ID-er og feil nøsting, for eksempel blokkelementer i `p` eller overskrifter, interaktive elementer inni lenker og knapper, og listeelementer utenfor lister. Ufullstendige elementer og dupliserte attributter finnes ikke i en DOM, så de må sjekkes med validatoren. Overskriftene i «Ofte stilte spørsmål» på kvitteringene inneholdt en `div` og bruker nå `span`. Utviklerverktøyene til TanStack har like ID-er, men vises bare lokalt og er utelatt fra kontrollen.
 - 2.1.1, 2.1.2, 2.4.3, 2.4.7 og 3.2.1: Ved hvert UU-sjekkpunkt tabber testene gjennom hele `main` med ekte tastatur, forover og bakover. Alle elementer som kan få fokus, blir nådd, og ingen elementer har positiv `tabindex`. Fokusrekkefølgen følger DOM-rekkefølgen og hopper ikke oppover, og bakover gir samme rekkefølge snudd. Fokus blir ikke fanget, er synlig (`:focus-visible`) og ligger innenfor skjermen. Fokus endrer verken adresse eller hovedoverskrift. Ingen elementer kan bare brukes med mus. Unntaket er pilen i Aksels nedtrekksliste, der listen kan åpnes og brukes med piltaster. Egne tester viser at kalenderen kan brukes med tastatur og lukkes med Escape, og at fokus da går tilbake til knappen. Ved 320 px går Tab fra «Lukk» via nettleseren tilbake til den modale kalenderen. Det er vanlig oppførsel og ingen felle. 2.4.3 står som «Ikke vurdert» fordi F03, fokus ved stegbytte, må kontrolleres med skjermleser.
 - 3.1.1: Alle sider kommer fra [index.html](./app/index.html) med `lang="nb-no"`. Serveren legger dekoratøren inn i `<head>` og `<body>` uten å endre `<html>`, og produksjonsbygget beholder attributtet. UU-testene kontrollerer sidespråket og axe-reglene for språk på hele dokumentet ved hvert sjekkpunkt. Den engelske teksten på den generelle feilsiden er merket med `lang="en"`.
 - 4.1.2: Åpen `UNSAFE_Combobox` fra Aksel 8.16.2 mangler tilgjengelig navn på `role="listbox"`. Axe rapporterer `aria-input-field-name`. Feilen skal følges opp med Aksel.

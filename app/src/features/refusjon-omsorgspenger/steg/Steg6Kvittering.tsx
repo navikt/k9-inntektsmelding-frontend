@@ -147,7 +147,7 @@ const FaqItem = ({ question, children, icon }: FaqItemProps) => {
     <ExpansionCard aria-labelledby={`faq-${id}`} size="small">
       <ExpansionCardHeader>
         <ExpansionCardTitle id={`faq-${id}`}>
-          <HStack align="center" gap="space-16">
+          <HStack align="center" as="span" gap="space-16">
             {icon}
             {question}
           </HStack>

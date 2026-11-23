@@ -91,14 +91,14 @@ export const Kvittering = ({
           >
             <ExpansionCard.Header>
               <ExpansionCard.Title id={slugify(spørsmål.spørsmål)} size="small">
-                <HStack align="center" gap="space-16">
-                  <div
+                <HStack align="center" as="span" gap="space-16">
+                  <span
                     aria-hidden
                     className="p-2 bg-ax-bg-info-soft rounded-full w-fit"
                   >
                     {spørsmål.ikon}
-                  </div>
-                  <div className="flex-1">{spørsmål.spørsmål}</div>
+                  </span>
+                  <span className="flex-1">{spørsmål.spørsmål}</span>
                 </HStack>
               </ExpansionCard.Title>
             </ExpansionCard.Header>

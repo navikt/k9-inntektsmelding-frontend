@@ -796,6 +796,86 @@ export const sjekkLedetekstINavn = async (page: Page, steg: string) => {
   expect.soft(avvik, `Ledetekst i navn i ${steg}`).toEqual([]);
 };
 
+/* eslint-disable unicorn/consistent-function-scoping -- Funksjonen kjøres i nettleseren via page.evaluate og må inneholde hjelperne sine selv. */
+const finnSyntaksfeil = () => {
+  const beskriv = (element: Element) =>
+    `${element.tagName.toLowerCase()}${element.id ? `#${element.id}` : ""} «${(element.textContent ?? "").trim().slice(0, 40)}»`;
+
+  // Utviklerverktøyene til TanStack vises bare lokalt og har like ID-er i logoene sine.
+  const utviklerverktøy = ".tsqd-parent-container, .TanStackRouterDevtools";
+  const antallPerId = new Map<string, number>();
+  for (const element of document.querySelectorAll("[id]")) {
+    const { id } = element;
+    if (id !== "" && !element.closest(utviklerverktøy)) {
+      antallPerId.set(id, (antallPerId.get(id) ?? 0) + 1);
+    }
+  }
+  const dupliserteIder = [...antallPerId]
+    .filter(([, antall]) => antall > 1)
+    .map(([id, antall]) => `${id} (${antall})`);
+
+  const blokk =
+    "address, article, aside, blockquote, details, dialog, div, dl, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hr, main, nav, ol, p, pre, section, table, ul";
+  const interaktiv =
+    "a[href], button, input:not([type=hidden]), select, textarea, label, iframe, details, [tabindex]:not([tabindex='-1'])";
+  const regler: {
+    navn: string;
+    selektor: string;
+    ok?: (e: Element) => boolean;
+  }[] = [
+    { navn: "blokkelement i p", selektor: `p :is(${blokk})` },
+    {
+      navn: "blokkelement i overskrift",
+      selektor: `:is(h1, h2, h3, h4, h5, h6) :is(${blokk})`,
+    },
+    {
+      navn: "interaktivt element i lenke eller knapp",
+      selektor: `:is(a[href], button) :is(${interaktiv})`,
+    },
+    { navn: "label i label", selektor: "label label" },
+    { navn: "skjema i skjema", selektor: "form form" },
+    { navn: "main i main", selektor: "main main" },
+    {
+      navn: "li utenfor liste",
+      selektor: "li",
+      ok: (e) => e.parentElement?.matches("ul, ol, menu") ?? false,
+    },
+    {
+      navn: "ugyldig barn av liste",
+      selektor: ":is(ul, ol, menu) > *",
+      ok: (e) => e.matches("li, script, template"),
+    },
+    {
+      navn: "ugyldig barn av dl",
+      selektor: "dl > *",
+      ok: (e) => e.matches("dt, dd, div, script, template"),
+    },
+    {
+      navn: "dt eller dd utenfor dl",
+      selektor: "dt, dd",
+      ok: (e) => e.parentElement?.matches("dl, dl > div") ?? false,
+    },
+    {
+      navn: "ugyldig barn av tabellrad",
+      selektor: "tr > *",
+      ok: (e) => e.matches("td, th, script, template"),
+    },
+  ];
+  const feilNøsting = regler.flatMap(({ navn, selektor, ok }) =>
+    [...document.querySelectorAll(selektor)]
+      .filter((element) => !ok?.(element))
+      .map((element) => `${navn}: ${beskriv(element)}`),
+  );
+  return { dupliserteIder, feilNøsting: [...new Set(feilNøsting)] };
+};
+/* eslint-enable unicorn/consistent-function-scoping */
+
+export const sjekkKodesyntaks = async (page: Page, steg: string) => {
+  expect
+    .soft(await page.evaluate(finnSyntaksfeil), `Kodesyntaks i ${steg}`)
+    .toEqual({ dupliserteIder: [], feilNøsting: [] });
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -805,6 +885,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkIkkeTekstligKontrast(page, steg);
     await sjekkTastatur(page, steg);
     await sjekkLedetekstINavn(page, steg);
+    await sjekkKodesyntaks(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
