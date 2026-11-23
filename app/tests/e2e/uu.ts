@@ -267,12 +267,292 @@ export const sjekkTekstavstand = async (page: Page, steg: string) => {
   await stil.evaluate((element) => (element as Element).remove());
 };
 
+/* eslint-disable unicorn/consistent-function-scoping -- Funksjonen kjøres i nettleseren via page.evaluate og må inneholde hjelperne sine selv. */
+const målIkkeTekstligKontrast = () => {
+  type Rgba = [number, number, number, number];
+  const lerret = document
+    .createElement("canvas")
+    .getContext("2d", { willReadFrequently: true })!;
+  lerret.canvas.width = 1;
+  lerret.canvas.height = 1;
+  const tilRgba = (farge: string): Rgba => {
+    lerret.clearRect(0, 0, 1, 1);
+    lerret.fillStyle = "transparent";
+    lerret.fillStyle = farge;
+    lerret.fillRect(0, 0, 1, 1);
+    const [r, g, b, a] = lerret.getImageData(0, 0, 1, 1).data;
+    return [r, g, b, a / 255];
+  };
+  const leggOver = ([r, g, b, a]: Rgba, under: Rgba): Rgba => [
+    r * a + under[0] * (1 - a),
+    g * a + under[1] * (1 - a),
+    b * a + under[2] * (1 - a),
+    1,
+  ];
+  const bakgrunnBak = (element: Element | null): Rgba => {
+    const lag: Rgba[] = [];
+    for (let node = element; node; node = node.parentElement) {
+      lag.push(tilRgba(getComputedStyle(node).backgroundColor));
+    }
+    let farge: Rgba = [255, 255, 255, 1];
+    for (const over of lag.toReversed()) {
+      farge = leggOver(over, farge);
+    }
+    return farge;
+  };
+  const luminans = ([r, g, b]: Rgba) => {
+    const [rl, gl, bl] = [r, g, b].map((kanal) => {
+      const verdi = kanal / 255;
+      return verdi <= 0.040_45
+        ? verdi / 12.92
+        : ((verdi + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * rl + 0.7152 * gl + 0.0722 * bl;
+  };
+  const kontrast = (a: Rgba, b: Rgba) => {
+    const [lys, mørk] = [luminans(a), luminans(b)].toSorted((x, y) => y - x);
+    return (lys + 0.05) / (mørk + 0.05);
+  };
+  const beskriv = (element: Element) =>
+    `${element.tagName.toLowerCase()} «${(element.getAttribute("aria-label") ?? element.closest("label, button, a, .aksel-form-field, fieldset")?.textContent ?? "").trim().slice(0, 50)}»`;
+  const synlig = (element: Element) =>
+    element.checkVisibility({
+      opacityProperty: true,
+      visibilityProperty: true,
+    });
+  const piksler = (verdi: string) => Number(verdi.replace("px", ""));
+  const avrund = (verdi: number) => Math.round(verdi * 100) / 100;
+  const avvik: { element: string; del: string; kontrast: number }[] = [];
+  const krev = (element: Element, del: string, verdi: number) => {
+    if (verdi < 3) {
+      avvik.push({ element: beskriv(element), del, kontrast: avrund(verdi) });
+    }
+  };
+
+  const kantEllerFyll = (boks: Element) => {
+    const stil = getComputedStyle(boks);
+    const ytre = bakgrunnBak(boks.parentElement);
+    const fyll = leggOver(tilRgba(stil.backgroundColor), ytre);
+    const harKant =
+      stil.borderTopStyle !== "none" && piksler(stil.borderTopWidth) > 0;
+    const kant = leggOver(tilRgba(stil.borderTopColor), ytre);
+    return Math.max(kontrast(fyll, ytre), harKant ? kontrast(kant, ytre) : 1);
+  };
+  const forfedre = (element: Element, antall: number) => {
+    const liste: Element[] = [];
+    for (
+      let forelder = element.parentElement;
+      forelder && liste.length < antall;
+      forelder = forelder.parentElement
+    ) {
+      liste.push(forelder);
+    }
+    return liste;
+  };
+  const feltboks = (felt: Element) =>
+    [felt, ...forfedre(felt, 3)].find(
+      (kandidat) => kantEllerFyll(kandidat) >= 1.01,
+    ) ?? felt;
+
+  for (const felt of document.querySelectorAll(
+    "main :is(input:not([type=hidden], [type=radio], [type=checkbox], [type=button], [type=submit]), textarea, select, input[type=radio], input[type=checkbox])",
+  )) {
+    if (
+      !synlig(felt) ||
+      (felt as HTMLInputElement).disabled ||
+      (felt as HTMLInputElement).readOnly
+    ) {
+      continue;
+    }
+    krev(felt, "avgrensning", kantEllerFyll(feltboks(felt)));
+    if (felt.matches("input[type=radio]:checked")) {
+      const stil = getComputedStyle(felt);
+      const ytre = bakgrunnBak(felt.parentElement);
+      krev(
+        felt,
+        "valgt prikk",
+        kontrast(
+          leggOver(tilRgba(stil.backgroundColor), ytre),
+          leggOver(tilRgba(stil.borderTopColor), ytre),
+        ),
+      );
+    }
+  }
+
+  for (const spor of document.querySelectorAll("main .aksel-switch__track")) {
+    if (!synlig(spor)) {
+      continue;
+    }
+    krev(spor, "bryterspor", kantEllerFyll(spor));
+    const knott = spor.querySelector(".aksel-switch__thumb");
+    if (knott) {
+      krev(
+        spor,
+        "bryterknott",
+        kontrast(
+          bakgrunnBak(knott),
+          leggOver(
+            tilRgba(getComputedStyle(spor).backgroundColor),
+            bakgrunnBak(spor.parentElement),
+          ),
+        ),
+      );
+    }
+  }
+
+  for (const ikon of document.querySelectorAll(
+    "main :is(button, a, [role=button], [aria-expanded], .aksel-select__container, .aksel-combobox__wrapper) svg",
+  )) {
+    if (!synlig(ikon) || ikon.getBoundingClientRect().width === 0) {
+      continue;
+    }
+    const tegning = [ikon, ...ikon.querySelectorAll("*")]
+      .flatMap((del) => {
+        const { fill, stroke } = getComputedStyle(del);
+        return [fill, stroke];
+      })
+      .map((farge) => tilRgba(farge))
+      .find((farge) => farge[3] > 0);
+    if (tegning) {
+      const bak = bakgrunnBak(ikon.parentElement);
+      krev(ikon, "ikon", kontrast(leggOver(tegning, bak), bak));
+    }
+  }
+
+  const fokusEgenskaper = [
+    "outlineStyle",
+    "outlineWidth",
+    "outlineColor",
+    "outlineOffset",
+    "boxShadow",
+    "borderTopColor",
+    "backgroundColor",
+  ] as const;
+  const øyeblikksbilde = (element: Element) =>
+    [element, ...element.children, ...forfedre(element, 3)].flatMap((vert) =>
+      [null, "::before", "::after"].map((pseudo) => {
+        const stil = getComputedStyle(vert, pseudo);
+        return {
+          vert,
+          pseudo,
+          synlig: pseudo === null || stil.content !== "none",
+          verdier: Object.fromEntries(
+            fokusEgenskaper.map((egenskap) => [egenskap, stil[egenskap]]),
+          ) as Record<(typeof fokusEgenskaper)[number], string>,
+        };
+      }),
+    );
+  const opprinneligFokus = document.activeElement as HTMLElement | null;
+  const fokushendelser = ["focus", "blur", "focusin", "focusout"];
+  const stoppHendelse = (hendelse: Event) =>
+    hendelse.stopImmediatePropagation();
+  for (const hendelse of fokushendelser) {
+    globalThis.addEventListener(hendelse, stoppHendelse, { capture: true });
+  }
+  const fokuserbare = [
+    ...document.querySelectorAll<HTMLElement>(
+      "main :is(a[href], button, input:not([type=hidden]), select, textarea, [tabindex]:not([tabindex='-1']))",
+    ),
+  ].filter(
+    (element) => synlig(element) && !(element as HTMLButtonElement).disabled,
+  );
+  for (const element of fokuserbare) {
+    const aktivt = document.activeElement as HTMLElement | null;
+    aktivt?.blur();
+    const før = øyeblikksbilde(element);
+    element.focus({ focusVisible: true, preventScroll: true } as FocusOptions);
+    if (document.activeElement !== element) {
+      continue;
+    }
+    const etter = øyeblikksbilde(element);
+    const indikatorer = etter.flatMap(
+      ({ vert, synlig: vises, verdier }, indeks) => {
+        const forrige = før[indeks].verdier;
+        if (!vises) {
+          return [];
+        }
+        const ytre = bakgrunnBak(vert.parentElement);
+        const indre = bakgrunnBak(vert);
+        const resultater: number[] = [];
+        if (
+          verdier.outlineStyle !== "none" &&
+          piksler(verdier.outlineWidth) > 0 &&
+          (verdier.outlineStyle !== forrige.outlineStyle ||
+            verdier.outlineColor !== forrige.outlineColor ||
+            verdier.outlineWidth !== forrige.outlineWidth)
+        ) {
+          const bak = piksler(verdier.outlineOffset) < 0 ? indre : ytre;
+          resultater.push(
+            kontrast(leggOver(tilRgba(verdier.outlineColor), bak), bak),
+          );
+        }
+        if (
+          verdier.boxShadow !== forrige.boxShadow &&
+          verdier.boxShadow !== "none"
+        ) {
+          const bak = verdier.boxShadow.includes("inset") ? indre : ytre;
+          const skyggefarger =
+            verdier.boxShadow.match(
+              /(?:rgba?|oklch|color)\([^)]*\)|#[\da-f]{3,8}/gi,
+            ) ?? [];
+          for (const farge of skyggefarger) {
+            resultater.push(kontrast(leggOver(tilRgba(farge), bak), bak));
+          }
+        }
+        if (verdier.borderTopColor !== forrige.borderTopColor) {
+          resultater.push(
+            kontrast(leggOver(tilRgba(verdier.borderTopColor), ytre), ytre),
+          );
+        }
+        if (verdier.backgroundColor !== forrige.backgroundColor) {
+          resultater.push(
+            kontrast(leggOver(tilRgba(verdier.backgroundColor), ytre), ytre),
+          );
+        }
+        return resultater;
+      },
+    );
+    if (indikatorer.length === 0) {
+      avvik.push({
+        element: beskriv(element),
+        del: "ingen fokusmarkering",
+        kontrast: 1,
+      });
+    } else {
+      krev(element, "fokusmarkering", Math.max(...indikatorer));
+    }
+  }
+  if (opprinneligFokus && opprinneligFokus !== document.body) {
+    opprinneligFokus.focus({ preventScroll: true });
+  } else {
+    const aktivt = document.activeElement as HTMLElement | null;
+    aktivt?.blur();
+  }
+  for (const hendelse of fokushendelser) {
+    globalThis.removeEventListener(hendelse, stoppHendelse, true);
+  }
+  return avvik;
+};
+/* eslint-enable unicorn/consistent-function-scoping */
+
+export const sjekkIkkeTekstligKontrast = async (page: Page, steg: string) => {
+  const avvik = await page.evaluate(målIkkeTekstligKontrast);
+  await test.info().attach(`ikke-tekstlig-kontrast-${steg}`, {
+    body: JSON.stringify(avvik, null, 2),
+    contentType: "application/json",
+  });
+  expect
+    .soft(avvik, `Kontrast for ikke-tekstlig innhold i ${steg}`)
+    .toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
     await sjekkSidetittel(page, steg);
     await sjekkSpråk(page, steg);
     await sjekkTekstavstand(page, steg);
+    await sjekkIkkeTekstligKontrast(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
