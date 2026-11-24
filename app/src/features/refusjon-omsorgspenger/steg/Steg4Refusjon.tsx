@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { hentGrunnbeløpOptions } from "~/api/queries.ts";
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
@@ -112,6 +113,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
       </GuidePanel>
       <form onSubmit={onSubmit}>
         <VStack gap="space-16">
+          <AlleFeltMåFyllesUt />
           {inntektsopplysninger ? (
             <Inntekt
               opplysninger={{

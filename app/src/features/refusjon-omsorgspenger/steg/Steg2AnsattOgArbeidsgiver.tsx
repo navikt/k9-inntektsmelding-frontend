@@ -14,6 +14,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
 import { formatFodselsnummer } from "~/utils.ts";
 
@@ -88,6 +89,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={2} />
       <form className="space-y-4" onSubmit={onSubmit}>
+        <AlleFeltMåFyllesUt />
         <Informasjonsseksjon tittel="Den ansatte">
           <div className="flex gap-4 flex-col ax-md:flex-row">
             <Controller

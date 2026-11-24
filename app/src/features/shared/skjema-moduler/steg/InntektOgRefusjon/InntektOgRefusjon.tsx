@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas.tsx";
 import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/frontendSchemas.tsx";
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import {
@@ -104,6 +105,7 @@ export function InntektOgRefusjon({
             Inntekt og refusjon
           </Heading>
           <Fremgangsindikator aktivtSteg={2} />
+          <AlleFeltMåFyllesUt />
           {opplysninger.ytelse !== "OMSORGSPENGER" && <Ytelsesperiode />}
           {opplysninger.ytelse === "OMSORGSPENGER" && (
             <OmFraværetOmsorgspenger />

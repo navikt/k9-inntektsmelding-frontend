@@ -188,6 +188,13 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     label: "Refusjonsbeløp per måned",
     error: "Beløpet må være 0 eller høyere",
   });
+  await page.getByText("Refusjonsbeløp per måned").fill("");
+  await page.getByRole("button", { name: "Neste steg" }).click();
+  await expectError({
+    page,
+    label: "Refusjonsbeløp per måned",
+    error: "Må oppgis",
+  });
   await page.getByText("Refusjonsbeløp per måned").fill("53000");
 
   await page

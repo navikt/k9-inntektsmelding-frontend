@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { capitalizeSetning } from "~/utils.ts";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
@@ -81,6 +82,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
       </GuidePanel>
       <form onSubmit={onSubmit}>
         <VStack gap="space-16">
+          <AlleFeltMåFyllesUt />
           <RadioGroup
             error={formState.errors.harUtbetaltLønn?.message}
             legend="Har dere utbetalt lønn under fraværet, og krever refusjon?"

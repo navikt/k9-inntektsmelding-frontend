@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/frontendSchemas";
 import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useHjelpetekst } from "~/features/shared/Hjelpetekst";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import type { OpplysningerDto } from "~/types/api-schemas.ts";
@@ -104,6 +105,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
             Dine opplysninger
           </Heading>
           <Fremgangsindikator aktivtSteg={1} />
+          <AlleFeltMåFyllesUt />
 
           <Intro opplysninger={opplysninger} />
           <Personinformasjon opplysninger={opplysninger} />

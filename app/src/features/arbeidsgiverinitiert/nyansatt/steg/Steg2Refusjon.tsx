@@ -5,6 +5,7 @@ import { isAfter } from "date-fns";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
@@ -163,6 +164,7 @@ export function Steg2Refusjon() {
             Refusjon
           </Heading>
           <Fremgangsindikator aktivtSteg={2} />
+          <AlleFeltMåFyllesUt />
           <DatePickerWrapped
             label="Første fraværsdag med refusjon"
             name="førsteFraværsdag"

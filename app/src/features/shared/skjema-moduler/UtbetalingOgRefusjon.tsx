@@ -162,6 +162,7 @@ function LikRefusjon() {
                 label="Refusjonsbeløp per måned"
                 min={0}
                 name="refusjon.0.beløp"
+                required
               />
               <Button
                 aria-label="Tilbakestill refusjonsbeløp"

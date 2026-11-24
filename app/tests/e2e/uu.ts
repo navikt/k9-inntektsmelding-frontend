@@ -1170,6 +1170,109 @@ export const sjekkInndataUtenKontekstendring = async (
     .toEqual({ avvik: [], dialoger: [] });
 };
 
+export const sjekkLedetekster = async (page: Page, steg: string) => {
+  /* eslint-disable unicorn/consistent-function-scoping -- Kjøres i nettleseren via page.evaluate. */
+  const avvik = await page.evaluate(() => {
+    const synlig = (element: Element) => {
+      const { width, height } = element.getBoundingClientRect();
+      return (
+        element.checkVisibility({
+          opacityProperty: true,
+          visibilityProperty: true,
+        }) &&
+        width > 1 &&
+        height > 1 &&
+        (element.textContent ?? "").trim() !== ""
+      );
+    };
+    const felt = [
+      ...document.querySelectorAll<HTMLInputElement>(
+        "main :is(input:not([type=hidden], [type=submit], [type=button]), select, textarea)",
+      ),
+    ].filter((element) => element.checkVisibility());
+    // Bryteren for hjelpetekster endrer visningen og er ikke en del av utfyllingen.
+    const førsteFelt = felt.find(
+      (element) => !element.closest(".aksel-switch"),
+    );
+    const opplysning = [...document.querySelectorAll("main p")].find(
+      (element) =>
+        (element.textContent ?? "").trim() === "Alle felt må fylles ut." &&
+        synlig(element),
+    );
+    const opplysningAvvik =
+      førsteFelt &&
+      !(
+        opplysning &&
+        opplysning.compareDocumentPosition(førsteFelt) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      )
+        ? ["«Alle felt må fylles ut.» står ikke før første felt"]
+        : [];
+    return [
+      ...opplysningAvvik,
+      ...felt.flatMap((element) => {
+        const etiketter = [...(element.labels ?? [])].filter((etikett) =>
+          synlig(etikett),
+        );
+        const beskrivelse = `${element.tagName.toLowerCase()}#${element.id} «${(element.getAttribute("aria-label") ?? element.labels?.[0]?.textContent ?? element.placeholder ?? "").trim().slice(0, 40)}»`;
+        if (etiketter.length === 0) {
+          return [`${beskrivelse}: mangler synlig ledetekst`];
+        }
+        const erNær = (a: Element, b: Element) => {
+          const boksA = a.getBoundingClientRect();
+          const boksB = b.getBoundingClientRect();
+          const avstandY = Math.max(
+            0,
+            boksA.top - boksB.bottom,
+            boksB.top - boksA.bottom,
+          );
+          const avstandX = Math.max(
+            0,
+            boksA.left - boksB.right,
+            boksB.left - boksA.right,
+          );
+          return avstandY <= 80 && avstandX <= 80;
+        };
+        // En beskrivelse mellom ledetekst og felt, som i Aksel, regnes som en del av ledeteksten.
+        const beskrivelser = (element.getAttribute("aria-describedby") ?? "")
+          .split(" ")
+          .filter((id) => id !== "")
+          .map((id) => document.querySelector(`#${CSS.escape(id)}`))
+          .filter((beskrivelseElement) => beskrivelseElement !== null)
+          .filter((beskrivelseElement) => synlig(beskrivelseElement));
+        const nær = etiketter.some(
+          (etikett) =>
+            erNær(etikett, element) ||
+            beskrivelser.some(
+              (beskrivelseElement) =>
+                erNær(etikett, beskrivelseElement) &&
+                erNær(beskrivelseElement, element),
+            ),
+        );
+        const avvikForFelt = nær
+          ? []
+          : [`${beskrivelse}: ledeteksten står langt fra feltet`];
+        if (element.type === "radio" || element.type === "checkbox") {
+          const gruppe = element.closest("fieldset");
+          const legend = gruppe?.querySelector(":scope > legend");
+          if (
+            gruppe &&
+            element.type === "radio" &&
+            !(legend && synlig(legend))
+          ) {
+            avvikForFelt.push(
+              `${beskrivelse}: radiogruppen mangler synlig spørsmål`,
+            );
+          }
+        }
+        return avvikForFelt;
+      }),
+    ];
+  });
+  /* eslint-enable unicorn/consistent-function-scoping */
+  expect.soft([...new Set(avvik)], `Synlige ledetekster i ${steg}`).toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -1184,6 +1287,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkHurtigtaster(page, steg);
     await sjekkBevegelse(page, steg);
     await sjekkFeilmeldinger(page, steg);
+    await sjekkLedetekster(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

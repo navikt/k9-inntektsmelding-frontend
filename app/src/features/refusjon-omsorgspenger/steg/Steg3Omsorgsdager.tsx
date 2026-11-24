@@ -29,6 +29,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 import { formatDatoKort } from "~/utils.ts";
 
@@ -142,6 +143,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
       </GuidePanel>
       <form onSubmit={onSubmit}>
         <VStack gap="space-16">
+          <AlleFeltMåFyllesUt />
           <RadioGroup
             error={formState.errors.harDekket10FørsteOmsorgsdager?.message}
             legend={`Har dere dekket de 10 første omsorgsdagene i ${årForRefusjon}?`}
