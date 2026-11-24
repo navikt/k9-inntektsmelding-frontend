@@ -1064,6 +1064,112 @@ export const sjekkStatusbeskjeder = async (page: Page, steg: string) => {
   expect.soft(funn, `Statusbeskjeder uten live-region før ${steg}`).toEqual([]);
 };
 
+const INNDATA =
+  "main :is(input:not([type=hidden], [type=submit], [type=button]), select, textarea)";
+
+/**
+ * Endrer alle felt i main, også felt som dukker opp underveis, og kontrollerer at ingen endring flytter fokus,
+ * bytter side, endrer hovedoverskriften eller åpner nye vinduer. Testen endrer skjemaets tilstand og må kjøres
+ * på en side som ikke brukes videre.
+ */
+export const sjekkInndataUtenKontekstendring = async (
+  page: Page,
+  side: string,
+) => {
+  const dialoger: string[] = [];
+  const registrerDialog = (dialog: { message: () => string }) => {
+    dialoger.push(dialog.message());
+  };
+  page.on("dialog", registrerDialog);
+  const avvik: string[] = [];
+  for (let runde = 0; runde < 100; runde++) {
+    const nesteFelt = page.locator(INNDATA).filter({ visible: true });
+    const indeks = await nesteFelt.evaluateAll((felt) =>
+      felt.findIndex(
+        (element) =>
+          !(element as HTMLElement).dataset.uuEndret &&
+          !(element as HTMLInputElement).disabled &&
+          !(element as HTMLInputElement).readOnly,
+      ),
+    );
+    if (indeks === -1) {
+      break;
+    }
+    const felt = nesteFelt.nth(indeks);
+    const { type, navn } = await felt.evaluate((element) => {
+      (element as HTMLElement).dataset.uuEndret = "ja";
+      return {
+        type:
+          element.tagName === "SELECT"
+            ? "select"
+            : ((element as HTMLInputElement).type ?? "text"),
+        navn:
+          (element as HTMLInputElement).labels?.[0]?.textContent?.trim() ??
+          element.getAttribute("aria-label") ??
+          element.tagName,
+      };
+    });
+    const før = {
+      url: page.url(),
+      h1: await page.locator("h1").allInnerTexts(),
+      vinduer: page.context().pages().length,
+    };
+    if (type === "radio" || type === "checkbox") {
+      await felt.focus();
+      await page.keyboard.press("Space");
+    } else if (type === "select") {
+      const verdier = await felt.evaluate((element) =>
+        [...(element as HTMLSelectElement).options]
+          .map(({ value }) => value)
+          .filter(
+            (verdi) =>
+              verdi !== "" && verdi !== (element as HTMLSelectElement).value,
+          ),
+      );
+      if (verdier.length === 0) {
+        continue;
+      }
+      await felt.focus();
+      await felt.selectOption(verdier[0]);
+    } else {
+      await felt.focus();
+      await page.keyboard.type("1");
+    }
+    await page.waitForLoadState("networkidle");
+    const etter = {
+      url: page.url(),
+      h1: await page.locator("h1").allInnerTexts(),
+      vinduer: page.context().pages().length,
+      fokusIFeltet: await felt.evaluate(
+        (element) =>
+          element === document.activeElement ||
+          element.contains(document.activeElement),
+      ),
+    };
+    if (
+      etter.url !== før.url ||
+      etter.h1.join(",") !== før.h1.join(",") ||
+      etter.vinduer !== før.vinduer ||
+      !etter.fokusIFeltet
+    ) {
+      const endringer = [
+        etter.url === før.url ? "" : `adresse ${før.url} → ${etter.url}`,
+        etter.h1.join(",") === før.h1.join(",") ? "" : "hovedoverskrift",
+        etter.vinduer === før.vinduer ? "" : "nytt vindu",
+        etter.fokusIFeltet ? "" : "fokus flyttet",
+      ].filter(Boolean);
+      avvik.push(`${navn} (${type}): ${endringer.join(", ")}`);
+    }
+  }
+  page.off("dialog", registrerDialog);
+  expect
+    .soft(
+      { avvik, dialoger },
+      `Endring av verdier uten kontekstendring i ${side}`,
+    )
+    .toEqual({ avvik: [], dialoger: [] });
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();

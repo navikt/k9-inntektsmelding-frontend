@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import {
   finnWcagAvvik,
   sjekkIngenVannrettRulling,
+  sjekkInndataUtenKontekstendring,
   sjekkUniversellUtforming,
 } from "tests/e2e/uu";
 import { utgåttOpplysningerResponse } from "tests/mocks/inntektsmelding/opplysninger";
@@ -400,6 +401,91 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
       page,
       "Den ansatte og arbeidsgiver med feil",
     );
+  });
+
+  test.describe("Endring av verdier gir ingen kontekstendring", () => {
+    test("Inntektsmelding: Dine opplysninger og Inntekt og refusjon", async ({
+      page,
+    }) => {
+      await mockOpplysninger({ page });
+      await mockGrunnbeløp({ page });
+      await mockInntektsmeldinger({ page });
+      await page.goto("/k9-im-dialog/1/dine-opplysninger");
+      await page.getByLabel("Navn", { exact: true }).fill("Test Brukersen");
+      await page.getByLabel("Telefon", { exact: true }).fill("13371337");
+      await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
+      await expect(
+        page.getByText("Steg 2 av 3", { exact: true }),
+      ).toBeVisible();
+      await page
+        .getByRole("button", { name: "Endre månedslønn", exact: true })
+        .click();
+      await sjekkInndataUtenKontekstendring(page, "Inntekt og refusjon");
+
+      await page.goto("/k9-im-dialog/1/dine-opplysninger");
+      await expect(
+        page.getByText("Steg 1 av 3", { exact: true }),
+      ).toBeVisible();
+      await sjekkInndataUtenKontekstendring(page, "Dine opplysninger");
+    });
+
+    test("Arbeidsgiverinitiert: opprett inntektsmelding", async ({ page }) => {
+      await mockHentPersonOgArbeidsforhold({ page });
+      await mockGrunnbeløp({ page });
+      await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
+      await expect(
+        page.getByRole("heading", { name: "Opprett manuell inntektsmelding" }),
+      ).toBeVisible();
+      await sjekkInndataUtenKontekstendring(page, "Opprett inntektsmelding");
+    });
+
+    test("Refusjon av omsorgspenger: steg 1 til 3", async ({ page }) => {
+      await page.clock.install({ time: new Date("2026-03-15").getTime() });
+      await mockInnloggetBruker({ page });
+      await mockGrunnbeløp({ page });
+      await mockInntektsmeldingForÅr({ page, json: [] });
+      await mockInntektsopplysninger({ page });
+      await mockArbeidstakerOppslag({ page });
+      const intro = "/k9-im-dialog/refusjon-omsorgspenger/123456789/1-intro";
+
+      await page.goto(intro);
+      await page.getByRole("radio", { name: "Ja", exact: true }).check();
+      await page.getByRole("radio", { name: "2025", exact: true }).check();
+      await page.getByRole("button", { name: "Neste steg" }).click();
+      await page
+        .getByLabel("Ansattes fødselsnummer (11 siffer)")
+        .fill("16878397960");
+      await page.waitForLoadState("networkidle");
+      await page.getByRole("button", { name: "Neste steg" }).click();
+      await expect(
+        page.getByRole("heading", {
+          name: "Omsorgsdager dere søker refusjon for",
+        }),
+      ).toBeVisible();
+      await page.getByRole("radio", { name: "Ja", exact: true }).check();
+      const leggTilKnapper = await page
+        .getByRole("button", { name: /Legg til/ })
+        .all();
+      for (const knapp of leggTilKnapper) {
+        await knapp.click();
+      }
+      await sjekkInndataUtenKontekstendring(page, "Omsorgsdager");
+
+      await page.goto(intro);
+      await page.getByRole("radio", { name: "Ja", exact: true }).check();
+      await page.getByRole("radio", { name: "2025", exact: true }).check();
+      await page.getByRole("button", { name: "Neste steg" }).click();
+      await expect(
+        page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+      ).toBeVisible();
+      await sjekkInndataUtenKontekstendring(
+        page,
+        "Den ansatte og arbeidsgiver",
+      );
+
+      await page.goto(intro);
+      await sjekkInndataUtenKontekstendring(page, "Om refusjon");
+    });
   });
 
   test(

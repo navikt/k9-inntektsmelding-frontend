@@ -34,6 +34,7 @@ import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/Da
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import {
   EndringAvInntektÅrsaker,
+  EndringAvInntektÅrsakerSchema,
   MånedsinntektStatus,
   OpplysningerDto,
 } from "~/types/api-schemas.ts";
@@ -477,9 +478,9 @@ type EndringsårsakerProps = {
   skjæringstidspunkt: string;
 };
 function Endringsårsaker({ skjæringstidspunkt }: EndringsårsakerProps) {
-  const { control, register, formState } =
+  const { control, register, formState, setValue } =
     useFormContext<InntektOgRefusjonForm>();
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "endringAvInntektÅrsaker",
   });
@@ -506,10 +507,25 @@ function Endringsårsaker({ skjæringstidspunkt }: EndringsårsakerProps) {
               })}
               className="md:max-w-[60%]"
               onChange={(v) => {
-                // vi nullstiller alle andre felter enn årsak, så vi ikke får noe som henger igjen når vi endrer årsak
-                update(index, {
-                  ...ENDRINGSÅRSAK_TEMPLATE,
-                  årsak: v.target.value as EndringAvInntektÅrsaker,
+                // vi nullstiller alle andre felter enn årsak, så vi ikke får noe som henger igjen når vi endrer årsak.
+                // setValue per felt beholder raden, slik at fokus blir værende i nedtrekkslisten.
+                const rad = `endringAvInntektÅrsaker.${index}` as const;
+                setValue(`${rad}.fom`, ENDRINGSÅRSAK_TEMPLATE.fom);
+                setValue(`${rad}.tom`, ENDRINGSÅRSAK_TEMPLATE.tom);
+                setValue(
+                  `${rad}.bleKjentFom`,
+                  ENDRINGSÅRSAK_TEMPLATE.bleKjentFom,
+                );
+                setValue(
+                  `${rad}.ignorerTom`,
+                  ENDRINGSÅRSAK_TEMPLATE.ignorerTom,
+                );
+                const årsak = EndringAvInntektÅrsakerSchema.safeParse(
+                  v.target.value,
+                );
+                setValue(`${rad}.årsak`, årsak.success ? årsak.data : "", {
+                  shouldDirty: true,
+                  shouldValidate: formState.isSubmitted,
                 });
               }}
             >
