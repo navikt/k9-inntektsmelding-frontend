@@ -27,7 +27,7 @@ export const IkkeFunnetFeilside = () => {
           </BodyShort>
         </div>
         <Button as="a" href="https://arbeidsgiver.nav.no/min-side-arbeidsgiver">
-          Gå til Min side arbeidsgiver
+          Gå til Min side – arbeidsgiver
         </Button>
       </VStack>
     </Box>

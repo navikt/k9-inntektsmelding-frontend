@@ -35,7 +35,7 @@ export const OppgaveErUtgåttFeilside = () => {
                 </div>
 
                 <Button as="a" href="/min-side-arbeidsgiver">
-                  Gå til Min side - arbeidsgiver
+                  Gå til Min side – arbeidsgiver
                 </Button>
               </VStack>
             </VStack>

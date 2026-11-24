@@ -117,7 +117,7 @@ export const VisInnsendtRefusjonskrav = () => {
             iconPosition="left"
             variant="tertiary"
           >
-            Last ned PDF
+            Last ned refusjonskrav
           </Button>
         </div>
       </div>

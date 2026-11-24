@@ -59,7 +59,7 @@ export const GenerellFeilside = () => {
                 </div>
 
                 <Button as="a" href="/min-side-arbeidsgiver">
-                  Gå til Min side - arbeidsgiver
+                  Gå til Min side – arbeidsgiver
                 </Button>
               </VStack>
 

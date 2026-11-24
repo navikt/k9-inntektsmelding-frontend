@@ -122,8 +122,8 @@ test.describe("Refusjon Omsorgspenger – vis-rute", () => {
     // Inntekt formatert: 50 000 kr
     await expect(page.getByText("50 000 kr", { exact: false })).toBeVisible();
 
-    // Last ned PDF
-    await expect(page.getByText("Last ned PDF")).toBeVisible();
+    // Last ned refusjonskravet
+    await expect(page.getByText("Last ned refusjonskrav")).toBeVisible();
     await sjekkUniversellUtforming(page, "refusjon-omsorgspenger-vis");
   });
 });

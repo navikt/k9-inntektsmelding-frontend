@@ -108,7 +108,7 @@ export const Kvittering = ({
       </VStack>
       <HStack gap="space-8" justify="center" wrap={true}>
         <Button as="a" href="/min-side-arbeidsgiver" variant="primary">
-          Gå til min side – arbeidsgiver
+          Gå til Min side – arbeidsgiver
         </Button>
         {inntektsmeldingsId && (
           <Button

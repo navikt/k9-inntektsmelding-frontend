@@ -1450,6 +1450,108 @@ export const sjekkInnholdVedPekerOgFokus = async (page: Page, steg: string) => {
     .toEqual([]);
 };
 
+type Navigasjonselement = { nøkkel: string; navn: string; mål?: string };
+// Stegnavigasjonen kan lede til samme side som andre lenker, men har en annen funksjon.
+const erStegnavigasjon = (navn: string) =>
+  ["avbryt", "forrige steg"].includes(normaliser(navn));
+const navigasjonPerTest = new Map<
+  string,
+  { steg: string; elementer: Navigasjonselement[] }[]
+>();
+
+export const sjekkKonsekventNavigering = async (page: Page, steg: string) => {
+  const rå = await page.evaluate(() =>
+    [
+      ...document.querySelectorAll(
+        "header a[href], main a[href], main button, main [role=button]",
+      ),
+    ]
+      .filter(
+        (element) =>
+          element.checkVisibility() &&
+          !element.closest("dialog, [role=dialog], [popover]"),
+      )
+      .map((element) => ({
+        navn: (element.getAttribute("aria-label") ?? element.textContent ?? "")
+          .trim()
+          .replaceAll(/\s+/g, " "),
+        mål:
+          element instanceof HTMLAnchorElement
+            ? `${new URL(element.href).pathname}${new URL(element.href).hash}`.replaceAll(
+                /[\da-f]{8}-[\da-f-]{27}|\d{3,}/gi,
+                ":id",
+              )
+            : undefined,
+      }))
+      .filter(({ navn }) => navn !== ""),
+  );
+  const elementer = rå.map(({ navn, mål }) => ({
+    navn,
+    mål,
+    nøkkel: `${mål ? "lenke" : "knapp"}:${normaliser(navn)}`,
+  }));
+  const testId = test.info().testId;
+  const tidligere = navigasjonPerTest.get(testId) ?? [];
+  navigasjonPerTest.set(testId, [...tidligere, { steg, elementer }]);
+
+  const førstePlass = (liste: Navigasjonselement[]) => {
+    const plass = new Map<string, number>();
+    for (const [indeks, { nøkkel }] of liste.entries()) {
+      if (!plass.has(nøkkel)) {
+        plass.set(nøkkel, indeks);
+      }
+    }
+    return plass;
+  };
+  const nå = førstePlass(elementer);
+  const navn = new Map(
+    elementer.map((element) => [element.nøkkel, element.navn]),
+  );
+  const rekkefølge: string[] = [];
+  const identifikasjon: string[] = [];
+  for (const forrige of tidligere) {
+    const før = førstePlass(forrige.elementer);
+    const felles = før
+      .keys()
+      .filter((nøkkel) => nå.has(nøkkel))
+      .toArray()
+      .toSorted((a, b) => før.get(a)! - før.get(b)!);
+    for (const [indeks, nøkkel] of felles.entries()) {
+      const neste = felles[indeks + 1];
+      if (neste && nå.get(neste)! < nå.get(nøkkel)!) {
+        rekkefølge.push(
+          `«${navn.get(nøkkel)}» står før «${navn.get(neste)}» i ${forrige.steg}, men etter i ${steg}`,
+        );
+      }
+    }
+    for (const { mål, navn: navnFør } of forrige.elementer) {
+      const sammeMål = elementer.find(
+        (element) =>
+          mål &&
+          element.mål === mål &&
+          !erStegnavigasjon(navnFør) &&
+          !erStegnavigasjon(element.navn) &&
+          !normaliser(element.navn).includes(normaliser(navnFør)) &&
+          !normaliser(navnFør).includes(normaliser(element.navn)),
+      );
+      if (sammeMål) {
+        identifikasjon.push(
+          `Lenken til ${mål} heter «${navnFør}» i ${forrige.steg} og «${sammeMål.navn}» i ${steg}`,
+        );
+      }
+    }
+  }
+  expect
+    .soft(
+      {
+        rekkefølge: [...new Set(rekkefølge)],
+        identifikasjon: [...new Set(identifikasjon)],
+      },
+      `Konsekvent navigering og identifikasjon i ${steg}`,
+    )
+    .toEqual({ rekkefølge: [], identifikasjon: [] });
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -1466,6 +1568,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkFeilmeldinger(page, steg);
     await sjekkLedetekster(page, steg);
     await sjekkInnholdVedPekerOgFokus(page, steg);
+    await sjekkKonsekventNavigering(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

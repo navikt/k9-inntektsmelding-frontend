@@ -22,7 +22,7 @@ test("utgått oppgave skal vise egen side og hindre innsending av IM", async ({
     page.getByRole("heading", { name: "Oppgaven er utgått" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Gå til Min side - arbeidsgiver" }),
+    page.getByRole("button", { name: "Gå til Min side – arbeidsgiver" }),
   ).toBeVisible();
 
   // Forsøk gå til en annen underside, og forvent samme resultat
@@ -32,6 +32,6 @@ test("utgått oppgave skal vise egen side og hindre innsending av IM", async ({
     page.getByRole("heading", { name: "Oppgaven er utgått" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Gå til Min side - arbeidsgiver" }),
+    page.getByRole("button", { name: "Gå til Min side – arbeidsgiver" }),
   ).toBeVisible();
 });
