@@ -301,7 +301,7 @@ function Refusjonsperioder() {
               name={`refusjon.${index}.fom` as const}
               readOnly={index === 0}
               rules={{
-                required: "Må oppgis",
+                required: "Du må oppgi fra og med dato",
                 validate: (date: string) => {
                   if (index === 0) {
                     return true;

@@ -143,17 +143,17 @@ test.describe("Happy path", () => {
       await page.getByLabel("Telefon", { exact: true }).clear();
       await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
       await expect(
-        page.getByText("Navn er påkrevd", { exact: true }),
+        page.getByText("Du må oppgi navn", { exact: true }),
       ).toBeVisible();
       await expect(
-        page.getByText("Telefonnummer er påkrevd", { exact: true }),
+        page.getByText("Du må oppgi telefonnummer", { exact: true }),
       ).toBeVisible();
       await expect(
         kontaktinformasjon.getByLabel("Navn"),
-      ).toHaveAccessibleDescription("Navn er påkrevd");
+      ).toHaveAccessibleDescription("Du må oppgi navn");
       await expect(
         kontaktinformasjon.getByLabel("Telefon"),
-      ).toHaveAccessibleDescription("Telefonnummer er påkrevd");
+      ).toHaveAccessibleDescription("Du må oppgi telefonnummer");
       await sjekkUniversellUtforming(
         page,
         "Kontaktopplysninger med valideringsfeil",

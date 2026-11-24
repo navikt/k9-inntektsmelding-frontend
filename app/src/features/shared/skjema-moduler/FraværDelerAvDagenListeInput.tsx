@@ -75,7 +75,7 @@ export const FraværDelerAvDagenListeInput = ({
               label="Dato"
               name={`fraværDelerAvDagen.${index}.dato`}
               rules={{
-                required: "Dato er påkrevd",
+                required: "Du må oppgi dato",
                 validate: (dato: string) => {
                   if (!dato) return true;
                   const alleDager = getValues("fraværDelerAvDagen") as {

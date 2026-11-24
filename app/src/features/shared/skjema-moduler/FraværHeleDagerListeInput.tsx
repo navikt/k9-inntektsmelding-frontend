@@ -59,7 +59,7 @@ export const FraværHeleDagerListeInput = ({
               name={`fraværHeleDager.${index}`}
               rules={{
                 fom: {
-                  required: "Fra-dato er påkrevd",
+                  required: "Du må oppgi fra og med dato",
                   validate: () => {
                     if (!erAGIUnntattAaregister) return true;
                     const allePerioder = getValues("fraværHeleDager");
@@ -78,7 +78,7 @@ export const FraværHeleDagerListeInput = ({
                   },
                 },
                 tom: {
-                  required: "Til-dato er påkrevd",
+                  required: "Du må oppgi til og med dato",
                   validate: () => {
                     if (!erAGIUnntattAaregister) return true;
                     const allePerioder = getValues("fraværHeleDager");

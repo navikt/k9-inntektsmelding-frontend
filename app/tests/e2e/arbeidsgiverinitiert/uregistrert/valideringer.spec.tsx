@@ -44,7 +44,9 @@ test.describe("AGI unntatt Aa-registeret – valideringer", () => {
 
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
 
-    await expect(page.getByText("Må oppgis").first()).toBeVisible();
+    await expect(
+      page.getByText("Du må oppgi fødselsnummeret til den ansatte"),
+    ).toBeVisible();
 
     await page.getByLabel("Ansattes fødselsnummer").fill("123");
     await page.getByRole("button", { name: "Hent opplysninger" }).click();
@@ -68,13 +70,13 @@ test.describe("AGI unntatt Aa-registeret – valideringer", () => {
     await page.getByLabel("Navn").clear();
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
 
-    await expect(page.getByText("Navn er påkrevd")).toBeVisible();
+    await expect(page.getByText("Du må oppgi navn")).toBeVisible();
 
     await page.getByLabel("Navn").fill("Ola Nordmann");
     await page.getByLabel("Telefon").clear();
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
 
-    await expect(page.getByText("Telefonnummer er påkrevd")).toBeVisible();
+    await expect(page.getByText("Du må oppgi telefonnummer")).toBeVisible();
 
     await page.getByLabel("Telefon").fill("123");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();

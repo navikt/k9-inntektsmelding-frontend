@@ -169,7 +169,7 @@ export function Steg2Refusjon() {
             label="Første fraværsdag med refusjon"
             name="førsteFraværsdag"
             rules={{
-              required: "Må oppgis",
+              required: "Du må oppgi første fraværsdag med refusjon",
               validate:
                 prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding,
             }}

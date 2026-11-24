@@ -180,7 +180,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
                   {...register(
                     `bortfaltNaturalytelsePerioder.${index}.navn` as const,
                     {
-                      required: "Må oppgis",
+                      required: "Du må velge naturalytelse som faller bort",
                     },
                   )}
                   className="max-w-[60%]"
@@ -200,7 +200,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
                   label="Fra og med"
                   name={`bortfaltNaturalytelsePerioder.${index}.fom` as const}
                   rules={{
-                    required: "Må oppgis",
+                    required: "Du må oppgi fra og med dato",
                     validate: (date: string) => {
                       return (
                         !isBefore(date, opplysninger.førsteUttaksdato) ||
@@ -258,7 +258,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
                             return true;
                           }
                           if (!tom) {
-                            return "Må oppgis";
+                            return "Du må oppgi til og med dato";
                           }
 
                           return (

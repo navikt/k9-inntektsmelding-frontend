@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, Locator, Page, test } from "@playwright/test";
+import { expect, Page, test } from "@playwright/test";
 
 export const finnWcagAvvik = async (page: Page, steg: string) => {
   const { violations, incomplete, testEngine, url, timestamp } =
@@ -986,7 +986,7 @@ export const sjekkFeilmeldinger = async (page: Page, steg: string) => {
       );
     // En melding om at verdien mangler gir ikke forslag til retting når feltet har innhold (3.3.3).
     const meldingOmManglendeVerdi =
-      /^(fra og med: |til og med: )?(må oppgis|du må oppgi|.* er påkrevd)/i;
+      /^(fra og med: |til og med: )?(må oppgis|du må (oppgi|velge|fylle ut)|.* er påkrevd)/i;
     const manglerVerdiMedInnhold = felt
       .filter(
         (kontroll): kontroll is HTMLInputElement | HTMLTextAreaElement =>
@@ -1301,12 +1301,14 @@ export const sjekkLedetekster = async (page: Page, steg: string) => {
 
 type InnholdVedPekerOgFokus = {
   taBilde: () => void;
-  nyttInnhold: (kontroll: Element) => Promise<string[]>;
+  nyttInnhold: (kontroll: Element, ventetid: number) => Promise<string[]>;
 };
 
+/* eslint-disable unicorn/consistent-function-scoping -- Kjøres i nettleseren via page.evaluate. */
 const leggInnHjelpereForPekerOgFokus = () => {
-  // Utviklerverktøyene til TanStack vises bare lokalt.
-  const utviklerverktøy = ".tsqd-parent-container, .TanStackRouterDevtools";
+  // Ekstra innhold ligger i main eller i et lag over siden. Da holdes også utviklerverktøyene til TanStack utenfor.
+  const ekstraInnhold =
+    "main, [role=tooltip], [role=dialog], [role=listbox], [role=menu], [popover], [data-floating-ui-portal]";
   const synlige = () =>
     [...document.body.querySelectorAll("*")].filter((element) =>
       element.checkVisibility({
@@ -1319,7 +1321,7 @@ const leggInnHjelpereForPekerOgFokus = () => {
     taBilde: () => {
       bilde = new Set(synlige());
     },
-    nyttInnhold: (kontroll) =>
+    nyttInnhold: (kontroll, ventetid) =>
       new Promise((resolve) => {
         setTimeout(() => {
           const nye = synlige().filter(
@@ -1327,7 +1329,7 @@ const leggInnHjelpereForPekerOgFokus = () => {
               !bilde.has(element) &&
               !kontroll.contains(element) &&
               !element.contains(kontroll) &&
-              !element.closest(utviklerverktøy) &&
+              element.closest(ekstraInnhold) &&
               (element.textContent ?? "").trim() !== "",
           );
           resolve(
@@ -1341,13 +1343,20 @@ const leggInnHjelpereForPekerOgFokus = () => {
                 (element.textContent ?? "").trim().slice(0, 60),
               ),
           );
-        }, 50);
+        }, ventetid);
       }),
   };
-  (
-    globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
-  ).uuPekerOgFokus = hjelpere;
+  const vindu = globalThis as typeof globalThis & {
+    uuPekerOgFokus?: InnholdVedPekerOgFokus;
+  };
+  vindu.uuPekerOgFokus = hjelpere;
 };
+/* eslint-enable unicorn/consistent-function-scoping */
+
+// Aksels Tooltip åpnes etter 150 ms med pekeren i ro og brukes på ikonknapper uten synlig tekst.
+const VENTETID_IKONKNAPP = 200;
+const VENTETID = 50;
+const kontrollerteSiderForPekerOgFokus = new Set<string>();
 
 export const sjekkInnholdVedPekerOgFokus = async (page: Page, steg: string) => {
   const åpenDialog = page
@@ -1363,21 +1372,44 @@ export const sjekkInnholdVedPekerOgFokus = async (page: Page, steg: string) => {
     .locator(KONTROLLER)
     .filter({ visible: true })
     .all();
+  // Samme side med de samme kontrollene er allerede kontrollert i denne workeren.
+  const signatur = await page.evaluate(
+    (utvalg) =>
+      `${location.pathname}|${[
+        ...document.querySelectorAll(`main :is(${utvalg})`),
+      ]
+        .filter((element) => element.checkVisibility())
+        .map(
+          (element) =>
+            `${element.tagName}:${element.getAttribute("aria-label") ?? element.textContent?.trim()}`,
+        )
+        .join(",")}`,
+    KONTROLLER,
+  );
+  if (kontrollerteSiderForPekerOgFokus.has(signatur)) {
+    return;
+  }
+  kontrollerteSiderForPekerOgFokus.add(signatur);
   const funn: string[] = [];
   for (const kontroll of kontroller) {
-    const { navn, vedFokus } = await kontroll.evaluate(async (element) => {
-      const hjelpere = (
-        globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
-      ).uuPekerOgFokus;
-      hjelpere.taBilde();
-      (element as HTMLElement).focus({ preventScroll: true });
-      const nye = await hjelpere.nyttInnhold(element);
-      (element as HTMLElement).blur();
-      return {
-        navn: `${element.tagName.toLowerCase()} «${(element.getAttribute("aria-label") ?? element.textContent ?? "").trim().slice(0, 40)}»`,
-        vedFokus: nye,
-      };
-    });
+    const { navn, vedFokus } = await kontroll.evaluate(
+      async (element, ventetid) => {
+        const hjelpere = (
+          globalThis as typeof globalThis & {
+            uuPekerOgFokus: InnholdVedPekerOgFokus;
+          }
+        ).uuPekerOgFokus;
+        hjelpere.taBilde();
+        (element as HTMLElement).focus({ preventScroll: true });
+        const nye = await hjelpere.nyttInnhold(element, ventetid);
+        (element as HTMLElement).blur();
+        return {
+          navn: `${element.tagName.toLowerCase()} «${(element.getAttribute("aria-label") ?? element.textContent ?? "").trim().slice(0, 40)}»`,
+          vedFokus: nye,
+        };
+      },
+      VENTETID,
+    );
     funn.push(...vedFokus.map((tekst) => `Fokus på ${navn}: «${tekst}»`));
     const boks = await kontroll.boundingBox();
     if (!boks) {
@@ -1385,14 +1417,27 @@ export const sjekkInnholdVedPekerOgFokus = async (page: Page, steg: string) => {
     }
     await page.evaluate(() =>
       (
-        globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
+        globalThis as typeof globalThis & {
+          uuPekerOgFokus: InnholdVedPekerOgFokus;
+        }
       ).uuPekerOgFokus.taBilde(),
     );
     await page.mouse.move(boks.x + boks.width / 2, boks.y + boks.height / 2);
-    const vedPeker = await kontroll.evaluate((element) =>
-      (
-        globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
-      ).uuPekerOgFokus.nyttInnhold(element),
+    const vedPeker = await kontroll.evaluate(
+      (element, [ventetid, ventetidIkonknapp]) =>
+        (
+          globalThis as typeof globalThis & {
+            uuPekerOgFokus: InnholdVedPekerOgFokus;
+          }
+        ).uuPekerOgFokus.nyttInnhold(
+          element,
+          !element.matches("input, select, textarea") &&
+            // eslint-disable-next-line unicorn/prefer-dom-node-text-content -- innerText gir bare synlig tekst.
+            (element as HTMLElement).innerText.trim() === ""
+            ? ventetidIkonknapp
+            : ventetid,
+        ),
+      [VENTETID, VENTETID_IKONKNAPP],
     );
     funn.push(...vedPeker.map((tekst) => `Peker over ${navn}: «${tekst}»`));
     await page.mouse.move(0, 0);

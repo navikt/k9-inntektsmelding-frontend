@@ -503,7 +503,7 @@ function Endringsårsaker({ skjæringstidspunkt }: EndringsårsakerProps) {
               }
               label="Hva er årsaken til endringen?"
               {...register(`endringAvInntektÅrsaker.${index}.årsak`, {
-                required: "Må oppgis",
+                required: "Du må velge årsak til endringen",
               })}
               className="md:max-w-[60%]"
               onChange={(v) => {
@@ -594,7 +594,7 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
           label="Fra og med"
           name={`endringAvInntektÅrsaker.${index}.fom`}
           rules={{
-            required: "Må oppgis",
+            required: "Du må oppgi fra og med dato",
             validate: (date: string) => {
               return (
                 isAfter(new Date(skjæringstidspunkt), new Date(date)) ||
@@ -606,7 +606,7 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
         <DatePickerWrapped
           label="Ble kjent fra"
           name={`endringAvInntektÅrsaker.${index}.bleKjentFom`}
-          rules={{ required: "Må oppgis" }}
+          rules={{ required: "Du må oppgi når endringen ble kjent" }}
         />
       </div>
     );
@@ -629,7 +629,7 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
             label="Fra og med"
             name={`endringAvInntektÅrsaker.${index}.fom`}
             rules={{
-              required: "Må oppgis",
+              required: "Du må oppgi fra og med dato",
               validate: (date: string) => {
                 return (
                   isAfter(skjæringstidspunkt, date) ||
@@ -647,7 +647,7 @@ function Årsaksperioder({ index, skjæringstidspunkt }: ÅrsaksperioderProps) {
             label="Til og med"
             name={`endringAvInntektÅrsaker.${index}.tom`}
             rules={{
-              required: ignorerTom ? false : "Må oppgis",
+              required: ignorerTom ? false : "Du må oppgi til og med dato",
               validate: (date: string) => {
                 if (ignorerTom) {
                   return true;

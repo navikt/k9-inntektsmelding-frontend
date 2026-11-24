@@ -36,7 +36,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await expectError({
     page,
     label: "Telefon",
-    error: "Telefonnummer er påkrevd",
+    error: "Du må oppgi telefonnummer",
   });
 
   await page.getByLabel("Navn").clear();
@@ -79,13 +79,13 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await expectError({
     page,
     label: "Endret månedsinntekt",
-    error: "Må oppgis",
+    error: "Du må oppgi endret månedsinntekt",
   });
 
   await expectError({
     page,
     label: "Hva er årsaken til endringen?",
-    error: "Må oppgis",
+    error: "Du må velge årsak til endringen",
   });
 
   await page.getByLabel("Endret månedsinntekt").fill("-50000");
@@ -94,13 +94,13 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     label: "Endret månedsinntekt",
     error: "Beløpet må være 0 eller høyere",
   });
-  await page.getByText("Endret månedsinntekt").fill("5".repeat(21));
+  await page.getByLabel("Endret månedsinntekt").fill("5".repeat(21));
   await expectError({
     page,
     label: "Endret månedsinntekt",
     error: "Beløpet er for stort",
   });
-  await page.getByText("Endret månedsinntekt").fill("50000");
+  await page.getByLabel("Endret månedsinntekt").fill("50000");
 
   await page.getByLabel("Hva er årsaken til endringen?").selectOption("Ferie");
 
@@ -108,13 +108,13 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await expectError({
     page,
     label: "Fra og med",
-    error: "Må oppgis",
+    error: "Du må oppgi fra og med dato",
   });
 
   await expectError({
     page,
     label: "Til og med",
-    error: "Må oppgis",
+    error: "Du må oppgi til og med dato",
   });
 
   await page.getByLabel("Fra og med").fill("01.08.2024");
@@ -148,7 +148,7 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     page,
     nth: 1,
     label: "Fra og med",
-    error: "Må oppgis",
+    error: "Du må oppgi fra og med dato",
   });
 
   await page.getByRole("button", { name: "Slett endringsårsak" }).click();
@@ -181,21 +181,21 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   ).toBeVisible();
   await expect(refusjonsBlock.getByText("50 000 kr")).toBeVisible();
   await page.getByRole("button", { name: "Endre refusjonsbeløp" }).click();
-  await page.getByText("Refusjonsbeløp per måned").fill("-1");
+  await page.getByLabel("Refusjonsbeløp per måned").fill("-1");
   await page.getByRole("button", { name: "Neste steg" }).click();
   await expectError({
     page,
     label: "Refusjonsbeløp per måned",
     error: "Beløpet må være 0 eller høyere",
   });
-  await page.getByText("Refusjonsbeløp per måned").fill("");
+  await page.getByLabel("Refusjonsbeløp per måned").fill("");
   await page.getByRole("button", { name: "Neste steg" }).click();
   await expectError({
     page,
     label: "Refusjonsbeløp per måned",
-    error: "Må oppgis",
+    error: "Du må oppgi refusjonsbeløp per måned",
   });
-  await page.getByText("Refusjonsbeløp per måned").fill("53000");
+  await page.getByLabel("Refusjonsbeløp per måned").fill("53000");
 
   await page
     .getByRole("button", { name: "Tilbakestill refusjonsbeløp" })
@@ -255,9 +255,12 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     page: variabelRefusjonBlock,
     nth: 1,
     label: "Fra og med",
-    error: "Må oppgis",
+    error: "Du må oppgi fra og med dato",
   });
-  await variabelRefusjonBlock.getByText("Fra og med").nth(1).fill("31.05.2024");
+  await variabelRefusjonBlock
+    .getByLabel("Fra og med")
+    .nth(1)
+    .fill("31.05.2024");
   await expectError({
     page: variabelRefusjonBlock,
     nth: 1,
@@ -265,7 +268,10 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     error: "Kan ikke være før startdato",
   });
 
-  await variabelRefusjonBlock.getByText("Fra og med").nth(1).fill("30.06.2024");
+  await variabelRefusjonBlock
+    .getByLabel("Fra og med")
+    .nth(1)
+    .fill("30.06.2024");
 
   await variabelRefusjonBlock
     .getByRole("button", { name: "Legg til ny periode" })
@@ -294,12 +300,12 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await expectError({
     page: naturalytelserBlokk,
     label: "Naturalytelse som faller bort",
-    error: "Må oppgis",
+    error: "Du må velge naturalytelse som faller bort",
   });
   await expectError({
     page: naturalytelserBlokk,
     label: "Fra og med",
-    error: "Må oppgis",
+    error: "Du må oppgi fra og med dato",
   });
   await expectError({
     page: naturalytelserBlokk,
@@ -315,13 +321,13 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await naturalytelserBlokk
     .getByLabel("Naturalytelse som faller bort")
     .selectOption("Bil");
-  await naturalytelserBlokk.getByText("Fra og med").fill("20.05.2024");
+  await naturalytelserBlokk.getByLabel("Fra og med").fill("20.05.2024");
   await expectError({
     page: naturalytelserBlokk,
     label: "Fra og med",
     error: "Må være etter første uttaksdag",
   });
-  await naturalytelserBlokk.getByText("Fra og med").fill("31.05.2024");
+  await naturalytelserBlokk.getByLabel("Fra og med").fill("31.05.2024");
   await naturalytelserBlokk.getByText("Verdi pr. måned").fill("2500");
   await naturalytelserBlokk
     .getByRole("radiogroup", {
@@ -333,15 +339,15 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
   await expectError({
     page: naturalytelserBlokk,
     label: "Til og med",
-    error: "Må oppgis",
+    error: "Du må oppgi til og med dato",
   });
-  await naturalytelserBlokk.getByText("Til og med").fill("10.05.2024");
+  await naturalytelserBlokk.getByLabel("Til og med").fill("10.05.2024");
   await expectError({
     page: naturalytelserBlokk,
     label: "Til og med",
     error: "Kan ikke være før fra dato",
   });
-  await naturalytelserBlokk.getByText("Til og med").fill("20.07.2024");
+  await naturalytelserBlokk.getByLabel("Til og med").fill("20.07.2024");
 
   await page.getByRole("button", { name: "Legg til naturalytelse" }).click();
   await expect(
@@ -352,14 +358,14 @@ test("Gå igjennom skjema og test alle valideringer", async ({ page }) => {
     .getByLabel("Naturalytelse som faller bort")
     .nth(1)
     .selectOption("Bil");
-  await naturalytelserBlokk.getByText("Fra og med").nth(1).fill("10.07.2024");
+  await naturalytelserBlokk.getByLabel("Fra og med").nth(1).fill("10.07.2024");
   await page.getByRole("button", { name: "Neste steg" }).click();
   await expect(
     naturalytelserBlokk.getByText(
       "Naturalytelse Bil har overlappende perioder",
     ),
   ).toBeVisible();
-  await naturalytelserBlokk.getByText("Til og med").fill("05.07.2024");
+  await naturalytelserBlokk.getByLabel("Til og med").fill("05.07.2024");
   await page.getByRole("button", { name: "Neste steg" }).click(); // Ville ideelt sett ikke måtte manuelt trigge validering
   await expect(
     naturalytelserBlokk.getByText(

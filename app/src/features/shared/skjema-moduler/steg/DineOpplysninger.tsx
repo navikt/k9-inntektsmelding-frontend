@@ -118,7 +118,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
               <TextField
                 className="w-full"
                 {...register("navn", {
-                  required: "Navn er påkrevd",
+                  required: "Du må oppgi navn",
                   maxLength: {
                     value: 100,
                     message: "Navn kan ikke være lenger enn 100 tegn",
@@ -132,7 +132,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
               <TextField
                 className="w-full"
                 {...register("telefonnummer", {
-                  required: "Telefonnummer er påkrevd",
+                  required: "Du må oppgi telefonnummer",
                   // Sjekke 8 siffer, eller landskode og vilkårlig antall siffer
                   validate: (data) =>
                     /^(\d{8}|\+\d+)$/.test(data) ||

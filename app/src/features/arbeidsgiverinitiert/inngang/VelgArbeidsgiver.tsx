@@ -31,7 +31,7 @@ export function VelgArbeidsgiver({
       name="organisasjonsnummer"
       onOptionSelected={onOptionSelected}
       options={options}
-      rules={{ required: "Må oppgis" }}
+      rules={{ required: "Du må velge arbeidsgiver" }}
     />
   );
 }

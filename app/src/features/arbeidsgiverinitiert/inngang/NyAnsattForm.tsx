@@ -121,7 +121,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         <HStack gap="space-40">
           <TextField
             {...register("fødselsnummer", {
-              required: "Må oppgis",
+              required: "Du må oppgi fødselsnummeret til den ansatte",
               validate: (value) =>
                 (value && fnr(value).status === "valid") ||
                 "Du må fylle ut et gyldig fødselsnummer",
@@ -144,7 +144,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
           label="Første fraværsdag med refusjon"
           name="førsteFraværsdag"
           callback={nullstillFeilmeldinger}
-          rules={{ required: "Må oppgis" }} // TODO: Forklare hvorfor det må oppgis
+          rules={{ required: "Du må oppgi første fraværsdag med refusjon" }} // TODO: Forklare hvorfor det må oppgis
         />
         <Button
           className="w-fit"

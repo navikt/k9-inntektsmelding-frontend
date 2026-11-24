@@ -30,7 +30,7 @@ test("Ny ansatt", async ({ page }) => {
   await expectError({
     page,
     label: "Første fraværsdag med refusjon",
-    error: "Må oppgis",
+    error: "Du må oppgi første fraværsdag med refusjon",
   });
 
   await page.getByLabel("Ansattes fødselsnummer").fill(FAKE_FNR);
