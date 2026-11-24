@@ -347,6 +347,61 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
     await sjekkBeggeRetninger("Refusjon av omsorgspenger");
   });
 
+  test("Valideringsfeil i AGI og omsorgspenger er koblet til feltene", async ({
+    page,
+  }) => {
+    await page.clock.install({ time: new Date("2026-03-15").getTime() });
+    await mockHentPersonOgArbeidsforhold({ page });
+    await mockGrunnbeløp({ page });
+    await mockInnloggetBruker({ page });
+    await mockInntektsmeldingForÅr({ page, json: [] });
+    await mockInntektsopplysninger({ page });
+    await mockArbeidstakerOppslag({ page });
+    const fokusErIFeltMedFeil = () =>
+      page.evaluate(() =>
+        Boolean(
+          (document.activeElement ?? document.body).closest(
+            "[aria-invalid=true], fieldset[aria-invalid=true]",
+          ),
+        ),
+      );
+
+    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
+    await page
+      .getByRole("radio", { name: "Ny ansatt som mottar ytelse fra Nav" })
+      .check();
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+    await expect(
+      page.locator("main .aksel-error-message").first(),
+    ).toBeVisible();
+    expect(await fokusErIFeltMedFeil()).toBe(true);
+    await sjekkUniversellUtforming(page, "Opprett inntektsmelding med feil");
+
+    await page.goto("/k9-im-dialog/refusjon-omsorgspenger/123456789/1-intro");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(
+      page.locator("main .aksel-error-message").first(),
+    ).toBeVisible();
+    expect(await fokusErIFeltMedFeil()).toBe(true);
+    await sjekkUniversellUtforming(page, "Om refusjon med feil");
+
+    await page.getByRole("radio", { name: "Ja", exact: true }).check();
+    await page.getByRole("radio", { name: "2025", exact: true }).check();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(
+      page.locator("main .aksel-error-message").first(),
+    ).toBeVisible();
+    expect(await fokusErIFeltMedFeil()).toBe(true);
+    await sjekkUniversellUtforming(
+      page,
+      "Den ansatte og arbeidsgiver med feil",
+    );
+  });
+
   test(
     "Virksomhetslisten har tilgjengelig navn",
     { tag: "@kjent-avvik" },

@@ -948,6 +948,69 @@ export const sjekkBevegelse = async (page: Page, steg: string) => {
   });
 };
 
+export const sjekkFeilmeldinger = async (page: Page, steg: string) => {
+  /* eslint-disable unicorn/consistent-function-scoping -- Kjøres i nettleseren via page.evaluate. */
+  const funn = await page.evaluate(() => {
+    const synlig = (element: Element) =>
+      element.checkVisibility({ visibilityProperty: true }) &&
+      (element.textContent ?? "").trim() !== "";
+    const beskrivelser = (element: Element) =>
+      (element.getAttribute("aria-describedby") ?? "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((id) => document.querySelector(`#${CSS.escape(id)}`))
+        .filter((beskrivelse): beskrivelse is Element => beskrivelse !== null);
+    const felt = [
+      ...document.querySelectorAll("main :is(input, select, textarea)"),
+    ];
+
+    const feilUtenFelt = [
+      ...document.querySelectorAll("main .aksel-error-message"),
+    ]
+      .filter((melding) => synlig(melding))
+      .filter((melding) => {
+        const koblet = felt.filter((kontroll) =>
+          beskrivelser(kontroll).some((beskrivelse) =>
+            beskrivelse.contains(melding),
+          ),
+        );
+        return koblet.every(
+          (kontroll) =>
+            !(
+              kontroll.getAttribute("aria-invalid") === "true" ||
+              kontroll.closest("fieldset")?.getAttribute("aria-invalid") ===
+                "true"
+            ),
+        );
+      })
+      .map((melding) => (melding.textContent ?? "").trim());
+
+    const ugyldigUtenFeil = [
+      ...document.querySelectorAll(
+        "main :is(input, select, textarea, fieldset)[aria-invalid=true]",
+      ),
+    ]
+      .filter((element) => {
+        const kontroller =
+          element.tagName === "FIELDSET"
+            ? [...element.querySelectorAll("input, select, textarea")]
+            : [element];
+        return kontroller.every((kontroll) =>
+          beskrivelser(kontroll).every((beskrivelse) => !synlig(beskrivelse)),
+        );
+      })
+      .map(
+        (element) =>
+          `${element.tagName.toLowerCase()}#${element.id} «${(element.closest(".aksel-form-field, fieldset")?.textContent ?? "").trim().slice(0, 40)}»`,
+      );
+    return { feilUtenFelt, ugyldigUtenFeil };
+  });
+  /* eslint-enable unicorn/consistent-function-scoping */
+  expect
+    .soft(funn, `Feilmeldinger koblet til felt i ${steg}`)
+    .toEqual({ feilUtenFelt: [], ugyldigUtenFeil: [] });
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -960,6 +1023,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkKodesyntaks(page, steg);
     await sjekkHurtigtaster(page, steg);
     await sjekkBevegelse(page, steg);
+    await sjekkFeilmeldinger(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

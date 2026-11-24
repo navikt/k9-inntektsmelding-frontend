@@ -98,6 +98,8 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                   className="flex-1"
                   error={formState.errors.ansattesFødselsnummer?.message}
                   label="Ansattes fødselsnummer (11 siffer)"
+                  name={field.name}
+                  onBlur={field.onBlur}
                   onChange={(e) => {
                     const nyVerdi = e.target.value.replaceAll(/\s/g, "");
                     if (nyVerdi !== field.value) {
@@ -110,6 +112,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                     }
                     field.onChange(nyVerdi);
                   }}
+                  ref={field.ref}
                   value={formatFodselsnummer(field.value || "")}
                 />
               )}
@@ -143,7 +146,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                 render={({ field }) => (
                   <Checkbox
                     checked={field.value ?? false}
+                    name={field.name}
+                    onBlur={field.onBlur}
                     onChange={(e) => field.onChange(e.target.checked)}
+                    ref={field.ref}
                   >
                     Arbeidstakeren er unntatt Aa-registeret
                   </Checkbox>
