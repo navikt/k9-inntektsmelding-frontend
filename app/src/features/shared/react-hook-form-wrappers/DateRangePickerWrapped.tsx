@@ -4,10 +4,11 @@ import {
   ErrorMessage,
   useRangeDatepicker,
 } from "@navikt/ds-react";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { RegisterOptions, useController } from "react-hook-form";
 
 import { formatIsoDatostempel } from "~/utils";
+import { UGYLDIG_DATO_FEILMELDING } from "~/validators";
 
 type DateRangePickerWrappedProps = {
   name: string;
@@ -30,12 +31,21 @@ export const DateRangePickerWrapped = forwardRef<
     name: `${name}.tom`,
     rules: rules?.tom,
   });
+  // Aksel gir ingen dato når teksten ikke kan tolkes, så feilen fra skjemaet sier bare at datoen mangler.
+  const [tekst, setTekst] = useState({ fom: "", tom: "" });
+  const [tomErFørFom, setTomErFørFom] = useState(false);
+  const ugyldigeDatoer = {
+    fom: tekst.fom.trim() !== "" && !fromField.value,
+    tom: tekst.tom.trim() !== "" && !toField.value,
+  };
   const {
     datepickerProps: useRangeDatepickerProps,
     toInputProps,
     fromInputProps,
   } = useRangeDatepicker({
     ...datepickerProps,
+    onValidate: (validering) =>
+      setTomErFørFom(validering.to.isBeforeFrom ?? false),
     onRangeChange: (dateRange) => {
       fromField.onChange(
         dateRange?.from ? formatIsoDatostempel(dateRange.from) : "",
@@ -43,12 +53,6 @@ export const DateRangePickerWrapped = forwardRef<
       toField.onChange(dateRange?.to ? formatIsoDatostempel(dateRange.to) : "");
       fromField.onBlur();
       toField.onBlur();
-    },
-    onValidate: (dateRange) => {
-      if (dateRange?.from && dateRange?.to) {
-        return dateRange.from <= dateRange.to;
-      }
-      return true;
     },
     defaultSelected: {
       from: fromField.value ? new Date(fromField.value) : undefined,
@@ -68,6 +72,10 @@ export const DateRangePickerWrapped = forwardRef<
           className="w-full max-w-[50%]"
           label="Fra og med"
           onBlur={fromField.onBlur}
+          onChange={(event) => {
+            setTekst((forrige) => ({ ...forrige, fom: event.target.value }));
+            fromInputProps.onChange?.(event);
+          }}
           ref={fromField.ref}
         />
         <DatePicker.Input
@@ -77,18 +85,30 @@ export const DateRangePickerWrapped = forwardRef<
           className="w-full max-w-[50%]"
           label="Til og med"
           onBlur={toField.onBlur}
+          onChange={(event) => {
+            setTekst((forrige) => ({ ...forrige, tom: event.target.value }));
+            toInputProps.onChange?.(event);
+          }}
           ref={toField.ref}
         />
       </div>
       <div aria-live="polite" className="mt-2">
         {fromFieldState.error?.message && (
           <ErrorMessage id={fomFeilId} showIcon>
-            Fra og med: {fromFieldState.error.message}
+            Fra og med:{" "}
+            {ugyldigeDatoer.fom
+              ? UGYLDIG_DATO_FEILMELDING
+              : fromFieldState.error.message}
           </ErrorMessage>
         )}
         {toFieldState.error?.message && (
           <ErrorMessage id={tomFeilId} showIcon>
-            Til og med: {toFieldState.error.message}
+            Til og med:{" "}
+            {ugyldigeDatoer.tom
+              ? tomErFørFom
+                ? "Datoen kan ikke være før fra og med."
+                : UGYLDIG_DATO_FEILMELDING
+              : toFieldState.error.message}
           </ErrorMessage>
         )}
       </div>

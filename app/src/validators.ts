@@ -1,5 +1,8 @@
 import { formatStrengTilTall } from "./utils";
 
+export const UGYLDIG_DATO_FEILMELDING =
+  "Datoen er ikke gyldig. Skriv den som dd.mm.åååå, for eksempel 01.04.2024.";
+
 export const validateInntekt = (
   v: string | number,
   min?: number,

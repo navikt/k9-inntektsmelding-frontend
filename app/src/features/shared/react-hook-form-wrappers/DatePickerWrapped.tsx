@@ -1,8 +1,10 @@
 import type { DateInputProps, DatePickerProps } from "@navikt/ds-react";
 import { DatePicker, useDatepicker } from "@navikt/ds-react";
+import { useState } from "react";
 import { useController } from "react-hook-form";
 
 import { formatIsoDatostempel } from "~/utils.ts";
+import { UGYLDIG_DATO_FEILMELDING } from "~/validators";
 
 type DatePickerWrappedProps = {
   name: string;
@@ -26,6 +28,9 @@ export function DatePickerWrapped({
     rules,
     shouldUnregister,
   });
+  // Aksel gir ingen dato når teksten ikke kan tolkes, så feilen fra skjemaet sier bare at datoen mangler.
+  const [tekst, setTekst] = useState("");
+  const erUgyldigDato = tekst.trim() !== "" && !field.value;
   const datePickerProperties = useDatepicker({
     ...datepickerProps,
     onDateChange: (date) => {
@@ -41,8 +46,16 @@ export function DatePickerWrapped({
       <DatePicker.Input
         {...dateInputProps}
         {...datePickerProperties.inputProps}
-        error={fieldState.error?.message}
+        error={
+          fieldState.error && erUgyldigDato
+            ? UGYLDIG_DATO_FEILMELDING
+            : fieldState.error?.message
+        }
         onBlur={field.onBlur}
+        onChange={(event) => {
+          setTekst(event.target.value);
+          datePickerProperties.inputProps.onChange?.(event);
+        }}
         ref={field.ref}
       />
     </DatePicker>

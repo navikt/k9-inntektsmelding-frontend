@@ -19,6 +19,8 @@ import {
   mockOpplysninger,
 } from "tests/mocks/shared/utils";
 
+import { UGYLDIG_DATO_FEILMELDING } from "~/validators";
+
 test.describe("UU-regresjoner", { tag: "@uu" }, () => {
   test("Åpne kontroller og serverfeil har tilgjengelig innhold og kontrast", async ({
     page,
@@ -401,6 +403,60 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
       page,
       "Den ansatte og arbeidsgiver med feil",
     );
+  });
+
+  test("Ugyldig dato gir forslag til riktig format", async ({ page }) => {
+    await page.clock.install({ time: new Date("2026-03-15").getTime() });
+    await mockHentPersonOgArbeidsforhold({ page });
+    await mockGrunnbeløp({ page });
+    await mockInnloggetBruker({ page });
+    await mockInntektsmeldingForÅr({ page, json: [] });
+    await mockInntektsopplysninger({ page });
+    await mockArbeidstakerOppslag({ page });
+
+    await page.goto("/k9-im-dialog/opprett?ytelseType=PLEIEPENGER_SYKT_BARN");
+    await page
+      .getByRole("radio", { name: "Ny ansatt som mottar ytelse fra Nav" })
+      .check();
+    await page.getByLabel("Første fraværsdag").fill("31.02.2024");
+    await page.getByRole("button", { name: "Hent opplysninger" }).click();
+    await expect(page.getByText(UGYLDIG_DATO_FEILMELDING)).toBeVisible();
+    await expect(page.getByLabel("Første fraværsdag")).toHaveValue(
+      "31.02.2024",
+    );
+    await sjekkUniversellUtforming(page, "Opprett inntektsmelding med feil");
+
+    await page.goto("/k9-im-dialog/refusjon-omsorgspenger/123456789/1-intro");
+    await page.getByRole("radio", { name: "Ja", exact: true }).check();
+    await page.getByRole("radio", { name: "2025", exact: true }).check();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page
+      .getByLabel("Ansattes fødselsnummer (11 siffer)")
+      .fill("16878397960");
+    await expect(
+      page.getByRole("region", { name: "Arbeidsgiver" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible();
+    await page.getByRole("radio", { name: "Ja", exact: true }).check();
+    await page
+      .getByRole("button", { name: "Legg til periode" })
+      .first()
+      .click();
+    await page.getByLabel("Fra og med").first().fill("31.02.2025");
+    await page.getByLabel("Til og med").first().fill("abc");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(
+      page.getByText(`Fra og med: ${UGYLDIG_DATO_FEILMELDING}`),
+    ).toBeVisible();
+    await expect(
+      page.getByText(`Til og med: ${UGYLDIG_DATO_FEILMELDING}`),
+    ).toBeVisible();
+    await sjekkUniversellUtforming(page, "Omsorgsdager");
   });
 
   test.describe("Endring av verdier gir ingen kontekstendring", () => {

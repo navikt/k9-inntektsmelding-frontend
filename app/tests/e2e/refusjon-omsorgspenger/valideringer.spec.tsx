@@ -586,7 +586,9 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await page.getByRole("button", { name: "Neste steg" }).click();
 
     // TODO: Denne bør egentlig si at tom er før fom. Men daterange-komponenten gjør det litt vrient
-    await expect(page.getByText("Du må oppgi en til og med dato")).toBeVisible({
+    await expect(
+      page.getByText("Til og med: Datoen kan ikke være før fra og med."),
+    ).toBeVisible({
       timeout: 10_000,
     });
 

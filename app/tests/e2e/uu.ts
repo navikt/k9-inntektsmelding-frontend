@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, Page, test } from "@playwright/test";
+import { expect, Locator, Page, test } from "@playwright/test";
 
 export const finnWcagAvvik = async (page: Page, steg: string) => {
   const { violations, incomplete, testEngine, url, timestamp } =
@@ -984,12 +984,38 @@ export const sjekkFeilmeldinger = async (page: Page, steg: string) => {
         (element) =>
           `${element.tagName.toLowerCase()}#${element.id} «${(element.closest(".aksel-form-field, fieldset")?.textContent ?? "").trim().slice(0, 40)}»`,
       );
-    return { feilUtenFelt, ugyldigUtenFeil };
+    // En melding om at verdien mangler gir ikke forslag til retting når feltet har innhold (3.3.3).
+    const meldingOmManglendeVerdi =
+      /^(fra og med: |til og med: )?(må oppgis|du må oppgi|.* er påkrevd)/i;
+    const manglerVerdiMedInnhold = felt
+      .filter(
+        (kontroll): kontroll is HTMLInputElement | HTMLTextAreaElement =>
+          (kontroll instanceof HTMLInputElement &&
+            !["radio", "checkbox", "hidden"].includes(kontroll.type)) ||
+          kontroll instanceof HTMLTextAreaElement,
+      )
+      .filter((kontroll) => kontroll.value.trim() !== "")
+      .flatMap((kontroll) =>
+        [...document.querySelectorAll("main .aksel-error-message")]
+          .filter(
+            (melding) =>
+              synlig(melding) &&
+              beskrivelser(kontroll).some((beskrivelse) =>
+                beskrivelse.contains(melding),
+              ),
+          )
+          .map((melding) => (melding.textContent ?? "").trim())
+          .filter((tekst) => meldingOmManglendeVerdi.test(tekst))
+          .map((tekst) => `«${kontroll.value}»: ${tekst}`),
+      );
+    return { feilUtenFelt, ugyldigUtenFeil, manglerVerdiMedInnhold };
   });
   /* eslint-enable unicorn/consistent-function-scoping */
-  expect
-    .soft(funn, `Feilmeldinger koblet til felt i ${steg}`)
-    .toEqual({ feilUtenFelt: [], ugyldigUtenFeil: [] });
+  expect.soft(funn, `Feilmeldinger koblet til felt i ${steg}`).toEqual({
+    feilUtenFelt: [],
+    ugyldigUtenFeil: [],
+    manglerVerdiMedInnhold: [],
+  });
 };
 
 type Statusovervåking = {
@@ -1273,6 +1299,112 @@ export const sjekkLedetekster = async (page: Page, steg: string) => {
   expect.soft([...new Set(avvik)], `Synlige ledetekster i ${steg}`).toEqual([]);
 };
 
+type InnholdVedPekerOgFokus = {
+  taBilde: () => void;
+  nyttInnhold: (kontroll: Element) => Promise<string[]>;
+};
+
+const leggInnHjelpereForPekerOgFokus = () => {
+  // Utviklerverktøyene til TanStack vises bare lokalt.
+  const utviklerverktøy = ".tsqd-parent-container, .TanStackRouterDevtools";
+  const synlige = () =>
+    [...document.body.querySelectorAll("*")].filter((element) =>
+      element.checkVisibility({
+        opacityProperty: true,
+        visibilityProperty: true,
+      }),
+    );
+  let bilde = new Set<Element>();
+  const hjelpere: InnholdVedPekerOgFokus = {
+    taBilde: () => {
+      bilde = new Set(synlige());
+    },
+    nyttInnhold: (kontroll) =>
+      new Promise((resolve) => {
+        setTimeout(() => {
+          const nye = synlige().filter(
+            (element) =>
+              !bilde.has(element) &&
+              !kontroll.contains(element) &&
+              !element.contains(kontroll) &&
+              !element.closest(utviklerverktøy) &&
+              (element.textContent ?? "").trim() !== "",
+          );
+          resolve(
+            nye
+              .filter(
+                (element) =>
+                  !element.parentElement ||
+                  !nye.includes(element.parentElement),
+              )
+              .map((element) =>
+                (element.textContent ?? "").trim().slice(0, 60),
+              ),
+          );
+        }, 50);
+      }),
+  };
+  (
+    globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
+  ).uuPekerOgFokus = hjelpere;
+};
+
+export const sjekkInnholdVedPekerOgFokus = async (page: Page, steg: string) => {
+  const åpenDialog = page
+    .locator("main :is(dialog[open], [role=dialog])")
+    .filter({ visible: true });
+  if ((await åpenDialog.count()) > 0) {
+    return;
+  }
+  const fokusFør = await page.evaluateHandle(() => document.activeElement);
+  await page.evaluate(leggInnHjelpereForPekerOgFokus);
+  const kontroller = await page
+    .getByRole("main")
+    .locator(KONTROLLER)
+    .filter({ visible: true })
+    .all();
+  const funn: string[] = [];
+  for (const kontroll of kontroller) {
+    const { navn, vedFokus } = await kontroll.evaluate(async (element) => {
+      const hjelpere = (
+        globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
+      ).uuPekerOgFokus;
+      hjelpere.taBilde();
+      (element as HTMLElement).focus({ preventScroll: true });
+      const nye = await hjelpere.nyttInnhold(element);
+      (element as HTMLElement).blur();
+      return {
+        navn: `${element.tagName.toLowerCase()} «${(element.getAttribute("aria-label") ?? element.textContent ?? "").trim().slice(0, 40)}»`,
+        vedFokus: nye,
+      };
+    });
+    funn.push(...vedFokus.map((tekst) => `Fokus på ${navn}: «${tekst}»`));
+    const boks = await kontroll.boundingBox();
+    if (!boks) {
+      continue;
+    }
+    await page.evaluate(() =>
+      (
+        globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
+      ).uuPekerOgFokus.taBilde(),
+    );
+    await page.mouse.move(boks.x + boks.width / 2, boks.y + boks.height / 2);
+    const vedPeker = await kontroll.evaluate((element) =>
+      (
+        globalThis as unknown as { uuPekerOgFokus: InnholdVedPekerOgFokus }
+      ).uuPekerOgFokus.nyttInnhold(element),
+    );
+    funn.push(...vedPeker.map((tekst) => `Peker over ${navn}: «${tekst}»`));
+    await page.mouse.move(0, 0);
+  }
+  await fokusFør.evaluate((element) =>
+    (element as HTMLElement | null)?.focus?.({ preventScroll: true }),
+  );
+  expect
+    .soft(funn, `Innhold som vises ved peker eller fokus i ${steg}`)
+    .toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -1288,6 +1420,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkBevegelse(page, steg);
     await sjekkFeilmeldinger(page, steg);
     await sjekkLedetekster(page, steg);
+    await sjekkInnholdVedPekerOgFokus(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
