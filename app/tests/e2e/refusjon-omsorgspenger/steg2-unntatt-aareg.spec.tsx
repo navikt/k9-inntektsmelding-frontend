@@ -121,12 +121,16 @@ test.describe("Refusjon Omsorgspenger – steg 2 unntatt Aa-registeret", () => {
     ).toBeVisible({ timeout: 10_000 });
 
     await expect(
-      page.getByText("Kunne ikke hente tidligere innsendinger."),
+      page.getByText(
+        `Kunne ikke hente refusjonskrav dere har sendt inn tidligere i ${FJORÅRET}.`,
+      ),
     ).toBeVisible();
     await mockInntektsmeldingForÅr({ page, json: [] });
     await page.getByRole("button", { name: "Prøv igjen", exact: true }).click();
     await expect(
-      page.getByText("Kunne ikke hente tidligere innsendinger."),
+      page.getByText(
+        `Kunne ikke hente refusjonskrav dere har sendt inn tidligere i ${FJORÅRET}.`,
+      ),
     ).toBeHidden();
     await page.getByRole("radio", { name: "Ja", exact: true }).check();
     await page

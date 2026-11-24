@@ -29,6 +29,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 import { formatDatoKort } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
@@ -159,8 +160,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
           <TiFørsteOmsorgsdagerInfo />
           <VStack gap="space-32">
             {historikkFeilet && (
-              <Alert variant="error">
-                <BodyLong>Kunne ikke hente tidligere innsendinger.</BodyLong>
+              <Alert role="status" variant="error">
+                <BodyLong>
+                  {`Kunne ikke hente refusjonskrav dere har sendt inn tidligere i ${årForRefusjon}.`}
+                </BodyLong>
                 <Button
                   type="button"
                   variant="secondary"
@@ -183,13 +186,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
               år={Number(årForRefusjon)}
             />
             <DagerSomSkalTrekkes />
-            {formState.errors.manglerFraværEllerTrekk?.message && (
-              <Alert aria-live="polite" variant="error">
-                <BodyLong>
-                  {formState.errors.manglerFraværEllerTrekk.message}
-                </BodyLong>
-              </Alert>
-            )}
+            <Valideringsfeil
+              melding={formState.errors.manglerFraværEllerTrekk?.message}
+            />
           </VStack>
 
           <div className="flex gap-4 mt-8">
@@ -292,7 +291,7 @@ const TiFørsteOmsorgsdagerInfo = () => {
   const harDekket10FørsteOmsorgsdager = watch("harDekket10FørsteOmsorgsdager");
   if (harDekket10FørsteOmsorgsdager === "ja") {
     return (
-      <HjelpetekstAlert>
+      <HjelpetekstAlert role="status">
         Du kan søke om refusjon fra Nav fra og med den 11. dagen hvis den
         ansatte har rett på flere enn 10 omsorgsdager. Ved kronisk sykt barn
         over 12 år, og ingen andre barn under 13 år, kan du søke om refusjon fra
@@ -303,7 +302,7 @@ const TiFørsteOmsorgsdagerInfo = () => {
 
   if (harDekket10FørsteOmsorgsdager === "nei") {
     return (
-      <HjelpetekstAlert>
+      <HjelpetekstAlert role="status">
         <VStack gap="space-16">
           <BodyLong>
             Dere må dekke de første 10 omsorgsdagene hvert kalenderår for

@@ -818,6 +818,7 @@ const finnSyntaksfeil = () => {
     "address, article, aside, blockquote, details, dialog, div, dl, fieldset, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hr, main, nav, ol, p, pre, section, table, ul";
   const interaktiv =
     "a[href], button, input:not([type=hidden]), select, textarea, label, iframe, details, [tabindex]:not([tabindex='-1'])";
+  // Lister og dl dekkes av axe-reglene list, listitem, dlitem og definition-list.
   const regler: {
     navn: string;
     selektor: string;
@@ -835,26 +836,6 @@ const finnSyntaksfeil = () => {
     { navn: "label i label", selektor: "label label" },
     { navn: "skjema i skjema", selektor: "form form" },
     { navn: "main i main", selektor: "main main" },
-    {
-      navn: "li utenfor liste",
-      selektor: "li",
-      ok: (e) => e.parentElement?.matches("ul, ol, menu") ?? false,
-    },
-    {
-      navn: "ugyldig barn av liste",
-      selektor: ":is(ul, ol, menu) > *",
-      ok: (e) => e.matches("li, script, template"),
-    },
-    {
-      navn: "ugyldig barn av dl",
-      selektor: "dl > *",
-      ok: (e) => e.matches("dt, dd, div, script, template"),
-    },
-    {
-      navn: "dt eller dd utenfor dl",
-      selektor: "dt, dd",
-      ok: (e) => e.parentElement?.matches("dl, dl > div") ?? false,
-    },
     {
       navn: "ugyldig barn av tabellrad",
       selektor: "tr > *",
@@ -936,9 +917,9 @@ export const sjekkBevegelse = async (page: Page, steg: string) => {
       merEnnTreGlimtPerSekund: animasjoner
         .filter(({ rundeMs }) => rundeMs > 0 && rundeMs < 1000 / 3)
         .map(({ element }) => element),
-      medier: [
-        ...document.querySelectorAll("main :is(video, audio, marquee, blink)"),
-      ].map((element) => beskriv(element)),
+      medier: [...document.querySelectorAll("main :is(video, audio)")].map(
+        (element) => beskriv(element),
+      ),
     };
   });
   expect.soft(funn, `Bevegelse og glimt i ${steg}`).toEqual({
@@ -1011,9 +992,82 @@ export const sjekkFeilmeldinger = async (page: Page, steg: string) => {
     .toEqual({ feilUtenFelt: [], ugyldigUtenFeil: [] });
 };
 
+type Statusovervåking = {
+  sisteHandling: string;
+  funn: string[];
+};
+
+const overvåkStatusbeskjeder = () => {
+  const vindu = globalThis as typeof globalThis & {
+    uuStatusbeskjeder?: Statusovervåking;
+  };
+  if (vindu.uuStatusbeskjeder) {
+    return;
+  }
+  const tilstand: Statusovervåking = { sisteHandling: "", funn: [] };
+  vindu.uuStatusbeskjeder = tilstand;
+  for (const type of ["click", "input", "change", "keydown"]) {
+    addEventListener(
+      type,
+      (hendelse) => {
+        if (hendelse.isTrusted) {
+          tilstand.sisteHandling = location.href;
+        }
+      },
+      true,
+    );
+  }
+  // Lasteindikatoren i Aksels Button (loading) er unntatt. Knappen beholder fokus og navnet endres til «Venter…».
+  const statusbeskjed =
+    ".aksel-alert, .aksel-loader:not(button .aksel-loader), .aksel-error-message";
+  const liveRegion =
+    "[role=alert], [role=status], [role=log], [role=progressbar], output, [aria-live=polite], [aria-live=assertive]";
+  new MutationObserver((endringer) => {
+    if (tilstand.sisteHandling !== location.href) {
+      return;
+    }
+    const nyeNoder = endringer.flatMap(({ addedNodes }) => [...addedNodes]);
+    for (const node of nyeNoder) {
+      if (!(node instanceof Element) || !node.closest("main")) {
+        continue;
+      }
+      const beskjeder = [node, ...node.querySelectorAll(statusbeskjed)].filter(
+        (element) => element.matches(statusbeskjed),
+      );
+      for (const beskjed of beskjeder) {
+        if (!beskjed.closest(liveRegion)) {
+          tilstand.funn.push(
+            `${String(beskjed.className).split(" ")[0]} «${(beskjed.textContent ?? "").trim().slice(0, 60)}»`,
+          );
+        }
+      }
+    }
+  }).observe(document, { childList: true, subtree: true });
+};
+
+const overvåkedeSider = new WeakSet<Page>();
+
+export const sjekkStatusbeskjeder = async (page: Page, steg: string) => {
+  if (!overvåkedeSider.has(page)) {
+    overvåkedeSider.add(page);
+    await page.addInitScript(overvåkStatusbeskjeder);
+  }
+  await page.evaluate(overvåkStatusbeskjeder);
+  const funn = await page.evaluate(() => {
+    const tilstand = (
+      globalThis as typeof globalThis & { uuStatusbeskjeder: Statusovervåking }
+    ).uuStatusbeskjeder;
+    const resultat = [...new Set(tilstand.funn)];
+    tilstand.funn = [];
+    return resultat;
+  });
+  expect.soft(funn, `Statusbeskjeder uten live-region før ${steg}`).toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
+    await sjekkStatusbeskjeder(page, steg);
     await sjekkSidetittel(page, steg);
     await sjekkSpråk(page, steg);
     await sjekkTekstavstand(page, steg);

@@ -71,7 +71,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
         <OppsummeringMånedslønn redigerbar={true} />
       </VStack>
       {isError && (
-        <Alert variant="error">
+        <Alert role="alert" variant="error">
           Noe gikk galt. Vennligst prøv igjen senere.
         </Alert>
       )}

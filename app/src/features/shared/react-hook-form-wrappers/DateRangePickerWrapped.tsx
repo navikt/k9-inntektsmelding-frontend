@@ -80,7 +80,7 @@ export const DateRangePickerWrapped = forwardRef<
           ref={toField.ref}
         />
       </div>
-      <div className="mt-2">
+      <div aria-live="polite" className="mt-2">
         {fromFieldState.error?.message && (
           <ErrorMessage id={fomFeilId} showIcon>
             Fra og med: {fromFieldState.error.message}

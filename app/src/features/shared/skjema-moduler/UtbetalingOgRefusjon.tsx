@@ -110,7 +110,7 @@ export function UtbetalingOgRefusjon() {
       ) : undefined}
       {skalRefunderes === "NEI" &&
         opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_NYANSATT" && (
-          <Alert variant="warning">
+          <Alert role="status" variant="warning">
             <Heading level="4" size="small">
               Inntektsmelding kan ikke sendes inn
             </Heading>
@@ -134,7 +134,7 @@ function Over6GAlert() {
 
   if (erRefusjonOver6G) {
     return (
-      <Alert variant="info">
+      <Alert role="status" variant="info">
         Nav utbetaler opptil 6G av årslønnen. Du skal likevel føre opp den
         lønnen dere utbetaler til den ansatte i sin helhet.
       </Alert>
@@ -221,7 +221,7 @@ function VarierendeRefusjon() {
         <Heading className="mb-4" level="4" size="small">
           Refusjonsbeløp dere krever per periode
         </Heading>
-        <Alert className="mb-4" variant="info">
+        <Alert role="status" className="mb-4" variant="info">
           <Stack gap="space-8">
             {visInfoOmEndringAvFørsteFraværsdagMedRefusjon && (
               <BodyLong>

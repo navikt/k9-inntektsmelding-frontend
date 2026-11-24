@@ -135,7 +135,11 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
 
   return (
     <>
-      {error ? <Alert variant="error">{error.message}</Alert> : undefined}
+      {error ? (
+        <Alert role="alert" variant="error">
+          {error.message}
+        </Alert>
+      ) : undefined}
       <div className="flex gap-4 justify-center">
         <Button
           as={Link}

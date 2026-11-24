@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { hentGrunnbeløpOptions } from "~/api/queries.ts";
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
 import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
@@ -124,12 +125,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
               <Over6GAlert />
             </Inntekt>
           ) : isLoading ? (
-            <div className="my-4 flex justify-center">
-              <Loader />
+            <div className="my-4 flex justify-center" role="status">
+              <Loader title="Henter inntekt" />
             </div>
           ) : isError ? (
             <>
-              <Alert variant="error">
+              <Alert role="alert" variant="error">
                 Inntektsopplysninger kunne ikke hentes.
               </Alert>
               <div>
@@ -184,7 +185,7 @@ function Over6GAlert() {
 
   if (erInntektOver6G) {
     return (
-      <Alert variant="info">
+      <Alert role="status" variant="info">
         Nav utbetaler opptil 6G av årslønnen. Du skal likevel føre opp den
         lønnen dere utbetaler til den ansatte i sin helhet.
       </Alert>
@@ -195,14 +196,5 @@ function Over6GAlert() {
 
 function InntektAlert() {
   const { formState } = useFormContext<RefusjonOmsorgspengerFormData>();
-  const error = formState.errors.inntekt;
-
-  if (error) {
-    return (
-      <Alert variant="error">
-        <BodyLong>{error.message}</BodyLong>
-      </Alert>
-    );
-  }
-  return null;
+  return <Valideringsfeil melding={formState.errors.inntekt?.message} />;
 }

@@ -167,7 +167,7 @@ export function UnntattAaregRegistreringForm({
             : "Hent opplysninger"}
         </Button>
         {organisasjonerQuery.isError && (
-          <Alert variant="error">
+          <Alert role="alert" variant="error">
             Kunne ikke hente virksomhetene dine. Prøv igjen.
             <Button
               className="mt-4"
@@ -181,7 +181,7 @@ export function UnntattAaregRegistreringForm({
           </Alert>
         )}
         {organisasjoner?.length === 0 && (
-          <Alert variant="warning">
+          <Alert role="status" variant="warning">
             Vi finner ingen virksomheter du har tilgang til. Sjekk tilgangene
             dine i Altinn.
           </Alert>

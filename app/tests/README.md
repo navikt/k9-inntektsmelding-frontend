@@ -52,6 +52,7 @@ Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Tester merket `
 | `sjekkKodesyntaks` | [4.1.1](https://www.uutilsynet.no/wcag-standarden/411-parsing-oppdeling-niva/120) | Like ID-er og feil nøsting, for eksempel `div` i overskrifter eller knapp i knapp. |
 | `sjekkHurtigtaster` | [2.1.4](https://www.uutilsynet.no/wcag-standarden/214-hurtigtaster-som-bestar-av-ett-tegn-niva/782) | Trykker a–z, 0–9 og vanlige tegn uten fokus i felt. Ingenting skal endre seg. |
 | `sjekkBevegelse` | [2.2.2](https://www.uutilsynet.no/wcag-standarden/222-pause-stopp-skjul-niva/101), [2.3.1](https://www.uutilsynet.no/wcag-standarden/231-terskelverdi-pa-maksimalt-tre-glimt-niva/102) | Ingen animasjoner over fem sekunder eller med mer enn tre runder per sekund, og ingen video eller lyd. |
+| `sjekkStatusbeskjeder` | [4.1.3](https://www.uutilsynet.no/wcag-standarden/413-statusbeskjeder-niva-aa/152) | Varsler, lasteindikatorer og feilmeldinger som dukker opp etter en handling på samme side, skal ligge i `role="alert"`, `role="status"` eller `aria-live`. Overvåkingen starter ved første sjekkpunkt. |
 | `sjekkFeilmeldinger` | [3.3.1](https://www.uutilsynet.no/wcag-standarden/331-identifikasjon-av-feil-niva/116) | Hver synlige feilmelding er koblet til et felt med `aria-invalid`, og hvert ugyldig felt har en synlig feilmelding. |
 
 `sjekkIngenVannrettRulling` ([1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144)) kjøres for seg der testene ber om det.

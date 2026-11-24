@@ -18,6 +18,7 @@ import { createLink, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import { formatDatoKort, lagFulltNavn } from "~/utils";
 
@@ -74,11 +75,9 @@ const OmFraværetOmsorgspenger = () => {
             overskrift="Delvise dager"
             overskriftsnivå="4"
           />
-          {formState.errors.fraværHeleDager?.message && (
-            <Alert variant="error">
-              {formState.errors.fraværHeleDager.message}
-            </Alert>
-          )}
+          <Valideringsfeil
+            melding={formState.errors.fraværHeleDager?.message}
+          />
         </div>
       ) : (
         <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
@@ -97,7 +96,7 @@ const OmFraværetOmsorgspenger = () => {
         </Radio>
       </RadioGroup>
       {watch("skalRefunderes") === "JA_LIK_REFUSJON" && vis && (
-        <Alert variant="info">
+        <Alert role="status" variant="info">
           <div className="flex flex-col gap-4">
             <BodyLong>
               Har dere utbetalt full lønn for fraværet skal dere ikke sende inn
@@ -121,7 +120,7 @@ const OmFraværetOmsorgspenger = () => {
         </Alert>
       )}
       {watch("skalRefunderes") === "NEI" && vis && (
-        <Alert variant="info">
+        <Alert role="status" variant="info">
           <div className="flex flex-col gap-4">
             <BodyLong>
               Hvis dere ikke har utbetalt lønn på grunn av uenighet om fraværet,

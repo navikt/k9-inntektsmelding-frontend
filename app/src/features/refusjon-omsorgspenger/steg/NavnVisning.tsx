@@ -23,7 +23,11 @@ export const NavnVisning = () => {
   }
 
   if (isLoading) {
-    return <Loader className="block mt-5" title="Henter informasjon" />;
+    return (
+      <div className="mt-5" role="status">
+        <Loader title="Henter informasjon" />
+      </div>
+    );
   }
 
   if (data) {

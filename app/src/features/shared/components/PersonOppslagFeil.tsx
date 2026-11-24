@@ -23,7 +23,7 @@ export function PersonOppslagError({
     error.message === "PERSON_IKKE_FUNNET"
   ) {
     return (
-      <Alert variant="error">
+      <Alert role="alert" variant="error">
         <Heading level="3" size="small">
           Vi finner ingen ansatt registrert hos dere med dette fødselsnummeret
         </Heading>
@@ -38,7 +38,7 @@ export function PersonOppslagError({
 
   if (error.message === "SENDT_FOR_TIDLIG") {
     return (
-      <Alert variant="warning">
+      <Alert role="status" variant="warning">
         <BodyShort>
           Du kan ikke sende inn inntektsmelding mer enn fire uker før personen
           starter med {formatYtelsesnavn(ytelse)}.
@@ -50,7 +50,7 @@ export function PersonOppslagError({
   if (error.message === "INGEN_SAK_FUNNET") {
     if (context === "dato_validering") {
       return (
-        <Alert variant="warning">
+        <Alert role="status" variant="warning">
           <BodyShort>
             Du kan ikke sende inn inntektsmelding for{" "}
             {formatYtelsesnavn(ytelse)} med denne datoen som første fraværsdag
@@ -61,7 +61,7 @@ export function PersonOppslagError({
     }
 
     return (
-      <Alert variant="warning">
+      <Alert role="status" variant="warning">
         <Heading level="3" size="small">
           Kan ikke opprette inntektsmelding
         </Heading>
@@ -84,7 +84,7 @@ export function PersonOppslagError({
       : "Det oppsto en feil ved henting av personopplysninger. Vennligst prøv igjen.";
 
   return (
-    <Alert variant="error">
+    <Alert role="alert" variant="error">
       <Heading level="3" size="small">
         {errorMessage}
       </Heading>

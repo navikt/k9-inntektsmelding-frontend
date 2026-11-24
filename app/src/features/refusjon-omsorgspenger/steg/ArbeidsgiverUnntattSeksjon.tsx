@@ -24,7 +24,12 @@ export const ArbeidsgiverUnntattSeksjon = () => {
     }
   }, [enkeltUnntatt?.organisasjonsnavn]);
 
-  if (isLoading) return <Loader title="Henter virksomheter" />;
+  if (isLoading)
+    return (
+      <div role="status">
+        <Loader title="Henter virksomheter" />
+      </div>
+    );
 
   if (error || data?.organisasjoner.length === 0) {
     return (

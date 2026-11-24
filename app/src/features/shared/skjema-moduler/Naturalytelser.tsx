@@ -1,6 +1,5 @@
 import { PlusIcon, TrashIcon } from "@navikt/aksel-icons";
 import {
-  Alert,
   BodyLong,
   Button,
   Fieldset,
@@ -14,6 +13,7 @@ import {
 import { isBefore } from "date-fns";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 import { HjelpetekstReadMore } from "~/features/shared/Hjelpetekst";
 import { DatePickerWrapped } from "~/features/shared/react-hook-form-wrappers/DatePickerWrapped";
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
@@ -287,9 +287,7 @@ function MisterNaturalytelser({ opplysninger }: NaturalytelserProps) {
       >
         Legg til naturalytelse
       </Button>
-      {overlappendePerioderError && (
-        <Alert variant="error">{overlappendePerioderError.message}</Alert>
-      )}
+      <Valideringsfeil melding={overlappendePerioderError?.message} />
     </div>
   );
 }

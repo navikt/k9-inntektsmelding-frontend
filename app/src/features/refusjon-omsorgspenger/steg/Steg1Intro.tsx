@@ -94,7 +94,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
             </Radio>
           </RadioGroup>
           {harUtbetaltLønn === "nei" && (
-            <Alert variant="warning">
+            <Alert role="status" variant="warning">
               <Heading level="3" size="small" spacing>
                 Arbeidsgivers plikt til å utbetale omsorgsdager
               </Heading>

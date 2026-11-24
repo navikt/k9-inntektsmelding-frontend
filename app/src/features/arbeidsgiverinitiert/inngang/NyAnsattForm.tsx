@@ -156,7 +156,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         </Button>
         {visRefusjonsvarsel && (
           <>
-            <Alert variant="warning">
+            <Alert role="status" variant="warning">
               <BodyLong>
                 Ikke bruk dette refusjonskravet til å stanse en refusjon for en
                 periode som allerede er i gang (løpende periode).
