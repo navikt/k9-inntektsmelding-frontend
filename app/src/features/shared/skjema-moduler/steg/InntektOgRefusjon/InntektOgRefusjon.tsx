@@ -15,7 +15,6 @@ import {
 import { formatYtelsesnavn } from "~/utils";
 
 import { useDocumentTitle } from "../../../hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../../hooks/useScrollToTopOnMount.tsx";
 import { Inntekt } from "../../Inntekt.tsx";
 import { Naturalytelser } from "../../Naturalytelser.tsx";
 import OmFraværetOmsorgspenger from "../../OmFraværetOmsorgspenger.tsx";
@@ -63,7 +62,6 @@ export function InntektOgRefusjon({
     InntektsmeldingSkjemaState | InntektsmeldingSkjemaStateAGIUnntattAaregister;
   onSubmit: (skjemadata: InntektOgRefusjonForm) => void;
 }) {
-  useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,

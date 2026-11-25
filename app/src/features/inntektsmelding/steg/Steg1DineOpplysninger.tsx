@@ -1,11 +1,13 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
 import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/frontendSchemas";
+import { useStartPåNyttSteg } from "~/features/shared/hooks/useStartPåNyttSteg";
 
 import { DineOpplysninger } from "../../shared/skjema-moduler/steg/DineOpplysninger";
 import { useInntektsmeldingSkjema } from "../SkjemaStateContext";
 
 export const Steg1DineOpplysninger = () => {
+  useStartPåNyttSteg();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjema();
 

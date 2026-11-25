@@ -2,7 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
-import { useScrollToTopOnMount } from "~/features/shared/hooks/useScrollToTopOnMount";
+import { useStartPåNyttSteg } from "~/features/shared/hooks/useStartPåNyttSteg";
 import { InntektOgRefusjon } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import {
   EndringAvInntektÅrsaker,
@@ -46,10 +46,10 @@ type NaturalytelserSomMistesForm = {
 };
 
 export const Steg2InntektOgRefusjon = () => {
+  useStartPåNyttSteg();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGIUnntattAaRegister();
 
-  useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,

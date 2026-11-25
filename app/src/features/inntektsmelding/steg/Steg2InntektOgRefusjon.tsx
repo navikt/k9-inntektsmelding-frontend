@@ -1,10 +1,10 @@
 import { useNavigate } from "@tanstack/react-router";
 
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
+import { useStartPåNyttSteg } from "~/features/shared/hooks/useStartPåNyttSteg";
 import { formatYtelsesnavn } from "~/utils";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount";
 import {
   InntektOgRefusjon,
   InntektOgRefusjonForm,
@@ -12,7 +12,7 @@ import {
 import { useInntektsmeldingSkjema } from "../SkjemaStateContext";
 
 export const Steg2InntektOgRefusjon = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,

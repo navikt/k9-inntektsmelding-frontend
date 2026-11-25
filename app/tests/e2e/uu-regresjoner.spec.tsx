@@ -459,6 +459,53 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
     await sjekkUniversellUtforming(page, "Omsorgsdager");
   });
 
+  test("Fokus flyttes til overskriften ved stegbytte", async ({ page }) => {
+    await mockOpplysninger({ page });
+    await mockGrunnbeløp({ page });
+    await mockInntektsmeldinger({ page });
+    await page.goto("/k9-im-dialog/1/dine-opplysninger");
+    await expect(
+      page.getByRole("heading", { name: "Dine opplysninger", level: 2 }),
+    ).toBeVisible();
+    // Ved første visning skal dekoratørens hoppelenke fortsatt være første stopp.
+    expect(
+      await page.evaluate(
+        () => (document.activeElement ?? document.body).tagName,
+      ),
+    ).toBe("BODY");
+
+    await page.getByRole("textbox", { name: "Navn", exact: true }).fill("Test");
+    await page
+      .getByRole("textbox", { name: "Telefon", exact: true })
+      .fill("13371337");
+    await page.getByRole("button", { name: "Bekreft og gå videre" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("heading", { name: "Inntekt og refusjon", level: 2 }),
+    ).toBeFocused();
+
+    await page.getByRole("button", { name: "Forrige steg" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("heading", { name: "Dine opplysninger", level: 2 }),
+    ).toBeFocused();
+
+    await page.clock.install({ time: new Date("2026-03-15").getTime() });
+    await mockInnloggetBruker({ page });
+    await mockInntektsmeldingForÅr({ page, json: [] });
+    await page.goto("/k9-im-dialog/refusjon-omsorgspenger/123456789/1-intro");
+    await page.getByRole("radio", { name: "Ja", exact: true }).check();
+    await page.getByRole("radio", { name: "2025", exact: true }).check();
+    await page.getByRole("button", { name: "Neste steg" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("heading", {
+        name: "Den ansatte og arbeidsgiver",
+        level: 2,
+      }),
+    ).toBeFocused();
+  });
+
   test.describe("Endring av verdier gir ingen kontekstendring", () => {
     test("Inntektsmelding: Dine opplysninger og Inntekt og refusjon", async ({
       page,

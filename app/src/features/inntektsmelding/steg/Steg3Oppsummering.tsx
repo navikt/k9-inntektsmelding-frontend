@@ -17,14 +17,14 @@ import {
 } from "~/utils";
 
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg";
 import { InntektsmeldingSkjemaStateValid } from "../frontendSchemas";
 import { Skjemaoppsummering } from "../visningskomponenter/Skjemaoppsummering";
 
 const route = getRouteApi("/$id");
 
 export const Steg3Oppsummering = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Oppsummering – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,

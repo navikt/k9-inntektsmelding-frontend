@@ -27,10 +27,10 @@ import { ReactNode } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg";
 import { useSkjemaState } from "../SkjemaStateContext";
 export const Steg6Kvittering = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Kvittering – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );

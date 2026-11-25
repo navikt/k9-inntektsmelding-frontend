@@ -1774,6 +1774,10 @@ export const sjekkPekeravbrytelseOgSensorer = async (
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
+    // Dekoratørens lenke «Hopp til hovedinnhold» går til #maincontent (2.4.1).
+    await expect
+      .soft(page.getByRole("main"), `Mål for hoppelenken i ${steg}`)
+      .toHaveAttribute("id", "maincontent");
     await sjekkStatusbeskjeder(page, steg);
     await sjekkSidetittel(page, steg);
     await sjekkSpråk(page, steg);

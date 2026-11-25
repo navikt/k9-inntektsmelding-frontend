@@ -27,7 +27,6 @@ import {
 } from "~/utils";
 
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
 import { Informasjonsseksjon } from "../../Informasjonsseksjon";
 import { Fremgangsindikator } from "../Fremgangsindikator";
 
@@ -56,7 +55,6 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
     | InntektsmeldingSkjemaStateValidAGIUnntattAaregister[];
   onSubmit: (kontaktperson: T["kontaktperson"]) => void;
 }) => {
-  useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Dine opplysninger – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,

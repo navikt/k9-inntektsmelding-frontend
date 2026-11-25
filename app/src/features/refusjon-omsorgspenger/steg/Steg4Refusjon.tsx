@@ -22,7 +22,7 @@ import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyl
 import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import { Inntekt } from "../../shared/skjema-moduler/Inntekt";
 import { hentInntektsopplysningerOptions } from "../api/queries.ts";
 import { RefusjonOmsorgspengerFormData } from "../frontendSchemas.tsx";
@@ -30,7 +30,7 @@ import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Refusjon – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );

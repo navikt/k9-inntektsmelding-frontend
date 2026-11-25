@@ -9,7 +9,7 @@ import { OppsummeringOmsorgsdager } from "~/components/oppsummering/Oppsummering
 import { OppsummeringRefusjon } from "~/components/oppsummering/OppsummeringRefusjon.tsx";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import {
   RefusjonOmsorgspengerResponseDto,
   sendInntektsmeldingOmsorgspengerRefusjonMutation,
@@ -18,7 +18,7 @@ import { useSkjemaState } from "../SkjemaStateContext";
 import { mapSkjemaTilSendInntektsmeldingRequest } from "../utils.ts";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Oppsummering – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );

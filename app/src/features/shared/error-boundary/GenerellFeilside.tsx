@@ -18,7 +18,7 @@ export const GenerellFeilside = () => {
 
   return (
     <Page>
-      <PageBlock as="main" gutters width="xl">
+      <PageBlock as="main" id="maincontent" gutters width="xl">
         <Box paddingBlock="space-80 space-32">
           <HGrid columns="minmax(auto,600px)" data-aksel-template="500-v2">
             <VStack gap="space-64">

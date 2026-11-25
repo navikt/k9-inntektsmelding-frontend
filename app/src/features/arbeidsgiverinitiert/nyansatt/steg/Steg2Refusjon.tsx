@@ -14,7 +14,7 @@ import { formatDatoKort, formatYtelsesnavn } from "~/utils";
 import { PersonOppslagError } from "../../../shared/components/PersonOppslagFeil.tsx";
 import { useDocumentTitle } from "../../../shared/hooks/useDocumentTitle.tsx";
 import { usePersonOppslag } from "../../../shared/hooks/usePersonOppslag.tsx";
-import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../../shared/hooks/useStartPåNyttSteg.tsx";
 import { DatePickerWrapped } from "../../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
 import { UtbetalingOgRefusjon } from "../../../shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
 import { InntektsmeldingSkjemaStateAGINyansatt } from "../frontendSchemas.tsx";
@@ -32,7 +32,7 @@ const førsteFraværsdagFremoverItidFeilmeldingHeading =
   "Du kan ikke endre denne datoen fremover i tid.";
 
 export function Steg2Refusjon() {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   const { eksisterendeInntektsmeldinger } =
     getRouteApi("/agi/$id").useLoaderData();

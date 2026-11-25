@@ -39,7 +39,7 @@ export const IkkeFunnetFeilside = () => {
 
   return (
     <Page>
-      <Page.Block as="main" gutters width="xl">
+      <Page.Block as="main" id="maincontent" gutters width="xl">
         {innhold}
       </Page.Block>
     </Page>

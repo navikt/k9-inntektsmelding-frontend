@@ -11,14 +11,14 @@ import type { OpplysningerDto } from "~/types/api-schemas.ts";
 import { formatStrengTilTall, formatYtelsesnavn } from "~/utils";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
-import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../../shared/hooks/useStartPåNyttSteg.tsx";
 import type { SendInntektsmeldingRequestDtoSchemaArbeidsgiverInitiertType } from "../api-schemas.ts";
 import { InntektsmeldingSkjemaStateValidAGINyansatt } from "../frontendSchemas.tsx";
 import { Skjemaoppsummering } from "../Skjemaoppsummering.tsx";
 import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext.tsx";
 
 export const Steg3Oppsummering = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Oppsummering – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,

@@ -41,7 +41,7 @@ Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Tester merket `
 
 | Kontroll | WCAG | Hva den tester |
 | --- | --- | --- |
-| Struktur | [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90) | Synlig `main`, nøyaktig én h1 og ingen hopp i overskriftsnivåer. |
+| Struktur | [1.3.1](https://www.uutilsynet.no/wcag-standarden/131-informasjon-og-relasjoner-niva/90), [2.4.1](https://www.uutilsynet.no/wcag-standarden/241-hoppe-over-blokker-niva/103) | Synlig `main` med `id="maincontent"`, som er målet for dekoratørens «Hopp til hovedinnhold», nøyaktig én h1 og ingen hopp i overskriftsnivåer. |
 | `finnWcagAvvik` | Flere | Axe med WCAG 2.0 og 2.1 A og AA i `main`. Resultatet legges ved rapporten. |
 | `sjekkSidetittel` | [2.4.2](https://www.uutilsynet.no/wcag-standarden/242-sidetitler-niva/104) | Én `<title>` med forventet tittel for ruten, også etter navigering. |
 | `sjekkSpråk` | [3.1.1](https://www.uutilsynet.no/wcag-standarden/311-sprak-pa-siden-niva/110), [3.1.2](https://www.uutilsynet.no/wcag-standarden/312-sprak-pa-deler-av-innhold-niva-aa/111) | `lang="nb-no"` og axe-reglene for språk på hele dokumentet. |
@@ -80,6 +80,7 @@ Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Tester merket `
 | [Virksomhetslisten med tastatur](./e2e/uu-regresjoner.spec.tsx) | Listen åpnes med pil ned, og virksomhet velges med Enter. Begrunner unntaket for pilen i `sjekkTastatur`. | [2.1.1](https://www.uutilsynet.no/wcag-standarden/211-tastatur-niva/98) |
 | [Stående og liggende retning](./e2e/uu-regresjoner.spec.tsx) | Samme innhold ved 360 × 640 og 640 × 360, ingen vannrett rulling, ingen CSS for retning og ingen låsing av retning. | [1.3.4](https://www.uutilsynet.no/wcag-standarden/134-visningsretning-niva-aa/141) |
 | [Endring av verdier gir ingen kontekstendring](./e2e/uu-regresjoner.spec.tsx) | Endrer alle felt i Dine opplysninger, Inntekt og refusjon, Opprett inntektsmelding og steg 1–3 i omsorgspenger. Adresse, hovedoverskrift og vinduer skal være uendret, og fokus skal bli i feltet. | [3.2.2](https://www.uutilsynet.no/wcag-standarden/322-inndata-niva/114) |
+| [Fokus flyttes til overskriften ved stegbytte](./e2e/uu-regresjoner.spec.tsx) | Ved første visning står fokus øverst. Fremover og bakover med tastatur i inntektsmelding og omsorgspenger skal fokus flyttes til h2-overskriften for det nye steget. | [2.4.3](https://www.uutilsynet.no/wcag-standarden/243-fokusrekkefolge-niva/105) |
 | [Ugyldig dato gir forslag til riktig format](./e2e/uu-regresjoner.spec.tsx) | Skriver «31.02.2024» i første fraværsdag i AGI og ugyldige datoer i en fraværsperiode i omsorgspenger. Feilmeldingen skal foreslå formatet dd.mm.åååå, og teksten skal bli stående. | Felles, [3.3.3](https://www.uutilsynet.no/wcag-standarden/333-forslag-ved-feil-niva-aa/118) |
 | [Valideringsfeil i AGI og omsorgspenger](./e2e/uu-regresjoner.spec.tsx) | Felles kontroll med valideringsfeil, og fokus flyttes til første felt med feil. | Felles, [3.3.1](https://www.uutilsynet.no/wcag-standarden/331-identifikasjon-av-feil-niva/116) |
 | [Virksomhetslisten har navn](./e2e/uu-regresjoner.spec.tsx) (`@kjent-avvik`) | Den åpne listen i Aksel skal ha et tilgjengelig navn. Feiler som forventet. | [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) |

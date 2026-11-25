@@ -17,7 +17,7 @@ import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyl
 import { capitalizeSetning } from "~/utils.ts";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import { useSkjemaState } from "../SkjemaStateContext.tsx";
 import { useInnloggetBruker } from "../useInnloggetBruker.tsx";
 import {
@@ -29,7 +29,7 @@ import {
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle("Søknad om refusjon av omsorgspenger for arbeidsgiver");
 
   const innloggetBruker = useInnloggetBruker();
