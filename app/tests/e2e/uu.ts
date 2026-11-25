@@ -1358,6 +1358,22 @@ const leggInnHjelpereForPekerOgFokus = () => {
 };
 /* eslint-enable unicorn/consistent-function-scoping */
 
+/** Adresse og kontroller i main. Brukes til å kontrollere hver side bare én gang per worker. */
+const sidesignatur = (page: Page) =>
+  page.evaluate(
+    (utvalg) =>
+      `${location.pathname}|${[
+        ...document.querySelectorAll(`main :is(${utvalg})`),
+      ]
+        .filter((element) => element.checkVisibility())
+        .map(
+          (element) =>
+            `${element.tagName}:${element.getAttribute("aria-label") ?? element.textContent?.trim()}`,
+        )
+        .join(",")}`,
+    KONTROLLER,
+  );
+
 // Aksels Tooltip åpnes etter 150 ms med pekeren i ro og brukes på ikonknapper uten synlig tekst.
 const VENTETID_IKONKNAPP = 200;
 const VENTETID = 50;
@@ -1377,20 +1393,7 @@ export const sjekkInnholdVedPekerOgFokus = async (page: Page, steg: string) => {
     .locator(KONTROLLER)
     .filter({ visible: true })
     .all();
-  // Samme side med de samme kontrollene er allerede kontrollert i denne workeren.
-  const signatur = await page.evaluate(
-    (utvalg) =>
-      `${location.pathname}|${[
-        ...document.querySelectorAll(`main :is(${utvalg})`),
-      ]
-        .filter((element) => element.checkVisibility())
-        .map(
-          (element) =>
-            `${element.tagName}:${element.getAttribute("aria-label") ?? element.textContent?.trim()}`,
-        )
-        .join(",")}`,
-    KONTROLLER,
-  );
+  const signatur = await sidesignatur(page);
   if (kontrollerteSiderForPekerOgFokus.has(signatur)) {
     return;
   }
@@ -1690,6 +1693,84 @@ export const sjekkOverskrifterOgLedetekster = async (
     .toEqual([]);
 };
 
+const tilstandForPeker = () => ({
+  url: location.href,
+  innhold: document.querySelector("main")?.textContent ?? "",
+  lag: document.querySelectorAll(
+    "dialog[open], [role=dialog], [role=listbox], [popover]:popover-open",
+  ).length,
+  avkrysset: document.querySelectorAll("main input:checked").length,
+});
+const kontrollerteSiderForPeker = new Set<string>();
+
+export const sjekkPekeravbrytelseOgSensorer = async (
+  page: Page,
+  steg: string,
+) => {
+  const funn: string[] = [];
+
+  // 2.5.4: Ingen funksjoner skal styres av at enheten beveges.
+  const cdp = await page.context().newCDPSession(page);
+  const { result } = await cdp.send("Runtime.evaluate", {
+    expression: "window",
+  });
+  const { listeners } = await cdp.send("DOMDebugger.getEventListeners", {
+    objectId: result.objectId!,
+  });
+  await cdp.detach();
+  funn.push(
+    ...listeners
+      .filter(({ type }) => /devicemotion|deviceorientation/.test(type))
+      .map(({ type }) => `Siden lytter på ${type}`),
+  );
+
+  // 2.5.2: Trykk ned alene skal ikke utløse noe, og handlingen skal kunne avbrytes ved å flytte pekeren bort.
+  const åpenDialog = page
+    .locator("main :is(dialog[open], [role=dialog])")
+    .filter({ visible: true });
+  const signatur = await sidesignatur(page);
+  if (
+    (await åpenDialog.count()) === 0 &&
+    !kontrollerteSiderForPeker.has(signatur)
+  ) {
+    kontrollerteSiderForPeker.add(signatur);
+    const fokusFør = await page.evaluateHandle(() => document.activeElement);
+    const kontroller = await page
+      .getByRole("main")
+      .locator(KONTROLLER)
+      .filter({ visible: true })
+      .all();
+    for (const kontroll of kontroller) {
+      const boks = await kontroll.boundingBox();
+      if (!boks) {
+        continue;
+      }
+      const navn = await kontroll.evaluate(
+        (element) =>
+          `${element.tagName.toLowerCase()} «${(element.getAttribute("aria-label") ?? element.textContent ?? "").trim().slice(0, 40)}»`,
+      );
+      const før = await page.evaluate(tilstandForPeker);
+      await page.mouse.move(boks.x + boks.width / 2, boks.y + boks.height / 2);
+      await page.mouse.down();
+      const etterTrykk = await page.evaluate(tilstandForPeker);
+      await page.mouse.move(0, 0);
+      await page.mouse.up();
+      const etterAvbrudd = await page.evaluate(tilstandForPeker);
+      if (JSON.stringify(etterTrykk) !== JSON.stringify(før)) {
+        funn.push(`${navn} reagerer på trykk ned`);
+      } else if (JSON.stringify(etterAvbrudd) !== JSON.stringify(før)) {
+        funn.push(`${navn} kan ikke avbrytes ved å flytte pekeren bort`);
+      }
+    }
+    await fokusFør.evaluate((element) =>
+      (element as HTMLElement | null)?.focus?.({ preventScroll: true }),
+    );
+  }
+  expect
+    .soft(funn, `Pekeravbrytelse og bevegelsesaktivering i ${steg}`)
+    .toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -1709,6 +1790,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkKonsekventNavigering(page, steg);
     await sjekkLenkeformål(page, steg);
     await sjekkOverskrifterOgLedetekster(page, steg);
+    await sjekkPekeravbrytelseOgSensorer(page, steg);
 
     const overskrifter = await page
       .getByRole("main")
