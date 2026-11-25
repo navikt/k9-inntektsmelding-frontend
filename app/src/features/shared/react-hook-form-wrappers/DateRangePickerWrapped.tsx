@@ -64,7 +64,7 @@ export const DateRangePickerWrapped = forwardRef<
 
   return (
     <DatePicker {...useRangeDatepickerProps}>
-      <div className="flex gap-4" ref={ref}>
+      <div className="flex flex-col gap-4 ax-sm:flex-row" ref={ref}>
         <DatePicker.Input
           {...fromInputProps}
           aria-describedby={fromFieldState.error ? fomFeilId : undefined}

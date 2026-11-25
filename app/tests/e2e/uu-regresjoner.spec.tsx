@@ -624,55 +624,46 @@ test.describe("UU-regresjoner", { tag: "@uu" }, () => {
     },
   );
 
-  test(
-    "Datoperioder i omsorgspenger krever ikke vannrett rulling",
-    {
-      tag: "@kjent-avvik",
-    },
-    async ({ page }) => {
-      await page.setViewportSize({ width: 320, height: 900 });
-      await page.clock.install({ time: new Date("2026-03-15").getTime() });
-      await mockInnloggetBruker({ page });
-      await mockGrunnbeløp({ page });
-      await mockInntektsmeldingForÅr({ page, json: [] });
-      await mockInntektsopplysninger({ page });
-      await mockArbeidstakerOppslag({ page });
-      await page.goto("/k9-im-dialog/refusjon-omsorgspenger/123456789/1-intro");
-      await page.getByRole("radio", { name: "Ja", exact: true }).check();
-      await page.getByRole("radio", { name: "2025", exact: true }).check();
-      await page.getByRole("button", { name: "Neste steg" }).click();
-      await page
-        .getByLabel("Ansattes fødselsnummer (11 siffer)")
-        .fill("16878397960");
-      await page.getByRole("button", { name: "Neste steg" }).click();
-      await expect(
-        page.getByRole("heading", {
-          name: "Omsorgsdager dere søker refusjon for",
-        }),
-      ).toBeVisible();
-      await page.getByRole("radio", { name: "Ja", exact: true }).check();
-      await page
-        .getByRole("button", { name: "Legg til periode" })
-        .first()
-        .click();
-      await expect(page.getByLabel("Fra og med").first()).toBeVisible();
-      await sjekkUniversellUtforming(page, "Datoperiode i omsorgspenger");
-      const overløp = await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      );
-      await test.info().attach("Reflow-avvik", {
-        body: JSON.stringify({ bredde: 320, overløp }),
-        contentType: "application/json",
-      });
+  test("Datoperioder i omsorgspenger krever ikke vannrett rulling", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 900 });
+    await page.clock.install({ time: new Date("2026-03-15").getTime() });
+    await mockInnloggetBruker({ page });
+    await mockGrunnbeløp({ page });
+    await mockInntektsmeldingForÅr({ page, json: [] });
+    await mockInntektsopplysninger({ page });
+    await mockArbeidstakerOppslag({ page });
+    await page.goto("/k9-im-dialog/refusjon-omsorgspenger/123456789/1-intro");
+    await page.getByRole("radio", { name: "Ja", exact: true }).check();
+    await page.getByRole("radio", { name: "2025", exact: true }).check();
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await page
+      .getByLabel("Ansattes fødselsnummer (11 siffer)")
+      .fill("16878397960");
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(
+      page.getByRole("heading", {
+        name: "Omsorgsdager dere søker refusjon for",
+      }),
+    ).toBeVisible();
+    await page.getByRole("radio", { name: "Ja", exact: true }).check();
+    await page
+      .getByRole("button", { name: "Legg til periode" })
+      .first()
+      .click();
+    await expect(page.getByLabel("Fra og med").first()).toBeVisible();
+    await sjekkUniversellUtforming(page, "Datoperiode i omsorgspenger");
+    const overløp = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    await test.info().attach("Reflow", {
+      body: JSON.stringify({ bredde: 320, overløp }),
+      contentType: "application/json",
+    });
 
-      expect(test.info().errors).toHaveLength(0);
-      test.fail(
-        true,
-        "Åpent 1.4.10-avvik: datoperioden er for bred ved 320 CSS-piksler.",
-      );
-      expect(overløp).toBe(0);
-    },
-  );
+    expect(overløp).toBe(0);
+  });
 });

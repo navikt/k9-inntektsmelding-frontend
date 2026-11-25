@@ -247,7 +247,7 @@ const DagerSomSkalTrekkes = () => {
             />
             <Button
               aria-label="Slett periode"
-              className="absolute top-9 right-20"
+              className="w-fit ax-md:absolute top-9 right-20"
               icon={<TrashIcon aria-hidden />}
               onClick={() => {
                 remove(index);

@@ -33,7 +33,7 @@ Kjør `yarn test:uu`. Suiten gjenbruker flyter og mocker fra E2E-testene, men kj
 - `uu-smal`: de samme flytene ved 320 × 256 CSS-piksler. Egen regresjonstest kontrollerer vannrett rulling ved 320, 768 og 800 piksler.
 - `uu-zoom`: full innsending av vanlig inntektsmelding ved ekte 200 % og 400 % nettleserzoom. En lokal testutvidelse styrer Chromium i en isolert profil. Testene sammenligner synlig tekst med 100 %, kontrollerer vannrett rulling og verifiserer faktisk zoom.
 
-Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Tester merket `@kjent-avvik` gjengir navnløs virksomhetsliste i Aksel (4.1.2) og for brede datoperioder (1.4.10). Bare den avsluttende kravkontrollen har forventet feil; oppsett og øvrige kontroller skal bestå. Hvis kravet blir oppfylt, feiler testen som «unexpected pass», og markeringen må fjernes.
+Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Testen merket `@kjent-avvik` gjengir navnløs virksomhetsliste i Aksel (4.1.2). Bare den avsluttende kravkontrollen har forventet feil; oppsett og øvrige kontroller skal bestå. Hvis kravet blir oppfylt, feiler testen som «unexpected pass», og markeringen må fjernes.
 
 ### Felles kontroll ved hvert sjekkpunkt
 
@@ -84,7 +84,7 @@ Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Tester merket `
 | [Ugyldig dato gir forslag til riktig format](./e2e/uu-regresjoner.spec.tsx) | Skriver «31.02.2024» i første fraværsdag i AGI og ugyldige datoer i en fraværsperiode i omsorgspenger. Feilmeldingen skal foreslå formatet dd.mm.åååå, og teksten skal bli stående. | Felles, [3.3.3](https://www.uutilsynet.no/wcag-standarden/333-forslag-ved-feil-niva-aa/118) |
 | [Valideringsfeil i AGI og omsorgspenger](./e2e/uu-regresjoner.spec.tsx) | Felles kontroll med valideringsfeil, og fokus flyttes til første felt med feil. | Felles, [3.3.1](https://www.uutilsynet.no/wcag-standarden/331-identifikasjon-av-feil-niva/116) |
 | [Virksomhetslisten har navn](./e2e/uu-regresjoner.spec.tsx) (`@kjent-avvik`) | Den åpne listen i Aksel skal ha et tilgjengelig navn. Feiler som forventet. | [4.1.2](https://www.uutilsynet.no/wcag-standarden/412-navn-rolle-verdi-niva/121) |
-| [Datoperioder i omsorgspenger](./e2e/uu-regresjoner.spec.tsx) (`@kjent-avvik`) | Datoperioden skal ikke gi vannrett rulling ved 320 piksler. Feiler som forventet. | [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) |
+| [Datoperioder i omsorgspenger](./e2e/uu-regresjoner.spec.tsx) | Datoperioden skal ikke gi vannrett rulling ved 320 piksler. Feltene står under hverandre, og «Slett» ligger under feltene. | [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144) |
 | [Ekte nettleserzoom](./e2e/nettleserzoom.spec.tsx) (`uu-zoom`) | Full innsending av vanlig inntektsmelding ved 200 % og 400 % zoom. Synlig tekst sammenlignes med 100 %, og felles kontroll kjøres. | [1.4.4](https://www.uutilsynet.no/wcag-standarden/144-endring-av-tekststorrelse-niva-aa/96), [1.4.10](https://www.uutilsynet.no/wcag-standarden/1410-dynamisk-tilpasning-reflow-niva-aa/144), felles |
 
 CI lagrer separate rapporter som `playwright-report-e2e` og `playwright-report-uu`, med JSON-vedlegg fra axe og zoommålinger i UU-rapporten. Jobbene avbryter ikke hverandre ved feil.

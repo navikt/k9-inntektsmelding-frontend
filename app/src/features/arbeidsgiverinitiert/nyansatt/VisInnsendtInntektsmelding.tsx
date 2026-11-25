@@ -95,7 +95,12 @@ export const VisInntektsmelding = () => {
         <HStack gap="space-16" justify="space-between">
           <HStack gap="space-16">
             {endreKnapp}
-            <Button as="a" href="/min-side-arbeidsgiver" variant="tertiary">
+            <Button
+              aria-label="Lukk og gå til Min side – arbeidsgiver"
+              as="a"
+              href="/min-side-arbeidsgiver"
+              variant="tertiary"
+            >
               Lukk
             </Button>
           </HStack>

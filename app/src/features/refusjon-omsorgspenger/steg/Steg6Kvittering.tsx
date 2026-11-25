@@ -66,10 +66,9 @@ export const Steg6Kvittering = () => {
           >
             <BodyLong>
               <Link href="https://www.nav.no/arbeidsgiver/saksbehandlingstider#omsorgspenger-hjemme-med-sykt-barn-dager">
-                Her
+                Her finner du oversikt over saksbehandlingstiden til Nav.
               </Link>{" "}
-              finner du oversikt over saksbehandlingstiden til Nav. Vi tar
-              kontakt hvis vi trenger flere opplysninger.
+              Vi tar kontakt hvis vi trenger flere opplysninger.
             </BodyLong>
           </FaqItem>
           <FaqItem
@@ -106,9 +105,9 @@ export const Steg6Kvittering = () => {
                 className="mt-4"
                 href="https://www.nav.no/arbeidsgiver/omsorgspenger#inntektsmelding"
               >
-                Her
-              </Link>{" "}
-              finner du informasjon om hvordan du kan endre et refusjonskrav.
+                Her finner du informasjon om hvordan du kan endre et
+                refusjonskrav.
+              </Link>
             </BodyLong>
           </FaqItem>
         </VStack>
