@@ -372,7 +372,7 @@ const TidligereInnsendinger = ({
   return (
     <Box className="bg-ax-bg-neutral-soft p-4">
       <div className="flex justify-between">
-        <Label size="small">
+        <Label as="p" size="small">
           {`Tidligere innsendinger for ${årForRefusjon}`}
         </Label>
         <BodyShort size="small">FRA Nav</BodyShort>
@@ -400,7 +400,7 @@ const TidligereInnsendinger = ({
                   {innsending.heleDager && innsending.heleDager?.length > 0 && (
                     <div>
                       <div className="flex gap-2 items-center">
-                        <Label>
+                        <Label as="p">
                           {innsending.erRefusjon
                             ? "Hele dager dere søkte refusjon for"
                             : "Dager med oppgitt fravær"}
@@ -434,7 +434,9 @@ const TidligereInnsendinger = ({
                       <div>
                         <Dropdown.Menu.Divider />
                         <div className="mt-4">
-                          <Label>Delvise dager dere søkte refusjon for</Label>
+                          <Label as="p">
+                            Delvise dager dere søkte refusjon for
+                          </Label>
                           <div className="flex flex-col gap-2 mt-1">
                             <Box marginBlock="space-16" asChild>
                               <List data-aksel-migrated-v8>
@@ -455,7 +457,7 @@ const TidligereInnsendinger = ({
                       <div>
                         <Dropdown.Menu.Divider />
                         <div className="mt-4">
-                          <Label>Dager dere ønsker å trekke</Label>
+                          <Label as="p">Dager dere ønsker å trekke</Label>
                           <div className="flex flex-col gap-2 mt-1">
                             <Box marginBlock="space-16" asChild>
                               <List data-aksel-migrated-v8>

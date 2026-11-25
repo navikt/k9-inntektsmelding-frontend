@@ -167,7 +167,10 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
   return (
     <Box className="bg-ax-bg-neutral-soft p-4">
       <div className="flex justify-between">
-        <Label size="small">{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
+        <Label
+          as="p"
+          size="small"
+        >{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
         <BodyShort size="small">FRA SØKNAD</BodyShort>
       </div>
       <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">

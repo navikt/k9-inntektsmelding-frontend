@@ -131,7 +131,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
             label="Ansattes fødselsnummer"
           />
           <VStack gap="space-16">
-            <Label>Navn</Label>
+            <Label as="p">Navn</Label>
             {hentPersonMutation.data && (
               <BodyShort>
                 {hentPersonMutation.data.fornavn}{" "}

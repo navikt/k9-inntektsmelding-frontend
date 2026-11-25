@@ -145,7 +145,7 @@ export const FraværDelerAvDagenListeInput = ({
             arbeidstid, må fraværet omregnes.
           </BodyLong>
           <HjelpetekstReadMore header="Eksempler på hvordan du oppgir og omregner arbeidstid">
-            <Label>Eksempel 1:</Label>
+            <Label as="p">Eksempel 1:</Label>
             <BodyLong>
               Arbeidstaker jobber vanligvis 7,5 timer per dag og har vært borte
               en halv dag.

@@ -2,6 +2,7 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Button,
   GuidePanel,
   Heading,
@@ -64,9 +65,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
       <OmsorgspengerFremgangsindikator aktivtSteg={1} />
       <GuidePanel className="mb-4">
         <VStack gap="space-16">
-          <Heading level="3" size="medium">
+          <BodyShort size="large" weight="semibold">
             Hei {capitalizeSetning(innloggetBruker.fornavn)}!
-          </Heading>
+          </BodyShort>
           <BodyLong>
             Her kan du søke om refusjon for en ansatt som har vært hjemme med
             sykt barn.

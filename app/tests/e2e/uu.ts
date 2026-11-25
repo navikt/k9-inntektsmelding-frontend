@@ -907,6 +907,7 @@ export const sjekkBevegelse = async (page: Page, steg: string) => {
           uendelig: iterations === Infinity,
           varighetMs: Number(duration) * Number(iterations),
           rundeMs: Number(duration),
+          gjentas: Number(iterations) > 1,
         };
       })
       .filter(({ iMain }) => iMain);
@@ -914,8 +915,12 @@ export const sjekkBevegelse = async (page: Page, steg: string) => {
       varerOver5Sekunder: animasjoner
         .filter(({ uendelig, varighetMs }) => uendelig || varighetMs > 5000)
         .map(({ element }) => element),
+      // Én kort overgang er ikke et glimt. Glimt forutsetter at animasjonen gjentas.
       merEnnTreGlimtPerSekund: animasjoner
-        .filter(({ rundeMs }) => rundeMs > 0 && rundeMs < 1000 / 3)
+        .filter(
+          ({ rundeMs, gjentas }) =>
+            gjentas && rundeMs > 0 && rundeMs < 1000 / 3,
+        )
         .map(({ element }) => element),
       medier: [...document.querySelectorAll("main :is(video, audio)")].map(
         (element) => beskriv(element),
@@ -1621,6 +1626,70 @@ export const sjekkLenkeformål = async (page: Page, steg: string) => {
     .toEqual([]);
 };
 
+/* eslint-disable unicorn/consistent-function-scoping -- Kjøres i nettleseren via page.evaluate. */
+const finnUklareOverskrifterOgLedetekster = () => {
+  const tekst = (element: Element | null | undefined) =>
+    (element?.textContent ?? "")
+      .toLocaleLowerCase("nb")
+      .replaceAll(/\s+/g, " ")
+      .trim();
+  const synlig = (element: Element) => element.checkVisibility();
+
+  const ledeteksterUtenFelt = [...document.querySelectorAll("main label")]
+    .filter(
+      (etikett) => synlig(etikett) && !(etikett as HTMLLabelElement).control,
+    )
+    .map((etikett) => `«${tekst(etikett)}» er en ledetekst uten felt`);
+
+  const overskrifter = [
+    ...document.querySelectorAll("main :is(h1, h2, h3, h4, h5, h6)"),
+  ].filter((overskrift) => synlig(overskrift));
+  const likeOverskrifter = overskrifter
+    .map((overskrift) => `${overskrift.tagName} «${tekst(overskrift)}»`)
+    .filter((nøkkel, indeks, alle) => alle.indexOf(nøkkel) !== indeks)
+    .map((nøkkel) => `Flere overskrifter heter ${nøkkel}`);
+
+  // Felt med samme ledetekst må skilles av spørsmålet eller feltgruppen de står i.
+  const felt = [
+    ...document.querySelectorAll<HTMLInputElement>(
+      "main :is(input:not([type=hidden]), select, textarea)",
+    ),
+  ].filter((element) => synlig(element) && element.labels?.length);
+  const nøkler = felt.map((element) => {
+    const grupper: string[] = [];
+    let gruppe = element.closest("fieldset");
+    while (gruppe) {
+      grupper.unshift(tekst(gruppe.querySelector(":scope > legend")));
+      gruppe = gruppe.parentElement?.closest("fieldset") ?? null;
+    }
+    return `«${tekst(element.labels?.[0])}»${grupper.map((navn) => ` i «${navn}»`).join("")}`;
+  });
+  const likeLedetekster = nøkler
+    .filter((nøkkel, indeks) => nøkler.indexOf(nøkkel) !== indeks)
+    .map((nøkkel) => `Flere felt heter ${nøkkel}`);
+
+  return [
+    ...new Set([
+      ...ledeteksterUtenFelt,
+      ...likeOverskrifter,
+      ...likeLedetekster,
+    ]),
+  ];
+};
+/* eslint-enable unicorn/consistent-function-scoping */
+
+export const sjekkOverskrifterOgLedetekster = async (
+  page: Page,
+  steg: string,
+) => {
+  expect
+    .soft(
+      await page.evaluate(finnUklareOverskrifterOgLedetekster),
+      `Overskrifter og ledetekster i ${steg}`,
+    )
+    .toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -1639,6 +1708,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkInnholdVedPekerOgFokus(page, steg);
     await sjekkKonsekventNavigering(page, steg);
     await sjekkLenkeformål(page, steg);
+    await sjekkOverskrifterOgLedetekster(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

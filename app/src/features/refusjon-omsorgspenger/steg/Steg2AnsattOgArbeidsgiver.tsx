@@ -121,7 +121,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             />
             {!visUnntattLøype && (
               <div className="flex-1 flex flex-col">
-                <Label>Navn</Label>
+                <Label as="p">Navn</Label>
                 <NavnVisning />
               </div>
             )}

@@ -73,11 +73,11 @@ export const ArbeidsgiverUnntattSeksjon = () => {
   return (
     <div className="flex gap-4">
       <div className="flex-1">
-        <Label>Virksomhetsnavn</Label>
+        <Label as="p">Virksomhetsnavn</Label>
         <BodyShort>{enkeltUnntatt!.organisasjonsnavn}</BodyShort>
       </div>
       <div className="flex-1">
-        <Label>Org.nr. for underenhet</Label>
+        <Label as="p">Org.nr. for underenhet</Label>
         <input
           type="hidden"
           {...register("organisasjonsnummer")}

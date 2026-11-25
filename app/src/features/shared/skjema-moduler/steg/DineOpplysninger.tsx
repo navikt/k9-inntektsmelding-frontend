@@ -2,6 +2,7 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Button,
   CopyButton,
   GuidePanel,
@@ -199,9 +200,9 @@ const Intro = ({ opplysninger }: IntroProps) => {
   return (
     <GuidePanel className="mb-4 col-span-2">
       <div className="flex flex-col gap-4">
-        <Heading level="3" size="medium">
+        <BodyShort size="large" weight="semibold">
           Hei {capitalizeSetning(opplysninger.innsender.fornavn)}!
-        </Heading>
+        </BodyShort>
         <BodyLong>
           <strong>
             {fulltNavnSøker} ({formatFødselsnummer(person.fødselsnummer)})

@@ -186,7 +186,7 @@ function LikRefusjon() {
           </Stack>
         ) : (
           <>
-            <Label>Refusjonsbeløp per måned</Label>
+            <Label as="p">Refusjonsbeløp per måned</Label>
             <BodyLong className="mb-2" size="medium">
               {formatKroner(refusjonsbeløpPerMåned)}
             </BodyLong>
