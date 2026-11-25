@@ -163,6 +163,9 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
         page.getByRole("heading", { name: "Oppsummering" }),
       ).toBeVisible({ timeout: 10_000 });
       await sjekkUniversellUtforming(page, "Oppsummering for omsorgspenger");
+      await expect(
+        page.getByRole("link", { name: "Endre refusjon" }),
+      ).toHaveAttribute("href", /\/1-intro$/);
 
       await page.route(
         "**/*/imdialog/send-inntektsmelding/omsorgspenger-refusjon/v2",

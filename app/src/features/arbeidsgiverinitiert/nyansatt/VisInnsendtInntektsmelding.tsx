@@ -57,7 +57,7 @@ export const VisInntektsmelding = () => {
       to="../dine-opplysninger"
       variant="secondary"
     >
-      Endre
+      Endre inntektsmeldingen
     </Button>
   );
 

@@ -1552,6 +1552,75 @@ export const sjekkKonsekventNavigering = async (page: Page, steg: string) => {
     .toEqual({ rekkefølge: [], identifikasjon: [] });
 };
 
+// Uu-tilsynet regner bare tekst i samme avsnitt, liste eller tabellcelle som lenkekontekst, ikke overskrifter.
+/* eslint-disable unicorn/consistent-function-scoping -- Kjøres i nettleseren via page.evaluate. */
+const finnUklareLenker = () => {
+  const normaliser = (tekst: string) =>
+    tekst
+      .toLocaleLowerCase("nb")
+      .replaceAll(/[^\p{L}\p{N}]+/gu, " ")
+      .trim();
+  const generiske = new Set([
+    "her",
+    "les mer",
+    "klikk her",
+    "trykk her",
+    "se her",
+    "mer",
+    "lenke",
+    "endre",
+    "endre svar",
+  ]);
+  const lenker = [
+    ...document.querySelectorAll<HTMLAnchorElement>("main a[href]"),
+  ]
+    .filter((lenke) => lenke.checkVisibility())
+    .map((lenke) => {
+      const navn = normaliser(
+        lenke.getAttribute("aria-label") ?? lenke.textContent ?? "",
+      );
+      const kontekstelement = lenke.closest("p, li, td, th, dd");
+      const kontekst = kontekstelement
+        ? normaliser(kontekstelement.textContent ?? "")
+            .replace(navn, "")
+            .trim()
+        : "";
+      const url = new URL(lenke.href);
+      return {
+        navn,
+        kontekst,
+        mål: `${url.origin}${url.pathname}${url.hash}`,
+      };
+    })
+    .filter(({ navn }) => navn !== "");
+  const utenKontekst = lenker
+    .filter(
+      ({ navn, kontekst }) =>
+        generiske.has(navn) && kontekst.split(" ").filter(Boolean).length < 3,
+    )
+    .map(({ navn }) => `«${navn}» sier ikke hvor lenken går`);
+  const likeNavn = [...new Set(lenker.map(({ navn }) => navn))]
+    .map((navn) => lenker.filter((lenke) => lenke.navn === navn))
+    .filter(
+      (medSammeNavn) =>
+        new Set(medSammeNavn.map(({ mål }) => mål)).size > 1 &&
+        new Set(medSammeNavn.map(({ kontekst }) => kontekst)).size <
+          medSammeNavn.length,
+    )
+    .map(
+      (medSammeNavn) =>
+        `${medSammeNavn.length} lenker heter «${medSammeNavn[0].navn}», men går til ulike steder`,
+    );
+  return [...new Set([...utenKontekst, ...likeNavn])];
+};
+/* eslint-enable unicorn/consistent-function-scoping */
+
+export const sjekkLenkeformål = async (page: Page, steg: string) => {
+  expect
+    .soft(await page.evaluate(finnUklareLenker), `Formål med lenker i ${steg}`)
+    .toEqual([]);
+};
+
 export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
   await test.step(`Axe: ${steg}`, async () => {
     await expect(page.getByRole("main")).toBeVisible();
@@ -1569,6 +1638,7 @@ export const sjekkUniversellUtforming = async (page: Page, steg: string) => {
     await sjekkLedetekster(page, steg);
     await sjekkInnholdVedPekerOgFokus(page, steg);
     await sjekkKonsekventNavigering(page, steg);
+    await sjekkLenkeformål(page, steg);
 
     const overskrifter = await page
       .getByRole("main")

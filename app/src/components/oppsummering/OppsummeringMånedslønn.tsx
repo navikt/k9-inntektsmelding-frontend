@@ -72,7 +72,9 @@ export const OppsummeringMånedslønn = ({
       </FormSummaryAnswers>
       {redigerbar && (
         <FormSummaryFooter>
-          <FormSummaryEditLink as={Link} to={"../4-refusjon"} />
+          <FormSummaryEditLink as={Link} to="../4-refusjon">
+            Endre beregnet månedslønn
+          </FormSummaryEditLink>
         </FormSummaryFooter>
       )}
     </FormSummary>

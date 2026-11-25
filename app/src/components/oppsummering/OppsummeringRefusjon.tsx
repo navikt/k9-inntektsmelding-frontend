@@ -48,7 +48,9 @@ export const OppsummeringRefusjon = ({
       </FormSummaryAnswers>
       {redigerbar && (
         <FormSummaryFooter>
-          <FormSummaryEditLink as={Link} to={"../4-refusjon"} />
+          <FormSummaryEditLink as={Link} to="../1-intro">
+            Endre refusjon
+          </FormSummaryEditLink>
         </FormSummaryFooter>
       )}
     </FormSummary>

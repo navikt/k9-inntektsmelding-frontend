@@ -148,7 +148,9 @@ export const OppsummeringOmsorgsdager = ({
       </FormSummaryAnswers>
       {redigerbar && (
         <FormSummaryFooter>
-          <FormSummaryEditLink as={Link} to={editPath} />
+          <FormSummaryEditLink as={Link} to={editPath}>
+            Endre omsorgsdager
+          </FormSummaryEditLink>
         </FormSummaryFooter>
       )}
     </FormSummary>
