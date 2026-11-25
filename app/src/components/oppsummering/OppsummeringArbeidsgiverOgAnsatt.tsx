@@ -79,9 +79,11 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
       </FormSummaryAnswers>
       {redigerbar && (
         <FormSummaryFooter>
-          <FormSummaryEditLink as={Link} to="../2-ansatt-og-arbeidsgiver">
-            Endre arbeidsgiver og den ansatte
-          </FormSummaryEditLink>
+          <FormSummaryEditLink
+            aria-label="Endre svar om arbeidsgiver og den ansatte"
+            as={Link}
+            to="../2-ansatt-og-arbeidsgiver"
+          />
         </FormSummaryFooter>
       )}
     </FormSummary>

@@ -51,13 +51,14 @@ export const VisInntektsmelding = () => {
   const endreKnapp = (
     <Button
       as={Link}
+      aria-label="Endre inntektsmeldingen"
       className="w-fit"
       disabled={opplysninger.forespørselStatus === "UTGÅTT"}
       icon={<PencilIcon aria-hidden />}
       to="../dine-opplysninger"
       variant="secondary"
     >
-      Endre inntektsmeldingen
+      Endre
     </Button>
   );
 

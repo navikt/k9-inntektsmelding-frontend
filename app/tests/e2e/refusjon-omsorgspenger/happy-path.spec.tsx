@@ -164,7 +164,7 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
       ).toBeVisible({ timeout: 10_000 });
       await sjekkUniversellUtforming(page, "Oppsummering for omsorgspenger");
       await expect(
-        page.getByRole("link", { name: "Endre refusjon" }),
+        page.getByRole("link", { name: "Endre svar om refusjon" }),
       ).toHaveAttribute("href", /\/1-intro$/);
 
       await page.route(
