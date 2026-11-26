@@ -141,6 +141,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
                 error={formState.errors.telefonnummer?.message}
                 label="Telefon"
                 size="medium"
+                type="tel"
               />
             </HGrid>
             {vis && (
