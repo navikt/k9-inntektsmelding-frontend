@@ -10,7 +10,7 @@ import {
   VStack,
 } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { getRouteApi, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
@@ -34,6 +34,9 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   );
 
   const navigate = useNavigate();
+  const { organisasjonsnummer } = getRouteApi(
+    "/refusjon-omsorgspenger/$organisasjonsnummer",
+  ).useParams();
   const {
     register,
     formState,
@@ -49,7 +52,11 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
   const år = getValues("årForRefusjon");
 
   const { data, error } = useQuery(
-    hentArbeidstakerOptions(getValues("ansattesFødselsnummer") ?? "", år),
+    hentArbeidstakerOptions(
+      getValues("ansattesFødselsnummer") ?? "",
+      år,
+      organisasjonsnummer,
+    ),
   );
 
   const fantIngenPersoner =

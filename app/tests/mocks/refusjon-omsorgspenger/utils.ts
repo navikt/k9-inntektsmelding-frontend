@@ -72,7 +72,7 @@ export const mockArbeidstakerOppslag = ({
   };
 }) => {
   return page.route(
-    "**/*/server/api/refusjon-omsorgsdager/arbeidstaker",
+    "**/*/server/api/refusjon-omsorgsdager/arbeidstaker/v2",
     async (route) => {
       await route.fulfill({ json });
     },

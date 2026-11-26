@@ -59,8 +59,19 @@ test.describe("Refusjon Omsorgspenger – happy path", () => {
     await expect(
       page.getByRole("heading", { name: "Den ansatte og arbeidsgiver" }),
     ).toBeVisible();
+    const arbeidstakerforespørsel = page.waitForRequest(
+      "**/refusjon-omsorgsdager/arbeidstaker/v2",
+    );
     await page.getByLabel("Ansattes fødselsnummer (11 siffer)").fill(VALID_FNR);
-    await page.waitForLoadState("networkidle");
+    const oppslag = await arbeidstakerforespørsel;
+    expect(oppslag.method()).toBe("POST");
+    expect(oppslag.postDataJSON()).toEqual({
+      fødselsnummer: VALID_FNR,
+      organisasjonsnummer: ORGANISASJONSNUMMER,
+      ytelseType: "OMSORGSPENGER",
+      årstall: FJORÅRET,
+    });
+    await expect(page.getByText("Test Ansatt", { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Neste steg" }).click();
 
     // Steg 3: Omsorgsdager

@@ -1,5 +1,6 @@
 import { BodyShort, Detail, Label, VStack } from "@navikt/ds-react";
 import { useQuery } from "@tanstack/react-query";
+import { getRouteApi } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 
@@ -16,8 +17,15 @@ export const ArbeidsgiverSeksjon = ({
   fødselsnummer,
 }: ArbeidsgiverSeksjonProps) => {
   const { setValue, getValues } = useSkjemaState();
+  const { organisasjonsnummer } = getRouteApi(
+    "/refusjon-omsorgspenger/$organisasjonsnummer",
+  ).useParams();
   const { data } = useQuery(
-    hentArbeidstakerOptions(fødselsnummer ?? "", getValues("årForRefusjon")),
+    hentArbeidstakerOptions(
+      fødselsnummer ?? "",
+      getValues("årForRefusjon"),
+      organisasjonsnummer,
+    ),
   );
 
   useEffect(() => {
