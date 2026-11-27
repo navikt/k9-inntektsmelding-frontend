@@ -86,10 +86,10 @@ Det er også egne readmes for [appen](./app/README.md), [ende-til-ende-testing](
 ## Universell utforming
 
 - Kontrollene dekker appens eget innhold (ikke dekoratøren) i fire skjemaflyter og visning av innsendte skjemaer.
-- Åpne avvik: datoperioder krever vannrett rulling ved 320 CSS-piksler og 400 % zoom (1.4.10), og virksomhetslisten i Aksel mangler tilgjengelig navn (4.1.2). Aksel-avviket må følges opp manuelt.
+- Åpent avvik: virksomhetslisten i Aksels `UNSAFE_Combobox` mangler tilgjengelig navn (4.1.2). Det følges opp med Aksel.
 - Full skjermleserkontroll og kontroll i produksjon gjenstår.
 
-Kjør den egne UU-suiten med `cd app && yarn test:uu`. Den kjører også i en egen CI-jobb, parallelt med funksjonstestene. Kjente avvik har kjørende tester med forventet feil. Se [testdokumentasjonen](./app/tests/README.md) for dekning og [UU-sjekklisten](./UNIVERSELL_UTFORMING.md) for Uu-tilsynets «Kort fortalt»-tekst, kilde, kravstatus og dokumenterte funn.
+Kjør den egne UU-suiten med `cd app && yarn test:uu`. Den kjører også i en egen CI-jobb, parallelt med funksjonstestene. Kjente avvik har kjørende tester med forventet feil. Se [testdokumentasjonen](./app/tests/README.md) for hva hver test kontrollerer, og [Uu-tilsynets kravoversikt for offentlig sektor](https://www.uutilsynet.no/wcag-standarden/wcag-standarden/86?f%5B0%5D=t2%3A129) for kravene.
 
 Copilot-skillen [wcag-testing](./.github/skills/wcag-testing/SKILL.md) hjelper med å velge automatiserte tester og skille dem fra manuelle WCAG-vurderinger.
 

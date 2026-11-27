@@ -9,7 +9,7 @@ Hjelp teamet å finne avvik og hindre regresjoner. En bestått test dokumenterer
 
 ## Start her
 
-1. Les [UU-sjekklisten](../../../UNIVERSELL_UTFORMING.md) og avklar krav, flyt, tilstand og testmiljø.
+1. Finn kravet i [Uu-tilsynets kravoversikt for offentlig sektor](https://www.uutilsynet.no/wcag-standarden/wcag-standarden/86?f%5B0%5D=t2%3A129) og avklar flyt, tilstand og testmiljø.
 2. Sjekk gjeldende fortolkning og testregel hos Uu-tilsynet. Bruk kravgrunnlaget for nettsteder i offentlig sektor, ikke unntak for native mobilapper. Skill lovkrav fra tilleggsmål som WCAG 2.2.
 3. Les [testdokumentasjonen](../../../app/tests/README.md), [Playwright-oppsettet](../../../app/playwright.config.ts) og eksisterende tester før du lager nye.
 4. Angi hva en test faktisk kan bekrefte, og hva som fortsatt trenger manuell vurdering. Ikke oppgi en prosentvis WCAG-dekning ut fra antall axe-regler eller grønne tester.

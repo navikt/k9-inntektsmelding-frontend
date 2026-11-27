@@ -89,7 +89,7 @@ Alle fire skjemaflyter og visning av innsendte skjemaer inngår. Testen merket `
 
 CI lagrer separate rapporter som `playwright-report-e2e` og `playwright-report-uu`, med JSON-vedlegg fra axe og zoommålinger i UU-rapporten. Jobbene avbryter ikke hverandre ved feil.
 
-Grønne tester er ikke en UU-godkjenning. Skjermleser, bilder av tekst, informasjon som bare formidles med farge, visuell klipping og axe-funn merket `incomplete` krever fortsatt manuell vurdering. Se [UU-sjekklisten](../../UNIVERSELL_UTFORMING.md).
+Grønne tester er ikke en UU-godkjenning. Skjermleser, bilder av tekst, informasjon som bare formidles med farge, visuell klipping og axe-funn merket `incomplete` krever fortsatt manuell vurdering. Se [Uu-tilsynets kravoversikt for offentlig sektor](https://www.uutilsynet.no/wcag-standarden/wcag-standarden/86?f%5B0%5D=t2%3A129) for hva hvert krav innebærer og hvordan tilsynet tester det.
 
 ## Nye tester
 
