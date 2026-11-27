@@ -17,14 +17,14 @@ import {
 } from "~/utils";
 
 import { useOpplysninger } from "../../shared/hooks/useOpplysninger";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg";
 import { InntektsmeldingSkjemaStateValid } from "../frontendSchemas";
 import { Skjemaoppsummering } from "../visningskomponenter/Skjemaoppsummering";
 
 const route = getRouteApi("/$id");
 
 export const Steg3Oppsummering = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Oppsummering – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
@@ -135,18 +135,22 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
 
   return (
     <>
-      {error ? <Alert variant="error">{error.message}</Alert> : undefined}
+      {error ? (
+        <Alert role="alert" variant="error">
+          {error.message}
+        </Alert>
+      ) : undefined}
       <div className="flex gap-4 justify-center">
         <Button
           as={Link}
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowLeftIcon aria-hidden />}
           to="../inntekt-og-refusjon"
           variant="secondary"
         >
           Forrige steg
         </Button>
         <Button
-          icon={<PaperplaneIcon />}
+          icon={<PaperplaneIcon aria-hidden />}
           iconPosition="right"
           loading={isPending}
           onClick={() => mutate(gyldigInntektsmeldingSkjemaState)}

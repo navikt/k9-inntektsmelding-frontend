@@ -2,6 +2,7 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Button,
   GuidePanel,
   Heading,
@@ -12,10 +13,11 @@ import {
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { capitalizeSetning } from "~/utils.ts";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import { useSkjemaState } from "../SkjemaStateContext.tsx";
 import { useInnloggetBruker } from "../useInnloggetBruker.tsx";
 import {
@@ -27,7 +29,7 @@ import {
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle("Søknad om refusjon av omsorgspenger for arbeidsgiver");
 
   const innloggetBruker = useInnloggetBruker();
@@ -57,15 +59,15 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
     : "";
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Om refusjon
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={1} />
       <GuidePanel className="mb-4">
         <VStack gap="space-16">
-          <Heading level="2" size="medium">
+          <BodyShort size="large" weight="semibold">
             Hei {capitalizeSetning(innloggetBruker.fornavn)}!
-          </Heading>
+          </BodyShort>
           <BodyLong>
             Her kan du søke om refusjon for en ansatt som har vært hjemme med
             sykt barn.
@@ -81,6 +83,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
       </GuidePanel>
       <form onSubmit={onSubmit}>
         <VStack gap="space-16">
+          <AlleFeltMåFyllesUt />
           <RadioGroup
             error={formState.errors.harUtbetaltLønn?.message}
             legend="Har dere utbetalt lønn under fraværet, og krever refusjon?"
@@ -94,7 +97,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
             </Radio>
           </RadioGroup>
           {harUtbetaltLønn === "nei" && (
-            <Alert variant="warning">
+            <Alert role="status" variant="warning">
               <Heading level="3" size="small" spacing>
                 Arbeidsgivers plikt til å utbetale omsorgsdager
               </Heading>
@@ -114,7 +117,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg1 = () => {
           <div>
             <Button
               disabled={harUtbetaltLønn === "nei"}
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"

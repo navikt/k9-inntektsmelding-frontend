@@ -13,7 +13,12 @@ import { useEffect } from "react";
 
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 import { useInntektsmeldingSkjema } from "~/features/inntektsmelding/SkjemaStateContext";
-import { finnSenesteInntektsmelding, formatDatoTidKort } from "~/utils.ts";
+import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
+import {
+  finnSenesteInntektsmelding,
+  formatDatoTidKort,
+  formatYtelsesnavn,
+} from "~/utils.ts";
 
 import { Skjemaoppsummering } from "./Skjemaoppsummering";
 
@@ -23,6 +28,9 @@ export const VisInntektsmelding = () => {
   const { opplysninger, eksisterendeInntektsmeldinger } = route.useLoaderData();
   const { id } = route.useParams();
   const { setInntektsmeldingSkjemaState } = useInntektsmeldingSkjema();
+  useDocumentTitle(
+    `Innsendt inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
+  );
 
   const sisteInntektsmelding = finnSenesteInntektsmelding(
     eksisterendeInntektsmeldinger,
@@ -42,9 +50,10 @@ export const VisInntektsmelding = () => {
   const endreKnapp = (
     <Button
       as={Link}
+      aria-label="Endre inntektsmeldingen"
       className="w-fit"
       disabled={opplysninger.forespørselStatus === "UTGÅTT"}
-      icon={<PencilIcon />}
+      icon={<PencilIcon aria-hidden />}
       to="../dine-opplysninger"
       variant="secondary"
     >
@@ -57,7 +66,7 @@ export const VisInntektsmelding = () => {
       <VStack className="bg-ax-bg-default px-5 py-6 rounded-md" gap="space-24">
         <HStack gap="space-8" justify="space-between">
           <VStack>
-            <Heading level="1" size="medium">
+            <Heading level="2" size="medium">
               Innsendt inntektsmelding
             </Heading>
             <Detail uppercase>
@@ -86,7 +95,12 @@ export const VisInntektsmelding = () => {
           <HStack gap="space-16">
             {endreKnapp}
 
-            <Button as="a" href="/min-side-arbeidsgiver" variant="tertiary">
+            <Button
+              aria-label="Lukk og gå til Min side – arbeidsgiver"
+              as="a"
+              href="/min-side-arbeidsgiver"
+              variant="tertiary"
+            >
               Lukk
             </Button>
           </HStack>
@@ -94,7 +108,7 @@ export const VisInntektsmelding = () => {
             as="a"
             download={`inntektsmelding-${id}.pdf`}
             href={hentInntektsmeldingPdfUrl(sisteInntektsmelding.id)}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             variant="tertiary"
           >
             Last ned inntektsmeldingen

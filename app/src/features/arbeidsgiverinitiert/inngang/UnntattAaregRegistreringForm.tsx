@@ -120,7 +120,7 @@ export function UnntattAaregRegistreringForm({
       <VStack gap="space-32">
         <TextField
           {...register("fødselsnummer", {
-            required: "Må oppgis",
+            required: "Du må oppgi fødselsnummeret til den ansatte",
             validate: (value: string) =>
               (value && fnr(value).status === "valid") ||
               "Du må fylle ut et gyldig fødselsnummer",
@@ -134,7 +134,7 @@ export function UnntattAaregRegistreringForm({
           label="Første fraværsdag"
           name="førsteFraværsdag"
           callback={nullstillFeilmeldinger}
-          rules={{ required: "Må oppgis" }}
+          rules={{ required: "Du må oppgi første fraværsdag" }}
         />
         {organisasjoner && organisasjoner.length > 1 && (
           <ComboboxWrapped
@@ -167,7 +167,7 @@ export function UnntattAaregRegistreringForm({
             : "Hent opplysninger"}
         </Button>
         {organisasjonerQuery.isError && (
-          <Alert variant="error">
+          <Alert role="alert" variant="error">
             Kunne ikke hente virksomhetene dine. Prøv igjen.
             <Button
               className="mt-4"
@@ -181,7 +181,7 @@ export function UnntattAaregRegistreringForm({
           </Alert>
         )}
         {organisasjoner?.length === 0 && (
-          <Alert variant="warning">
+          <Alert role="status" variant="warning">
             Vi finner ingen virksomheter du har tilgang til. Sjekk tilgangene
             dine i Altinn.
           </Alert>

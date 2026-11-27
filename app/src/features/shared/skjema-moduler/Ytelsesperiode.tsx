@@ -24,10 +24,11 @@ export function Ytelsesperiode() {
   return (
     <VStack gap="space-16">
       <hr />
-      <Heading level="4" size="medium">
+      <Heading level="3" size="medium">
         Periode med {formatYtelsesnavn(ytelse)}
       </Heading>
       <Informasjonsseksjon
+        overskriftsnivå="4"
         kilde={
           opplysninger.forespørselType === "ARBEIDSGIVERINITIERT_UREGISTRERT"
             ? undefined

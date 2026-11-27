@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { sjekkUniversellUtforming } from "tests/e2e/uu";
 import { agiOpplysningerResponseUregistrert } from "tests/mocks/arbeidsgiverinitiert/nyansatt/agi-opplysninger";
 import { agiUregistrertSendInntektsmeldingResponse } from "tests/mocks/arbeidsgiverinitiert/uregistrert/agi-send-inntektsmelding";
 import {
@@ -11,7 +12,7 @@ import {
 const FAKE_FNR = "09810198874";
 
 test.describe("AGI unntatt Aa-registeret – happy path", () => {
-  test("Fullstendig flyt med refusjon", async ({ page }) => {
+  test("Fullstendig flyt med refusjon", { tag: "@uu" }, async ({ page }) => {
     await mockArbeidsgiversOrganisasjoner({ page });
     await mockGrunnbeløp({ page });
 
@@ -24,6 +25,7 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
     await page
       .getByRole("radio", { name: "Unntatt registrering i Aa-registeret" })
       .click();
+    await sjekkUniversellUtforming(page, "Unntatt Aa-registeret valgt");
 
     await mockAGIOpplysningerUregistrert({
       page,
@@ -38,6 +40,18 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
     await expect(
       page.getByRole("heading", { name: "Dine opplysninger" }),
     ).toBeVisible();
+    await sjekkUniversellUtforming(
+      page,
+      "Dine opplysninger unntatt Aa-registeret",
+    );
+    await expect(page.getByLabel("Navn", { exact: true })).toHaveAttribute(
+      "autocomplete",
+      "name",
+    );
+    await expect(page.getByLabel("Telefon", { exact: true })).toHaveAttribute(
+      "autocomplete",
+      "tel",
+    );
     await page.getByLabel("Navn").fill("Ola Nordmann");
     await page.getByLabel("Telefon").fill("98765432");
     await page.getByRole("button", { name: "Bekreft og gå videre" }).click();
@@ -56,6 +70,7 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
       })
       .getByRole("radio", { name: "Nei" })
       .click();
+    await sjekkUniversellUtforming(page, "Refusjon unntatt Aa-registeret");
 
     await page.getByRole("button", { name: "Neste steg" }).click();
 
@@ -63,6 +78,7 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
     await expect(
       page.getByRole("heading", { name: "Oppsummering" }),
     ).toBeVisible();
+    await sjekkUniversellUtforming(page, "Oppsummering unntatt Aa-registeret");
 
     await mockAGISendInntektsmeldingUregistrert({
       page,
@@ -74,6 +90,7 @@ test.describe("AGI unntatt Aa-registeret – happy path", () => {
     await expect(
       page.getByText("Vi har mottatt inntektsmeldingen", { exact: false }),
     ).toBeVisible();
+    await sjekkUniversellUtforming(page, "Kvittering unntatt Aa-registeret");
   });
 
   test("Flyt uten refusjon", async ({ page }) => {

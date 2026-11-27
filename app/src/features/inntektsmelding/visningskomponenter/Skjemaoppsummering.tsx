@@ -253,10 +253,11 @@ function InntektOppsummering({
       {kanEndres && (
         <FormSummary.Footer>
           <FormSummary.EditLink
-            aria-label="Endre inntekt"
             as={Link}
             to="../inntekt-og-refusjon#beregnet-manedslonn"
-          />
+          >
+            Endre inntekt
+          </FormSummary.EditLink>
         </FormSummary.Footer>
       )}
     </FormSummary>
@@ -308,11 +309,9 @@ export const ArbeidsgiverOgAnsattOppsummering = ({
     </FormSummary.Answers>
     {kanEndres && (
       <FormSummary.Footer>
-        <FormSummary.EditLink
-          aria-label="Endre dine opplysninger"
-          as={Link}
-          to={editPath}
-        />
+        <FormSummary.EditLink as={Link} to={editPath}>
+          Endre dine opplysninger
+        </FormSummary.EditLink>
       </FormSummary.Footer>
     )}
   </FormSummary>
@@ -345,11 +344,9 @@ export const RefusjonOppsummering = ({
     </FormSummary.Answers>
     {kanEndres && (
       <FormSummary.Footer>
-        <FormSummary.EditLink
-          aria-label="Endre første dag med fravær"
-          as={Link}
-          to={editPath}
-        />
+        <FormSummary.EditLink as={Link} to={editPath}>
+          Endre første dag med fravær
+        </FormSummary.EditLink>
       </FormSummary.Footer>
     )}
   </FormSummary>
@@ -415,11 +412,9 @@ export const UtbetalingOgRefusjonOppsummering = ({
     </FormSummary.Answers>
     {kanEndres && (
       <FormSummary.Footer>
-        <FormSummary.EditLink
-          aria-label="Endre utbetaling og refusjon"
-          as={Link}
-          to={editPath}
-        />
+        <FormSummary.EditLink as={Link} to={editPath}>
+          Endre utbetaling og refusjon
+        </FormSummary.EditLink>
       </FormSummary.Footer>
     )}
   </FormSummary>
@@ -476,10 +471,11 @@ const NaturalytelserOppsummering = ({
     {kanEndres && (
       <FormSummary.Footer>
         <FormSummary.EditLink
-          aria-label="Endre naturalytelser"
           as={Link}
           to="../inntekt-og-refusjon#naturalytelser"
-        />
+        >
+          Endre naturalytelser
+        </FormSummary.EditLink>
       </FormSummary.Footer>
     )}
   </FormSummary>

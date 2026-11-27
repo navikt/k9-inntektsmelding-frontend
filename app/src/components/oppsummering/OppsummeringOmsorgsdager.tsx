@@ -148,7 +148,11 @@ export const OppsummeringOmsorgsdager = ({
       </FormSummaryAnswers>
       {redigerbar && (
         <FormSummaryFooter>
-          <FormSummaryEditLink as={Link} to={editPath} />
+          <FormSummaryEditLink
+            aria-label="Endre svar om omsorgsdager"
+            as={Link}
+            to={editPath}
+          />
         </FormSummaryFooter>
       )}
     </FormSummary>

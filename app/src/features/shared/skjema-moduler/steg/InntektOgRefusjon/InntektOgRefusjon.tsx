@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { InntektsmeldingSkjemaStateAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas.tsx";
 import { InntektsmeldingSkjemaState } from "~/features/inntektsmelding/frontendSchemas.tsx";
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import {
@@ -14,7 +15,6 @@ import {
 import { formatYtelsesnavn } from "~/utils";
 
 import { useDocumentTitle } from "../../../hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../../hooks/useScrollToTopOnMount.tsx";
 import { Inntekt } from "../../Inntekt.tsx";
 import { Naturalytelser } from "../../Naturalytelser.tsx";
 import OmFraværetOmsorgspenger from "../../OmFraværetOmsorgspenger.tsx";
@@ -62,7 +62,6 @@ export function InntektOgRefusjon({
     InntektsmeldingSkjemaState | InntektsmeldingSkjemaStateAGIUnntattAaregister;
   onSubmit: (skjemadata: InntektOgRefusjonForm) => void;
 }) {
-  useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Inntekt og refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
@@ -100,10 +99,11 @@ export function InntektOgRefusjon({
           className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col"
           onSubmit={formMethods.handleSubmit(validerOgSubmit)}
         >
-          <Heading level="3" size="large">
+          <Heading level="2" size="large">
             Inntekt og refusjon
           </Heading>
           <Fremgangsindikator aktivtSteg={2} />
+          <AlleFeltMåFyllesUt />
           {opplysninger.ytelse !== "OMSORGSPENGER" && <Ytelsesperiode />}
           {opplysninger.ytelse === "OMSORGSPENGER" && (
             <OmFraværetOmsorgspenger />
@@ -119,14 +119,14 @@ export function InntektOgRefusjon({
           <div className="flex gap-4 justify-center">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to="../dine-opplysninger"
               variant="secondary"
             >
               Forrige steg
             </Button>
             <Button
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"

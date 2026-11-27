@@ -27,10 +27,10 @@ import { ReactNode } from "react";
 import { hentInntektsmeldingPdfUrl } from "~/api/queries";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg";
 import { useSkjemaState } from "../SkjemaStateContext";
 export const Steg6Kvittering = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Kvittering – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
@@ -61,19 +61,18 @@ export const Steg6Kvittering = () => {
         </Heading>
         <VStack className="mb-12" gap="space-8">
           <FaqItem
-            icon={<ClockIcon />}
+            icon={<ClockIcon aria-hidden />}
             question="Hvor lang er saksbehandlingstiden?"
           >
             <BodyLong>
               <Link href="https://www.nav.no/arbeidsgiver/saksbehandlingstider#omsorgspenger-hjemme-med-sykt-barn-dager">
-                Her
+                Her finner du oversikt over saksbehandlingstiden til Nav.
               </Link>{" "}
-              finner du oversikt over saksbehandlingstiden til Nav. Vi tar
-              kontakt hvis vi trenger flere opplysninger.
+              Vi tar kontakt hvis vi trenger flere opplysninger.
             </BodyLong>
           </FaqItem>
           <FaqItem
-            icon={<SackKronerIcon />}
+            icon={<SackKronerIcon aria-hidden />}
             question="Når blir refusjon utbetalt?"
           >
             <BodyLong>
@@ -88,7 +87,7 @@ export const Steg6Kvittering = () => {
             </BodyLong>
           </FaqItem>
           <FaqItem
-            icon={<DocPencilIcon />}
+            icon={<DocPencilIcon aria-hidden />}
             question="Hvordan korrigere hvis noe er feil?"
           >
             <BodyLong>
@@ -106,16 +105,16 @@ export const Steg6Kvittering = () => {
                 className="mt-4"
                 href="https://www.nav.no/arbeidsgiver/omsorgspenger#inntektsmelding"
               >
-                Her
-              </Link>{" "}
-              finner du informasjon om hvordan du kan endre et refusjonskrav.
+                Her finner du informasjon om hvordan du kan endre et
+                refusjonskrav.
+              </Link>
             </BodyLong>
           </FaqItem>
         </VStack>
 
         <HStack gap="space-8" justify="center" wrap={true}>
           <Button as="a" href="/min-side-arbeidsgiver" variant="primary">
-            Gå til min side – arbeidsgiver
+            Gå til Min side – arbeidsgiver
           </Button>
           <Button
             as="a"
@@ -123,7 +122,7 @@ export const Steg6Kvittering = () => {
             href={hentInntektsmeldingPdfUrl(
               getValues("meta.innsendtSøknadId") as number,
             )}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             iconPosition="left"
             variant="secondary"
           >
@@ -147,7 +146,7 @@ const FaqItem = ({ question, children, icon }: FaqItemProps) => {
     <ExpansionCard aria-labelledby={`faq-${id}`} size="small">
       <ExpansionCardHeader>
         <ExpansionCardTitle id={`faq-${id}`}>
-          <HStack align="center" gap="space-16">
+          <HStack align="center" as="span" gap="space-16">
             {icon}
             {question}
           </HStack>

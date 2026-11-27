@@ -121,7 +121,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         <HStack gap="space-40">
           <TextField
             {...register("fødselsnummer", {
-              required: "Må oppgis",
+              required: "Du må oppgi fødselsnummeret til den ansatte",
               validate: (value) =>
                 (value && fnr(value).status === "valid") ||
                 "Du må fylle ut et gyldig fødselsnummer",
@@ -131,7 +131,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
             label="Ansattes fødselsnummer"
           />
           <VStack gap="space-16">
-            <Label>Navn</Label>
+            <Label as="p">Navn</Label>
             {hentPersonMutation.data && (
               <BodyShort>
                 {hentPersonMutation.data.fornavn}{" "}
@@ -144,7 +144,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
           label="Første fraværsdag med refusjon"
           name="førsteFraværsdag"
           callback={nullstillFeilmeldinger}
-          rules={{ required: "Må oppgis" }} // TODO: Forklare hvorfor det må oppgis
+          rules={{ required: "Du må oppgi første fraværsdag med refusjon" }} // TODO: Forklare hvorfor det må oppgis
         />
         <Button
           className="w-fit"
@@ -156,7 +156,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         </Button>
         {visRefusjonsvarsel && (
           <>
-            <Alert variant="warning">
+            <Alert role="status" variant="warning">
               <BodyLong>
                 Ikke bruk dette refusjonskravet til å stanse en refusjon for en
                 periode som allerede er i gang (løpende periode).
@@ -192,7 +192,7 @@ export function NyAnsattForm({ ytelseType }: { ytelseType: Ytelsetype }) {
         {(hentPersonMutation.data?.arbeidsforhold.length ?? 0) > 1 && (
           <Button
             className="w-fit"
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             loading={opprettOpplysningerMutation.isPending}
             onClick={() =>

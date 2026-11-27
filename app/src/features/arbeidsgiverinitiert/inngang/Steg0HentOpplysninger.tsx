@@ -2,6 +2,7 @@ import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { getRouteApi } from "@tanstack/react-router";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { formatYtelsesnavn } from "~/utils.ts";
 
@@ -33,9 +34,10 @@ export const HentOpplysninger = () => {
     <FormProvider {...formMethods}>
       <section className="mt-2">
         <div className="bg-ax-bg-default px-5 py-6 rounded-md flex flex-col gap-6">
-          <Heading level="3" size="large">
+          <Heading level="2" size="large">
             Opprett manuell inntektsmelding
           </Heading>
+          <AlleFeltMåFyllesUt />
           <RadioGroup
             error={formMethods.formState.errors.årsak?.message}
             legend="Årsak til at du vil opprette inntektsmelding"

@@ -14,12 +14,13 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { Informasjonsseksjon } from "~/features/shared/Informasjonsseksjon.tsx";
 import { formatFodselsnummer } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import { hentArbeidstakerOptions } from "../api/queries.ts";
 import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
@@ -28,7 +29,7 @@ import { ArbeidsgiverUnntattSeksjon } from "./ArbeidsgiverUnntattSeksjon.tsx";
 import { NavnVisning } from "./NavnVisning.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Ansatt og arbeidsgiver – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
@@ -83,11 +84,12 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Den ansatte og arbeidsgiver
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={2} />
       <form className="space-y-4" onSubmit={onSubmit}>
+        <AlleFeltMåFyllesUt />
         <Informasjonsseksjon tittel="Den ansatte">
           <div className="flex gap-4 flex-col ax-md:flex-row">
             <Controller
@@ -98,6 +100,8 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                   className="flex-1"
                   error={formState.errors.ansattesFødselsnummer?.message}
                   label="Ansattes fødselsnummer (11 siffer)"
+                  name={field.name}
+                  onBlur={field.onBlur}
                   onChange={(e) => {
                     const nyVerdi = e.target.value.replaceAll(/\s/g, "");
                     if (nyVerdi !== field.value) {
@@ -110,13 +114,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                     }
                     field.onChange(nyVerdi);
                   }}
+                  ref={field.ref}
                   value={formatFodselsnummer(field.value || "")}
                 />
               )}
             />
             {!visUnntattLøype && (
               <div className="flex-1 flex flex-col">
-                <Label>Navn</Label>
+                <Label as="p">Navn</Label>
                 <NavnVisning />
               </div>
             )}
@@ -143,7 +148,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
                 render={({ field }) => (
                   <Checkbox
                     checked={field.value ?? false}
+                    name={field.name}
+                    onBlur={field.onBlur}
                     onChange={(e) => field.onChange(e.target.checked)}
+                    ref={field.ref}
                   >
                     Arbeidstakeren er unntatt Aa-registeret
                   </Checkbox>
@@ -169,6 +177,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
           <div className="flex gap-4 flex-col ax-md:flex-row">
             <div className="flex-1">
               <TextField
+                autoComplete="name"
                 label="Navn"
                 {...register("kontaktperson.navn")}
                 error={formState.errors.kontaktperson?.navn?.message}
@@ -176,6 +185,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             </div>
             <div className="flex-1">
               <TextField
+                autoComplete="tel"
                 label="Telefonnummer"
                 type="tel"
                 {...register("kontaktperson.telefonnummer")}
@@ -184,7 +194,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
             </div>
           </div>
           <HjelpetekstAlert>
-            <Heading level="3" size="xsmall" spacing>
+            <Heading level="4" size="xsmall" spacing>
               Er kontaktinformasjonen riktig?
             </Heading>
             <BodyLong>
@@ -199,14 +209,14 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg2 = () => {
         <div className="flex gap-4">
           <Button
             as={Link}
-            icon={<ArrowLeftIcon />}
+            icon={<ArrowLeftIcon aria-hidden />}
             to={"../1-intro"}
             variant="secondary"
           >
             Forrige steg
           </Button>
           <Button
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             type="submit"
             variant="primary"

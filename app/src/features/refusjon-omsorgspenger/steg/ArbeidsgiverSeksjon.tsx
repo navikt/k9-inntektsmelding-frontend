@@ -82,7 +82,7 @@ export const ArbeidsgiverSeksjon = ({
   return (
     <div className="flex gap-4">
       <div className="flex-1">
-        <Label>Virksomhetsnavn</Label>
+        <Label as="p">Virksomhetsnavn</Label>
         <VStack gap="space-2">
           <BodyShort>{enkelt.organisasjonsnavn}</BodyShort>
           {enkelt.ansettelsesperiode.tom && (
@@ -91,7 +91,7 @@ export const ArbeidsgiverSeksjon = ({
         </VStack>
       </div>
       <div className="flex-1">
-        <Label>Org.nr. for underenhet</Label>
+        <Label as="p">Org.nr. for underenhet</Label>
         <BodyShort>{enkelt.organisasjonsnummer}</BodyShort>
       </div>
     </div>

@@ -43,7 +43,6 @@ export const RefusjonOmsorgspengerArbeidsgiverForm = ({
   const form = useForm<RefusjonOmsorgspengerFormData>({
     resolver: zodResolver(RefusjonOmsorgspengerSchemaMedValidering),
     defaultValues,
-    mode: "onBlur",
     reValidateMode: "onChange",
   });
 

@@ -14,6 +14,7 @@ import {
   Button,
   Detail,
   Dropdown,
+  Fieldset,
   GuidePanel,
   Heading,
   HelpText,
@@ -28,11 +29,13 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 import { formatDatoKort } from "~/utils.ts";
 
 import { HjelpetekstAlert } from "../../shared/Hjelpetekst.tsx";
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import { DateRangePickerWrapped } from "../../shared/react-hook-form-wrappers/DateRangePickerWrapped.tsx";
 import { FraværDelerAvDagenListeInput } from "../../shared/skjema-moduler/FraværDelerAvDagenListeInput.tsx";
 import { FraværHeleDagerListeInput } from "../../shared/skjema-moduler/FraværHeleDagerListeInput.tsx";
@@ -43,9 +46,9 @@ import { utledDefaultMonthDatepicker } from "../utils.ts";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
-    "Omsorgsdager - søknad om refusjon av omsorgspenger for arbeidsgiver",
+    "Omsorgsdager – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
 
   const {
@@ -123,7 +126,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Omsorgsdager dere søker refusjon for
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={3} />
@@ -140,6 +143,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
       </GuidePanel>
       <form onSubmit={onSubmit}>
         <VStack gap="space-16">
+          <AlleFeltMåFyllesUt />
           <RadioGroup
             error={formState.errors.harDekket10FørsteOmsorgsdager?.message}
             legend={`Har dere dekket de 10 første omsorgsdagene i ${årForRefusjon}?`}
@@ -158,8 +162,10 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
           <TiFørsteOmsorgsdagerInfo />
           <VStack gap="space-32">
             {historikkFeilet && (
-              <Alert variant="error">
-                <BodyLong>Kunne ikke hente tidligere innsendinger.</BodyLong>
+              <Alert role="status" variant="error">
+                <BodyLong>
+                  {`Kunne ikke hente refusjonskrav dere har sendt inn tidligere i ${årForRefusjon}.`}
+                </BodyLong>
                 <Button
                   type="button"
                   variant="secondary"
@@ -182,26 +188,22 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg3 = () => {
               år={Number(årForRefusjon)}
             />
             <DagerSomSkalTrekkes />
-            {formState.errors.manglerFraværEllerTrekk?.message && (
-              <Alert aria-live="polite" variant="error">
-                <BodyLong>
-                  {formState.errors.manglerFraværEllerTrekk.message}
-                </BodyLong>
-              </Alert>
-            )}
+            <Valideringsfeil
+              melding={formState.errors.manglerFraværEllerTrekk?.message}
+            />
           </VStack>
 
           <div className="flex gap-4 mt-8">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to={"../2-ansatt-og-arbeidsgiver"}
               variant="secondary"
             >
               Forrige steg
             </Button>
             <Button
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"
@@ -228,31 +230,36 @@ const DagerSomSkalTrekkes = () => {
         Dager dere ønsker å trekke
       </Heading>
       {fields.map((periode, index) => (
-        <HStack
-          className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
-          gap="space-16"
+        <Fieldset
           key={periode.id}
+          legend={`Trekkperiode ${index + 1}`}
+          hideLegend
         >
-          <DateRangePickerWrapped
-            datepickerProps={{
-              defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
-            }}
-            name={`dagerSomSkalTrekkes.${index}`}
-          />
-          <Button
-            aria-label="Slett periode"
-            className="absolute top-9 right-20"
-            icon={<TrashIcon />}
-            onClick={() => {
-              remove(index);
-            }}
-            size="small"
-            type="button"
-            variant="tertiary"
+          <HStack
+            className="border-solid border-0 border-l-4 border-ax-bg-neutral-soft pl-4 py-2 relative"
+            gap="space-16"
           >
-            Slett
-          </Button>
-        </HStack>
+            <DateRangePickerWrapped
+              datepickerProps={{
+                defaultMonth: utledDefaultMonthDatepicker(årForRefusjon),
+              }}
+              name={`dagerSomSkalTrekkes.${index}`}
+            />
+            <Button
+              aria-label="Slett periode"
+              className="w-fit ax-md:absolute top-9 right-20"
+              icon={<TrashIcon aria-hidden />}
+              onClick={() => {
+                remove(index);
+              }}
+              size="small"
+              type="button"
+              variant="tertiary"
+            >
+              Slett
+            </Button>
+          </HStack>
+        </Fieldset>
       ))}
       {fields.length > 0 && (
         <>
@@ -266,7 +273,7 @@ const DagerSomSkalTrekkes = () => {
       )}
       <div>
         <Button
-          icon={<PlusIcon />}
+          icon={<PlusIcon aria-hidden />}
           onClick={() => {
             append({ fom: "", tom: "" }, { shouldFocus: false });
           }}
@@ -286,7 +293,7 @@ const TiFørsteOmsorgsdagerInfo = () => {
   const harDekket10FørsteOmsorgsdager = watch("harDekket10FørsteOmsorgsdager");
   if (harDekket10FørsteOmsorgsdager === "ja") {
     return (
-      <HjelpetekstAlert>
+      <HjelpetekstAlert role="status">
         Du kan søke om refusjon fra Nav fra og med den 11. dagen hvis den
         ansatte har rett på flere enn 10 omsorgsdager. Ved kronisk sykt barn
         over 12 år, og ingen andre barn under 13 år, kan du søke om refusjon fra
@@ -297,7 +304,7 @@ const TiFørsteOmsorgsdagerInfo = () => {
 
   if (harDekket10FørsteOmsorgsdager === "nei") {
     return (
-      <HjelpetekstAlert>
+      <HjelpetekstAlert role="status">
         <VStack gap="space-16">
           <BodyLong>
             Dere må dekke de første 10 omsorgsdagene hvert kalenderår for
@@ -365,7 +372,7 @@ const TidligereInnsendinger = ({
   return (
     <Box className="bg-ax-bg-neutral-soft p-4">
       <div className="flex justify-between">
-        <Label size="small">
+        <Label as="p" size="small">
           {`Tidligere innsendinger for ${årForRefusjon}`}
         </Label>
         <BodyShort size="small">FRA Nav</BodyShort>
@@ -393,7 +400,7 @@ const TidligereInnsendinger = ({
                   {innsending.heleDager && innsending.heleDager?.length > 0 && (
                     <div>
                       <div className="flex gap-2 items-center">
-                        <Label>
+                        <Label as="p">
                           {innsending.erRefusjon
                             ? "Hele dager dere søkte refusjon for"
                             : "Dager med oppgitt fravær"}
@@ -427,7 +434,9 @@ const TidligereInnsendinger = ({
                       <div>
                         <Dropdown.Menu.Divider />
                         <div className="mt-4">
-                          <Label>Delvise dager dere søkte refusjon for</Label>
+                          <Label as="p">
+                            Delvise dager dere søkte refusjon for
+                          </Label>
                           <div className="flex flex-col gap-2 mt-1">
                             <Box marginBlock="space-16" asChild>
                               <List data-aksel-migrated-v8>
@@ -448,7 +457,7 @@ const TidligereInnsendinger = ({
                       <div>
                         <Dropdown.Menu.Divider />
                         <div className="mt-4">
-                          <Label>Dager dere ønsker å trekke</Label>
+                          <Label as="p">Dager dere ønsker å trekke</Label>
                           <div className="flex flex-col gap-2 mt-1">
                             <Box marginBlock="space-16" asChild>
                               <List data-aksel-migrated-v8>
@@ -472,7 +481,7 @@ const TidligereInnsendinger = ({
       {harFlereInnsendingerEnnAntallSomVises && (
         <Button
           className="mt-2"
-          icon={<ArrowDownIcon />}
+          icon={<ArrowDownIcon aria-hidden />}
           onClick={visFlereInnsendinger}
           size="small"
           type="button"

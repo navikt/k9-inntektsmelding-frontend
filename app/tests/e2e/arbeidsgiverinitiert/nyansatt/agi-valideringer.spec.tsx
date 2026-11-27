@@ -46,7 +46,7 @@ test.describe("AGI Valideringer", () => {
     await expectError({
       page,
       label: "Første fraværsdag",
-      error: "Må oppgis",
+      error: "Du må oppgi første fraværsdag med refusjon",
     });
   });
 
@@ -252,7 +252,7 @@ test.describe("AGI Valideringer", () => {
     await expectError({
       page,
       label: "Første fraværsdag med refusjon",
-      error: "Må oppgis",
+      error: "Du må oppgi første fraværsdag med refusjon",
     });
   });
 });

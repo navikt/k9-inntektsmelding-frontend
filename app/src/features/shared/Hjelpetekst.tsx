@@ -59,7 +59,7 @@ export function HjelpetekstToggle() {
   const { visHjelpetekster, setVisHjelpetekster } = useHjelpetekst();
 
   return (
-    <Page.Block className="mt-2 mx-5 ax-lg:mx-0" width="md">
+    <Page.Block className="mt-2 mx-5 ax-lg:mx-0 w-auto" width="md">
       <Switch
         checked={visHjelpetekster.vis}
         onChange={(e) => {
@@ -98,12 +98,19 @@ export function HjelpetekstReadMore({
   );
 }
 
-export function HjelpetekstAlert({ children }: Pick<AlertProps, "children">) {
+export function HjelpetekstAlert({
+  children,
+  role,
+}: Pick<AlertProps, "children" | "role">) {
   const { vis } = useHjelpetekst().visHjelpetekster;
 
   if (!vis) {
     return null;
   }
 
-  return <Alert variant="info">{children}</Alert>;
+  return (
+    <Alert role={role} variant="info">
+      {children}
+    </Alert>
+  );
 }

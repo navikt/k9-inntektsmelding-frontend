@@ -24,7 +24,12 @@ export const ArbeidsgiverUnntattSeksjon = () => {
     }
   }, [enkeltUnntatt?.organisasjonsnavn]);
 
-  if (isLoading) return <Loader title="Henter virksomheter" />;
+  if (isLoading)
+    return (
+      <div role="status">
+        <Loader title="Henter virksomheter" />
+      </div>
+    );
 
   if (error || data?.organisasjoner.length === 0) {
     return (
@@ -68,11 +73,11 @@ export const ArbeidsgiverUnntattSeksjon = () => {
   return (
     <div className="flex gap-4">
       <div className="flex-1">
-        <Label>Virksomhetsnavn</Label>
+        <Label as="p">Virksomhetsnavn</Label>
         <BodyShort>{enkeltUnntatt!.organisasjonsnavn}</BodyShort>
       </div>
       <div className="flex-1">
-        <Label>Org.nr. for underenhet</Label>
+        <Label as="p">Org.nr. for underenhet</Label>
         <input
           type="hidden"
           {...register("organisasjonsnummer")}

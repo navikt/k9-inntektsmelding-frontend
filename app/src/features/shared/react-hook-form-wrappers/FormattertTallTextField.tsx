@@ -11,6 +11,11 @@ type FormattertTallTextFieldProps = TextFieldProps & {
   required?: boolean;
 };
 
+const påkrevdFeilmelding = (ledetekst: TextFieldProps["label"]) =>
+  typeof ledetekst === "string"
+    ? `Du må oppgi ${ledetekst.toLocaleLowerCase("nb")}`
+    : "Du må fylle ut feltet";
+
 /** Et tekstfelt som formaterer innholdet til et tall med tusenvise mellomrom. */
 export const FormattertTallTextField = ({
   name,
@@ -22,7 +27,7 @@ export const FormattertTallTextField = ({
   const { field, fieldState } = useController({
     name,
     rules: {
-      required: required ? "Må oppgis" : false,
+      required: required ? påkrevdFeilmelding(rest.label) : false,
       validate: (v) => validateInntekt(v, min, max),
     },
   });
@@ -30,7 +35,6 @@ export const FormattertTallTextField = ({
   return (
     <TextField
       {...rest}
-      aria-label={field.value}
       autoComplete="off"
       error={fieldState.error?.message}
       onChange={(e) => {

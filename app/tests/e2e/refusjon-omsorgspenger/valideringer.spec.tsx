@@ -73,6 +73,30 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     ).toBeVisible({ timeout: 10_000 });
   });
 
+  test("Steg 1: Feilen forsvinner når brukeren svarer, og neste valg virker med én gang", async ({
+    page,
+  }) => {
+    await page.goto(
+      `/k9-im-dialog/refusjon-omsorgspenger/${ORGANISASJONSNUMMER}/1-intro`,
+    );
+    const harUtbetaltLønn = page.getByRole("radio", { name: "Ja" });
+    await harUtbetaltLønn.focus();
+    await page.keyboard.press("Tab");
+    const feilmelding = page.getByText(
+      "Du må svare på om dere har utbetalt lønn under fraværet",
+    );
+    await expect(feilmelding).toBeHidden();
+
+    await page.getByRole("button", { name: "Neste steg" }).click();
+    await expect(feilmelding).toBeVisible();
+    await harUtbetaltLønn.click();
+    await expect(feilmelding).toBeHidden();
+    await page.getByRole("radio", { name: String(FJORÅRET) }).click();
+    await expect(
+      page.getByRole("radio", { name: String(FJORÅRET) }),
+    ).toBeChecked();
+  });
+
   test("Steg 2: Validering av kontaktperson, fødselsnummer og organisasjonsnummer", async ({
     page,
   }) => {
@@ -562,7 +586,9 @@ test.describe("Refusjon Omsorgspenger - Valideringer", () => {
     await page.getByRole("button", { name: "Neste steg" }).click();
 
     // TODO: Denne bør egentlig si at tom er før fom. Men daterange-komponenten gjør det litt vrient
-    await expect(page.getByText("Du må oppgi en til og med dato")).toBeVisible({
+    await expect(
+      page.getByText("Til og med: Datoen kan ikke være før fra og med."),
+    ).toBeVisible({
       timeout: 10_000,
     });
 

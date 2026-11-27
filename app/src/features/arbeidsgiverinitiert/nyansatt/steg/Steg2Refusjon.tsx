@@ -5,6 +5,7 @@ import { isAfter } from "date-fns";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger.tsx";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator.tsx";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
@@ -13,7 +14,7 @@ import { formatDatoKort, formatYtelsesnavn } from "~/utils";
 import { PersonOppslagError } from "../../../shared/components/PersonOppslagFeil.tsx";
 import { useDocumentTitle } from "../../../shared/hooks/useDocumentTitle.tsx";
 import { usePersonOppslag } from "../../../shared/hooks/usePersonOppslag.tsx";
-import { useScrollToTopOnMount } from "../../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../../shared/hooks/useStartPåNyttSteg.tsx";
 import { DatePickerWrapped } from "../../../shared/react-hook-form-wrappers/DatePickerWrapped.tsx";
 import { UtbetalingOgRefusjon } from "../../../shared/skjema-moduler/UtbetalingOgRefusjon.tsx";
 import { InntektsmeldingSkjemaStateAGINyansatt } from "../frontendSchemas.tsx";
@@ -31,13 +32,13 @@ const førsteFraværsdagFremoverItidFeilmeldingHeading =
   "Du kan ikke endre denne datoen fremover i tid.";
 
 export function Steg2Refusjon() {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   const { eksisterendeInntektsmeldinger } =
     getRouteApi("/agi/$id").useLoaderData();
 
   useDocumentTitle(
-    `Refusjon - inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
+    `Refusjon – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
 
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
@@ -159,15 +160,16 @@ export function Steg2Refusjon() {
           className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col"
           onSubmit={onSubmit}
         >
-          <Heading level="3" size="large">
+          <Heading level="2" size="large">
             Refusjon
           </Heading>
           <Fremgangsindikator aktivtSteg={2} />
+          <AlleFeltMåFyllesUt />
           <DatePickerWrapped
             label="Første fraværsdag med refusjon"
             name="førsteFraværsdag"
             rules={{
-              required: "Må oppgis",
+              required: "Du må oppgi første fraværsdag med refusjon",
               validate:
                 prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding,
             }}
@@ -181,7 +183,7 @@ export function Steg2Refusjon() {
           )}
           {prøverÅSetteFørsteFraværsdagLengerFremITidEnnSisteInntektsmelding() &&
             sisteInntektsmeldingFørsteFraværsdag && (
-              <Alert variant="warning">
+              <Alert role="status" variant="warning">
                 <Stack gap="space-8">
                   <Heading level="3" size="small" spacing>
                     {førsteFraværsdagFremoverItidFeilmeldingHeading}
@@ -208,7 +210,7 @@ export function Steg2Refusjon() {
           <div className="flex gap-4 justify-center">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to="../dine-opplysninger"
               variant="secondary"
             >
@@ -219,7 +221,7 @@ export function Steg2Refusjon() {
                 watch("skalRefunderes") === "NEI" ||
                 validerFørsteFraværsdagMutation.isPending
               }
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               loading={validerFørsteFraværsdagMutation.isPending}
               type="submit"

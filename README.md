@@ -83,6 +83,16 @@ PS: Vet ikke om denne brukeren har noe use case lenger. Ser ut som den mangler t
 
 Det er også egne readmes for [appen](./app/README.md), [ende-til-ende-testing](./app/tests/README.md) og for [serveren](./server/README.md).
 
+## Universell utforming
+
+- Kontrollene dekker appens eget innhold (ikke dekoratøren) i fire skjemaflyter og visning av innsendte skjemaer.
+- Åpent avvik: virksomhetslisten i Aksels `UNSAFE_Combobox` mangler tilgjengelig navn (4.1.2). Det følges opp med Aksel.
+- Full skjermleserkontroll og kontroll i produksjon gjenstår.
+
+Kjør den egne UU-suiten med `cd app && yarn test:uu`. Den kjører også i en egen CI-jobb, parallelt med funksjonstestene. Kjente avvik har kjørende tester med forventet feil. Se [testdokumentasjonen](./app/tests/README.md) for hva hver test kontrollerer, og [Uu-tilsynets kravoversikt for offentlig sektor](https://www.uutilsynet.no/wcag-standarden/wcag-standarden/86?f%5B0%5D=t2%3A129) for kravene.
+
+Copilot-skillen [wcag-testing](./.github/skills/wcag-testing/SKILL.md) hjelper med å velge automatiserte tester og skille dem fra manuelle WCAG-vurderinger.
+
 ## Kode generert av GitHub Copilot
 
 Dette repoet bruker GitHub Copilot til å generere kode.

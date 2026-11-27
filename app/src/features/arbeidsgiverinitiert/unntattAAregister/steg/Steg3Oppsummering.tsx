@@ -9,7 +9,7 @@ import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/fron
 import { Skjemaoppsummering } from "~/features/inntektsmelding/visningskomponenter/Skjemaoppsummering";
 import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
-import { useScrollToTopOnMount } from "~/features/shared/hooks/useScrollToTopOnMount";
+import { useStartPåNyttSteg } from "~/features/shared/hooks/useStartPåNyttSteg";
 import { Fremgangsindikator } from "~/features/shared/skjema-moduler/Fremgangsindikator";
 import { lagSendInntektsmeldingRequest } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/utils";
 import type { OpplysningerDto } from "~/types/api-schemas.ts";
@@ -19,7 +19,7 @@ import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "../frontend
 import { useInntektsmeldingSkjemaAGIUnntattAaRegister } from "../SkjemaStateContext";
 
 export const Steg3Oppsummering = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Oppsummering – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
@@ -137,18 +137,22 @@ function SendInnInntektsmelding({ opplysninger }: SendInnInntektsmeldingProps) {
 
   return (
     <>
-      {error ? <Alert variant="error">{error.message}</Alert> : undefined}
+      {error ? (
+        <Alert role="alert" variant="error">
+          {error.message}
+        </Alert>
+      ) : undefined}
       <div className="flex gap-4 justify-center">
         <Button
           as={Link}
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowLeftIcon aria-hidden />}
           to="../inntekt-og-refusjon"
           variant="secondary"
         >
           Forrige steg
         </Button>
         <Button
-          icon={<PaperplaneIcon />}
+          icon={<PaperplaneIcon aria-hidden />}
           iconPosition="right"
           loading={isPending}
           onClick={() => mutate(gyldigInntektsmeldingSkjemaState)}

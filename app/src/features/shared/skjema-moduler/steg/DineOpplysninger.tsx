@@ -2,6 +2,7 @@ import { ArrowRightIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyLong,
+  BodyShort,
   Button,
   CopyButton,
   GuidePanel,
@@ -14,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { InntektsmeldingSkjemaStateValidAGINyansatt } from "~/features/arbeidsgiverinitiert/nyansatt/frontendSchemas";
 import { InntektsmeldingSkjemaStateValidAGIUnntattAaregister } from "~/features/arbeidsgiverinitiert/unntattAAregister/frontendSchemas";
 import { InntektsmeldingSkjemaStateValid } from "~/features/inntektsmelding/frontendSchemas";
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
 import { useHjelpetekst } from "~/features/shared/Hjelpetekst";
 import { useOpplysninger } from "~/features/shared/hooks/useOpplysninger";
 import type { OpplysningerDto } from "~/types/api-schemas.ts";
@@ -25,7 +27,6 @@ import {
 } from "~/utils";
 
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
-import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
 import { Informasjonsseksjon } from "../../Informasjonsseksjon";
 import { Fremgangsindikator } from "../Fremgangsindikator";
 
@@ -54,7 +55,6 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
     | InntektsmeldingSkjemaStateValidAGIUnntattAaregister[];
   onSubmit: (kontaktperson: T["kontaktperson"]) => void;
 }) => {
-  useScrollToTopOnMount();
   const opplysninger = useOpplysninger();
   useDocumentTitle(
     `Dine opplysninger – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
@@ -82,7 +82,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
     <section className="mt-2">
       {erTidligereSendInnFraAltinn && (
         <Alert className="mb-4" variant="warning">
-          <Heading level="3" size="xsmall" spacing>
+          <Heading level="2" size="xsmall" spacing>
             Inntektsmelding er sendt inn via Altinn eller lønns- og
             personalsystem
           </Heading>
@@ -100,10 +100,11 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
         })}
       >
         <div className="bg-ax-bg-default px-5 py-6 rounded-md flex flex-col gap-6">
-          <Heading level="3" size="large">
+          <Heading level="2" size="large">
             Dine opplysninger
           </Heading>
           <Fremgangsindikator aktivtSteg={1} />
+          <AlleFeltMåFyllesUt />
 
           <Intro opplysninger={opplysninger} />
           <Personinformasjon opplysninger={opplysninger} />
@@ -116,7 +117,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
               <TextField
                 className="w-full"
                 {...register("navn", {
-                  required: "Navn er påkrevd",
+                  required: "Du må oppgi navn",
                   maxLength: {
                     value: 100,
                     message: "Navn kan ikke være lenger enn 100 tegn",
@@ -130,7 +131,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
               <TextField
                 className="w-full"
                 {...register("telefonnummer", {
-                  required: "Telefonnummer er påkrevd",
+                  required: "Du må oppgi telefonnummer",
                   // Sjekke 8 siffer, eller landskode og vilkårlig antall siffer
                   validate: (data) =>
                     /^(\d{8}|\+\d+)$/.test(data) ||
@@ -140,11 +141,12 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
                 error={formState.errors.telefonnummer?.message}
                 label="Telefon"
                 size="medium"
+                type="tel"
               />
             </HGrid>
             {vis && (
               <Alert variant="info">
-                <Heading level="3" size="xsmall" spacing>
+                <Heading level="4" size="xsmall" spacing>
                   Er kontaktinformasjonen riktig?
                 </Heading>
                 <BodyLong>
@@ -160,7 +162,7 @@ export const DineOpplysninger = <T extends MinimalSkjemaState>({
 
           <Button
             className="w-fit self-center"
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             type="submit"
             variant="primary"
@@ -197,9 +199,9 @@ const Intro = ({ opplysninger }: IntroProps) => {
   return (
     <GuidePanel className="mb-4 col-span-2">
       <div className="flex flex-col gap-4">
-        <Heading level="3" size="medium">
+        <BodyShort size="large" weight="semibold">
           Hei {capitalizeSetning(opplysninger.innsender.fornavn)}!
-        </Heading>
+        </BodyShort>
         <BodyLong>
           <strong>
             {fulltNavnSøker} ({formatFødselsnummer(person.fødselsnummer)})

@@ -7,7 +7,7 @@ export const HentOpplysningerError = ({ error }: { error: Error | null }) => {
 
   if (error.message === "FINNES_I_AAREG") {
     return (
-      <Alert variant="warning">
+      <Alert role="status" variant="warning">
         Det ser ut til at den ansatte allerede er registrert i Aa-registeret.
         Sjekk at fødselsnummeret er riktig, og at den ansatte ikke er registrert
         i Aa-registeret før du prøver igjen.
@@ -33,11 +33,11 @@ export const HentOpplysningerError = ({ error }: { error: Error | null }) => {
   };
   const feilmelding = feilmeldinger[error.message];
 
+  const erFeil = !feilmelding || error.message === "A_INNTEKT_NEDE";
   return (
     <Alert
-      variant={
-        feilmelding && error.message !== "A_INNTEKT_NEDE" ? "warning" : "error"
-      }
+      role={erFeil ? "alert" : "status"}
+      variant={erFeil ? "error" : "warning"}
     >
       {feilmelding ?? "Kunne ikke hente personopplysninger. Prøv igjen senere."}
     </Alert>

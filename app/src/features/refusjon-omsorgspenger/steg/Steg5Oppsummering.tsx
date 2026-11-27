@@ -9,7 +9,7 @@ import { OppsummeringOmsorgsdager } from "~/components/oppsummering/Oppsummering
 import { OppsummeringRefusjon } from "~/components/oppsummering/OppsummeringRefusjon.tsx";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import {
   RefusjonOmsorgspengerResponseDto,
   sendInntektsmeldingOmsorgspengerRefusjonMutation,
@@ -18,7 +18,7 @@ import { useSkjemaState } from "../SkjemaStateContext";
 import { mapSkjemaTilSendInntektsmeldingRequest } from "../utils.ts";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Oppsummering – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
@@ -52,7 +52,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Oppsummering
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={5} />
@@ -71,21 +71,21 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg5 = () => {
         <OppsummeringMånedslønn redigerbar={true} />
       </VStack>
       {isError && (
-        <Alert variant="error">
+        <Alert role="alert" variant="error">
           Noe gikk galt. Vennligst prøv igjen senere.
         </Alert>
       )}
       <div className="flex gap-4 mt-4">
         <Button
           as={Link}
-          icon={<ArrowLeftIcon />}
+          icon={<ArrowLeftIcon aria-hidden />}
           to={"../4-refusjon"}
           variant="secondary"
         >
           Forrige steg
         </Button>
         <Button
-          icon={<PaperplaneIcon />}
+          icon={<PaperplaneIcon aria-hidden />}
           iconPosition="right"
           loading={isPending}
           onClick={handleSubmit((values) => {

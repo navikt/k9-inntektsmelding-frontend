@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite --base=/k9-im-dialog",
     "build": "tsc && vite build --base=/k9-im-dialog",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --project=chromium",
     "test:e2e:ui": "playwright test --ui",
+    "test:uu": "playwright test --project=uu --project=uu-smal --project=uu-zoom",
     "check:types": "tsc --noemit",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
@@ -37,6 +38,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@eslint/eslintrc": "3.3.7",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.65.0",
@@ -58,6 +60,7 @@
     "eslint-plugin-prettier": "5.5.7",
     "eslint-plugin-simple-import-sort": "14.0.0",
     "eslint-plugin-unicorn": "74.0.0",
+    "playwright-core": "1.65.0",
     "prettier": "3.9.10",
     "tailwindcss": "4.3.5",
     "typescript": "6.0.3",

@@ -18,9 +18,11 @@ import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { hentGrunnbeløpOptions } from "~/api/queries.ts";
+import { AlleFeltMåFyllesUt } from "~/features/shared/components/AlleFeltMåFyllesUt";
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 
 import { useDocumentTitle } from "../../shared/hooks/useDocumentTitle.tsx";
-import { useScrollToTopOnMount } from "../../shared/hooks/useScrollToTopOnMount.tsx";
+import { useStartPåNyttSteg } from "../../shared/hooks/useStartPåNyttSteg.tsx";
 import { Inntekt } from "../../shared/skjema-moduler/Inntekt";
 import { hentInntektsopplysningerOptions } from "../api/queries.ts";
 import { RefusjonOmsorgspengerFormData } from "../frontendSchemas.tsx";
@@ -28,7 +30,7 @@ import { useSkjemaState } from "../SkjemaStateContext";
 import { OmsorgspengerFremgangsindikator } from "../visningskomponenter/OmsorgspengerFremgangsindikator.tsx";
 
 export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
-  useScrollToTopOnMount();
+  useStartPåNyttSteg();
   useDocumentTitle(
     "Refusjon – søknad om refusjon av omsorgspenger for arbeidsgiver",
   );
@@ -94,7 +96,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
 
   return (
     <div className="bg-ax-bg-default rounded-md flex flex-col gap-6">
-      <Heading level="1" size="large">
+      <Heading level="2" size="large">
         Beregnet månedslønn for refusjon
       </Heading>
       <OmsorgspengerFremgangsindikator aktivtSteg={4} />
@@ -111,6 +113,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
       </GuidePanel>
       <form onSubmit={onSubmit}>
         <VStack gap="space-16">
+          <AlleFeltMåFyllesUt />
           {inntektsopplysninger ? (
             <Inntekt
               opplysninger={{
@@ -124,17 +127,17 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
               <Over6GAlert />
             </Inntekt>
           ) : isLoading ? (
-            <div className="my-4 flex justify-center">
-              <Loader />
+            <div className="my-4 flex justify-center" role="status">
+              <Loader title="Henter inntekt" />
             </div>
           ) : isError ? (
             <>
-              <Alert variant="error">
+              <Alert role="alert" variant="error">
                 Inntektsopplysninger kunne ikke hentes.
               </Alert>
               <div>
                 <Button
-                  icon={<ArrowCirclepathIcon />}
+                  icon={<ArrowCirclepathIcon aria-hidden />}
                   onClick={() => refetch()}
                   variant="secondary"
                 >
@@ -147,7 +150,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
           <div className="flex gap-4">
             <Button
               as={Link}
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon aria-hidden />}
               to="../3-omsorgsdager"
               variant="secondary"
             >
@@ -155,7 +158,7 @@ export const RefusjonOmsorgspengerArbeidsgiverSteg4 = () => {
             </Button>
             <Button
               disabled={!inntektsopplysninger}
-              icon={<ArrowRightIcon />}
+              icon={<ArrowRightIcon aria-hidden />}
               iconPosition="right"
               type="submit"
               variant="primary"
@@ -184,7 +187,7 @@ function Over6GAlert() {
 
   if (erInntektOver6G) {
     return (
-      <Alert variant="info">
+      <Alert role="status" variant="info">
         Nav utbetaler opptil 6G av årslønnen. Du skal likevel føre opp den
         lønnen dere utbetaler til den ansatte i sin helhet.
       </Alert>
@@ -195,14 +198,5 @@ function Over6GAlert() {
 
 function InntektAlert() {
   const { formState } = useFormContext<RefusjonOmsorgspengerFormData>();
-  const error = formState.errors.inntekt;
-
-  if (error) {
-    return (
-      <Alert variant="error">
-        <BodyLong>{error.message}</BodyLong>
-      </Alert>
-    );
-  }
-  return null;
+  return <Valideringsfeil melding={formState.errors.inntekt?.message} />;
 }

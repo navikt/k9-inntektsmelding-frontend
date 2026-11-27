@@ -18,6 +18,7 @@ import { createLink, useLocation } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
+import { Valideringsfeil } from "~/features/shared/components/Valideringsfeil";
 import type { InntektOgRefusjonForm } from "~/features/shared/skjema-moduler/steg/InntektOgRefusjon/InntektOgRefusjon.tsx";
 import { formatDatoKort, lagFulltNavn } from "~/utils";
 
@@ -61,18 +62,22 @@ const OmFraværetOmsorgspenger = () => {
   const ButtonLink = createLink(Button);
   return (
     <div className="flex gap-4 flex-col">
-      <Heading id="om-fraværet-omsorgspenger" level="4" size="medium">
+      <Heading id="om-fraværet-omsorgspenger" level="3" size="medium">
         Om fraværet
       </Heading>
       {erAGIUnntattAaregister ? (
         <div className="flex flex-col gap-6">
-          <FraværHeleDagerListeInput overskrift="Dager med fravær" />
-          <FraværDelerAvDagenListeInput overskrift="Delvise dager" />
-          {formState.errors.fraværHeleDager?.message && (
-            <Alert variant="error">
-              {formState.errors.fraværHeleDager.message}
-            </Alert>
-          )}
+          <FraværHeleDagerListeInput
+            overskrift="Dager med fravær"
+            overskriftsnivå="4"
+          />
+          <FraværDelerAvDagenListeInput
+            overskrift="Delvise dager"
+            overskriftsnivå="4"
+          />
+          <Valideringsfeil
+            melding={formState.errors.fraværHeleDager?.message}
+          />
         </div>
       ) : (
         <Fraværsdager navn={lagFulltNavn(opplysninger.person)} />
@@ -91,7 +96,7 @@ const OmFraværetOmsorgspenger = () => {
         </Radio>
       </RadioGroup>
       {watch("skalRefunderes") === "JA_LIK_REFUSJON" && vis && (
-        <Alert variant="info">
+        <Alert role="status" variant="info">
           <div className="flex flex-col gap-4">
             <BodyLong>
               Har dere utbetalt full lønn for fraværet skal dere ikke sende inn
@@ -102,7 +107,7 @@ const OmFraværetOmsorgspenger = () => {
           </div>
           <ButtonLink
             className="mt-4"
-            icon={<ArrowRightIcon />}
+            icon={<ArrowRightIcon aria-hidden />}
             iconPosition="right"
             params={{
               organisasjonsnummer: opplysninger.arbeidsgiver.organisasjonNummer,
@@ -115,7 +120,7 @@ const OmFraværetOmsorgspenger = () => {
         </Alert>
       )}
       {watch("skalRefunderes") === "NEI" && vis && (
-        <Alert variant="info">
+        <Alert role="status" variant="info">
           <div className="flex flex-col gap-4">
             <BodyLong>
               Hvis dere ikke har utbetalt lønn på grunn av uenighet om fraværet,
@@ -162,7 +167,10 @@ const Fraværsdager = ({ navn }: { navn?: string }) => {
   return (
     <Box className="bg-ax-bg-neutral-soft p-4">
       <div className="flex justify-between">
-        <Label size="small">{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
+        <Label
+          as="p"
+          size="small"
+        >{`Dager ${navn ? `${navn} har oppgitt fravær` : "med oppgitt fravær"}`}</Label>
         <BodyShort size="small">FRA SØKNAD</BodyShort>
       </div>
       <div className="bg-ax-bg-neutral-soft mt-4 flex flex-col text-ax-text-neutral gap-4">

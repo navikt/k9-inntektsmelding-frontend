@@ -39,21 +39,19 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
       </FormSummaryHeader>
       <FormSummaryAnswers>
         <FormSummaryAnswer>
-          <FormSummaryAnswer>
-            <FormSummaryLabel>Virksomhetsnavn</FormSummaryLabel>
-            <FormSummaryValue>
-              {getValues("meta.organisasjonsnavn")}
-            </FormSummaryValue>
-          </FormSummaryAnswer>
-          <FormSummaryAnswer>
-            <FormSummaryLabel>Org.nr. for underenhet</FormSummaryLabel>
-            <FormSummaryValue>
-              {getValues("organisasjonsnummer")}
-              <ErrorMessage
-                message={formState.errors?.organisasjonsnummer?.message}
-              />
-            </FormSummaryValue>
-          </FormSummaryAnswer>
+          <FormSummaryLabel>Virksomhetsnavn</FormSummaryLabel>
+          <FormSummaryValue>
+            {getValues("meta.organisasjonsnavn")}
+          </FormSummaryValue>
+        </FormSummaryAnswer>
+        <FormSummaryAnswer>
+          <FormSummaryLabel>Org.nr. for underenhet</FormSummaryLabel>
+          <FormSummaryValue>
+            {getValues("organisasjonsnummer")}
+            <ErrorMessage
+              message={formState.errors?.organisasjonsnummer?.message}
+            />
+          </FormSummaryValue>
         </FormSummaryAnswer>
         <FormSummaryAnswer>
           <FormSummaryLabel>Kontaktperson og innsender</FormSummaryLabel>
@@ -81,7 +79,11 @@ export const OppsummeringArbeidsgiverOgAnsatt = ({
       </FormSummaryAnswers>
       {redigerbar && (
         <FormSummaryFooter>
-          <FormSummaryEditLink as={Link} to="../2-ansatt-og-arbeidsgiver" />
+          <FormSummaryEditLink
+            aria-label="Endre svar om arbeidsgiver og den ansatte"
+            as={Link}
+            to="../2-ansatt-og-arbeidsgiver"
+          />
         </FormSummaryFooter>
       )}
     </FormSummary>

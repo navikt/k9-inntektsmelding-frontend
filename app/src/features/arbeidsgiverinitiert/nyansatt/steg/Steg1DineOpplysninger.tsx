@@ -1,5 +1,6 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
+import { useStartPåNyttSteg } from "~/features/shared/hooks/useStartPåNyttSteg";
 import { ARBEIDSGIVERINITERT_NYANSATT_ID } from "~/routes/opprett";
 
 import { useOpplysninger } from "../../../shared/hooks/useOpplysninger.tsx";
@@ -8,6 +9,7 @@ import { InntektsmeldingSkjemaStateAGINyansatt } from "../frontendSchemas.tsx";
 import { useInntektsmeldingSkjemaAGINyansatt } from "../SkjemaStateContext.tsx";
 
 export const Steg1DineOpplysninger = () => {
+  useStartPåNyttSteg();
   const opplysninger = useOpplysninger();
   const { inntektsmeldingSkjemaState, setInntektsmeldingSkjemaState } =
     useInntektsmeldingSkjemaAGINyansatt();

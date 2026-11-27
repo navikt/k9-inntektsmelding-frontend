@@ -24,8 +24,6 @@ import { useDocumentTitle } from "~/features/shared/hooks/useDocumentTitle";
 import type { OpplysningerDto } from "~/types/api-schemas";
 import { formatYtelsesnavn, lagFulltNavn, slugify } from "~/utils";
 
-import { useScrollToTopOnMount } from "../../hooks/useScrollToTopOnMount";
-
 type Steg4KvitteringBaseProps = {
   breadcrumbUrl: string;
   inntektsmeldingsId?: number;
@@ -39,7 +37,6 @@ export const Kvittering = ({
   opplysninger,
   skalRefunderes,
 }: Steg4KvitteringBaseProps) => {
-  useScrollToTopOnMount();
   useDocumentTitle(
     `Kvittering – inntektsmelding for ${formatYtelsesnavn(opplysninger.ytelse)}`,
   );
@@ -80,7 +77,9 @@ export const Kvittering = ({
         </BodyLong>
       </Alert>
       <VStack className="mb-12" gap="space-16">
-        <Heading size="medium">Ofte stilte spørsmål</Heading>
+        <Heading level="2" size="medium">
+          Ofte stilte spørsmål
+        </Heading>
         {ofteStilteSpørsmål().map((spørsmål) => (
           <ExpansionCard
             aria-labelledby={slugify(spørsmål.spørsmål)}
@@ -89,14 +88,14 @@ export const Kvittering = ({
           >
             <ExpansionCard.Header>
               <ExpansionCard.Title id={slugify(spørsmål.spørsmål)} size="small">
-                <HStack align="center" gap="space-16">
-                  <div
+                <HStack align="center" as="span" gap="space-16">
+                  <span
                     aria-hidden
                     className="p-2 bg-ax-bg-info-soft rounded-full w-fit"
                   >
                     {spørsmål.ikon}
-                  </div>
-                  <div className="flex-1">{spørsmål.spørsmål}</div>
+                  </span>
+                  <span className="flex-1">{spørsmål.spørsmål}</span>
                 </HStack>
               </ExpansionCard.Title>
             </ExpansionCard.Header>
@@ -106,14 +105,14 @@ export const Kvittering = ({
       </VStack>
       <HStack gap="space-8" justify="center" wrap={true}>
         <Button as="a" href="/min-side-arbeidsgiver" variant="primary">
-          Gå til min side – arbeidsgiver
+          Gå til Min side – arbeidsgiver
         </Button>
         {inntektsmeldingsId && (
           <Button
             as="a"
             download={`inntektsmelding-${inntektsmeldingsId}.pdf`}
             href={hentInntektsmeldingPdfUrl(inntektsmeldingsId)}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             iconPosition="left"
             variant="secondary"
           >

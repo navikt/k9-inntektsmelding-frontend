@@ -113,11 +113,11 @@ export const VisInnsendtRefusjonskrav = () => {
             as="a"
             download={`refusjon-omsorgspenger-søknad-kvittering-${inntektsmelding?.id}.pdf`}
             href={hentInntektsmeldingPdfUrl(inntektsmelding?.id)}
-            icon={<DownloadIcon />}
+            icon={<DownloadIcon aria-hidden />}
             iconPosition="left"
             variant="tertiary"
           >
-            Last ned PDF
+            Last ned refusjonskrav
           </Button>
         </div>
       </div>

@@ -7,9 +7,15 @@ import {
   Page,
   PageProps,
 } from "@navikt/ds-react";
+import { createContext, useContext } from "react";
 
 import { HjelpetekstToggle } from "../Hjelpetekst";
 import illustrasjonUrl from "./illustrasjon.svg";
+
+const ErIRotLayoutContext = createContext(false);
+
+/** Sann når komponenten vises inne i RotLayout, som allerede har `<main>` og h1. */
+export const useErIRotLayout = () => useContext(ErIRotLayoutContext);
 
 type RotLayoutProps = {
   /** Tittelen på viewet man er i, som "Ny inntektsmelding", eller "Endring, inntektsmelding" */
@@ -64,20 +70,22 @@ export const RotLayout = ({
         </Page.Block>
         <Page.Block width="md">
           {medHjelpetekstToggle && <HjelpetekstToggle />}
-          {medHvitBoks ? (
-            <div className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col mt-2">
-              {children}
-            </div>
-          ) : (
-            children
-          )}
+          <ErIRotLayoutContext.Provider value={true}>
+            {medHvitBoks ? (
+              <div className="bg-ax-bg-default px-5 py-6 rounded-md flex gap-6 flex-col mt-2">
+                {children}
+              </div>
+            ) : (
+              children
+            )}
+          </ErIRotLayoutContext.Provider>
         </Page.Block>
         {medAvbrytKnapp && (
           <HStack align="center" justify="center">
             <Button
               as="a"
               href="/min-side-arbeidsgiver"
-              icon={<XMarkIcon />}
+              icon={<XMarkIcon aria-hidden />}
               variant="tertiary"
             >
               Avbryt
